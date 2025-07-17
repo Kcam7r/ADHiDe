@@ -119,9 +119,6 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
         
         {/* Suwak do ustawiania czasu */}
         <div className="mb-6">
-          <label htmlFor="pomodoro-minutes-slider" className="block text-sm font-medium text-gray-300 mb-2">
-            Ustaw czas (minuty): <span className="font-bold text-white">{selectedMinutes}</span>
-          </label>
           <input
             id="pomodoro-minutes-slider"
             type="range"
