@@ -40,27 +40,27 @@
       }
 
       @keyframes daily-task-complete-pop {
-        0% { transform: scale(1); background-color: #1f2937; /* gray-800 */ }
-        25% { transform: scale(1.02); background-color: #10B981; /* green-600 */ }
-        100% { transform: scale(1); }
+        0% { background-color: #1f2937; /* gray-800 */ }
+        25% { background-color: #10B981; /* green-600 */ }
+        100% { background-color: #1f2937; }
       }
       .animate-daily-task-complete {
         animation: daily-task-complete-pop 0.3s ease-out forwards;
       }
 
       @keyframes habit-pulse-positive {
-        0% { transform: scale(1); background-color: #16a34a; /* green-600 */ }
-        25% { transform: scale(1.02); background-color: #22c55e; /* green-500 */ }
-        100% { transform: scale(1); background-color: #16a34a; }
+        0% { background-color: #16a34a; /* green-600 */ border-color: #22c55e; }
+        50% { background-color: #22c55e; /* green-500 */ border-color: #4ade80; }
+        100% { background-color: #16a34a; /* green-600 */ border-color: #22c55e; }
       }
       .animate-habit-pulse-positive {
         animation: habit-pulse-positive 0.3s ease-out forwards;
       }
 
       @keyframes habit-pulse-negative {
-        0% { transform: scale(1); background-color: #dc2626; /* red-600 */ }
-        25% { transform: scale(1.02); background-color: #ef4444; /* red-500 */ }
-        100% { transform: scale(1); background-color: #dc2626; }
+        0% { background-color: #dc2626; /* red-600 */ border-color: #ef4444; }
+        50% { background-color: #ef4444; /* red-500 */ border-color: #f87171; }
+        100% { background-color: #dc2626; /* red-600 */ border-color: #ef4444; }
       }
       .animate-habit-pulse-negative {
         animation: habit-pulse-negative 0.3s ease-out forwards;

@@ -100,13 +100,13 @@ export const Dashboard: React.FC = () => {
                 <div
                   key={habit.id}
                   onClick={() => handleHabitClick(habit.id, habit.type)} // Użyj nowej funkcji obsługi
-                  className={`p-4 rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 ${
+                  className={`p-4 rounded-lg cursor-pointer transition-all duration-200 ${
                     habit.type === 'positive' 
-                      ? 'bg-green-600 hover:bg-green-500' 
-                      : 'bg-red-600 hover:bg-red-500'
+                      ? 'bg-green-600 border-green-500' 
+                      : 'bg-red-600 border-red-500'
                   } ${animatingHabits.has(habit.id) 
                       ? (habit.type === 'positive' ? 'animate-habit-pulse-positive' : 'animate-habit-pulse-negative') 
-                      : ''
+                      : 'hover:bg-opacity-80' // Dodano subtelny efekt hover
                   }`}
                 >
                   <div className="flex items-center justify-between">
