@@ -276,6 +276,9 @@ export const Dashboard: React.FC = () => {
                     habit.type === 'positive' 
                       ? 'bg-green-600 border-green-500' 
                       : 'bg-red-600 border-red-500'
+                  } ${animatingHabits.has(habit.id) 
+                      ? (habit.type === 'positive' ? 'animate-habit-pulse-positive' : 'animate-habit-pulse-negative') 
+                      : 'hover:bg-opacity-80'
                   }`}
                 >
                   <div className="flex items-center justify-between">
