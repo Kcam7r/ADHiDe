@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Plus, Pause, Trash2, Play } from 'lucide-react'; // Dodano Play
-import type { Mission, Habit, DailyTask } from '../types';
+import { Plus, Pause, Trash2, Play } from 'lucide-react'; 
 
 export const QuestLog: React.FC = () => {
   const { 

@@ -49,7 +49,7 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
   const firstDayOfMonth = startOfMonth(currentMonth);
   const startingDayIndex = (getDay(firstDayOfMonth) + 6) % 7; // Adjust to make Monday 0, Tuesday 1, etc.
 
-  const days = Array.from({ length: startingDayIndex }, () => null).concat(daysInMonth);
+  const days: (Date | null)[] = Array.from({ length: startingDayIndex }, () => null).concat(daysInMonth);
 
   const weekdays = ['P', 'W', 'Ś', 'C', 'P', 'S', 'N'];
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Timer } from 'lucide-react';
 import { PomodoroModal } from './PomodoroModal';
 import { useWindowSize } from '../hooks/useWindowSize';
 

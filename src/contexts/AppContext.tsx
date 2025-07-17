@@ -24,15 +24,15 @@ interface AppContextType {
   resetXP: () => void;
   addHabit: (habit: Omit<Habit, 'id' | 'count'>) => void;
   updateHabit: (id: string, updates: Partial<Habit>) => void;
-  completeHabit: (id: string, originX?: number, originY?: number) => void;
+  completeHabit: (id: string) => void;
   deleteHabit: (id: string) => void;
   
   addDailyTask: (task: Omit<DailyTask, 'id' | 'completed'>) => void;
-  completeDailyTask: (id: string, originX?: number, originY?: number) => void;
+  completeDailyTask: (id: string) => void;
   deleteDailyTask: (id: string) => void;
   
   addMission: (mission: Omit<Mission, 'id' | 'completed'>) => void;
-  completeMission: (id: string, originX?: number, originY?: number) => void;
+  completeMission: (id: string) => void;
   activateMission: (id: string) => void;
   deactivateMission: (id: string) => void;
   deleteMission: (id: string) => void;
@@ -136,18 +136,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     ));
   };
 
-  const completeHabit = (id: string, originX?: number, originY?: number) => {
+  const completeHabit = (id: string) => {
     const habit = habits.find(h => h.id === id);
     if (!habit) return;
 
     const newCount = habit.count + 1;
-    const xpGain = habit.type === 'positive' ? 10 : -20;
     
     updateHabit(id, { 
       count: newCount, 
     });
-    
-    // addXP(xpGain, originX, originY); // Usunięto, ponieważ XP jest dodawane w Dashboard.tsx
   };
 
   const deleteHabit = (id: string) => {
@@ -163,14 +160,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setDailyTasks([...dailyTasks, newTask]);
   };
 
-  const completeDailyTask = (id: string, originX?: number, originY?: number) => {
+  const completeDailyTask = (id: string) => {
     const task = dailyTasks.find(t => t.id === id);
     if (!task || task.completed) return;
 
-    setDailyTasks(dailyTasks.map(task => 
-      task.id === id ? { ...task, completed: true, completedAt: new Date() } : task
+    setDailyTasks(dailyTasks.map((taskItem: DailyTask) => 
+      taskItem.id === id ? { ...taskItem, completed: true, completedAt: new Date() } : taskItem
     ));
-    // addXP(10, originX, originY); // Usunięto, ponieważ XP jest dodawane w Dashboard.tsx
   };
 
   const deleteDailyTask = (id: string) => {
@@ -187,30 +183,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setMissions([...missions, newMission]);
   };
 
-  const completeMission = (id: string, originX?: number, originY?: number) => {
+  const completeMission = (id: string) => {
     const mission = missions.find(m => m.id === id);
     if (!mission || mission.completed) return;
 
     const completedMission = { ...mission, completed: true, completedAt: new Date() };
     setMissions(missions.filter(m => m.id !== id));
     setCompletedMissionsHistory([completedMission, ...completedMissionsHistory]);
-
-    let xpGain = 50;
-    if (mission.priority === 'urgent') xpGain += 30;
-    else if (mission.priority === 'important') xpGain += 15;
-    if (mission.energy === 'concentration') xpGain += 10;
-
-    // addXP(xpGain, originX, originY); // Usunięto, ponieważ XP jest dodawane w Dashboard.tsx
   };
 
   const activateMission = (id: string) => {
-    setMissions(missions.map(mission =>
+    setMissions((prevMissions: Mission[]) => prevMissions.map((mission: Mission) =>
       mission.id === id ? { ...mission, isActive: true } : mission
     ));
     // NEW: Update the mission's isActive status within projects as well
-    setProjects(prevProjects => prevProjects.map(project => ({
+    setProjects((prevProjects: Project[]) => prevProjects.map((project: Project) => ({
       ...project,
-      tasks: project.tasks.map(task =>
+      tasks: project.tasks.map((task: Mission) =>
         task.id === id ? { ...task, isActive: true } : task
       )
     })));
@@ -218,24 +207,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const deactivateMission = (id: string) => {
-    setMissions(missions.map(mission =>
+    setMissions((prevMissions: Mission[]) => prevMissions.map((mission: Mission) =>
       mission.id === id ? { ...mission, isActive: false } : mission
     ));
     // NEW: Update the mission's isActive status within projects as well
-    setProjects(prevProjects => prevProjects.map(project => ({
+    setProjects((prevProjects: Project[]) => prevProjects.map((project: Project) => ({
       ...project,
-      tasks: project.tasks.map(task =>
+      tasks: project.tasks.map((task: Mission) =>
         task.id === id ? { ...task, isActive: false } : task
       )
     })));
   };
 
   const deleteMission = (id: string) => {
-    setMissions(missions.filter(mission => mission.id !== id));
+    setMissions((prevMissions: Mission[]) => prevMissions.filter((mission: Mission) => mission.id !== id));
     // Usuń również z projektów, jeśli było to zadanie projektowe
-    setProjects(projects.map(project => ({
+    setProjects((prevProjects: Project[]) => prevProjects.map((project: Project) => ({
       ...project,
-      tasks: project.tasks.filter(task => task.id !== id)
+      tasks: project.tasks.filter((task: Mission) => task.id !== id)
     })));
   };
 
@@ -264,13 +253,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       isActive: false, // Domyślnie nieaktywna
     };
     
-    setProjects(prevProjects => prevProjects.map(project => 
+    setProjects((prevProjects: Project[]) => prevProjects.map((project: Project) => 
       project.id === projectId 
         ? { ...project, tasks: [...project.tasks, newTask] }
         : project
     ));
     // Dodaj nowe zadanie do globalnej listy misji
-    setMissions(prevMissions => [...prevMissions, newTask]);
+    setMissions((prevMissions: Mission[]) => [...prevMissions, newTask]);
   };
 
   const addJournalEntry = (entry: Omit<JournalEntry, 'id'>) => {
@@ -317,7 +306,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
 
       window.dailyResetTimeout = setTimeout(() => {
-        setDailyTasks(prevTasks => prevTasks.map(task => ({ ...task, completed: false, completedAt: undefined })));
+        setDailyTasks((prevTasks: DailyTask[]) => prevTasks.map((task: DailyTask) => ({ ...task, completed: false, completedAt: undefined })));
         // Po zresetowaniu, zaplanuj następne zresetowanie na następną północ
         scheduleNextReset();
       }, timeToMidnight);

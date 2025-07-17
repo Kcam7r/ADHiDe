@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryFull, Brain, CheckCircle } from 'lucide-react';
-import { Mission, Habit, DailyTask } from '../types';
+import { Mission, DailyTask } from '../types';
 import { MissionHistoryModal } from './MissionHistoryModal';
 import { DailyTaskStamp } from './DailyTaskStamp'; // Import the new component
-import { showSuccessToast, showInfoToast } from '../utils/toast'; // Importuj funkcje toastów
+import { showSuccessToast, showInfoToast, showErrorToast } from '../utils/toast'; // Importuj funkcje toastów
 
 export const Dashboard: React.FC = () => {
   const { 
@@ -203,7 +203,7 @@ export const Dashboard: React.FC = () => {
 
     // After shrink-out animation completes (0.5s), update AppContext
     setTimeout(() => {
-      completeDailyTask(taskId, e.clientX, e.clientY); // This will move it to completedTodayVisual via useEffect
+      completeDailyTask(taskId); // This will move it to completedTodayVisual via useEffect
       setAnimatingOutTasks(prev => {
         const newSet = new Set(prev);
         newSet.delete(taskId);
@@ -234,7 +234,7 @@ export const Dashboard: React.FC = () => {
     }
 
     setAnimatingHabits((prev: Set<string>) => new Set(prev).add(habitId));
-    completeHabit(habitId, e.clientX, e.clientY); // Ta funkcja już aktualizuje count
+    completeHabit(habitId); // Ta funkcja już aktualizuje count
 
     setTimeout(() => {
       setAnimatingHabits((prev: Set<string>) => {
