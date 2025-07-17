@@ -87,7 +87,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setUser({ ...user, xp: newXP, level: newLevel });
     setLastXpGainTimestamp(Date.now());
 
-    if (originX !== undefined && originY !== undefined) {
+    // Generuj kulki tylko dla pozytywnego zysku XP
+    if (originX !== undefined && originY !== undefined && amount > 0) { 
       const numberOfParticles = Math.max(1, Math.floor(amount / 10)); // Jedna kulka na każde 10 XP, minimum 1
       const newParticles: XpParticleData[] = [];
       for (let i = 0; i < numberOfParticles; i++) {
@@ -255,7 +256,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const updateJournalEntry = (id: string, updates: Partial<JournalEntry>) => {
     setJournalEntries(journalEntries.map(entry => 
       entry.id === id ? { ...entry, ...updates } : entry
-    ));
+    );
   };
 
   const addQuickThought = (thought: Omit<QuickThought, 'id' | 'createdAt'>) => {
