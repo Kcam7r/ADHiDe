@@ -4,7 +4,7 @@ import { useApp } from '../contexts/AppContext';
 import { useWindowSize } from '../hooks/useWindowSize';
 
 export const ConfettiOverlay: React.FC = () => {
-  const { user } = useApp();
+  const { user, triggerConfetti: appTriggerConfetti } = useApp(); // Zmieniono nazwę, aby uniknąć konfliktu
   const [showConfetti, setShowConfetti] = useState(false);
   const prevLevelRef = useRef(user.level);
   const { width, height } = useWindowSize();
@@ -13,11 +13,22 @@ export const ConfettiOverlay: React.FC = () => {
     // Trigger confetti only if the level has increased
     if (user.level > prevLevelRef.current) {
       setShowConfetti(true);
-      // No need for a fixed setTimeout to hide, onConfettiComplete will handle it
     }
     // Update previous level for the next comparison
     prevLevelRef.current = user.level;
   }, [user.level]);
+
+  // Nowy useEffect do reagowania na wywołanie triggerConfetti z kontekstu
+  useEffect(() => {
+    if (appTriggerConfetti) { // Sprawdź, czy funkcja została wywołana
+      setShowConfetti(true);
+      // Resetuj stan konfetti po krótkim czasie, aby umożliwić ponowne wywołanie
+      const timer = setTimeout(() => {
+        setShowConfetti(false);
+      }, 2000); // Czas trwania konfetti
+      return () => clearTimeout(timer);
+    }
+  }, [appTriggerConfetti]); // Zależność od funkcji triggerConfetti z kontekstu
 
   const handleConfettiComplete = () => {
     setShowConfetti(false); // Hide the component only when all pieces are done

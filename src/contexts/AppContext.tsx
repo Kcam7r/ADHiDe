@@ -48,6 +48,7 @@ interface AppContextType {
   deleteQuickThought: (id: string) => void;
 
   removeXpParticle: (id: string) => void; // Nowa funkcja do usuwania cząsteczek
+  triggerConfetti: () => void; // Nowa funkcja do wyzwalania konfetti
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -77,6 +78,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [completedMissionsHistory, setCompletedMissionsHistory] = useLocalStorage<Mission[]>('adhd-completed-missions', []);
   const [lastXpGainTimestamp, setLastXpGainTimestamp] = useState(0);
   const [xpParticles, setXpParticles] = useState<XpParticleData[]>([]); // Zmieniono na tablicę
+  const [shouldTriggerConfetti, setShouldTriggerConfetti] = useState(false); // Nowy stan dla konfetti
 
   const calculateLevel = (xp: number) => Math.floor(xp / 1000) + 1;
 
@@ -108,6 +110,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const removeXpParticle = (id: string) => {
     setXpParticles(prev => prev.filter(p => p.id !== id));
+  };
+
+  const triggerConfetti = () => {
+    setShouldTriggerConfetti(true);
+    // Konfetti będzie widoczne przez krótki czas, a następnie zostanie wyłączone przez ConfettiOverlay
   };
 
   const resetXP = () => {
@@ -341,7 +348,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       updateJournalEntry,
       addQuickThought,
       deleteQuickThought,
-      removeXpParticle // Dodano do kontekstu
+      removeXpParticle, // Dodano do kontekstu
+      triggerConfetti, // Dodano do kontekstu
     }}>
       {children}
     </AppContext.Provider>

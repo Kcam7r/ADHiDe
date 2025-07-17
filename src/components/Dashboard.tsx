@@ -4,6 +4,7 @@ import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryFull, Brain, Ch
 import { Mission, Habit, DailyTask } from '../types';
 import { MissionHistoryModal } from './MissionHistoryModal';
 import { DailyTaskStamp } from './DailyTaskStamp'; // Import the new component
+import { showSuccessToast, showInfoToast } from '../utils/toast'; // Importuj funkcje toastów
 
 export const Dashboard: React.FC = () => {
   const { 
@@ -14,7 +15,8 @@ export const Dashboard: React.FC = () => {
     completeDailyTask, 
     completeMission,
     completedMissionsHistory,
-    addXP // Dodano addXP do kontekstu
+    addXP, // Dodano addXP do kontekstu
+    triggerConfetti, // Dodano triggerConfetti do kontekstu
   } = useApp();
 
   const [showHistory, setShowHistory] = useState(false);
@@ -23,11 +25,11 @@ export const Dashboard: React.FC = () => {
   // New states for Daily Tasks visual management
   const [displayDailyTasks, setDisplayDailyTasks] = useState<DailyTask[]>([]);
   const [completedTodayVisual, setCompletedTodayVisual] = useState<DailyTask[]>([]);
-  // Usunięto stampedTaskIds, ponieważ nie jest już potrzebne do trwałego wyświetlania stempla
   const [animatingOutTasks, setAnimatingOutTasks] = useState<Set<string>>(new Set());
 
-  // New state for Mission Completion Animation
+  // New states for Mission Completion Animation
   const [fadingOutMissions, setFadingOutMissions] = useState<Set<string>>(new Set());
+  const [missionReaction, setMissionReaction] = useState<{[key: string]: Mission['priority'] | null}>({}); // Nowy stan dla reakcji misji
 
   // Sync appDailyTasks with local display states
   useEffect(() => {
@@ -151,22 +153,39 @@ export const Dashboard: React.FC = () => {
     const originX = rect.x + rect.width / 2;
     const originY = rect.y + rect.height / 2;
 
-    // 1. Add mission to fadingOutMissions to trigger CSS animation
-    setFadingOutMissions(prev => new Set(prev).add(missionId));
+    // Etap 1: Reakcja karty (pulsowanie/drżenie)
+    setMissionReaction(prev => ({ ...prev, [missionId]: mission.priority }));
 
-    // 2. Immediately add XP (particles will fly from the card's position)
-    addXP(xpGain, originX, originY);
-
-    // 3. After the fade-out animation duration, actually complete the mission in context
+    // Opóźnienie przed etapem 2 (XP, toast, konfetti)
+    const reactionDuration = mission.priority === 'urgent' ? 600 : (mission.priority === 'important' ? 400 : 300);
+    
     setTimeout(() => {
-      completeMission(missionId); // This removes it from the `missions` array
-      // Remove from fadingOutMissions after it's fully gone from the DOM
-      setFadingOutMissions(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(missionId);
-        return newSet;
-      });
-    }, 500); // Match this with the CSS animation duration
+      // Etap 2: Dodanie XP, toast, konfetti
+      addXP(xpGain, originX, originY);
+      showSuccessToast(`Misja ukończona: ${mission.title}! (+${xpGain} XP)`);
+
+      if (mission.priority === 'urgent' || mission.priority === 'important') {
+        triggerConfetti();
+      }
+
+      // Etap 3: Zanikanie karty
+      setFadingOutMissions(prev => new Set(prev).add(missionId));
+
+      // Po zakończeniu animacji zanikania, usuń misję z kontekstu
+      setTimeout(() => {
+        completeMission(missionId);
+        setFadingOutMissions(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(missionId);
+          return newSet;
+        });
+        setMissionReaction(prev => { // Usuń stan reakcji po zakończeniu animacji
+          const newReaction = { ...prev };
+          delete newReaction[missionId];
+          return newReaction;
+        });
+      }, 500); // Czas trwania animate-mission-fade-out
+    }, reactionDuration);
   };
 
   const handleDailyTaskClick = (taskId: string, e: React.MouseEvent) => {
@@ -174,6 +193,7 @@ export const Dashboard: React.FC = () => {
     if (!task || task.completed) return;
 
     addXP(10, e.clientX, e.clientY); // Dodaj XP natychmiast
+    showInfoToast(`Zadanie ukończone: ${task.title}! (+10 XP)`);
 
     // Trigger visual move out animation and stamp animation
     setAnimatingOutTasks(prev => new Set(prev).add(taskId));
@@ -196,6 +216,12 @@ export const Dashboard: React.FC = () => {
 
     const xpGain = habit.type === 'positive' ? 10 : -20;
     addXP(xpGain, e.clientX, e.clientY); // Dodaj XP natychmiast
+    
+    if (habit.type === 'positive') {
+      showSuccessToast(`Nawyk ukończony: ${habit.name}! (+${xpGain} XP)`);
+    } else {
+      showErrorToast(`Nawyk przerwany: ${habit.name}! (${xpGain} XP)`);
+    }
 
     setAnimatingHabits((prev: Set<string>) => new Set(prev).add(habitId));
     completeHabit(habitId, e.clientX, e.clientY); // Ta funkcja już aktualizuje count
@@ -330,7 +356,11 @@ export const Dashboard: React.FC = () => {
                   onClick={(e) => handleMissionComplete(mission.id, e)}
                   className={`p-4 rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 ${
                     mission.projectId ? 'bg-purple-600 hover:bg-purple-500' : 'bg-cyan-600 hover:bg-cyan-500'
-                  } ${fadingOutMissions.has(mission.id) ? 'animate-mission-fade-out' : ''} `}
+                  } ${fadingOutMissions.has(mission.id) ? 'animate-mission-fade-out' : ''}
+                    ${missionReaction[mission.id] === 'normal' ? 'animate-mission-pulse-normal' : ''}
+                    ${missionReaction[mission.id] === 'important' ? 'animate-mission-pulse-important' : ''}
+                    ${missionReaction[mission.id] === 'urgent' ? 'animate-mission-pulse-urgent' : ''}
+                  `}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
