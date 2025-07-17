@@ -50,12 +50,12 @@ function Calendar({
         ),
         nav_button_previous: "absolute left-1",
         nav_button_next: "absolute right-1",
-        table: "w-full space-y-1",
-        head_row: "grid grid-cols-7", // Zmieniono na grid grid-cols-7
+        table: "w-full grid grid-cols-7 gap-y-1", // Zastosowanie grid do całej tabeli
+        head_row: "contents", // Użycie 'contents' dla wiersza nagłówków
         head_cell:
-          "text-gray-400 rounded-md font-normal text-[0.8rem] flex justify-center items-center", // Usunięto jawne w-calc
-        row: "grid grid-cols-7 mt-2", // Zmieniono na grid grid-cols-7
-        cell: "h-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-range-start)]:rounded-l-md [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20 flex justify-center items-center", // Usunięto jawne w-calc
+          "text-gray-400 rounded-md font-normal text-[0.8rem] flex justify-center items-center", // Usunięto jawne szerokości
+        row: "contents", // Użycie 'contents' dla wierszy dat
+        cell: "h-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-range-start)]:rounded-l-md [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20 flex justify-center items-center", // Usunięto jawne szerokości
         day: cn(
           buttonVariants({ variant: "ghost" }),
           "w-full h-full p-0 font-normal text-gray-300 flex justify-center items-center", // Wypełnienie całej komórki
