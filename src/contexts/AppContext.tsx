@@ -166,7 +166,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const task = dailyTasks.find(t => t.id === id);
     if (!task || task.completed) return;
 
-    setDailyTasks((dailyTasks: DailyTask[]) => dailyTasks.map((taskItem: DailyTask) => 
+    setDailyTasks((prevDailyTasks: DailyTask[]) => prevDailyTasks.map((taskItem: DailyTask) => 
       taskItem.id === id ? { ...taskItem, completed: true, completedAt: new Date() } : taskItem
     ));
     // Przekazanie originX i originY do addXP
@@ -192,7 +192,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (!mission || mission.completed) return;
 
     const completedMission = { ...mission, completed: true, completedAt: new Date() };
-    setMissions(missions.filter(m => m.id !== id));
+    setMissions((prevMissions: Mission[]) => prevMissions.filter((m: Mission) => m.id !== id));
     setCompletedMissionsHistory([completedMission, ...completedMissionsHistory]);
   };
 
