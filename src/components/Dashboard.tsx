@@ -137,7 +137,7 @@ export const Dashboard: React.FC = () => {
       element.style.animation = 'fadeOut 0.7s ease-out forwards';
       setTimeout(() => {
         completeMission(missionId, e.clientX, e.clientY);
-      }, 700);
+      }, 700); // Zmieniono na 700ms, aby dopasować do animacji fadeOut
     } else {
       completeMission(missionId, e.clientX, e.clientY);
     }
@@ -152,7 +152,7 @@ export const Dashboard: React.FC = () => {
     // 2. Trigger visual move out animation
     setAnimatingOutTasks(prev => new Set(prev).add(taskId));
 
-    // 3. After stamp (0.5s) and slide-out (1.5s) animations complete (total 2s),
+    // 3. After stamp (0.5s) and slide-out (0.5s) animations complete (total 1s),
     //    update AppContext and clear animation states.
     setTimeout(() => {
       completeDailyTask(taskId, e.clientX, e.clientY); // Update AppContext after animation
@@ -162,7 +162,7 @@ export const Dashboard: React.FC = () => {
         return newSet;
       });
       // StampedTaskIds remains, as the stamp should stay on the completed task
-    }, 2000); // Total animation duration
+    }, 1000); // Zmieniono na 1000ms (1s)
   };
 
   const handleHabitClick = (habitId: string, e: React.MouseEvent) => {

@@ -34,21 +34,23 @@ export const XpParticle: React.FC<XpParticleProps> = React.memo(({ startX, start
 
       const animationProgress = Math.min((elapsedTime - delay) / duration, 1);
 
-      // Oblicz punkt kontrolny dla kwadratowej krzywej Beziera
-      const midX = (startX + targetX) / 2;
-      const midY = (startY + targetY) / 2;
-
-      // Dodaj losowe przesunięcie do punktu kontrolnego, aby stworzyć unikalne krzywe
-      const curveOffsetX = (Math.random() - 0.5) * 150; // Odchylenie poziome
-      const curveOffsetY = (Math.random() - 0.5) * 150 - 50; // Odchylenie pionowe, z lekkim biasem w górę
+      // Definiowanie punktu kontrolnego dla kwadratowej krzywej Beziera
+      // P0 = (startX, startY)
+      // P2 = (targetX, targetY)
+      // P1 = (controlX, controlY)
+      const controlX = startX + (targetX - startX) / 2 + (Math.random() - 0.5) * 150; // Środek X + losowe przesunięcie poziome
+      const controlY = Math.min(startY, targetY) - 150 - (Math.random() * 100); // Powyżej najwyższego punktu + losowe przesunięcie pionowe
 
       // Obliczenia pozycji za pomocą kwadratowej krzywej Beziera
-      const currentX = (1 - animationProgress) * (1 - animationProgress) * startX + 
-                       2 * (1 - animationProgress) * animationProgress * curveOffsetX + 
-                       animationProgress * animationProgress * targetX;
-      const currentY = (1 - animationProgress) * (1 - animationProgress) * startY + 
-                       2 * (1 - animationProgress) * animationProgress * curveOffsetY + 
-                       animationProgress * animationProgress * targetY;
+      const t = animationProgress;
+      const oneMinusT = (1 - t);
+
+      const currentX = oneMinusT * oneMinusT * startX + 
+                       2 * oneMinusT * t * controlX + 
+                       t * t * targetX;
+      const currentY = oneMinusT * oneMinusT * startY + 
+                       2 * oneMinusT * t * controlY + 
+                       t * t * targetY;
       
       setPosition({ x: currentX, y: currentY });
 
