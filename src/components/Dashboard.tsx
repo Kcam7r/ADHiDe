@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryFull, Brain } from 'lucide-react';
 import { Mission, Habit } from '../types';
-import { MissionHistoryModal } from './MissionHistoryModal'; // Dodano import
+import { MissionHistoryModal } from './MissionHistoryModal';
 
 export const Dashboard: React.FC = () => {
   const { 
@@ -23,7 +23,7 @@ export const Dashboard: React.FC = () => {
   const getPriorityIcon = (priority: Mission['priority']) => {
     switch (priority) {
       case 'urgent':
-        return <Flame className="w-4 h-4 text-white animate-pulse" />;
+        return <Flame className="w-4 h-4 text-red-400 animate-pulse" />; // Zmieniono na text-red-400 dla spójności z ogólnym stylem
       case 'important':
         return <Star className="w-4 h-4 text-orange-400" />;
       default:
@@ -36,7 +36,7 @@ export const Dashboard: React.FC = () => {
       case 'urgent':
         return 'text-white';
       case 'important':
-        return 'text-orange-400';
+        return 'text-white'; // Zmieniono na biały kolor tekstu
       default:
         return 'text-white';
     }
