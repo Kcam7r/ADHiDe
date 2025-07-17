@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Calendar as CalendarIcon, ChevronDown, ChevronUp } from 'lucide-react'; // Dodano ChevronDown, ChevronUp
+import { Calendar as CalendarIcon, ChevronDown, ChevronUp, BatteryEmpty, BatteryLow, BatteryMedium, BatteryFull, Zap } from 'lucide-react'; // Dodano nowe ikony baterii i pioruna
 import { JournalEntry } from '../types';
 import { Calendar } from './Calendar';
 
@@ -78,8 +78,14 @@ export const Journal: React.FC = () => {
   };
 
   const getEnergyIcon = (energy: number) => {
-    const icons = ['🔋', '🔋', '🔋', '⚡', '⚡'];
-    return icons[energy - 1];
+    switch (energy) {
+      case 1: return <BatteryEmpty className="w-6 h-6 text-red-400" />;
+      case 2: return <BatteryLow className="w-6 h-6 text-orange-400" />;
+      case 3: return <BatteryMedium className="w-6 h-6 text-yellow-400" />;
+      case 4: return <BatteryFull className="w-6 h-6 text-green-400" />;
+      case 5: return <Zap className="w-6 h-6 text-cyan-400" />;
+      default: return null;
+    }
   };
 
   const toggleEntryExpansion = (entryId: string) => {
