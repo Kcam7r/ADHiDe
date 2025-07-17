@@ -1,4 +1,4 @@
-import React, { useState } => 'react';
+import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryFull, Brain } from 'lucide-react';
 import { Mission, Habit } from '../types';
@@ -22,7 +22,7 @@ export const Dashboard: React.FC = () => {
   const getPriorityIcon = (priority: Mission['priority']) => {
     switch (priority) {
       case 'urgent':
-        return <Flame className="w-4 h-4 text-white animate-pulse" />; // Zmieniono na text-white
+        return <Flame className="w-4 h-4 text-white animate-pulse" />;
       case 'important':
         return <Star className="w-4 h-4 text-orange-400" />;
       default:
@@ -33,7 +33,7 @@ export const Dashboard: React.FC = () => {
   const getPriorityColor = (priority: Mission['priority']) => {
     switch (priority) {
       case 'urgent':
-        return 'text-white'; // Zmieniono na text-white
+        return 'text-white';
       case 'important':
         return 'text-orange-400';
       default:
@@ -44,13 +44,13 @@ export const Dashboard: React.FC = () => {
   const getEnergyIcon = (energy: Mission['energy']) => {
     switch (energy) {
       case 'low':
-        return <BatteryLow className="w-4 h-4 text-white" />; // Zmieniono na text-white
+        return <BatteryLow className="w-4 h-4 text-white" />;
       case 'medium':
-        return <BatteryMedium className="w-4 h-4 text-white" />; // Zmieniono na text-white
+        return <BatteryMedium className="w-4 h-4 text-white" />;
       case 'high':
-        return <BatteryFull className="w-4 h-4 text-white" />; // Zmieniono na text-white
+        return <BatteryFull className="w-4 h-4 text-white" />;
       case 'concentration':
-        return <Brain className="w-4 h-4 text-white" />; // Zmieniono na text-white
+        return <Brain className="w-4 h-4 text-white" />;
       default:
         return null;
     }
