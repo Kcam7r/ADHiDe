@@ -3,6 +3,7 @@ import { Home, BookOpen, Calendar, Settings, Lightbulb } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import { QuickThoughtModal } from './QuickThoughtModal';
 import { QuickThoughtsModal } from './QuickThoughtsModal';
+import { PowerCrystal } from './PowerCrystal'; // Import PowerCrystal
 
 interface SidebarProps {
   activeView: string;
@@ -10,7 +11,7 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) => {
-  const { resetXP } = useApp(); // Usunięto user z destrukturyzacji
+  const { resetXP } = useApp();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showQuickThought, setShowQuickThought] = useState(false);
   const [showQuickThoughts, setShowQuickThoughts] = useState(false);
@@ -59,9 +60,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
           </ul>
         </nav>
 
-        {/* Gamification Info - Usunięto stary widżet XP/poziomu */}
-        <div className="p-4 border-t border-gray-700">
-          <p className="text-xs text-gray-400 mt-1 text-center">
+        {/* Gamification Info - Power Crystal */}
+        <div className="p-4 border-t border-gray-700 flex flex-col items-center"> {/* Dodano flex-col i items-center */}
+          <PowerCrystal /> {/* Render PowerCrystal here */}
+          <p className="text-xs text-gray-400 mt-4 text-center"> {/* Zmieniono mt-1 na mt-4 */}
             Postęp XP jest teraz widoczny w Krysztale Mocy!
           </p>
           <button

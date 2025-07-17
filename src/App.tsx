@@ -7,7 +7,7 @@ import { Journal } from './components/Journal';
 import { Garage } from './components/Garage';
 import { PomodoroTimer } from './components/PomodoroTimer';
 import { ConfettiOverlay } from './components/ConfettiOverlay';
-import { PowerCrystal } from './components/PowerCrystal'; // Import PowerCrystal
+// Usunięto import PowerCrystal
 
 function App() {
   const [activeView, setActiveView] = useState('dashboard');
@@ -37,7 +37,7 @@ function App() {
       </div>
       <PomodoroTimer />
       <ConfettiOverlay />
-      <PowerCrystal /> {/* Render PowerCrystal here */}
+      {/* Usunięto renderowanie PowerCrystal tutaj */}
     </AppProvider>
   );
 }

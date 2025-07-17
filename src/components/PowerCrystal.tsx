@@ -34,7 +34,7 @@ export const PowerCrystal: React.FC = () => {
 
   return (
     <div
-      className="fixed bottom-4 right-4 z-50 flex flex-col items-center justify-center"
+      className="relative flex flex-col items-center justify-center w-full" // Zmieniono na relative i w-full dla umieszczenia w sidebarze
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
