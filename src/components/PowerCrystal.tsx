@@ -1,45 +1,30 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { XpParticle } from './XpParticle';
+import { useWindowSize } from '../hooks/useWindowSize';
 
 interface PowerCrystalProps {
   onCrystalClick: () => void;
 }
 
 export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) => {
-  const { user, lastXpGainTimestamp, xpParticles, removeXpParticle } = useApp(); // Pobierz xpParticles i removeXpParticle
+  const { user, lastXpGainTimestamp, xpParticles, removeXpParticle } = useApp();
   const [isHovered, setIsHovered] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
   const [prevXp, setPrevXp] = useState(user.xp);
-  const crystalRef = useRef<HTMLDivElement>(null); // Ref dla kuli kryształu
+  const crystalRef = useRef<HTMLDivElement>(null);
+  const { width, height } = useWindowSize();
 
-  const xpForNextLevel = 1000;
-  const xpInCurrentLevel = user.xp % xpForNextLevel;
-  const xpProgress = xpInCurrentLevel / xpForNextLevel;
-
-  const getCrystalColor = (level: number) => {
-    if (level >= 15) return 'from-yellow-400 to-amber-600';
-    if (level >= 10) return 'from-purple-500 to-indigo-600';
-    if (level >= 5) return 'from-green-400 to-emerald-600';
-    return 'from-cyan-500 to-blue-600';
-  };
-
-  const currentCrystalColor = getCrystalColor(user.level);
-
-  // Efekt dla animacji zdobywania XP (błysk)
-  useEffect(() => {
-    if (lastXpGainTimestamp > 0 && user.xp > prevXp) {
-      setIsFlashing(true);
-      const flashTimer = setTimeout(() => setIsFlashing(false), 500);
-      return () => clearTimeout(flashTimer);
+  // Initialize crystalCenter with approximate screen center, or 0,0 if window not available
+  const [crystalCenter, setCrystalCenter] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     }
-    setPrevXp(user.xp);
-  }, [lastXpGainTimestamp, user.xp]);
+    return { x: 0, y: 0 };
+  });
 
-  // Oblicz środek kryształu dla celu kulki
-  const [crystalCenter, setCrystalCenter] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
+  // Use useLayoutEffect to ensure crystalCenter is calculated immediately after DOM updates
+  useLayoutEffect(() => {
     const updateCrystalCenter = () => {
       if (crystalRef.current) {
         const rect = crystalRef.current.getBoundingClientRect();
@@ -50,13 +35,23 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
       }
     };
 
-    updateCrystalCenter(); // Oblicz początkową pozycję
-    window.addEventListener('resize', updateCrystalCenter); // Aktualizuj przy zmianie rozmiaru okna
+    updateCrystalCenter(); // Calculate initial position
+    window.addEventListener('resize', updateCrystalCenter); // Update on window resize
 
     return () => {
       window.removeEventListener('resize', updateCrystalCenter);
     };
-  }, [user.level]); // Przelicz, jeśli pozycja/rozmiar kryształu się zmieni (np. awans na poziom)
+  }, [width, height, user.level]); // Depend on width/height and user.level for recalculation
+
+  // Efekt dla animacji zdobywania XP (błysk)
+  useEffect(() => {
+    if (lastXpGainTimestamp > 0 && user.xp > prevXp) {
+      setIsFlashing(true);
+      const flashTimer = setTimeout(() => setIsFlashing(false), 500);
+      return () => clearTimeout(flashTimer);
+    }
+    setPrevXp(user.xp);
+  }, [lastXpGainTimestamp, user.xp]);
 
   return (
     <div
@@ -111,7 +106,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
       </div>
 
       {/* Animacja kulek XP */}
-      {crystalCenter.x !== 0 && crystalCenter.y !== 0 && xpParticles.map(particle => (
+      {xpParticles.map(particle => (
         <XpParticle
           key={particle.id}
           startX={particle.startX}
