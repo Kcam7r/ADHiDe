@@ -16,9 +16,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
   const xpInCurrentLevel = user.xp % xpForNextLevel;
   const xpProgress = xpInCurrentLevel / xpForNextLevel; // Progress within current level (0 to 1)
 
-  // Determine which small orbs should be lit
-  const litOrbs = Math.floor(xpProgress * 4); // 0, 1, 2, 3 or 4
-
   // Define crystal colors based on level
   const getCrystalColor = (level: number) => {
     if (level >= 15) return 'from-yellow-400 to-amber-600'; // Gold
@@ -56,10 +53,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
       {/* Main Orb Container */}
       <div className="relative w-32 h-32 rounded-full flex items-center justify-center">
         {/* Metallic Casing (bottom half) */}
-        <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-b from-gray-700 to-gray-900 rounded-b-full border-t border-gray-600 shadow-inner-dark z-10">
-          {/* Decorative elements on casing */}
-          <div className="absolute top-0 left-0 right-0 h-1 border-t border-gray-500 opacity-50"></div>
-          <div className="absolute bottom-0 left-0 right-0 h-1 border-b border-gray-500 opacity-50"></div>
+        <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-b from-stone-700 to-stone-900 rounded-b-full border-t-2 border-stone-600 shadow-inner-dark z-10">
+          {/* Usunięto dekoracyjne elementy wewnątrz obudowy */}
         </div>
 
         {/* Crystal Orb */}
@@ -91,17 +86,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
         </div>
       </div>
 
-      {/* Four Stage Progress Orbs */}
-      <div className="flex mt-4 space-x-2 z-30">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <div
-            key={index}
-            className={`w-4 h-4 rounded-full border border-gray-600 transition-all duration-300 ${
-              index < litOrbs ? 'bg-amber-500 shadow-amber animate-small-orb-light-up' : 'bg-gray-700'
-            }`}
-          />
-        ))}
-      </div>
+      {/* Usunięto Four Stage Progress Orbs */}
 
       {/* XP Info on hover */}
       <div
