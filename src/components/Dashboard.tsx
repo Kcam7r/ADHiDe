@@ -13,7 +13,8 @@ export const Dashboard: React.FC = () => {
     completeHabit, 
     completeDailyTask, 
     completeMission,
-    completedMissionsHistory
+    completedMissionsHistory,
+    addXP // Dodano addXP do kontekstu
   } = useApp();
 
   const [showHistory, setShowHistory] = useState(false);
@@ -132,20 +133,32 @@ export const Dashboard: React.FC = () => {
   };
 
   const handleMissionComplete = (missionId: string, e: React.MouseEvent) => {
+    const mission = missions.find(m => m.id === missionId);
+    if (!mission || mission.completed) return;
+
+    // Oblicz XP natychmiast
+    let xpGain = 50;
+    if (mission.priority === 'urgent') xpGain += 30;
+    else if (mission.priority === 'important') xpGain += 15;
+    if (mission.energy === 'concentration') xpGain += 10;
+    addXP(xpGain, e.clientX, e.clientY); // Dodaj XP natychmiast
+
     const element = document.getElementById(`mission-${missionId}`);
     if (element) {
       element.style.animation = 'fadeOut 0.7s ease-out forwards';
       setTimeout(() => {
-        completeMission(missionId, e.clientX, e.clientY);
-      }, 700); // Zmieniono na 700ms, aby dopasować do animacji fadeOut
+        completeMission(missionId, e.clientX, e.clientY); // Aktualizuj stan po animacji
+      }, 700); 
     } else {
-      completeMission(missionId, e.clientX, e.clientY);
+      completeMission(missionId, e.clientX, e.clientY); // Fallback, jeśli element nie istnieje
     }
   };
 
   const handleDailyTaskClick = (taskId: string, e: React.MouseEvent) => {
     const task = appDailyTasks.find(t => t.id === taskId);
     if (!task || task.completed) return;
+
+    addXP(10, e.clientX, e.clientY); // Dodaj XP natychmiast
 
     // 1. Add to stamped tasks to show the stamp
     setStampedTaskIds(prev => new Set(prev).add(taskId));
@@ -162,12 +175,18 @@ export const Dashboard: React.FC = () => {
         return newSet;
       });
       // StampedTaskIds remains, as the stamp should stay on the completed task
-    }, 1000); // Zmieniono na 1000ms (1s)
+    }, 1000); 
   };
 
   const handleHabitClick = (habitId: string, e: React.MouseEvent) => {
+    const habit = habits.find(h => h.id === habitId);
+    if (!habit) return;
+
+    const xpGain = habit.type === 'positive' ? 10 : -20;
+    addXP(xpGain, e.clientX, e.clientY); // Dodaj XP natychmiast
+
     setAnimatingHabits((prev: Set<string>) => new Set(prev).add(habitId));
-    completeHabit(habitId, e.clientX, e.clientY);
+    completeHabit(habitId, e.clientX, e.clientY); // Ta funkcja już aktualizuje count
 
     setTimeout(() => {
       setAnimatingHabits((prev: Set<string>) => {
