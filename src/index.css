@@ -124,12 +124,11 @@
 
 /* New animations for Mission Completion */
 @keyframes tremble-pulse {
-  0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); box-shadow: 0 0 0px rgba(255,255,255,0); }
-  10% { transform: translateX(-1px) translateY(1px) rotate(-0.5deg); box-shadow: 0 0 10px rgba(255,255,255,0.5); }
-  20% { transform: translateX(1px) translateY(-1px) rotate(0.5deg); box-shadow: 0 0 20px rgba(255,255,255,0.8); }
-  30% { transform: translateX(-1px) translateY(1px) rotate(-0.5deg); box-shadow: 0 0 10px rgba(255,255,255,0.5); }
-  40% { transform: translateX(1px) translateY(-1px) rotate(0.5deg); box-shadow: 0 0 20px rgba(255,255,255,0.8); }
-  50% { transform: translateX(0) translateY(0) rotate(0deg); box-shadow: 0 0 0px rgba(255,255,255,0); }
+  0% { transform: translateX(0) translateY(0) rotate(0deg); box-shadow: 0 0 0px rgba(255,255,255,0); }
+  25% { transform: translateX(-2px) translateY(2px) rotate(-1deg); box-shadow: 0 0 15px rgba(255,255,255,0.6); }
+  50% { transform: translateX(2px) translateY(-2px) rotate(1deg); box-shadow: 0 0 25px rgba(255,255,255,0.9); }
+  75% { transform: translateX(-2px) translateY(2px) rotate(-1deg); box-shadow: 0 0 15px rgba(255,255,255,0.6); }
+  100% { transform: translateX(0) translateY(0) rotate(0deg); box-shadow: 0 0 0px rgba(255,255,255,0); }
 }
 .animate-tremble-pulse {
   animation: tremble-pulse 0.5s ease-out forwards;
@@ -140,7 +139,7 @@
   100% { opacity: 0; transform: scale(0.8); } /* Card fades out and shrinks slightly */
 }
 .animate-disintegrate-fade {
-  animation: disintegrate-fade 1s ease-out 0.5s forwards; /* Starts after tremble-pulse */
+  animation: disintegrate-fade 1s ease-out forwards; /* Usunięto opóźnienie 0.5s */
 }
 
 @keyframes xp-pop {
