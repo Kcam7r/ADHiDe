@@ -23,11 +23,12 @@ export const Dashboard: React.FC = () => {
   const getPriorityIcon = (priority: Mission['priority']) => {
     switch (priority) {
       case 'urgent':
-        return <Flame className="w-4 h-4 text-white animate-pulse" />; // Zmieniono na text-white
+        return <Flame className="w-4 h-4 text-white animate-pulse" />;
       case 'important':
-        return <Star className="w-4 h-4 text-white" />; // Zmieniono na text-white
+        return <Star className="w-4 h-4 text-white" />;
       default:
-        return null;
+        // Dla 'normal' priority, zwracamy pusty div, aby zachować wyrównanie
+        return <div className="w-4 h-4" />; 
     }
   };
 
