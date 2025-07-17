@@ -23,7 +23,7 @@ export const DailyTaskStamp: React.FC<DailyTaskStampProps> = ({ onAnimationEnd }
       className={`absolute inset-0 flex items-center justify-center pointer-events-none`}
     >
       <CheckCircle
-        className={`w-24 h-24 text-green-400 opacity-0 transition-all duration-500 ease-out
+        className={`w-20 h-20 text-green-400 opacity-0 transition-all duration-500 ease-out
           ${animate ? 'scale-100 opacity-70 animate-stamp-hit' : 'scale-0'}
         `}
         style={{ filter: 'drop-shadow(0 0 10px rgba(74, 222, 128, 0.8))' }} // Green glow
