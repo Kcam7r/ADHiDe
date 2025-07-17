@@ -61,17 +61,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
         </nav>
 
         {/* Gamification Info - Power Crystal */}
-        <div className="p-4 border-t border-gray-700 flex flex-col items-center"> {/* Dodano flex-col i items-center */}
-          <PowerCrystal /> {/* Render PowerCrystal here */}
-          <p className="text-xs text-gray-400 mt-4 text-center"> {/* Zmieniono mt-1 na mt-4 */}
+        <div className="p-4 border-t border-gray-700 flex flex-col items-center">
+          <PowerCrystal onCrystalClick={() => setShowResetConfirm(true)} /> {/* Dodano onCrystalClick */}
+          <p className="text-xs text-gray-400 mt-4 text-center">
             Postęp XP jest teraz widoczny w Krysztale Mocy!
           </p>
-          <button
-            onClick={() => setShowResetConfirm(true)}
-            className="w-full mt-2 bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg transition-colors text-sm"
-          >
-            Resetuj Postęp
-          </button>
+          {/* Usunięto przycisk Resetuj Postęp */}
         </div>
 
         {/* Quick Thoughts */}

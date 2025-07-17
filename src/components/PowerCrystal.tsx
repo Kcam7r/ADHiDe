@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../contexts/AppContext';
 
-export const PowerCrystal: React.FC = () => {
+interface PowerCrystalProps {
+  onCrystalClick: () => void; // Nowy prop
+}
+
+export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) => {
   const { user, lastXpGainTimestamp } = useApp();
   const [isHovered, setIsHovered] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
@@ -34,13 +38,13 @@ export const PowerCrystal: React.FC = () => {
 
   return (
     <div
-      className="relative flex flex-col items-center justify-center w-full"
+      className="relative flex flex-col items-center justify-center w-full cursor-pointer" // Dodano cursor-pointer
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={onCrystalClick} // Dodano onClick
     >
       <div
         className={`relative w-24 h-24 overflow-hidden rounded-full shadow-lg transition-all duration-300 ${currentCrystalColor} ${isFlashing ? 'animate-crystal-flash' : ''}`}
-        // Usunięto transform rotate-45 i clipPath, dodano rounded-full
       >
         {/* Liquid energy fill */}
         <div
@@ -52,7 +56,7 @@ export const PowerCrystal: React.FC = () => {
           }}
         />
         {/* Level number */}
-        <div className="absolute inset-0 flex items-center justify-center"> {/* Usunięto transform -rotate-45 */}
+        <div className="absolute inset-0 flex items-center justify-center">
           <span className="text-white text-3xl font-bold drop-shadow-lg">
             {user.level}
           </span>
