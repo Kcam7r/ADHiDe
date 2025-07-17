@@ -256,7 +256,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const updateJournalEntry = (id: string, updates: Partial<JournalEntry>) => {
     setJournalEntries(journalEntries.map(entry => 
       entry.id === id ? { ...entry, ...updates } : entry
-    );
+    ));
   };
 
   const addQuickThought = (thought: Omit<QuickThought, 'id' | 'createdAt'>) => {
