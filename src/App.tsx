@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { AppProvider } from './contexts/AppContext';
 import { Sidebar } from './components/Sidebar';
-import { Dashboard } from './components/Dashboard';
-import { QuestLog } from './components/QuestLog';
-import { Journal } from './components/Journal';
-import { Garage } from './components/Garage';
 import { PomodoroTimer } from './components/PomodoroTimer';
 import { ConfettiOverlay } from './components/ConfettiOverlay';
-// Usunięto import PowerCrystal
+
+// Leniwe ładowanie głównych komponentów widoków
+const Dashboard = lazy(() => import('./components/Dashboard').then(module => ({ default: module.Dashboard })));
+const QuestLog = lazy(() => import('./components/QuestLog').then(module => ({ default: module.QuestLog })));
+const Journal = lazy(() => import('./components/Journal').then(module => ({ default: module.Journal })));
+const Garage = lazy(() => import('./components/Garage').then(module => ({ default: module.Garage })));
 
 function App() {
   const [activeView, setActiveView] = useState('dashboard');
@@ -32,12 +33,17 @@ function App() {
       <div className="flex h-screen bg-gray-900">
         <Sidebar activeView={activeView} onViewChange={setActiveView} />
         <main className="flex-1 overflow-auto">
-          {renderActiveView()}
+          <Suspense fallback={
+            <div className="flex items-center justify-center h-full text-white text-xl">
+              Ładowanie...
+            </div>
+          }>
+            {renderActiveView()}
+          </Suspense>
         </main>
       </div>
       <PomodoroTimer />
       <ConfettiOverlay />
-      {/* Usunięto renderowanie PowerCrystal tutaj */}
     </AppProvider>
   );
 }

@@ -5,7 +5,7 @@ interface DailyTaskStampProps {
   onAnimationEnd: () => void;
 }
 
-export const DailyTaskStamp: React.FC<DailyTaskStampProps> = ({ onAnimationEnd }) => {
+export const DailyTaskStamp: React.FC<DailyTaskStampProps> = React.memo(({ onAnimationEnd }) => {
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
@@ -30,4 +30,4 @@ export const DailyTaskStamp: React.FC<DailyTaskStampProps> = ({ onAnimationEnd }
       />
     </div>
   );
-};
+});

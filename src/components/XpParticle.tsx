@@ -8,12 +8,12 @@ interface XpParticleProps {
   onComplete: () => void;
 }
 
-export const XpParticle: React.FC<XpParticleProps> = ({ startX, startY, targetX, targetY, onComplete }) => {
+export const XpParticle: React.FC<XpParticleProps> = React.memo(({ startX, startY, targetX, targetY, onComplete }) => {
   const [position, setPosition] = useState({ x: startX, y: startY });
   const [opacity, setOpacity] = useState(1);
   const [scale, setScale] = useState(1);
   const animationFrameId = useRef<number | null>(null);
-  const startTimeRef = useRef<DOMHighResTimeStamp | null>(null); // Przeniesiono deklarację tutaj
+  const startTimeRef = useRef<DOMHighResTimeStamp | null>(null);
 
   useEffect(() => {
     const duration = 800; // milisekundy
@@ -42,15 +42,12 @@ export const XpParticle: React.FC<XpParticleProps> = ({ startX, startY, targetX,
       const curveOffsetX = (Math.random() - 0.5) * 150; // Odchylenie poziome
       const curveOffsetY = (Math.random() - 0.5) * 150 - 50; // Odchylenie pionowe, z lekkim biasem w górę
 
-      const controlX = midX + curveOffsetX;
-      const controlY = midY + curveOffsetY;
-
       // Obliczenia pozycji za pomocą kwadratowej krzywej Beziera
       const currentX = (1 - animationProgress) * (1 - animationProgress) * startX + 
-                       2 * (1 - animationProgress) * animationProgress * controlX + 
+                       2 * (1 - animationProgress) * animationProgress * curveOffsetX + 
                        animationProgress * animationProgress * targetX;
       const currentY = (1 - animationProgress) * (1 - animationProgress) * startY + 
-                       2 * (1 - animationProgress) * animationProgress * controlY + 
+                       2 * (1 - animationProgress) * animationProgress * curveOffsetY + 
                        animationProgress * animationProgress * targetY;
       
       setPosition({ x: currentX, y: currentY });
@@ -87,4 +84,4 @@ export const XpParticle: React.FC<XpParticleProps> = ({ startX, startY, targetX,
       }}
     />
   );
-};
+});
