@@ -48,7 +48,7 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
   };
 
   return (
-    <div className="bg-gray-800 rounded-lg p-4 shadow-lg text-white w-full max-w-sm border border-gray-700">
+    <div className="bg-gray-800 rounded-lg p-6 shadow-lg text-white w-full max-w-sm border border-gray-700">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <button onClick={handlePrevMonth} className="p-2 rounded-full hover:bg-gray-700 transition-colors">
@@ -77,16 +77,18 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
           <div
             key={index}
             className={`
-              relative h-10 flex items-center justify-center rounded-md text-sm cursor-pointer
+              relative flex items-center justify-center rounded-md text-sm cursor-pointer
+              py-2 px-2 min-h-[40px] min-w-[40px]
               ${day && isSameMonth(day, currentMonth) ? 'text-white' : 'text-gray-500 opacity-60'}
               ${day && isSameDay(day, selectedDate) ? 'bg-cyan-600 text-white font-bold' : 'hover:bg-gray-700'}
-              ${day && isDateHighlighted(day) && !isSameDay(day, selectedDate) ? 'bg-cyan-700 text-cyan-200 font-medium' : ''}
-              
               group
             `}
             onClick={() => day && onSelectDate(day)}
           >
             {day && format(day, 'd')}
+            {day && isDateHighlighted(day) && (
+              <div className="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-cyan-400"></div>
+            )}
             {/* Subtle border on hover */}
             <div className="absolute inset-0 border border-transparent group-hover:border-gray-600 rounded-md transition-colors duration-100 pointer-events-none"></div>
           </div>

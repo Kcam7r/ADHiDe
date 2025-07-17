@@ -9,7 +9,7 @@ export const Journal: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date()); // Ustaw domyślnie na dzisiejszą datę
   const [currentEntry, setCurrentEntry] = useState<JournalEntry | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [expandedEntries, setExpandedEntries] = new Set<string>();
+  const [expandedEntries, setExpandedEntries] = useState<Set<string>>(new Set()); // Poprawiona inicjalizacja
   const [showCalendarPopup, setShowCalendarPopup] = useState(false); // Zmieniono nazwę stanu
 
   const [formData, setFormData] = useState({
