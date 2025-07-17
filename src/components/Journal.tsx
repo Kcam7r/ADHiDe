@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Edit, Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar as CalendarIcon, ChevronDown, ChevronUp } from 'lucide-react'; // Dodano ChevronDown, ChevronUp
 import { JournalEntry } from '../types';
-import { Calendar } from './Calendar'; // Import Calendar zamiast CalendarModal
+import { Calendar } from './Calendar';
 
 export const Journal: React.FC = () => {
   const { journalEntries, addJournalEntry, updateJournalEntry } = useApp();
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date()); // Ustaw domyślnie na dzisiejszą datę
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [currentEntry, setCurrentEntry] = useState<JournalEntry | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [expandedEntries, setExpandedEntries] = useState<Set<string>>(new Set()); // Poprawiona inicjalizacja
-  const [showCalendarPopup, setShowCalendarPopup] = useState(false); // Zmieniono nazwę stanu
+  const [expandedEntries, setExpandedEntries] = useState<Set<string>>(new Set());
+  const [showCalendarPopup, setShowCalendarPopup] = useState(false);
 
   const [formData, setFormData] = useState({
     content: '',
@@ -18,7 +17,6 @@ export const Journal: React.FC = () => {
     energy: 3
   });
 
-  // Wyodrębnij daty z wpisów dziennika do podświetlenia w kalendarzu
   const journalDates = React.useMemo(() => {
     return journalEntries.map(entry => new Date(entry.date));
   }, [journalEntries]);
@@ -36,7 +34,6 @@ export const Journal: React.FC = () => {
         mood: existingEntry.mood,
         energy: existingEntry.energy
       });
-      setIsEditing(false); // Po wybraniu daty z wpisem, wyświetl go, nie edytuj
     } else {
       setCurrentEntry(null);
       setFormData({
@@ -44,9 +41,8 @@ export const Journal: React.FC = () => {
         mood: 3,
         energy: 3
       });
-      setIsEditing(true); // Jeśli brak wpisu dla daty, od razu przejdź do edycji
     }
-  }, [selectedDate, journalEntries]); // Dodano journalEntries do zależności
+  }, [selectedDate, journalEntries]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,7 +61,6 @@ export const Journal: React.FC = () => {
           energy: formData.energy
         });
       }
-      setIsEditing(false);
     }
   };
 
@@ -103,7 +98,7 @@ export const Journal: React.FC = () => {
 
   const handleDateSelection = (date: Date) => {
     setSelectedDate(date);
-    setShowCalendarPopup(false); // Zamknij popup po wybraniu daty
+    setShowCalendarPopup(false);
   };
 
   return (
@@ -111,37 +106,27 @@ export const Journal: React.FC = () => {
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-white mb-8">Dziennik</h1>
         
-        <div className="bg-gray-800 rounded-lg p-6">
+        <div className="bg-gray-800 rounded-lg p-6 shadow-lg">
           {/* Date Selection */}
           <div className="mb-6">
             <div className="flex items-center justify-center relative mb-4">
               <button
-                onClick={() => setShowCalendarPopup(true)} // Otwórz popup kalendarza
-                className="flex items-center space-x-2 text-white hover:text-cyan-400 transition-colors"
+                onClick={() => setShowCalendarPopup(true)}
+                className="flex items-center space-x-2 text-white hover:text-cyan-400 transition-colors p-2 rounded-md"
               >
-                <CalendarIcon className="w-5 h-5" />
-                <span className="text-xl font-semibold">
+                <CalendarIcon className="w-6 h-6" />
+                <span className="text-2xl font-semibold">
                   {selectedDate ? formatDate(selectedDate) : 'Wybierz datę'}
                 </span>
               </button>
               
-              {currentEntry && !isEditing && (
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center space-x-2 bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg transition-colors"
-                >
-                  <Edit className="w-4 h-4" />
-                  <span>Edytuj</span>
-                </button>
-              )}
-
               {showCalendarPopup && (
                 <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50">
                   <Calendar
                     selectedDate={selectedDate}
                     onSelectDate={handleDateSelection}
                     highlightedDates={journalDates}
-                    onClose={() => setShowCalendarPopup(false)} // Przekazanie funkcji zamykającej
+                    onClose={() => setShowCalendarPopup(false)}
                   />
                 </div>
               )}
@@ -149,107 +134,88 @@ export const Journal: React.FC = () => {
           </div>
 
           {/* Entry Form or Display */}
-          {(isEditing || !currentEntry) ? (
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label htmlFor="journal-content" className="block text-sm font-medium text-gray-300 mb-2">
+                Wpis
+              </label>
+              <textarea
+                id="journal-content"
+                value={formData.content}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                className="w-full p-4 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-cyan-500 focus:outline-none resize-y"
+                rows={8}
+                placeholder="Jak minął Ci dzień? Co czujesz?"
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Wpis
+                <label htmlFor="journal-mood" className="block text-sm font-medium text-gray-300 mb-2">
+                  Nastrój (1-5) <span className="text-2xl ml-2">{getMoodEmoji(formData.mood)}</span>
                 </label>
-                <textarea
-                  value={formData.content}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  className="w-full p-4 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-cyan-500 focus:outline-none"
-                  rows={8}
-                  placeholder="Jak minął Ci dzień? Co czujesz?"
-                  required
+                <input
+                  id="journal-mood"
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={formData.mood}
+                  onChange={(e) => setFormData({ ...formData, mood: parseInt(e.target.value) })}
+                  className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:bg-cyan-500 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:appearance-none [&::-moz-range-thumb]:bg-cyan-500 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full"
                 />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Nastrój (1-5) {getMoodEmoji(formData.mood)}
-                  </label>
-                  <input
-                    type="range"
-                    min="1"
-                    max="5"
-                    value={formData.mood}
-                    onChange={(e) => setFormData({ ...formData, mood: parseInt(e.target.value) })}
-                    className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
-                  />
-                  <div className="flex justify-between text-xs text-gray-400 mt-1">
-                    <span>Bardzo źle</span>
-                    <span>Bardzo dobrze</span>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Energia (1-5) {getEnergyIcon(formData.energy)}
-                  </label>
-                  <input
-                    type="range"
-                    min="1"
-                    max="5"
-                    value={formData.energy}
-                    onChange={(e) => setFormData({ ...formData, energy: parseInt(e.target.value) })}
-                    className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
-                  />
-                  <div className="flex justify-between text-xs text-gray-400 mt-1">
-                    <span>Bardzo niska</span>
-                    <span>Bardzo wysoka</span>
-                  </div>
+                <div className="flex justify-between text-xs text-gray-400 mt-1">
+                  <span>Bardzo źle</span>
+                  <span>Bardzo dobrze</span>
                 </div>
               </div>
 
-              <div className="flex space-x-3">
-                <button
-                  type="submit"
-                  className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2 rounded-lg transition-colors"
-                >
-                  {currentEntry ? 'Aktualizuj' : 'Zapisz'}
-                </button>
-                {isEditing && (
-                  <button
-                    type="button"
-                    onClick={() => setIsEditing(false)}
-                    className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition-colors"
-                  >
-                    Anuluj
-                  </button>
-                )}
-              </div>
-            </form>
-          ) : (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-gray-700 p-4 rounded-lg">
-                  <h3 className="text-white font-medium mb-2">Nastrój</h3>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-2xl">{getMoodEmoji(currentEntry.mood)}</span>
-                    <span className="text-gray-300">{currentEntry.mood}/5</span>
-                  </div>
+              <div>
+                <label htmlFor="journal-energy" className="block text-sm font-medium text-gray-300 mb-2">
+                  Energia (1-5) <span className="text-2xl ml-2">{getEnergyIcon(formData.energy)}</span>
+                </label>
+                <input
+                  id="journal-energy"
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={formData.energy}
+                  onChange={(e) => setFormData({ ...formData, energy: parseInt(e.target.value) })}
+                  className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:bg-cyan-500 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:appearance-none [&::-moz-range-thumb]:bg-cyan-500 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full"
+                />
+                <div className="flex justify-between text-xs text-gray-400 mt-1">
+                  <span>Bardzo niska</span>
+                  <span>Bardzo wysoka</span>
                 </div>
-                <div className="bg-gray-700 p-4 rounded-lg">
-                  <h3 className="text-white font-medium mb-2">Energia</h3>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-2xl">{getEnergyIcon(currentEntry.energy)}</span>
-                    <span className="text-gray-300">{currentEntry.energy}/5</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-white font-medium mb-2">Wpis</h3>
-                <p className="text-gray-300 whitespace-pre-wrap">{currentEntry.content}</p>
               </div>
             </div>
-          )}
+
+            <div className="flex space-x-3">
+              <button
+                type="submit"
+                className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2 rounded-lg transition-colors font-medium"
+              >
+                {currentEntry ? 'Aktualizuj wpis' : 'Zapisz wpis'}
+              </button>
+              {currentEntry && ( // Przycisk "Nowy wpis" tylko jeśli jest już istniejący wpis
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentEntry(null);
+                    setFormData({ content: '', mood: 3, energy: 3 });
+                    setSelectedDate(new Date()); // Resetuj do dzisiejszej daty
+                  }}
+                  className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition-colors font-medium"
+                >
+                  Nowy wpis
+                </button>
+              )}
+            </div>
+          </form>
         </div>
 
         {/* Recent Entries */}
-        <div className="mt-8 bg-gray-800 rounded-lg p-6">
+        <div className="mt-8 bg-gray-800 rounded-lg p-6 shadow-lg">
           <h2 className="text-xl font-semibold text-white mb-4">Ostatnie wpisy</h2>
           {entriesWithDates.length === 0 ? (
             <div className="text-gray-400 text-center py-8">
@@ -258,10 +224,13 @@ export const Journal: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-3">
-              {entriesWithDates.map((entry) => (
+              {entriesWithDates
+                .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Sortuj od najnowszych
+                .map((entry) => (
                 <div
                   key={entry.id}
-                  className="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition-colors"
+                  className="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition-colors cursor-pointer"
+                  onClick={() => setSelectedDate(new Date(entry.date))} // Kliknięcie na wpis wybiera datę
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
@@ -269,17 +238,20 @@ export const Journal: React.FC = () => {
                         LOG z dnia {formatDate(entry.date)}
                       </h3>
                       <div className="flex items-center space-x-2">
-                        <span>{getMoodEmoji(entry.mood)}</span>
-                        <span>{getEnergyIcon(entry.energy)}</span>
+                        <span className="text-xl">{getMoodEmoji(entry.mood)}</span>
+                        <span className="text-xl">{getEnergyIcon(entry.energy)}</span>
                       </div>
                     </div>
                     <button
-                      onClick={() => toggleEntryExpansion(entry.id)}
-                      className="text-gray-400 hover:text-white transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Zapobiegaj wywołaniu onClick rodzica
+                        toggleEntryExpansion(entry.id);
+                      }}
+                      className="text-gray-400 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-500"
                     >
                       {expandedEntries.has(entry.id) ? 
-                        <span className="text-xl">▲</span> : 
-                        <span className="text-xl">▼</span>
+                        <ChevronUp className="w-5 h-5" /> : 
+                        <ChevronDown className="w-5 h-5" />
                       }
                     </button>
                   </div>
