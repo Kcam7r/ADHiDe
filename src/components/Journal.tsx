@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Edit } from 'lucide-react'; // Usunięto Calendar, ChevronDown, ChevronUp
+import { Edit, Calendar as CalendarIcon } from 'lucide-react'; // Import CalendarIcon
 import { JournalEntry } from '../types';
-import { Calendar } from './ui/calendar'; // Import nowego komponentu Calendar
+import { Calendar } from './ui/calendar'; // Import komponentu Calendar
 import { cn } from '../lib/utils'; // Import funkcji cn
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'; // Import Popover components
 
 export const Journal: React.FC = () => {
   const { journalEntries, addJournalEntry, updateJournalEntry } = useApp();
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date()); // Zmieniono typ na Date | undefined
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [currentEntry, setCurrentEntry] = useState<JournalEntry | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [showCalendar, setShowCalendar] = useState(false);
   const [expandedEntries, setExpandedEntries] = useState<Set<string>>(new Set());
 
   const [formData, setFormData] = useState({
@@ -19,7 +19,7 @@ export const Journal: React.FC = () => {
     energy: 3
   });
 
-  const selectedDateString = selectedDate ? selectedDate.toDateString() : ''; // Sprawdzenie, czy selectedDate istnieje
+  const selectedDateString = selectedDate ? selectedDate.toDateString() : '';
   const existingEntry = journalEntries.find(entry => 
     new Date(entry.date).toDateString() === selectedDateString
   );
@@ -40,15 +40,11 @@ export const Journal: React.FC = () => {
         energy: 3
       });
     }
-    // Po zmianie daty, jeśli kalendarz był otwarty, zamknij go
-    if (showCalendar) {
-      setShowCalendar(false);
-    }
-  }, [existingEntry, selectedDate]); // Dodano selectedDate do zależności
+  }, [existingEntry, selectedDate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.content.trim() && selectedDate) { // Upewnij się, że selectedDate istnieje
+    if (formData.content.trim() && selectedDate) {
       if (currentEntry) {
         updateJournalEntry(currentEntry.id, {
           content: formData.content,
@@ -107,15 +103,30 @@ export const Journal: React.FC = () => {
         <div className="bg-gray-800 rounded-lg p-6">
           {/* Date Selection */}
           <div className="mb-6">
-            <div className="flex items-center justify-center relative mb-4"> {/* Zmieniono na justify-center */}
-              <button
-                onClick={() => setShowCalendar(!showCalendar)}
-                className="text-white hover:text-cyan-400 transition-colors"
-              >
-                <span className="text-xl font-semibold">
-                  {selectedDate ? formatDate(selectedDate) : 'Wybierz datę'}
-                </span>
-              </button>
+            <div className="flex items-center justify-center relative mb-4">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    className={cn(
+                      "flex items-center space-x-2 text-white hover:text-cyan-400 transition-colors",
+                      !selectedDate && "text-gray-400"
+                    )}
+                  >
+                    <CalendarIcon className="w-5 h-5" />
+                    <span className="text-xl font-semibold">
+                      {selectedDate ? formatDate(selectedDate) : 'Wybierz datę'}
+                    </span>
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={setSelectedDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
               
               {currentEntry && !isEditing && (
                 <button
@@ -127,18 +138,6 @@ export const Journal: React.FC = () => {
                 </button>
               )}
             </div>
-
-            {showCalendar && (
-              <div className="bg-gray-700 p-4 rounded-lg mb-4 flex justify-center"> {/* Wyśrodkowanie kalendarza */}
-                <Calendar
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={setSelectedDate}
-                  initialFocus
-                  className="rounded-md border border-gray-600 bg-gray-800 text-white" // Dodano klasy dla stylizacji
-                />
-              </div>
-            )}
           </div>
 
           {/* Entry Form or Display */}
