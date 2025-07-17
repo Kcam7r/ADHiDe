@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryFull, Brain } from 'lucide-react';
+import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryFull, Brain, CheckCircle } from 'lucide-react';
 import { Mission, Habit, DailyTask } from '../types';
 import { MissionHistoryModal } from './MissionHistoryModal';
 import { DailyTaskStamp } from './DailyTaskStamp'; // Import the new component
@@ -23,7 +23,7 @@ export const Dashboard: React.FC = () => {
   // New states for Daily Tasks visual management
   const [displayDailyTasks, setDisplayDailyTasks] = useState<DailyTask[]>([]);
   const [completedTodayVisual, setCompletedTodayVisual] = useState<DailyTask[]>([]);
-  const [stampedTaskIds, setStampedTaskIds] = useState<Set<string>>(new Set());
+  // Usunięto stampedTaskIds, ponieważ nie jest już potrzebne do trwałego wyświetlania stempla
   const [animatingOutTasks, setAnimatingOutTasks] = useState<Set<string>>(new Set());
 
   // New state for Mission Completion Animation
@@ -69,7 +69,7 @@ export const Dashboard: React.FC = () => {
     }, timeToMidnight);
 
     return () => clearTimeout(resetTimer);
-  }, []); // Run once on mount to schedule the daily reset
+  }, []);
 
 
   // Definicja kolejności priorytetów i energii
@@ -175,13 +175,11 @@ export const Dashboard: React.FC = () => {
 
     addXP(10, e.clientX, e.clientY); // Dodaj XP natychmiast
 
-    // 1. Add to stamped tasks to show the stamp
-    setStampedTaskIds(prev => new Set(prev).add(taskId));
-    // 2. Trigger visual move out animation
+    // Trigger visual move out animation and stamp animation
     setAnimatingOutTasks(prev => new Set(prev).add(taskId));
 
-    // 3. After stamp (0.5s) and slide-out (0.5s) animations complete (total 1s),
-    //    update AppContext and clear animation states.
+    // After stamp (0.5s) and slide-out (0.5s) animations complete (total 1s),
+    // update AppContext and clear animation states.
     setTimeout(() => {
       completeDailyTask(taskId, e.clientX, e.clientY); // Update AppContext after animation
       setAnimatingOutTasks(prev => {
@@ -189,7 +187,6 @@ export const Dashboard: React.FC = () => {
         newSet.delete(taskId);
         return newSet;
       });
-      // StampedTaskIds remains, as the stamp should stay on the completed task
     }, 1000); 
   };
 
@@ -270,11 +267,12 @@ export const Dashboard: React.FC = () => {
                     ${animatingOutTasks.has(task.id) ? 'animate-slide-out-down' : ''}
                   `}
                 >
-                  <span className={`text-white ${stampedTaskIds.has(task.id) ? 'task-completed-visual' : ''}`}>
+                  <span className={`text-white`}>
                     {task.title}
                   </span>
-                  {stampedTaskIds.has(task.id) && (
-                    <DailyTaskStamp onAnimationEnd={() => { /* Stamp stays visible */ }} />
+                  {/* Render DailyTaskStamp only if it's currently animating out */}
+                  {animatingOutTasks.has(task.id) && (
+                    <DailyTaskStamp onAnimationEnd={() => { /* No action needed here, task will move to completedTodayVisual */ }} />
                   )}
                 </div>
               ))}
@@ -296,9 +294,13 @@ export const Dashboard: React.FC = () => {
                       className="relative p-4 rounded-lg bg-gray-700 border-2 border-amber-500 task-completed-visual"
                     >
                       <span className="text-gray-400">{task.title}</span>
-                      {stampedTaskIds.has(task.id) && ( // Ensure stamp is still shown here
-                        <DailyTaskStamp onAnimationEnd={() => { /* Stamp stays visible */ }} />
-                      )}
+                      {/* Static checkmark for completed tasks */}
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <CheckCircle
+                          className="w-12 h-12 text-green-400 opacity-70"
+                          style={{ filter: 'drop-shadow(0 0 10px rgba(74, 222, 128, 0.8))' }}
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>
