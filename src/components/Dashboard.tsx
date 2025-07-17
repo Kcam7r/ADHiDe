@@ -4,7 +4,6 @@ import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryFull, Brain } f
 import { Mission, Habit, DailyTask } from '../types';
 import { MissionHistoryModal } from './MissionHistoryModal';
 import { DailyTaskStamp } from './DailyTaskStamp'; // Import the new component
-import { MissionCompleteAnimator } from './MissionCompleteAnimator'; // Import the new animator
 
 export const Dashboard: React.FC = () => {
   const { 
@@ -27,8 +26,8 @@ export const Dashboard: React.FC = () => {
   const [stampedTaskIds, setStampedTaskIds] = useState<Set<string>>(new Set());
   const [animatingOutTasks, setAnimatingOutTasks] = useState<Set<string>>(new Set());
 
-  // State for Mission Completion Animation
-  const [animatingMission, setAnimatingMission] = useState<{ mission: Mission; xpGain: number; rect: DOMRect } | null>(null);
+  // New state for Mission Completion Animation
+  const [fadingOutMissions, setFadingOutMissions] = useState<Set<string>>(new Set());
 
   // Sync appDailyTasks with local display states
   useEffect(() => {
@@ -140,25 +139,34 @@ export const Dashboard: React.FC = () => {
     const mission = missions.find(m => m.id === missionId);
     if (!mission || mission.completed) return;
 
-    // Oblicz XP
+    // Calculate XP gain
     let xpGain = 50;
     if (mission.priority === 'urgent') xpGain += 30;
     else if (mission.priority === 'important') xpGain += 15;
     if (mission.energy === 'concentration') xpGain += 10;
 
-    // Pobierz pozycję i rozmiar elementu misji
+    // Get origin for XP particles
     const element = e.currentTarget as HTMLElement;
     const rect = element.getBoundingClientRect();
+    const originX = rect.x + rect.width / 2;
+    const originY = rect.y + rect.height / 2;
 
-    // Ustaw stan, aby uruchomić komponent animacji
-    setAnimatingMission({ mission, xpGain, rect });
-  };
+    // 1. Add mission to fadingOutMissions to trigger CSS animation
+    setFadingOutMissions(prev => new Set(prev).add(missionId));
 
-  const handleMissionAnimationComplete = (missionId: string) => {
-    // Po zakończeniu animacji, faktycznie ukończ misję w kontekście
-    completeMission(missionId);
-    // Wyczyść stan animacji
-    setAnimatingMission(null);
+    // 2. Immediately add XP (particles will fly from the card's position)
+    addXP(xpGain, originX, originY);
+
+    // 3. After the fade-out animation duration, actually complete the mission in context
+    setTimeout(() => {
+      completeMission(missionId); // This removes it from the `missions` array
+      // Remove from fadingOutMissions after it's fully gone from the DOM
+      setFadingOutMissions(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(missionId);
+        return newSet;
+      });
+    }, 500); // Match this with the CSS animation duration
   };
 
   const handleDailyTaskClick = (taskId: string, e: React.MouseEvent) => {
@@ -320,8 +328,7 @@ export const Dashboard: React.FC = () => {
                   onClick={(e) => handleMissionComplete(mission.id, e)}
                   className={`p-4 rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 ${
                     mission.projectId ? 'bg-purple-600 hover:bg-purple-500' : 'bg-cyan-600 hover:bg-cyan-500'
-                  } ${animatingMission && animatingMission.mission.id === mission.id ? 'opacity-0' : ''} `}
-                  // Hide the original mission card if it's currently animating
+                  } ${fadingOutMissions.has(mission.id) ? 'animate-mission-fade-out' : ''} `}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
@@ -354,16 +361,6 @@ export const Dashboard: React.FC = () => {
         <MissionHistoryModal
           missions={completedMissionsHistory}
           onClose={() => setShowHistory(false)}
-        />
-      )}
-
-      {/* Render MissionCompleteAnimator if a mission is animating */}
-      {animatingMission && (
-        <MissionCompleteAnimator
-          mission={animatingMission.mission}
-          xpGain={animatingMission.xpGain}
-          missionRect={animatingMission.rect}
-          onAnimationComplete={handleMissionAnimationComplete}
         />
       )}
     </div>

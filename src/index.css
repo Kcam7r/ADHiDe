@@ -122,31 +122,11 @@
   animation: slide-out-down 0.5s ease-out forwards;
 }
 
-/* New animations for Mission Completion */
-@keyframes tremble-pulse {
-  0% { transform: translateX(0) translateY(0) rotate(0deg); box-shadow: 0 0 0px rgba(255,255,255,0); }
-  25% { transform: translateX(-2px) translateY(2px) rotate(-1deg); box-shadow: 0 0 15px rgba(255,255,255,0.6); }
-  50% { transform: translateX(2px) translateY(-2px) rotate(1deg); box-shadow: 0 0 25px rgba(255,255,255,0.9); }
-  75% { transform: translateX(-2px) translateY(2px) rotate(-1deg); box-shadow: 0 0 15px rgba(255,255,255,0.6); }
-  100% { transform: translateX(0) translateY(0) rotate(0deg); box-shadow: 0 0 0px rgba(255,255,255,0); }
+/* Nowa animacja dla zanikania misji */
+@keyframes mission-fade-out {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-20px) scale(0.9); }
 }
-.animate-tremble-pulse {
-  animation: tremble-pulse 0.5s ease-out forwards;
-}
-
-@keyframes disintegrate-fade {
-  0% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(0.8); } /* Card fades out and shrinks slightly */
-}
-.animate-disintegrate-fade {
-  animation: disintegrate-fade 1s ease-out forwards;
-}
-
-@keyframes xp-pop {
-  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
-  100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
-}
-.animate-xp-pop {
-  animation: xp-pop 1s ease-out forwards; /* Usunięto opóźnienie 1.5s */
+.animate-mission-fade-out {
+  animation: mission-fade-out 0.5s ease-out forwards;
 }
