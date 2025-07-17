@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Calendar as CalendarIcon, ChevronDown, ChevronUp, BatteryEmpty, BatteryLow, BatteryMedium, BatteryFull, Zap } from 'lucide-react'; // Dodano nowe ikony baterii i pioruna
+import { Calendar as CalendarIcon, ChevronDown, ChevronUp, Battery, BatteryLow, BatteryMedium, BatteryFull, Zap } from 'lucide-react'; // Zmieniono BatteryEmpty na Battery
 import { JournalEntry } from '../types';
 import { Calendar } from './Calendar';
 
@@ -79,7 +79,7 @@ export const Journal: React.FC = () => {
 
   const getEnergyIcon = (energy: number) => {
     switch (energy) {
-      case 1: return <BatteryEmpty className="w-6 h-6 text-red-400" />;
+      case 1: return <Battery className="w-6 h-6 text-red-400" />; // Użyto Battery zamiast BatteryEmpty
       case 2: return <BatteryLow className="w-6 h-6 text-orange-400" />;
       case 3: return <BatteryMedium className="w-6 h-6 text-yellow-400" />;
       case 4: return <BatteryFull className="w-6 h-6 text-green-400" />;
