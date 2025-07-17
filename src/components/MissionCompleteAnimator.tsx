@@ -66,14 +66,14 @@ export const MissionCompleteAnimator: React.FC<MissionCompleteAnimatorProps> = (
       setStage(1);
       // Here you would play the "building tension" sound
       // Example: playSound('tension_build_up');
-    }, 50); // Small delay to ensure component is mounted and positioned
+    }, 10); // Start almost immediately
 
     // Stage 2: Disintegration (0.5s - 1.5s)
     const stage2Timer = setTimeout(() => {
       setStage(2);
       // Here you would play the "disintegration" sound
       // Example: playSound('disintegrate_whoosh');
-    }, 500);
+    }, 510); // Starts after tremble-pulse (0.5s) + small buffer
 
     // Stage 3: Reward (+XP! text and particles fly) (1.5s - 2.5s)
     const stage3Timer = setTimeout(() => {
@@ -83,12 +83,12 @@ export const MissionCompleteAnimator: React.FC<MissionCompleteAnimatorProps> = (
       addXP(xpGain, missionRect.x + missionRect.width / 2, missionRect.y + missionRect.height / 2);
       // Here you would play the "satisfying clink" sound
       // Example: playSound('xp_clink');
-    }, 1500);
+    }, 1510); // Starts after disintegrate-fade (1s) + small buffer
 
     // Final cleanup: Remove component and update AppContext (2.5s)
     const finalTimer = setTimeout(() => {
       onAnimationComplete(mission.id);
-    }, 2500);
+    }, 2510); // After xp-pop (1s) + small buffer
 
     return () => {
       clearTimeout(stage1Timer);

@@ -139,7 +139,7 @@
   100% { opacity: 0; transform: scale(0.8); } /* Card fades out and shrinks slightly */
 }
 .animate-disintegrate-fade {
-  animation: disintegrate-fade 1s ease-out forwards; /* Usunięto opóźnienie 0.5s */
+  animation: disintegrate-fade 1s ease-out forwards;
 }
 
 @keyframes xp-pop {
@@ -148,5 +148,5 @@
   100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
 }
 .animate-xp-pop {
-  animation: xp-pop 1s ease-out 1.5s forwards; /* Starts after disintegration */
+  animation: xp-pop 1s ease-out forwards; /* Usunięto opóźnienie 1.5s */
 }
