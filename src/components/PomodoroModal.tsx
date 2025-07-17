@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Play, Pause, RotateCcw } from 'lucide-react';
 
 interface PomodoroModalProps {
@@ -6,12 +6,12 @@ interface PomodoroModalProps {
 }
 
 export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
-  // Placeholder for Pomodoro logic
-  const [time, setTime] = React.useState(25 * 60); // 25 minutes in seconds
-  const [isActive, setIsActive] = React.useState(false);
-  const [mode, setMode] = React.useState<'pomodoro' | 'shortBreak' | 'longBreak'>('pomodoro');
+  const [selectedMinutes, setSelectedMinutes] = useState(25); // Domyślny czas: 25 minut
+  const [time, setTime] = useState(selectedMinutes * 60); // Czas w sekundach
+  const [isActive, setIsActive] = useState(false);
 
-  React.useEffect(() => {
+  // Efekt do obsługi odliczania czasu
+  useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
     if (isActive && time > 0) {
       interval = setInterval(() => {
@@ -19,12 +19,18 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
       }, 1000);
     } else if (time === 0) {
       setIsActive(false);
-      // Here you would typically switch modes or notify user
+      // Tutaj można dodać logikę po zakończeniu sesji, np. powiadomienie
     }
     return () => {
       if (interval) clearInterval(interval);
     };
   }, [isActive, time]);
+
+  // Efekt do aktualizacji czasu, gdy zmieni się selectedMinutes (np. przez suwak)
+  useEffect(() => {
+    setTime(selectedMinutes * 60);
+    setIsActive(false); // Zatrzymujemy timer po zmianie czasu suwakiem
+  }, [selectedMinutes]);
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -38,24 +44,11 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
 
   const handleReset = () => {
     setIsActive(false);
-    setMode('pomodoro');
-    setTime(25 * 60);
+    setTime(selectedMinutes * 60); // Resetuj do aktualnie wybranej wartości
   };
 
-  const handleModeChange = (newMode: 'pomodoro' | 'shortBreak' | 'longBreak') => {
-    setMode(newMode);
-    setIsActive(false);
-    switch (newMode) {
-      case 'pomodoro':
-        setTime(25 * 60);
-        break;
-      case 'shortBreak':
-        setTime(5 * 60);
-        break;
-      case 'longBreak':
-        setTime(15 * 60);
-        break;
-    }
+  const handleMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedMinutes(parseInt(e.target.value));
   };
 
   return (
@@ -74,25 +67,25 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
           </button>
         </div>
         
-        <div className="flex justify-around mb-4">
-          <button
-            onClick={() => handleModeChange('pomodoro')}
-            className={`px-3 py-1 rounded-md text-sm font-medium ${mode === 'pomodoro' ? 'bg-red-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
-          >
-            Pomodoro
-          </button>
-          <button
-            onClick={() => handleModeChange('shortBreak')}
-            className={`px-3 py-1 rounded-md text-sm font-medium ${mode === 'shortBreak' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
-          >
-            Krótka przerwa
-          </button>
-          <button
-            onClick={() => handleModeChange('longBreak')}
-            className={`px-3 py-1 rounded-md text-sm font-medium ${mode === 'longBreak' ? 'bg-indigo-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
-          >
-            Długa przerwa
-          </button>
+        {/* Suwak do ustawiania czasu */}
+        <div className="mb-6">
+          <label htmlFor="pomodoro-minutes" className="block text-sm font-medium text-gray-300 mb-2">
+            Ustaw czas (minuty): <span className="font-bold text-white">{selectedMinutes}</span>
+          </label>
+          <input
+            id="pomodoro-minutes"
+            type="range"
+            min="5"
+            max="60"
+            step="1"
+            value={selectedMinutes}
+            onChange={handleMinutesChange}
+            className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+          />
+          <div className="flex justify-between text-xs text-gray-400 mt-1">
+            <span>5 min</span>
+            <span>60 min</span>
+          </div>
         </div>
 
         <div className="text-center my-8">
