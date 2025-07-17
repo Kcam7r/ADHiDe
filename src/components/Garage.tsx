@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Plus, ChevronDown, ChevronUp, Pause, Target } from 'lucide-react'; // Usunięto Play
+import { Plus, ChevronDown, ChevronUp, Pause, Target } from 'lucide-react';
 import { Project } from '../types';
 
 export const Garage: React.FC = () => {
-  const { projects, addProject, addTaskToProject, activateMission, deactivateMission } = useApp(); // Usunięto updateProject
+  const { projects, addProject, addTaskToProject, activateMission, deactivateMission } = useApp();
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [expandedProjects, setExpandedProjects] = useState<Set<string>>(new Set());
   const [showTaskForms, setShowTaskForms] = useState<Set<string>>(new Set());

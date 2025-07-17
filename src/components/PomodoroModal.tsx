@@ -14,7 +14,7 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
 
   // Efekt do obsługi odliczania czasu
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
+    let interval: number | null = null;
     if (isActive && time > 0) {
       interval = setInterval(() => {
         setTime((prevTime) => prevTime - 1);

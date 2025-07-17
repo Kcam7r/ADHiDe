@@ -109,7 +109,7 @@ export const Dashboard: React.FC = () => {
     }, 400);
   };
 
-  const handleHabitClick = (habitId: string) => { // Usunięto habitType
+  const handleHabitClick = (habitId: string) => {
     setAnimatingHabits((prev: Set<string>) => new Set(prev).add(habitId));
     completeHabit(habitId);
 
@@ -138,7 +138,7 @@ export const Dashboard: React.FC = () => {
               {habits.map((habit) => (
                 <div
                   key={habit.id}
-                  onClick={() => handleHabitClick(habit.id)} // Usunięto habit.type
+                  onClick={() => handleHabitClick(habit.id)}
                   className={`p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 ${
                     habit.type === 'positive' 
                       ? 'bg-green-600 border-green-500' 

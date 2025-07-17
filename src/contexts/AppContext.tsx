@@ -67,16 +67,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [quickThoughts, setQuickThoughts] = useLocalStorage<QuickThought[]>('adhd-thoughts', []);
   const [completedMissionsHistory, setCompletedMissionsHistory] = useLocalStorage<Mission[]>('adhd-completed-missions', []);
 
-  // showLevelUp state and logic removed, now handled by ConfettiOverlay
-
   const calculateLevel = (xp: number) => Math.floor(xp / 1000) + 1;
-  // getXpForNextLevel removed as it was unused
 
   const addXP = (amount: number) => {
     const newXP = user.xp + amount;
     const newLevel = calculateLevel(newXP);
-    
-    // No direct UI update here, ConfettiOverlay will react to user.level change
     
     setUser({ ...user, xp: newXP, level: newLevel });
   };
@@ -250,21 +245,34 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Reset daily tasks at midnight
   useEffect(() => {
-    const resetDaily = () => {
+    const scheduleNextReset = () => {
       const now = new Date();
       const midnight = new Date(now);
-      midnight.setHours(24, 0, 0, 0);
-      
+      midnight.setHours(24, 0, 0, 0); // Sets to midnight of the *next* day
+
       const timeToMidnight = midnight.getTime() - now.getTime();
-      
-      setTimeout(() => {
-        setDailyTasks(dailyTasks.map(task => ({ ...task, completed: false, completedAt: undefined })));
-        resetDaily();
+
+      // Clear any existing timeout to prevent multiple timers
+      if (window.dailyResetTimeout) {
+        clearTimeout(window.dailyResetTimeout);
+      }
+
+      window.dailyResetTimeout = setTimeout(() => {
+        setDailyTasks(prevTasks => prevTasks.map(task => ({ ...task, completed: false, completedAt: undefined })));
+        // After resetting, schedule the next reset for the next midnight
+        scheduleNextReset();
       }, timeToMidnight);
     };
-    
-    resetDaily();
-  }, []);
+
+    scheduleNextReset(); // Initial call to schedule the first reset
+
+    // Cleanup function to clear the timeout when the component unmounts
+    return () => {
+      if (window.dailyResetTimeout) {
+        clearTimeout(window.dailyResetTimeout);
+      }
+    };
+  }, []); // Empty dependency array means it runs once on mount and cleans up on unmount.
 
   return (
     <AppContext.Provider value={{
@@ -299,7 +307,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       deleteQuickThought
     }}>
       {children}
-      {/* Level up modal removed, now handled by ConfettiOverlay */}
     </AppContext.Provider>
   );
 };
