@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryFull, Brain } from 'lucide-react';
 import { Mission, Habit } from '../types';
+import { MissionHistoryModal } from './MissionHistoryModal'; // Dodano import
 
 export const Dashboard: React.FC = () => {
   const { 
@@ -15,7 +16,7 @@ export const Dashboard: React.FC = () => {
   } = useApp();
   const [showHistory, setShowHistory] = useState(false);
   const [animatingDailyTasks, setAnimatingDailyTasks] = useState<Set<string>>(new Set());
-  const [animatingHabits, setAnimatingHabits] = useState<Set<string>>(new Set()); // Poprawiono nazwę zmiennej stanu
+  const [animatingHabits, setAnimatingHabits] = useState<Set<string>>(new Set());
 
   const activeMissions = missions.filter(m => m.isActive);
 
@@ -85,11 +86,11 @@ export const Dashboard: React.FC = () => {
   };
 
   const handleHabitClick = (habitId: string, habitType: Habit['type']) => {
-    setAnimatingHabits(prev => new Set(prev).add(habitId)); // Użyto poprawnej nazwy
+    setAnimatingHabits(prev => new Set(prev).add(habitId));
     completeHabit(habitId);
 
     setTimeout(() => {
-      setAnimatingHabits(prev => { // Użyto poprawnej nazwy
+      setAnimatingHabits(prev => {
         const newSet = new Set(prev);
         newSet.delete(habitId);
         return newSet;
