@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Calendar, Edit, ChevronDown, ChevronUp } from 'lucide-react';
+import { Edit } from 'lucide-react'; // Usunięto Calendar, ChevronDown, ChevronUp
 import { JournalEntry } from '../types';
+import { Calendar } from './ui/calendar'; // Import nowego komponentu Calendar
+import { cn } from '../lib/utils'; // Import funkcji cn
 
 export const Journal: React.FC = () => {
   const { journalEntries, addJournalEntry, updateJournalEntry } = useApp();
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date()); // Zmieniono typ na Date | undefined
   const [currentEntry, setCurrentEntry] = useState<JournalEntry | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -17,7 +19,7 @@ export const Journal: React.FC = () => {
     energy: 3
   });
 
-  const selectedDateString = selectedDate.toDateString();
+  const selectedDateString = selectedDate ? selectedDate.toDateString() : ''; // Sprawdzenie, czy selectedDate istnieje
   const existingEntry = journalEntries.find(entry => 
     new Date(entry.date).toDateString() === selectedDateString
   );
@@ -38,11 +40,15 @@ export const Journal: React.FC = () => {
         energy: 3
       });
     }
-  }, [existingEntry]);
+    // Po zmianie daty, jeśli kalendarz był otwarty, zamknij go
+    if (showCalendar) {
+      setShowCalendar(false);
+    }
+  }, [existingEntry, selectedDate]); // Dodano selectedDate do zależności
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.content.trim()) {
+    if (formData.content.trim() && selectedDate) { // Upewnij się, że selectedDate istnieje
       if (currentEntry) {
         updateJournalEntry(currentEntry.id, {
           content: formData.content,
@@ -80,13 +86,15 @@ export const Journal: React.FC = () => {
   };
 
   const toggleEntryExpansion = (entryId: string) => {
-    const newExpanded = new Set(expandedEntries);
-    if (newExpanded.has(entryId)) {
-      newExpanded.delete(entryId);
-    } else {
-      newExpanded.add(entryId);
-    }
-    setExpandedEntries(newExpanded);
+    setExpandedEntries(prev => {
+      const newExpanded = new Set(prev);
+      if (newExpanded.has(entryId)) {
+        newExpanded.delete(entryId);
+      } else {
+        newExpanded.add(entryId);
+      }
+      return newExpanded;
+    });
   };
 
   const entriesWithDates = journalEntries.filter(entry => !!entry.date);
@@ -99,22 +107,20 @@ export const Journal: React.FC = () => {
         <div className="bg-gray-800 rounded-lg p-6">
           {/* Date Selection */}
           <div className="mb-6">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-center relative mb-4"> {/* Zmieniono na justify-center */}
               <button
                 onClick={() => setShowCalendar(!showCalendar)}
-                className="flex items-center space-x-2 text-white hover:text-cyan-400 transition-colors"
+                className="text-white hover:text-cyan-400 transition-colors"
               >
-                <Calendar className="w-5 h-5" />
                 <span className="text-xl font-semibold">
-                  {formatDate(selectedDate)}
+                  {selectedDate ? formatDate(selectedDate) : 'Wybierz datę'}
                 </span>
-                {showCalendar ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </button>
               
               {currentEntry && !isEditing && (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="flex items-center space-x-2 bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg transition-colors"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center space-x-2 bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg transition-colors"
                 >
                   <Edit className="w-4 h-4" />
                   <span>Edytuj</span>
@@ -123,12 +129,13 @@ export const Journal: React.FC = () => {
             </div>
 
             {showCalendar && (
-              <div className="bg-gray-700 p-4 rounded-lg mb-4">
-                <input
-                  type="date"
-                  value={selectedDate.toISOString().split('T')[0]}
-                  onChange={(e) => setSelectedDate(new Date(e.target.value))}
-                  className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
+              <div className="bg-gray-700 p-4 rounded-lg mb-4 flex justify-center"> {/* Wyśrodkowanie kalendarza */}
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={setSelectedDate}
+                  initialFocus
+                  className="rounded-md border border-gray-600 bg-gray-800 text-white" // Dodano klasy dla stylizacji
                 />
               </div>
             )}
@@ -264,8 +271,8 @@ export const Journal: React.FC = () => {
                       className="text-gray-400 hover:text-white transition-colors"
                     >
                       {expandedEntries.has(entry.id) ? 
-                        <ChevronUp className="w-5 h-5" /> : 
-                        <ChevronDown className="w-5 h-5" />
+                        <span className="text-xl">▲</span> : // Prosta strzałka w górę
+                        <span className="text-xl">▼</span>  // Prosta strzałka w dół
                       }
                     </button>
                   </div>
