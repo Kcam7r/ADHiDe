@@ -86,9 +86,10 @@
 /* Custom animations for the new PowerCrystal design */
 @keyframes liquid-wave {
   0% { transform: translateY(0px); }
-  25% { transform: translateY(-2px); }
-  50% { transform: translateY(0px); }
-  75% { transform: translateY(2px); }
+  20% { transform: translateY(-5px); } /* Większa amplituda w górę */
+  40% { transform: translateY(0px); }
+  60% { transform: translateY(5px); }  /* Większa amplituda w dół */
+  80% { transform: translateY(0px); }
   100% { transform: translateY(0px); }
 }
 .animate-liquid-wave {
@@ -115,11 +116,7 @@
   animation: xp-streak 0.8s ease-out forwards;
 }
 
-/* Usunięto animację small-orb-light-up, ponieważ kulki zostały usunięte */
-
-/* Custom shadow for metallic casing - wzmocniony */
+/* Custom shadow for metallic casing */
 .shadow-inner-dark {
   box-shadow: inset 0 8px 15px rgba(0,0,0,0.6), inset 0 -8px 15px rgba(0,0,0,0.6);
 }
-
-/* Custom glow for amber orbs - usunięto, ponieważ kulki zostały usunięte */
