@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryFull, Brain } from 'lucide-react';
 import { Mission, Habit, DailyTask } from '../types';
 import { MissionHistoryModal } from './MissionHistoryModal';
 import { DailyTaskStamp } from './DailyTaskStamp'; // Import the new component
+import { MissionCompleteAnimator } from './MissionCompleteAnimator'; // Import the new animator
 
 export const Dashboard: React.FC = () => {
   const { 
@@ -25,6 +26,9 @@ export const Dashboard: React.FC = () => {
   const [completedTodayVisual, setCompletedTodayVisual] = useState<DailyTask[]>([]);
   const [stampedTaskIds, setStampedTaskIds] = useState<Set<string>>(new Set());
   const [animatingOutTasks, setAnimatingOutTasks] = useState<Set<string>>(new Set());
+
+  // State for Mission Completion Animation
+  const [animatingMission, setAnimatingMission] = useState<{ mission: Mission; xpGain: number; rect: DOMRect } | null>(null);
 
   // Sync appDailyTasks with local display states
   useEffect(() => {
@@ -136,22 +140,25 @@ export const Dashboard: React.FC = () => {
     const mission = missions.find(m => m.id === missionId);
     if (!mission || mission.completed) return;
 
-    // Oblicz XP natychmiast
+    // Oblicz XP
     let xpGain = 50;
     if (mission.priority === 'urgent') xpGain += 30;
     else if (mission.priority === 'important') xpGain += 15;
     if (mission.energy === 'concentration') xpGain += 10;
-    addXP(xpGain, e.clientX, e.clientY); // Dodaj XP natychmiast
 
-    const element = document.getElementById(`mission-${missionId}`);
-    if (element) {
-      element.style.animation = 'fadeOut 0.7s ease-out forwards';
-      setTimeout(() => {
-        completeMission(missionId, e.clientX, e.clientY); // Aktualizuj stan po animacji
-      }, 700); 
-    } else {
-      completeMission(missionId, e.clientX, e.clientY); // Fallback, jeśli element nie istnieje
-    }
+    // Pobierz pozycję i rozmiar elementu misji
+    const element = e.currentTarget as HTMLElement;
+    const rect = element.getBoundingClientRect();
+
+    // Ustaw stan, aby uruchomić komponent animacji
+    setAnimatingMission({ mission, xpGain, rect });
+  };
+
+  const handleMissionAnimationComplete = (missionId: string) => {
+    // Po zakończeniu animacji, faktycznie ukończ misję w kontekście
+    completeMission(missionId);
+    // Wyczyść stan animacji
+    setAnimatingMission(null);
   };
 
   const handleDailyTaskClick = (taskId: string, e: React.MouseEvent) => {
@@ -313,7 +320,8 @@ export const Dashboard: React.FC = () => {
                   onClick={(e) => handleMissionComplete(mission.id, e)}
                   className={`p-4 rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 ${
                     mission.projectId ? 'bg-purple-600 hover:bg-purple-500' : 'bg-cyan-600 hover:bg-cyan-500'
-                  }`}
+                  } ${animatingMission && animatingMission.mission.id === mission.id ? 'opacity-0' : ''} `}
+                  // Hide the original mission card if it's currently animating
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
@@ -346,6 +354,16 @@ export const Dashboard: React.FC = () => {
         <MissionHistoryModal
           missions={completedMissionsHistory}
           onClose={() => setShowHistory(false)}
+        />
+      )}
+
+      {/* Render MissionCompleteAnimator if a mission is animating */}
+      {animatingMission && (
+        <MissionCompleteAnimator
+          mission={animatingMission.mission}
+          xpGain={animatingMission.xpGain}
+          missionRect={animatingMission.rect}
+          onAnimationComplete={handleMissionAnimationComplete}
         />
       )}
     </div>

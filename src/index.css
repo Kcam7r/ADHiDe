@@ -121,3 +121,33 @@
 .animate-slide-out-down {
   animation: slide-out-down 0.5s ease-out forwards;
 }
+
+/* New animations for Mission Completion */
+@keyframes tremble-pulse {
+  0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); box-shadow: 0 0 0px rgba(255,255,255,0); }
+  10% { transform: translateX(-1px) translateY(1px) rotate(-0.5deg); box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+  20% { transform: translateX(1px) translateY(-1px) rotate(0.5deg); box-shadow: 0 0 20px rgba(255,255,255,0.8); }
+  30% { transform: translateX(-1px) translateY(1px) rotate(-0.5deg); box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+  40% { transform: translateX(1px) translateY(-1px) rotate(0.5deg); box-shadow: 0 0 20px rgba(255,255,255,0.8); }
+  50% { transform: translateX(0) translateY(0) rotate(0deg); box-shadow: 0 0 0px rgba(255,255,255,0); }
+}
+.animate-tremble-pulse {
+  animation: tremble-pulse 0.5s ease-out forwards;
+}
+
+@keyframes disintegrate-fade {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.8); } /* Card fades out and shrinks slightly */
+}
+.animate-disintegrate-fade {
+  animation: disintegrate-fade 1s ease-out 0.5s forwards; /* Starts after tremble-pulse */
+}
+
+@keyframes xp-pop {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
+.animate-xp-pop {
+  animation: xp-pop 1s ease-out 1.5s forwards; /* Starts after disintegration */
+}
