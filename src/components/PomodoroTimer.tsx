@@ -81,7 +81,8 @@ export const PomodoroTimer: React.FC = () => {
         ref={buttonRef}
         onMouseDown={handleMouseDown}
         onClick={handleClick}
-        className="fixed z-40 p-3 cursor-grab active:cursor-grabbing transition-all duration-200 text-5xl hover:scale-110"
+        // Dynamiczne klasy: transition-none podczas przeciągania, transition-all w innym przypadku
+        className={`fixed z-40 p-3 cursor-grab active:cursor-grabbing text-5xl hover:scale-110 ${isDragging ? 'transition-none' : 'transition-all duration-200'}`}
         style={{ left: position.x, top: position.y }}
       >
         🍅 {/* Emoji pomidora */}
