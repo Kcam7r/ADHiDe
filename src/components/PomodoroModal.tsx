@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, Play, Pause, RotateCcw } from 'lucide-react';
 
 interface PomodoroModalProps {
@@ -9,6 +9,8 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
   const [selectedMinutes, setSelectedMinutes] = useState(25); // Domyślny czas: 25 minut
   const [time, setTime] = useState(selectedMinutes * 60); // Czas w sekundach
   const [isActive, setIsActive] = useState(false);
+  const [isEditingMinutes, setIsEditingMinutes] = useState(false); // Nowy stan do edycji minut
+  const inputRef = useRef<HTMLInputElement>(null); // Referencja do pola input
 
   // Efekt do obsługi odliczania czasu
   useEffect(() => {
@@ -26,11 +28,18 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
     };
   }, [isActive, time]);
 
-  // Efekt do aktualizacji czasu, gdy zmieni się selectedMinutes (np. przez suwak)
+  // Efekt do aktualizacji czasu, gdy zmieni się selectedMinutes (np. przez suwak lub ręczne wpisanie)
   useEffect(() => {
     setTime(selectedMinutes * 60);
-    setIsActive(false); // Zatrzymujemy timer po zmianie czasu suwakiem
+    setIsActive(false); // Zatrzymujemy timer po zmianie czasu
   }, [selectedMinutes]);
+
+  // Efekt do automatycznego focusowania inputa po przejściu w tryb edycji
+  useEffect(() => {
+    if (isEditingMinutes && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditingMinutes]);
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -49,6 +58,32 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
 
   const handleMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedMinutes(parseInt(e.target.value));
+  };
+
+  const handleManualMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value);
+    // Pozwól na puste pole podczas wpisywania, ale ustaw domyślną wartość przy zatwierdzeniu
+    if (!isNaN(value)) {
+      setSelectedMinutes(value);
+    }
+  };
+
+  const handleInputBlur = () => {
+    // Upewnij się, że wartość jest w rozsądnym zakresie po zakończeniu edycji
+    let finalMinutes = selectedMinutes;
+    if (isNaN(finalMinutes) || finalMinutes < 1) {
+      finalMinutes = 1; // Minimalna wartość
+    } else if (finalMinutes > 180) { // Maksymalna wartość, np. 3 godziny
+      finalMinutes = 180;
+    }
+    setSelectedMinutes(finalMinutes);
+    setIsEditingMinutes(false);
+  };
+
+  const handleInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      inputRef.current?.blur(); // Wywołaj blur, aby uruchomić handleInputBlur
+    }
   };
 
   // Renderowanie pełnoekranowego zegara, gdy timer jest aktywny
@@ -85,7 +120,27 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
         {/* Suwak do ustawiania czasu */}
         <div className="mb-6">
           <label htmlFor="pomodoro-minutes" className="block text-sm font-medium text-gray-300 mb-2">
-            Ustaw czas (minuty): <span className="font-bold text-white">{selectedMinutes}</span>
+            Ustaw czas (minuty):{' '}
+            {isEditingMinutes ? (
+              <input
+                ref={inputRef}
+                type="number"
+                value={selectedMinutes}
+                onChange={handleManualMinutesChange}
+                onBlur={handleInputBlur}
+                onKeyPress={handleInputKeyPress}
+                className="bg-gray-700 text-white rounded-md px-2 py-1 w-20 text-center focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                min="1"
+                max="180"
+              />
+            ) : (
+              <span
+                className="font-bold text-white cursor-pointer hover:text-cyan-400 transition-colors"
+                onClick={() => setIsEditingMinutes(true)}
+              >
+                {selectedMinutes}
+              </span>
+            )}
           </label>
           <input
             id="pomodoro-minutes"
