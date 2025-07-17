@@ -53,12 +53,12 @@ function Calendar({
         table: "w-full space-y-1", // Usunięto border-collapse
         head_row: "flex w-full flex-wrap", // Dodano flex-wrap
         head_cell:
-          "text-gray-400 rounded-md w-9 font-normal text-[0.8rem] flex justify-center items-center", // Stała szerokość, wyśrodkowane
+          "text-gray-400 rounded-md font-normal text-[0.8rem] flex-1 flex justify-center items-center", // Zmieniono w-9 na flex-1
         row: "flex w-full mt-2 flex-wrap", // Dodano flex-wrap
-        cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-range-start)]:rounded-l-md [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20 flex justify-center items-center", // Stała szerokość/wysokość, wyśrodkowane
+        cell: "h-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-range-start)]:rounded-l-md [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20 flex-1 flex justify-center items-center", // Zmieniono w-9 na flex-1
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 font-normal text-gray-300 flex justify-center items-center", // Stała szerokość/wysokość, wyśrodkowane
+          "h-9 p-0 font-normal text-gray-300 flex-1 flex justify-center items-center", // Zmieniono w-9 na flex-1
           "border border-transparent hover:border-gray-600 rounded-md transition-colors duration-100" // Ramki na najechaniu
         ),
         day_range_start: "day-range-start",
