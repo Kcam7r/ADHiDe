@@ -75,7 +75,8 @@ export const PomodoroTimer: React.FC = () => {
         ref={buttonRef}
         onMouseDown={handleMouseDown}
         onClick={handleClick}
-        className="fixed z-40 p-3 text-white cursor-grab active:cursor-grabbing transition-colors duration-200 hover:bg-gray-700 rounded-lg text-3xl" // Zwiększono rozmiar tekstu dla emoji
+        // Zaktualizowane klasy: większy tekst, brak tła po najechaniu, dodany efekt skalowania
+        className="fixed z-40 p-3 cursor-grab active:cursor-grabbing transition-all duration-200 text-5xl hover:scale-110"
         style={{ left: position.x, top: position.y }}
       >
         🍅 {/* Emoji pomidora */}
