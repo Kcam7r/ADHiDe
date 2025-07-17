@@ -8,20 +8,36 @@ import { pl } from 'date-fns/locale'; // Importuj polską lokalizację
 import { cn } from "../../lib/utils"
 import { buttonVariants } from "./button"
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  highlightedDates?: Date[]; // Nowa właściwość dla dat do podświetlenia
+}
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  highlightedDates = [], // Domyślnie pusta tablica
   ...props
 }: CalendarProps) {
+
+  // Modyfikatory do zaznaczania dni z wpisami
+  const modifiers = {
+    highlighted: highlightedDates,
+  };
+
+  // Klasy CSS dla zaznaczonych dni
+  const modifiersClassNames = {
+    highlighted: "bg-blue-700 text-white hover:bg-blue-600", // Styl dla podświetlonych dni
+  };
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-3 w-full", className)} // Dodano w-full do głównego kontenera DayPicker
+      className={cn("p-3 w-full", className)} // Zapewnij pełną szerokość dla głównego kontenera kalendarza
       locale={pl} // Ustaw lokalizację na polską
-      weekStartsOn={1} // Ustaw początek tygodnia na poniedziałek
+      weekStartsOn={1} // Ustaw początek tygodnia na poniedziałek (poniedziałek = 1)
+      modifiers={modifiers} // Zastosuj niestandardowe modyfikatory
+      modifiersClassNames={modifiersClassNames} // Zastosuj niestandardowe klasy dla modyfikatorów
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
@@ -37,12 +53,13 @@ function Calendar({
         table: "w-full border-collapse space-y-1",
         head_row: "flex w-full", // Upewnij się, że head_row jest flex i w-full
         head_cell:
-          "text-gray-400 rounded-md font-normal text-[0.8rem] flex-1 flex justify-center items-center", // Zmieniono w-9 na flex-1
+          "text-gray-400 rounded-md w-9 font-normal text-[0.8rem] flex justify-center items-center", // Stała szerokość, wyśrodkowane
         row: "flex w-full mt-2", // Upewnij się, że row jest flex i w-full
-        cell: "h-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-range-start)]:rounded-l-md [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20 flex-1 flex justify-center items-center", // Zmieniono w-9 na flex-1
+        cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-range-start)]:rounded-l-md [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20 flex justify-center items-center", // Stała szerokość/wysokość, wyśrodkowane
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 p-0 font-normal text-gray-300 hover:bg-gray-700 hover:text-white flex-1" // Zmieniono w-9 na flex-1
+          "h-9 w-9 p-0 font-normal text-gray-300 flex justify-center items-center", // Stała szerokość/wysokość, wyśrodkowane
+          "border border-transparent hover:border-gray-600 rounded-md transition-colors duration-100" // Ramki na najechaniu
         ),
         day_range_start: "day-range-start",
         day_range_end: "day-range-end",

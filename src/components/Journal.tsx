@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Edit, Calendar as CalendarIcon } from 'lucide-react'; // Import CalendarIcon
+import { Edit, Calendar as CalendarIcon } from 'lucide-react';
 import { JournalEntry } from '../types';
-import { Calendar } from './ui/calendar'; // Import komponentu Calendar
-import { cn } from '../lib/utils'; // Import funkcji cn
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'; // Import Popover components
+import { Calendar } from './ui/calendar';
+import { cn } from '../lib/utils';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 
 export const Journal: React.FC = () => {
   const { journalEntries, addJournalEntry, updateJournalEntry } = useApp();
@@ -18,6 +18,11 @@ export const Journal: React.FC = () => {
     mood: 3,
     energy: 3
   });
+
+  // Wyodrębnij daty z wpisów dziennika do podświetlenia w kalendarzu
+  const journalDates = React.useMemo(() => {
+    return journalEntries.map(entry => new Date(entry.date));
+  }, [journalEntries]);
 
   const selectedDateString = selectedDate ? selectedDate.toDateString() : '';
   const existingEntry = journalEntries.find(entry => 
@@ -124,6 +129,7 @@ export const Journal: React.FC = () => {
                     selected={selectedDate}
                     onSelect={setSelectedDate}
                     initialFocus
+                    highlightedDates={journalDates} // Przekaż daty z wpisów tutaj
                   />
                 </PopoverContent>
               </Popover>
@@ -270,8 +276,8 @@ export const Journal: React.FC = () => {
                       className="text-gray-400 hover:text-white transition-colors"
                     >
                       {expandedEntries.has(entry.id) ? 
-                        <span className="text-xl">▲</span> : // Prosta strzałka w górę
-                        <span className="text-xl">▼</span>  // Prosta strzałka w dół
+                        <span className="text-xl">▲</span> : 
+                        <span className="text-xl">▼</span>
                       }
                     </button>
                   </div>
