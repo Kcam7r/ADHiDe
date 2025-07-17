@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Edit, Calendar as CalendarIcon } from 'lucide-react';
 import { JournalEntry } from '../types';
+import { CalendarModal } from './CalendarModal'; // Import CalendarModal
 
 export const Journal: React.FC = () => {
   const { journalEntries, addJournalEntry, updateJournalEntry } = useApp();
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date()); // Ustaw domyślnie na dzisiejszą datę
   const [currentEntry, setCurrentEntry] = useState<JournalEntry | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [expandedEntries, setExpandedEntries] = useState<Set<string>>(new Set());
+  const [showCalendarModal, setShowCalendarModal] = useState(false); // Nowy stan do kontroli widoczności modala
 
   const [formData, setFormData] = useState({
     content: '',
@@ -17,17 +19,16 @@ export const Journal: React.FC = () => {
   });
 
   // Wyodrębnij daty z wpisów dziennika do podświetlenia w kalendarzu
-  // Ta logika nie jest już potrzebna bez komponentu Calendar, ale zostawiam dla kontekstu
-  // const journalDates = React.useMemo(() => {
-  //   return journalEntries.map(entry => new Date(entry.date));
-  // }, [journalEntries]);
-
-  const selectedDateString = selectedDate ? selectedDate.toDateString() : '';
-  const existingEntry = journalEntries.find(entry => 
-    new Date(entry.date).toDateString() === selectedDateString
-  );
+  const journalDates = React.useMemo(() => {
+    return journalEntries.map(entry => new Date(entry.date));
+  }, [journalEntries]);
 
   React.useEffect(() => {
+    const selectedDateString = selectedDate.toDateString();
+    const existingEntry = journalEntries.find(entry => 
+      new Date(entry.date).toDateString() === selectedDateString
+    );
+
     if (existingEntry) {
       setCurrentEntry(existingEntry);
       setFormData({
@@ -35,6 +36,7 @@ export const Journal: React.FC = () => {
         mood: existingEntry.mood,
         energy: existingEntry.energy
       });
+      setIsEditing(false); // Po wybraniu daty z wpisem, wyświetl go, nie edytuj
     } else {
       setCurrentEntry(null);
       setFormData({
@@ -42,8 +44,9 @@ export const Journal: React.FC = () => {
         mood: 3,
         energy: 3
       });
+      setIsEditing(true); // Jeśli brak wpisu dla daty, od razu przejdź do edycji
     }
-  }, [existingEntry, selectedDate]);
+  }, [selectedDate, journalEntries]); // Dodano journalEntries do zależności
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,9 +110,8 @@ export const Journal: React.FC = () => {
           {/* Date Selection */}
           <div className="mb-6">
             <div className="flex items-center justify-center relative mb-4">
-              {/* Usunięto Popover i Calendar */}
               <button
-                // onClick={() => setShowCalendar(true)} // Możesz dodać logikę do otwierania własnego selektora daty
+                onClick={() => setShowCalendarModal(true)} // Otwórz modal kalendarza
                 className="flex items-center space-x-2 text-white hover:text-cyan-400 transition-colors"
               >
                 <CalendarIcon className="w-5 h-5" />
@@ -277,6 +279,15 @@ export const Journal: React.FC = () => {
           )}
         </div>
       </div>
+
+      {showCalendarModal && (
+        <CalendarModal
+          onClose={() => setShowCalendarModal(false)}
+          selectedDate={selectedDate}
+          onSelectDate={setSelectedDate}
+          highlightedDates={journalDates}
+        />
+      )}
     </div>
   );
 };
