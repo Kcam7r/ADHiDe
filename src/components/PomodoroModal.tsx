@@ -57,6 +57,10 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
     setTime(selectedMinutes * 60); // Resetuj do aktualnie wybranej wartości
   };
 
+  const handleSliderMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedMinutes(parseInt(e.target.value));
+  };
+
   const handleManualMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     // Pozwól na puste pole podczas wpisywania, ale ustaw domyślną wartość przy zatwierdzeniu
@@ -113,6 +117,27 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
           </button>
         </div>
         
+        {/* Suwak do ustawiania czasu */}
+        <div className="mb-6">
+          <label htmlFor="pomodoro-minutes-slider" className="block text-sm font-medium text-gray-300 mb-2">
+            Ustaw czas (minuty): <span className="font-bold text-white">{selectedMinutes}</span>
+          </label>
+          <input
+            id="pomodoro-minutes-slider"
+            type="range"
+            min="5"
+            max="60"
+            step="1"
+            value={selectedMinutes}
+            onChange={handleSliderMinutesChange}
+            className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+          />
+          <div className="flex justify-between text-xs text-gray-400 mt-1">
+            <span>5 min</span>
+            <span>60 min</span>
+          </div>
+        </div>
+
         {/* Duży zegar, teraz klikalny do edycji */}
         <div className="text-center my-8">
           {isEditingMinutes ? (
