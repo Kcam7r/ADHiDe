@@ -63,13 +63,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
         {/* Gamification Info - Power Crystal */}
         <div className="p-4 border-t border-gray-700 flex flex-col items-center">
           <PowerCrystal onCrystalClick={() => setShowResetConfirm(true)} />
-          {/* Usunięto p z tekstem informującym o postępie XP */}
-          <button
-            onClick={() => setShowResetConfirm(true)}
-            className="w-full mt-2 bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg transition-colors text-sm"
-          >
-            Resetuj Postęp
-          </button>
+          {/* Usunięto przycisk Resetuj Postęp */}
         </div>
 
         {/* Quick Thoughts */}
