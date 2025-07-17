@@ -19,13 +19,12 @@ interface CalendarProps {
   selectedDate: Date;
   onSelectDate: (date: Date) => void;
   highlightedDates?: Date[];
-  onClose: () => void; // Nowa właściwość do zamykania kalendarza
+  onClose: () => void;
 }
 
 export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, highlightedDates = [], onClose }) => {
   const [currentMonth, setCurrentMonth] = useState(selectedDate);
-  const [isSelectingDate, setIsSelectingDate] = useState(false); // Stan do szybkiego wyboru daty
-  const calendarRef = useRef<HTMLDivElement>(null); // Referencja do elementu kalendarza
+  const calendarRef = useRef<HTMLDivElement>(null);
 
   // Obsługa kliknięcia poza kalendarzem
   useEffect(() => {
@@ -56,12 +55,10 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
 
   const handlePrevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
-    setIsSelectingDate(false); // Zamknij szybki wybór po zmianie miesiąca
   };
 
   const handleNextMonth = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
-    setIsSelectingDate(false); // Zamknij szybki wybór po zmianie miesiąca
   };
 
   const isDateHighlighted = (date: Date) => {
@@ -71,13 +68,11 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
   const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newMonthIndex = parseInt(e.target.value, 10);
     setCurrentMonth(prev => setMonth(prev, newMonthIndex));
-    setIsSelectingDate(false); // Zamknij po wyborze
   };
 
   const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newYear = parseInt(e.target.value, 10);
     setCurrentMonth(prev => setYear(prev, newYear));
-    setIsSelectingDate(false); // Zamknij po wyborze
   };
 
   const currentYear = currentMonth.getFullYear();
@@ -90,24 +85,12 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
 
   return (
     <div ref={calendarRef} className="bg-gray-800 rounded-lg p-6 shadow-lg text-white w-full max-w-sm border border-gray-700">
-      {/* Header */}
+      {/* Header with month and year selectors */}
       <div className="flex justify-between items-center mb-4">
         <button onClick={handlePrevMonth} className="p-2 rounded-full hover:bg-gray-700 transition-colors">
           <ChevronLeft className="w-5 h-5 text-gray-300" />
         </button>
-        <h2 
-          className="text-lg font-semibold text-center cursor-pointer hover:text-cyan-400 transition-colors"
-          onClick={() => setIsSelectingDate(!isSelectingDate)}
-        >
-          {format(currentMonth, 'MMMM yyyy', { locale: pl })}
-        </h2>
-        <button onClick={handleNextMonth} className="p-2 rounded-full hover:bg-gray-700 transition-colors">
-          <ChevronRight className="w-5 h-5 text-gray-300" />
-        </button>
-      </div>
-
-      {isSelectingDate ? (
-        <div className="flex justify-center space-x-2 mb-4">
+        <div className="flex space-x-2">
           <select
             value={currentMonth.getMonth()}
             onChange={handleMonthChange}
@@ -131,42 +114,43 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
             ))}
           </select>
         </div>
-      ) : (
-        <>
-          {/* Weekdays */}
-          <div className="grid grid-cols-7 text-center text-sm font-medium text-gray-400 mb-2">
-            {weekdays.map((day, index) => (
-              <div key={index} className="py-2">
-                {day}
-              </div>
-            ))}
-          </div>
+        <button onClick={handleNextMonth} className="p-2 rounded-full hover:bg-gray-700 transition-colors">
+          <ChevronRight className="w-5 h-5 text-gray-300" />
+        </button>
+      </div>
 
-          {/* Days Grid */}
-          <div className="grid grid-cols-7 gap-1">
-            {days.map((day, index) => (
-              <div
-                key={index}
-                className={`
-                  relative flex items-center justify-center rounded-md text-sm cursor-pointer
-                  aspect-square h-10
-                  ${day && isSameMonth(day, currentMonth) ? 'text-white' : 'text-gray-500 opacity-60'}
-                  ${day && isSameDay(day, selectedDate) ? 'bg-cyan-600 text-white font-bold' : 'hover:bg-gray-700'}
-                  group
-                `}
-                onClick={() => day && onSelectDate(day)}
-              >
-                {day && format(day, 'd')}
-                {day && isDateHighlighted(day) && (
-                  <div className="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-cyan-400"></div>
-                )}
-                {/* Subtle border on hover */}
-                <div className="absolute inset-0 border border-transparent group-hover:border-gray-600 rounded-md transition-colors duration-100 pointer-events-none"></div>
-              </div>
-            ))}
+      {/* Weekdays */}
+      <div className="grid grid-cols-7 text-center text-sm font-medium text-gray-400 mb-2">
+        {weekdays.map((day, index) => (
+          <div key={index} className="py-2">
+            {day}
           </div>
-        </>
-      )}
+        ))}
+      </div>
+
+      {/* Days Grid */}
+      <div className="grid grid-cols-7 gap-1">
+        {days.map((day, index) => (
+          <div
+            key={index}
+            className={`
+              relative flex items-center justify-center rounded-md text-sm cursor-pointer
+              aspect-square h-10
+              ${day && isSameMonth(day, currentMonth) ? 'text-white' : 'text-gray-500 opacity-60'}
+              ${day && isSameDay(day, selectedDate) ? 'bg-cyan-600 text-white font-bold' : 'hover:bg-gray-700'}
+              group
+            `}
+            onClick={() => day && onSelectDate(day)}
+          >
+            {day && format(day, 'd')}
+            {day && isDateHighlighted(day) && (
+              <div className="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-cyan-400"></div>
+            )}
+            {/* Subtle border on hover */}
+            <div className="absolute inset-0 border border-transparent group-hover:border-gray-600 rounded-md transition-colors duration-100 pointer-events-none"></div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
