@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Edit, Calendar as CalendarIcon } from 'lucide-react';
 import { JournalEntry } from '../types';
-import { Calendar } from './ui/calendar';
-import { cn } from '../lib/utils';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 
 export const Journal: React.FC = () => {
   const { journalEntries, addJournalEntry, updateJournalEntry } = useApp();
@@ -20,9 +17,10 @@ export const Journal: React.FC = () => {
   });
 
   // Wyodrębnij daty z wpisów dziennika do podświetlenia w kalendarzu
-  const journalDates = React.useMemo(() => {
-    return journalEntries.map(entry => new Date(entry.date));
-  }, [journalEntries]);
+  // Ta logika nie jest już potrzebna bez komponentu Calendar, ale zostawiam dla kontekstu
+  // const journalDates = React.useMemo(() => {
+  //   return journalEntries.map(entry => new Date(entry.date));
+  // }, [journalEntries]);
 
   const selectedDateString = selectedDate ? selectedDate.toDateString() : '';
   const existingEntry = journalEntries.find(entry => 
@@ -109,30 +107,16 @@ export const Journal: React.FC = () => {
           {/* Date Selection */}
           <div className="mb-6">
             <div className="flex items-center justify-center relative mb-4">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button
-                    className={cn(
-                      "flex items-center space-x-2 text-white hover:text-cyan-400 transition-colors",
-                      !selectedDate && "text-gray-400"
-                    )}
-                  >
-                    <CalendarIcon className="w-5 h-5" />
-                    <span className="text-xl font-semibold">
-                      {selectedDate ? formatDate(selectedDate) : 'Wybierz datę'}
-                    </span>
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={setSelectedDate}
-                    initialFocus
-                    highlightedDates={journalDates} // Przekaż daty z wpisów tutaj
-                  />
-                </PopoverContent>
-              </Popover>
+              {/* Usunięto Popover i Calendar */}
+              <button
+                // onClick={() => setShowCalendar(true)} // Możesz dodać logikę do otwierania własnego selektora daty
+                className="flex items-center space-x-2 text-white hover:text-cyan-400 transition-colors"
+              >
+                <CalendarIcon className="w-5 h-5" />
+                <span className="text-xl font-semibold">
+                  {selectedDate ? formatDate(selectedDate) : 'Wybierz datę'}
+                </span>
+              </button>
               
               {currentEntry && !isEditing && (
                 <button
