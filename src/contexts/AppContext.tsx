@@ -89,7 +89,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     // Generuj kulki tylko dla pozytywnego zysku XP
     if (originX !== undefined && originY !== undefined && amount > 0) { 
-      const numberOfParticles = Math.max(1, Math.floor(amount / 10)); // Jedna kulka na każde 10 XP, minimum 1
+      // Zmieniono logikę: teraz każda kulka reprezentuje dokładnie 10 XP.
+      // Jeśli XP jest mniejsze niż 10, nie będzie żadnych kulek.
+      const numberOfParticles = Math.floor(amount / 10); 
       const newParticles: XpParticleData[] = [];
       for (let i = 0; i < numberOfParticles; i++) {
         newParticles.push({
