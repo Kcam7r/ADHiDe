@@ -1,22 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryFull, Brain } from 'lucide-react';
-import { Mission, Habit } from '../types';
+import { Mission, Habit, DailyTask } from '../types';
 import { MissionHistoryModal } from './MissionHistoryModal';
+import { DailyTaskStamp } from './DailyTaskStamp'; // Import the new component
 
 export const Dashboard: React.FC = () => {
   const { 
     habits, 
-    dailyTasks, 
+    dailyTasks: appDailyTasks, // Rename to avoid conflict with local state
     missions, 
     completeHabit, 
     completeDailyTask, 
     completeMission,
     completedMissionsHistory
   } = useApp();
+
   const [showHistory, setShowHistory] = useState(false);
-  const [animatingDailyTasks, setAnimatingDailyTasks] = useState<Set<string>>(new Set());
   const [animatingHabits, setAnimatingHabits] = useState<Set<string>>(new Set());
+
+  // New states for Daily Tasks visual management
+  const [displayDailyTasks, setDisplayDailyTasks] = useState<DailyTask[]>([]);
+  const [completedTodayVisual, setCompletedTodayVisual] = useState<DailyTask[]>([]);
+  const [stampedTaskIds, setStampedTaskIds] = useState<Set<string>>(new Set());
+  const [animatingOutTasks, setAnimatingOutTasks] = useState<Set<string>>(new Set());
+
+  // Sync appDailyTasks with local display states
+  useEffect(() => {
+    const active = appDailyTasks.filter(task => 
+      !task.completed && !animatingOutTasks.has(task.id) && !completedTodayVisual.some(t => t.id === task.id)
+    );
+    const completed = appDailyTasks.filter(task => 
+      task.completed && !completedTodayVisual.some(t => t.id === task.id)
+    );
+
+    setDisplayDailyTasks(active);
+    setCompletedTodayVisual(prev => {
+      const newCompleted = [...prev];
+      completed.forEach(task => {
+        if (!newCompleted.some(t => t.id === task.id)) {
+          newCompleted.push(task);
+        }
+      });
+      return newCompleted;
+    });
+  }, [appDailyTasks, animatingOutTasks, completedTodayVisual]);
+
+
+  // Daily Reset for completedTodayVisual
+  useEffect(() => {
+    const now = new Date();
+    const midnight = new Date(now);
+    midnight.setHours(24, 0, 0, 0); // Next midnight
+
+    const timeToMidnight = midnight.getTime() - now.getTime();
+
+    const resetTimer = setTimeout(() => {
+      setCompletedTodayVisual([]); // Clear completed tasks for the new day
+    }, timeToMidnight);
+
+    return () => clearTimeout(resetTimer);
+  }, []); // Run once on mount to schedule the daily reset
+
 
   // Definicja kolejności priorytetów i energii
   const priorityOrder: Record<Mission['priority'], number> = {
@@ -81,37 +126,52 @@ export const Dashboard: React.FC = () => {
     }
   };
 
-  const handleMissionComplete = (missionId: string, e: React.MouseEvent) => { // Zmodyfikowano
+  const handleMissionComplete = (missionId: string, e: React.MouseEvent) => {
     const element = document.getElementById(`mission-${missionId}`);
     if (element) {
       element.style.animation = 'fadeOut 0.7s ease-out forwards';
       setTimeout(() => {
-        completeMission(missionId, e.clientX, e.clientY); // Przekaż współrzędne
+        completeMission(missionId, e.clientX, e.clientY);
       }, 700);
     } else {
-      completeMission(missionId, e.clientX, e.clientY); // Przekaż współrzędne
+      completeMission(missionId, e.clientX, e.clientY);
     }
   };
 
-  const handleDailyTaskClick = (taskId: string, e: React.MouseEvent) => { // Zmodyfikowano
-    const task = dailyTasks.find(t => t.id === taskId);
+  const handleDailyTaskClick = (taskId: string, e: React.MouseEvent) => {
+    const task = appDailyTasks.find(t => t.id === taskId);
     if (!task || task.completed) return;
 
-    setAnimatingDailyTasks((prev: Set<string>) => new Set(prev).add(taskId));
+    // 1. Add to stamped tasks to show the stamp
+    setStampedTaskIds(prev => new Set(prev).add(taskId));
 
+    // 2. Immediately mark as completed in AppContext
+    completeDailyTask(taskId, e.clientX, e.clientY);
+
+    // 3. After stamp animation, trigger visual move out
     setTimeout(() => {
-      setAnimatingDailyTasks((prev: Set<string>) => {
-        const newSet = new Set(prev);
-        newSet.delete(taskId);
-        return newSet;
-      });
-      completeDailyTask(taskId, e.clientX, e.clientY); // Przekaż współrzędne
-    }, 400);
+      setAnimatingOutTasks(prev => new Set(prev).add(taskId));
+      // 4. After move out animation, transfer to completedTodayVisual
+      setTimeout(() => {
+        setDisplayDailyTasks(prev => prev.filter(t => t.id !== taskId));
+        setCompletedTodayVisual(prev => [...prev, task]); // Add the task to the completed section
+        setAnimatingOutTasks(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(taskId);
+          return newSet;
+        });
+        setStampedTaskIds(prev => { // Keep stamp visible on completed task
+          const newSet = new Set(prev);
+          // newSet.delete(taskId); // Only remove if stamp should disappear
+          return newSet;
+        });
+      }, 1500); // Total 2 seconds from click (0.5s stamp + 1.5s move)
+    }, 500); // Stamp animation duration
   };
 
-  const handleHabitClick = (habitId: string, e: React.MouseEvent) => { // Zmodyfikowano
+  const handleHabitClick = (habitId: string, e: React.MouseEvent) => {
     setAnimatingHabits((prev: Set<string>) => new Set(prev).add(habitId));
-    completeHabit(habitId, e.clientX, e.clientY); // Przekaż współrzędne
+    completeHabit(habitId, e.clientX, e.clientY);
 
     setTimeout(() => {
       setAnimatingHabits((prev: Set<string>) => {
@@ -138,7 +198,7 @@ export const Dashboard: React.FC = () => {
               {habits.map((habit) => (
                 <div
                   key={habit.id}
-                  onClick={(e) => handleHabitClick(habit.id, e)} // Przekaż event
+                  onClick={(e) => handleHabitClick(habit.id, e)}
                   className={`p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 ${
                     habit.type === 'positive' 
                       ? 'bg-green-600 border-green-500' 
@@ -172,28 +232,46 @@ export const Dashboard: React.FC = () => {
               <span>Codzienne</span>
             </h2>
             <div className="space-y-3">
-              {dailyTasks.map((task) => (
+              {displayDailyTasks.map((task) => (
                 <div
                   key={task.id}
-                  onClick={(e) => handleDailyTaskClick(task.id, e)} // Przekaż event
-                  className={`p-4 rounded-lg transition-all duration-200 cursor-pointer ${
-                    task.completed
-                      ? 'bg-gray-700 border-2 border-amber-500'
-                      : 'bg-gray-700 hover:bg-gray-600 border-2 border-gray-600'
-                  }`}
+                  onClick={(e) => handleDailyTaskClick(task.id, e)}
+                  className={`relative p-4 rounded-lg transition-all duration-200 cursor-pointer bg-gray-700 border-2 border-gray-600
+                    ${animatingOutTasks.has(task.id) ? 'animate-slide-out-down' : ''}
+                  `}
                 >
-                  <span className={`${task.completed ? 'line-through text-gray-400' : 'text-white'}`}>
+                  <span className={`text-white ${stampedTaskIds.has(task.id) ? 'task-completed-visual' : ''}`}>
                     {task.title}
                   </span>
+                  {stampedTaskIds.has(task.id) && (
+                    <DailyTaskStamp onAnimationEnd={() => { /* Stamp stays visible */ }} />
+                  )}
                 </div>
               ))}
-              {dailyTasks.length === 0 && (
+              {displayDailyTasks.length === 0 && completedTodayVisual.length === 0 && (
                 <div className="text-gray-400 text-center py-4">
                   <p>Brak zadań codziennych</p>
                   <p className="text-sm mt-1">Dodaj nowe zadania w Quest Log</p>
                 </div>
               )}
             </div>
+
+            {completedTodayVisual.length > 0 && (
+              <div className="mt-6 pt-4 border-t border-gray-700">
+                <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
+                <div className="space-y-3">
+                  {completedTodayVisual.map((task) => (
+                    <div
+                      key={task.id}
+                      className="relative p-4 rounded-lg bg-gray-700 border-2 border-amber-500 task-completed-visual"
+                    >
+                      <span className="text-gray-400">{task.title}</span>
+                      <DailyTaskStamp onAnimationEnd={() => { /* Stamp stays visible */ }} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Misje */}
@@ -211,11 +289,11 @@ export const Dashboard: React.FC = () => {
               </button>
             </div>
             <div className="space-y-3">
-              {sortedActiveMissions.map((mission) => ( // Użycie posortowanej listy
+              {sortedActiveMissions.map((mission) => (
                 <div
                   key={mission.id}
                   id={`mission-${mission.id}`}
-                  onClick={(e) => handleMissionComplete(mission.id, e)} // Przekaż event
+                  onClick={(e) => handleMissionComplete(mission.id, e)}
                   className={`p-4 rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 ${
                     mission.projectId ? 'bg-purple-600 hover:bg-purple-500' : 'bg-cyan-600 hover:bg-cyan-500'
                   }`}
@@ -236,7 +314,7 @@ export const Dashboard: React.FC = () => {
                   )}
                 </div>
               ))}
-              {sortedActiveMissions.length === 0 && ( // Zmieniono na sortedActiveMissions
+              {sortedActiveMissions.length === 0 && (
                 <div className="text-gray-400 text-center py-4">
                   <p>Brak aktywnych misji</p>
                   <p className="text-sm mt-1">Aktywuj misje w Quest Log lub Garażu</p>
