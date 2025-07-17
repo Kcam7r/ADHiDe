@@ -10,8 +10,6 @@ export interface Habit {
   name: string;
   type: 'positive' | 'negative';
   count: number;
-  streak: number;
-  lastCompleted?: Date;
 }
 
 export interface DailyTask {

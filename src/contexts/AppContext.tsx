@@ -13,7 +13,7 @@ interface AppContextType {
   
   addXP: (amount: number) => void;
   resetXP: () => void;
-  addHabit: (habit: Omit<Habit, 'id' | 'count' | 'streak'>) => void;
+  addHabit: (habit: Omit<Habit, 'id' | 'count'>) => void;
   updateHabit: (id: string, updates: Partial<Habit>) => void;
   completeHabit: (id: string) => void;
   
@@ -85,12 +85,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setUser({ ...user, xp: 0, level: 1 });
   };
 
-  const addHabit = (habit: Omit<Habit, 'id' | 'count' | 'streak'>) => {
+  const addHabit = (habit: Omit<Habit, 'id' | 'count'>) => {
     const newHabit: Habit = {
       ...habit,
       id: Date.now().toString(),
       count: 0,
-      streak: 0
     };
     setHabits([...habits, newHabit]);
   };
@@ -105,21 +104,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const habit = habits.find(h => h.id === id);
     if (!habit) return;
 
-    const today = new Date().toDateString();
-    const lastCompleted = habit.lastCompleted?.toDateString();
+    const newCount = habit.count + 1;
+    const xpGain = habit.type === 'positive' ? 10 : -20;
     
-    if (lastCompleted !== today) {
-      const newCount = habit.count + 1;
-      const xpGain = habit.type === 'positive' ? 10 : -20;
-      
-      updateHabit(id, { 
-        count: newCount, 
-        lastCompleted: new Date(),
-        streak: lastCompleted === new Date(Date.now() - 86400000).toDateString() ? habit.streak + 1 : 1
-      });
-      
-      addXP(xpGain);
-    }
+    updateHabit(id, { 
+      count: newCount, 
+    });
+    
+    addXP(xpGain);
   };
 
   const addDailyTask = (task: Omit<DailyTask, 'id' | 'completed'>) => {
@@ -250,7 +242,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       
       setTimeout(() => {
         setDailyTasks(dailyTasks.map(task => ({ ...task, completed: false, completedAt: undefined })));
-        setHabits(habits.map(habit => ({ ...habit, count: 0 })));
+        // Habits are no longer reset daily as they can be clicked multiple times
         resetDaily();
       }, timeToMidnight);
     };

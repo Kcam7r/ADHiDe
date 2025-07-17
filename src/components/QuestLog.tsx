@@ -173,9 +173,6 @@ export const QuestLog: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <span className="text-white font-bold text-lg">{habit.count}x</span>
-                      {habit.streak > 0 && (
-                        <p className="text-gray-200 text-sm">Seria: {habit.streak}</p>
-                      )}
                     </div>
                   </div>
                 </div>

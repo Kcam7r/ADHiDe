@@ -77,11 +77,6 @@ export const Dashboard: React.FC = () => {
                       {habit.count}x
                     </span>
                   </div>
-                  {habit.streak > 0 && (
-                    <div className="mt-2 text-xs text-gray-200">
-                      Seria: {habit.streak} dni
-                    </div>
-                  )}
                 </div>
               ))}
               {habits.length === 0 && (
