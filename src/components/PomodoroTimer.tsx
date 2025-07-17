@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Timer } from 'lucide-react';
+import { Timer } from 'lucide-react'; // Timer jest nadal importowany, ale nie używany bezpośrednio w JSX
 import { PomodoroModal } from './PomodoroModal';
 import { useWindowSize } from '../hooks/useWindowSize';
 
@@ -55,7 +55,7 @@ export const PomodoroTimer: React.FC = () => {
     } else {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
-    }
+    };
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
@@ -75,10 +75,10 @@ export const PomodoroTimer: React.FC = () => {
         ref={buttonRef}
         onMouseDown={handleMouseDown}
         onClick={handleClick}
-        className="fixed z-40 p-3 text-white cursor-grab active:cursor-grabbing transition-colors duration-200 hover:bg-gray-700 rounded-lg" // Usunięto bg-red-600 i rounded-full
+        className="fixed z-40 p-3 text-white cursor-grab active:cursor-grabbing transition-colors duration-200 hover:bg-gray-700 rounded-lg text-3xl" // Zwiększono rozmiar tekstu dla emoji
         style={{ left: position.x, top: position.y }}
       >
-        <Timer className="w-8 h-8" /> {/* Ikona pomidora */}
+        🍅 {/* Emoji pomidora */}
       </button>
 
       {showModal && <PomodoroModal onClose={() => setShowModal(false)} />}
