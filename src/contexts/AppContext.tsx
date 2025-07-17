@@ -140,7 +140,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       count: newCount, 
     });
     
-    addXP(xpGain, originX, originY);
+    // addXP(xpGain, originX, originY); // Usunięto, ponieważ XP jest dodawane w Dashboard.tsx
   };
 
   const deleteHabit = (id: string) => {
@@ -163,7 +163,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setDailyTasks(dailyTasks.map(task => 
       task.id === id ? { ...task, completed: true, completedAt: new Date() } : task
     ));
-    addXP(10, originX, originY);
+    // addXP(10, originX, originY); // Usunięto, ponieważ XP jest dodawane w Dashboard.tsx
   };
 
   const deleteDailyTask = (id: string) => {
@@ -192,7 +192,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     else if (mission.priority === 'important') xpGain += 15;
     if (mission.energy === 'concentration') xpGain += 10;
 
-    addXP(xpGain, originX, originY);
+    // addXP(xpGain, originX, originY); // Usunięto, ponieważ XP jest dodawane w Dashboard.tsx
   };
 
   const activateMission = (id: string) => {
