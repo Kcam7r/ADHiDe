@@ -1,3 +1,84 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0) scale(1) rotateZ(0deg); }
+  to { opacity: 0; transform: translateY(-50px) scale(0.8) rotateZ(5deg); } /* Misja odlatuje w górę, lekko się zmniejsza i obraca */
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translate3d(0,0,0);
+  }
+  40%, 43% {
+    transform: translate3d(0, -30px, 0);
+  }
+  70% {
+    transform: translate3d(0, -15px, 0);
+  }
+  90% {
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+@keyframes daily-task-complete-pop {
+  0% { transform: scale(1) translateY(0) rotateZ(0deg); background-color: #1f2937; /* gray-800 */ box-shadow: none; }
+  25% { transform: scale(1.03) translateY(-5px) rotateZ(1deg); background-color: #f59e0b; /* amber-500 */ box-shadow: 0 0 15px rgba(245, 158, 11, 0.7); }
+  50% { transform: scale(0.98) translateY(0) rotateZ(-1deg); background-color: #f59e0b; /* amber-500 */ box-shadow: 0 0 5px rgba(245, 158, 11, 0.3); }
+  100% { transform: scale(1) translateY(0) rotateZ(0deg); background-color: #1f2937; box-shadow: none; }
+}
+.animate-daily-task-complete {
+  animation: daily-task-complete-pop 0.4s ease-out forwards;
+}
+
+@keyframes habit-pulse-positive {
+  0% { transform: scale(1) translateY(0); background-color: #16a34a; /* green-600 */ border-color: #22c55e; box-shadow: none; }
+  25% { transform: scale(1.02) translateY(-5px); background-color: #22c55e; /* green-500 */ border-color: #4ade80; box-shadow: 0 0 20px rgba(66, 255, 150, 0.8); } /* More intense glow */
+  100% { transform: scale(1) translateY(0); background-color: #16a34a; /* green-600 */ border-color: #22c55e; box-shadow: none; }
+}
+.animate-habit-pulse-positive {
+  animation: habit-pulse-positive 0.3s ease-out forwards;
+}
+
+@keyframes habit-pulse-negative {
+  0% { transform: scale(1) translateY(0); background-color: #dc2626; /* red-600 */ border-color: #ef4444; box-shadow: none; }
+  25% { transform: scale(1.02) translateY(-5px); background-color: #ef4444; /* red-500 */ border-color: #f87171; box-shadow: 0 0 20px rgba(255, 66, 66, 0.8); } /* More intense glow */
+  100% { transform: scale(1) translateY(0); background-color: #dc2626; /* red-600 */ border-color: #ef4444; box-shadow: none; }
+}
+.animate-habit-pulse-negative {
+  animation: habit-pulse-negative 0.3s ease-out forwards;
+}
+
+/* New animations for PowerCrystal */
+@keyframes crystal-flash {
+  0% { box-shadow: 0 0 0px rgba(255, 255, 255, 0); }
+  50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.6); }
+  100% { box-shadow: 0 0 0px rgba(255, 255, 255, 0); }
+}
+.animate-crystal-flash {
+  animation: crystal-flash 0.5s ease-out;
+}
+
+@keyframes xp-particle {
+  0% { transform: scale(0) opacity(0); background-color: rgba(255, 255, 255, 0.8); }
+  20% { transform: scale(1) opacity(1); }
+  80% { transform: scale(0.5) opacity(0.5); }
+  100% { transform: scale(0) opacity(0); }
+}
+.animate-xp-particle {
+  animation: xp-particle 0.8s ease-out forwards;
+}

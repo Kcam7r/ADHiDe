@@ -6,7 +6,8 @@ import { QuestLog } from './components/QuestLog';
 import { Journal } from './components/Journal';
 import { Garage } from './components/Garage';
 import { PomodoroTimer } from './components/PomodoroTimer';
-import { ConfettiOverlay } from './components/ConfettiOverlay'; // Import ConfettiOverlay
+import { ConfettiOverlay } from './components/ConfettiOverlay';
+import { PowerCrystal } from './components/PowerCrystal'; // Import PowerCrystal
 
 function App() {
   const [activeView, setActiveView] = useState('dashboard');
@@ -34,8 +35,9 @@ function App() {
           {renderActiveView()}
         </main>
       </div>
-      <PomodoroTimer /> {/* Render PomodoroTimer here */}
-      <ConfettiOverlay /> {/* Render ConfettiOverlay here */}
+      <PomodoroTimer />
+      <ConfettiOverlay />
+      <PowerCrystal /> {/* Render PowerCrystal here */}
     </AppProvider>
   );
 }

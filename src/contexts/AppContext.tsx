@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react'; // Dodano useState
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { User, Habit, DailyTask, Mission, Project, JournalEntry, QuickThought } from '../types';
 
@@ -10,23 +10,24 @@ interface AppContextType {
   projects: Project[];
   journalEntries: JournalEntry[];
   quickThoughts: QuickThought[];
+  lastXpGainTimestamp: number; // Nowa zmienna do wyzwalania animacji XP
   
   addXP: (amount: number) => void;
   resetXP: () => void;
   addHabit: (habit: Omit<Habit, 'id' | 'count'>) => void;
   updateHabit: (id: string, updates: Partial<Habit>) => void;
   completeHabit: (id: string) => void;
-  deleteHabit: (id: string) => void; // Dodano funkcję usuwania nawyku
+  deleteHabit: (id: string) => void;
   
   addDailyTask: (task: Omit<DailyTask, 'id' | 'completed'>) => void;
   completeDailyTask: (id: string) => void;
-  deleteDailyTask: (id: string) => void; // Dodano funkcję usuwania zadania codziennego
+  deleteDailyTask: (id: string) => void;
   
   addMission: (mission: Omit<Mission, 'id' | 'completed'>) => void;
   completeMission: (id: string) => void;
   activateMission: (id: string) => void;
   deactivateMission: (id: string) => void;
-  deleteMission: (id: string) => void; // Dodano funkcję usuwania misji
+  deleteMission: (id: string) => void;
   
   addProject: (project: Omit<Project, 'id' | 'tasks' | 'createdAt'>) => void;
   updateProject: (id: string, updates: Partial<Project>) => void;
@@ -66,6 +67,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [journalEntries, setJournalEntries] = useLocalStorage<JournalEntry[]>('adhd-journal', []);
   const [quickThoughts, setQuickThoughts] = useLocalStorage<QuickThought[]>('adhd-thoughts', []);
   const [completedMissionsHistory, setCompletedMissionsHistory] = useLocalStorage<Mission[]>('adhd-completed-missions', []);
+  const [lastXpGainTimestamp, setLastXpGainTimestamp] = useState(0); // Nowy stan
 
   const calculateLevel = (xp: number) => Math.floor(xp / 1000) + 1;
 
@@ -74,6 +76,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const newLevel = calculateLevel(newXP);
     
     setUser({ ...user, xp: newXP, level: newLevel });
+    setLastXpGainTimestamp(Date.now()); // Wyzwól animację
   };
 
   const resetXP = () => {
@@ -284,6 +287,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       journalEntries,
       quickThoughts,
       completedMissionsHistory,
+      lastXpGainTimestamp, // Dodano do kontekstu
       addXP,
       resetXP,
       addHabit,

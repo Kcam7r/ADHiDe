@@ -10,7 +10,7 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) => {
-  const { user, resetXP } = useApp();
+  const { resetXP } = useApp(); // Usunięto user z destrukturyzacji
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showQuickThought, setShowQuickThought] = useState(false);
   const [showQuickThoughts, setShowQuickThoughts] = useState(false);
@@ -21,8 +21,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
     { id: 'journal', label: 'Dziennik', icon: Calendar },
     { id: 'garage', label: 'Garaż', icon: Settings },
   ];
-
-  const progressPercentage = (user.xp % 1000) / 10;
 
   const handleResetConfirm = () => {
     resetXP();
@@ -61,31 +59,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
           </ul>
         </nav>
 
-        {/* Gamification Info */}
+        {/* Gamification Info - Usunięto stary widżet XP/poziomu */}
         <div className="p-4 border-t border-gray-700">
-          <div className="text-white mb-2">
-            <div className="flex justify-between items-center">
-              <span className="text-sm">Poziom</span>
-              <span className="font-bold">{user.level}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm">XP</span>
-              <span className="font-bold">{user.xp}</span>
-            </div>
-          </div>
-          
-          <div 
-            className="bg-gray-600 rounded-full h-3 cursor-pointer hover:bg-gray-500 transition-colors"
-            onClick={() => setShowResetConfirm(true)}
-          >
-            <div
-              className="bg-gradient-to-r from-cyan-500 to-blue-500 h-full rounded-full transition-all duration-300"
-              style={{ width: `${progressPercentage}%` }}
-            />
-          </div>
-          <p className="text-xs text-gray-400 mt-1">
-            {user.xp % 1000} / 1000 XP do następnego poziomu
+          <p className="text-xs text-gray-400 mt-1 text-center">
+            Postęp XP jest teraz widoczny w Krysztale Mocy!
           </p>
+          <button
+            onClick={() => setShowResetConfirm(true)}
+            className="w-full mt-2 bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg transition-colors text-sm"
+          >
+            Resetuj Postęp
+          </button>
         </div>
 
         {/* Quick Thoughts */}
