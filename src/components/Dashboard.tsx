@@ -67,7 +67,7 @@ export const Dashboard: React.FC = () => {
         newSet.delete(taskId);
         return newSet;
       });
-    }, 300); // Czas trwania animacji daily-task-complete-pop
+    }, 400); // Czas trwania animacji daily-task-complete-pop (zmieniono na 400ms)
   };
 
   const handleHabitClick = (habitId: string, habitType: Habit['type']) => {
