@@ -204,16 +204,30 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const activateMission = (id: string) => {
-    setMissions(missions.map(mission => 
+    setMissions(missions.map(mission =>
       mission.id === id ? { ...mission, isActive: true } : mission
     ));
+    // NEW: Update the mission's isActive status within projects as well
+    setProjects(prevProjects => prevProjects.map(project => ({
+      ...project,
+      tasks: project.tasks.map(task =>
+        task.id === id ? { ...task, isActive: true } : task
+      )
+    })));
     addXP(20); // Brak pochodzenia dla aktywacji
   };
 
   const deactivateMission = (id: string) => {
-    setMissions(missions.map(mission => 
+    setMissions(missions.map(mission =>
       mission.id === id ? { ...mission, isActive: false } : mission
     ));
+    // NEW: Update the mission's isActive status within projects as well
+    setProjects(prevProjects => prevProjects.map(project => ({
+      ...project,
+      tasks: project.tasks.map(task =>
+        task.id === id ? { ...task, isActive: false } : task
+      )
+    })));
   };
 
   const deleteMission = (id: string) => {
