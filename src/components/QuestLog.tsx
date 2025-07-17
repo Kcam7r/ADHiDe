@@ -12,7 +12,10 @@ export const QuestLog: React.FC = () => {
     addDailyTask, 
     addMission,
     activateMission,
-    deactivateMission
+    deactivateMission,
+    deleteHabit, // Importuj funkcję usuwania nawyku
+    deleteDailyTask, // Importuj funkcję usuwania zadania codziennego
+    deleteMission // Importuj funkcję usuwania misji
   } = useApp();
   
   const [activeTab, setActiveTab] = useState<'habits' | 'daily' | 'missions'>('habits');
@@ -171,8 +174,15 @@ export const QuestLog: React.FC = () => {
                         Typ: {habit.type === 'positive' ? 'Pozytywny' : 'Negatywny'}
                       </p>
                     </div>
-                    <div className="text-right">
+                    <div className="flex items-center space-x-2"> {/* Dodano flex dla przycisku usuwania */}
                       <span className="text-white font-bold text-lg">{habit.count}x</span>
+                      <button
+                        onClick={() => deleteHabit(habit.id)}
+                        className="text-gray-200 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700"
+                        title="Usuń nawyk"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -248,8 +258,17 @@ export const QuestLog: React.FC = () => {
                     <h3 className={`font-medium ${task.completed ? 'line-through text-gray-400' : 'text-white'}`}>
                       {task.title}
                     </h3>
-                    <div className="text-sm text-gray-400">
-                      {task.completed ? 'Ukończone' : 'Do zrobienia'}
+                    <div className="flex items-center space-x-2"> {/* Dodano flex dla przycisku usuwania */}
+                      <div className="text-sm text-gray-400">
+                        {task.completed ? 'Ukończone' : 'Do zrobienia'}
+                      </div>
+                      <button
+                        onClick={() => deleteDailyTask(task.id)}
+                        className="text-gray-200 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700"
+                        title="Usuń zadanie"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -395,6 +414,13 @@ export const QuestLog: React.FC = () => {
                         ) : (
                           <Play className="w-4 h-4 text-white" />
                         )}
+                      </button>
+                      <button
+                        onClick={() => deleteMission(mission.id)}
+                        className="text-gray-200 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700"
+                        title="Usuń zadanie"
+                      >
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>

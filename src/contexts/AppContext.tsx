@@ -16,14 +16,17 @@ interface AppContextType {
   addHabit: (habit: Omit<Habit, 'id' | 'count'>) => void;
   updateHabit: (id: string, updates: Partial<Habit>) => void;
   completeHabit: (id: string) => void;
+  deleteHabit: (id: string) => void; // Dodano funkcję usuwania nawyku
   
   addDailyTask: (task: Omit<DailyTask, 'id' | 'completed'>) => void;
   completeDailyTask: (id: string) => void;
+  deleteDailyTask: (id: string) => void; // Dodano funkcję usuwania zadania codziennego
   
   addMission: (mission: Omit<Mission, 'id' | 'completed'>) => void;
   completeMission: (id: string) => void;
   activateMission: (id: string) => void;
   deactivateMission: (id: string) => void;
+  deleteMission: (id: string) => void; // Dodano funkcję usuwania misji
   
   addProject: (project: Omit<Project, 'id' | 'tasks' | 'createdAt'>) => void;
   updateProject: (id: string, updates: Partial<Project>) => void;
@@ -114,6 +117,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     addXP(xpGain);
   };
 
+  const deleteHabit = (id: string) => {
+    setHabits(habits.filter(habit => habit.id !== id));
+  };
+
   const addDailyTask = (task: Omit<DailyTask, 'id' | 'completed'>) => {
     const newTask: DailyTask = {
       ...task,
@@ -131,6 +138,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       task.id === id ? { ...task, completed: true, completedAt: new Date() } : task
     ));
     addXP(10);
+  };
+
+  const deleteDailyTask = (id: string) => {
+    setDailyTasks(dailyTasks.filter(task => task.id !== id));
   };
 
   const addMission = (mission: Omit<Mission, 'id' | 'completed'>) => {
@@ -169,6 +180,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setMissions(missions.map(mission => 
       mission.id === id ? { ...mission, isActive: false } : mission
     ));
+  };
+
+  const deleteMission = (id: string) => {
+    setMissions(missions.filter(mission => mission.id !== id));
+    // Also remove from projects if it was a project task
+    setProjects(projects.map(project => ({
+      ...project,
+      tasks: project.tasks.filter(task => task.id !== id)
+    })));
   };
 
   const addProject = (project: Omit<Project, 'id' | 'tasks' | 'createdAt'>) => {
@@ -231,7 +251,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setQuickThoughts(quickThoughts.filter(thought => thought.id !== id));
   };
 
-  // Reset daily tasks and habits at midnight
+  // Reset daily tasks at midnight
   useEffect(() => {
     const resetDaily = () => {
       const now = new Date();
@@ -242,7 +262,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       
       setTimeout(() => {
         setDailyTasks(dailyTasks.map(task => ({ ...task, completed: false, completedAt: undefined })));
-        // Habits are no longer reset daily as they can be clicked multiple times
         resetDaily();
       }, timeToMidnight);
     };
@@ -265,12 +284,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       addHabit,
       updateHabit,
       completeHabit,
+      deleteHabit,
       addDailyTask,
       completeDailyTask,
+      deleteDailyTask,
       addMission,
       completeMission,
       activateMission,
       deactivateMission,
+      deleteMission,
       addProject,
       updateProject,
       addTaskToProject,
