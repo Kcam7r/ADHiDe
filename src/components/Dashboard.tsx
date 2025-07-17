@@ -26,6 +26,7 @@ export const Dashboard: React.FC = () => {
   const [displayDailyTasks, setDisplayDailyTasks] = useState<DailyTask[]>([]);
   const [completedTodayVisual, setCompletedTodayVisual] = useState<DailyTask[]>([]);
   const [animatingOutTasks, setAnimatingOutTasks] = useState<Set<string>>(new Set());
+  const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedTasks] = useState<Set<string>>(new Set()); // New state for grow-in animation
 
   // New states for Mission Completion Animation
   const [fadingOutMissions, setFadingOutMissions] = useState<Set<string>>(new Set());
@@ -50,6 +51,8 @@ export const Dashboard: React.FC = () => {
       newlyCompleted.forEach(task => {
         if (!updatedCompleted.some(t => t.id === task.id)) { // Double check to prevent duplicates
           updatedCompleted.push(task);
+          // Add to newlyCompletedAnimatedTasks to trigger grow-in animation
+          setNewlyCompletedAnimatedTasks(prevSet => new Set(prevSet).add(task.id));
         }
       });
       return updatedCompleted;
@@ -195,19 +198,26 @@ export const Dashboard: React.FC = () => {
     addXP(10, e.clientX, e.clientY); // Dodaj XP natychmiast
     showInfoToast(`Zadanie ukończone: ${task.title}! (+10 XP)`);
 
-    // Trigger visual move out animation and stamp animation
+    // Trigger visual shrink-out animation
     setAnimatingOutTasks(prev => new Set(prev).add(taskId));
 
-    // After stamp (0.5s) and slide-out (0.5s) animations complete (total 1s),
-    // update AppContext and clear animation states.
+    // After shrink-out animation completes (0.5s), update AppContext
     setTimeout(() => {
-      completeDailyTask(taskId, e.clientX, e.clientY); // Update AppContext after animation
+      completeDailyTask(taskId, e.clientX, e.clientY); // This will move it to completedTodayVisual via useEffect
       setAnimatingOutTasks(prev => {
         const newSet = new Set(prev);
         newSet.delete(taskId);
         return newSet;
       });
-    }, 1000); 
+      // After grow-in animation completes (0.3s), remove from newlyCompletedAnimatedTasks
+      setTimeout(() => {
+        setNewlyCompletedAnimatedTasks(prevSet => {
+          const newSet = new Set(prevSet);
+          newSet.delete(taskId);
+          return newSet;
+        });
+      }, 300); // Duration of grow-in animation
+    }, 500); // Duration of shrink-out animation
   };
 
   const handleHabitClick = (habitId: string, e: React.MouseEvent) => {
@@ -290,7 +300,7 @@ export const Dashboard: React.FC = () => {
                   key={task.id}
                   onClick={(e) => handleDailyTaskClick(task.id, e)}
                   className={`relative p-4 rounded-lg transition-all duration-200 cursor-pointer bg-gray-700 border-2 border-gray-600
-                    ${animatingOutTasks.has(task.id) ? 'animate-slide-out-down' : ''}
+                    ${animatingOutTasks.has(task.id) ? 'animate-daily-task-shrink-out' : ''}
                   `}
                 >
                   <span className={`text-white`}>
@@ -317,7 +327,9 @@ export const Dashboard: React.FC = () => {
                   {completedTodayVisual.map((task) => (
                     <div
                       key={task.id}
-                      className="relative p-4 rounded-lg bg-gray-700 border-2 border-amber-500 task-completed-visual"
+                      className={`relative p-4 rounded-lg bg-gray-700 border-2 border-amber-500 task-completed-visual
+                        ${newlyCompletedAnimatedTasks.has(task.id) ? 'animate-daily-task-grow-in' : ''}
+                      `}
                     >
                       <span className="text-gray-400">{task.title}</span>
                       {/* Static checkmark for completed tasks */}
