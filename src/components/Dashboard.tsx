@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryHigh, Brain } from 'lucide-react'; // Dodano nowe ikony
+import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryFull, Brain } from 'lucide-react'; // Poprawiono import BatteryHigh na BatteryFull
 import { Mission, Habit } from '../types'; // Import Mission type
 
 export const Dashboard: React.FC = () => {
@@ -48,7 +48,7 @@ export const Dashboard: React.FC = () => {
       case 'medium':
         return <BatteryMedium className="w-4 h-4 text-gray-400" />;
       case 'high':
-        return <BatteryHigh className="w-4 h-4 text-gray-400" />;
+        return <BatteryFull className="w-4 h-4 text-gray-400" />; // Zmieniono na BatteryFull
       case 'concentration':
         return <Brain className="w-4 h-4 text-purple-400" />;
       default:
