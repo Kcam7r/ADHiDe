@@ -181,7 +181,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const newMission: Mission = {
       ...mission,
       id: Date.now().toString(),
-      completed: false
+      completed: false,
+      isActive: false, // Domyślnie nieaktywna
     };
     setMissions([...missions, newMission]);
   };
@@ -245,14 +246,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       ...task,
       id: Date.now().toString(),
       completed: false,
-      projectId
+      projectId,
+      isActive: false, // Domyślnie nieaktywna
     };
     
-    setProjects(projects.map(project => 
+    setProjects(prevProjects => prevProjects.map(project => 
       project.id === projectId 
         ? { ...project, tasks: [...project.tasks, newTask] }
         : project
     ));
+    // Dodaj nowe zadanie do globalnej listy misji
+    setMissions(prevMissions => [...prevMissions, newTask]);
   };
 
   const addJournalEntry = (entry: Omit<JournalEntry, 'id'>) => {
@@ -350,7 +354,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       deleteQuickThought,
       removeXpParticle,
       triggerConfetti,
-      confettiKey, // Dodano do kontekstu
+      confettiKey,
     }}>
       {children}
     </AppContext.Provider>
