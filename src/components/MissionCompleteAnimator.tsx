@@ -113,7 +113,7 @@ export const MissionCompleteAnimator: React.FC<MissionCompleteAnimatorProps> = (
     >
       {/* The animating mission card */}
       <div
-        className={`p-4 rounded-lg transition-all duration-500 ease-out
+        className={`p-4 rounded-lg
           ${mission.projectId ? 'bg-purple-600' : 'bg-cyan-600'}
           ${stage === 1 ? 'animate-tremble-pulse' : ''}
           ${stage >= 2 ? 'animate-disintegrate-fade' : ''}
