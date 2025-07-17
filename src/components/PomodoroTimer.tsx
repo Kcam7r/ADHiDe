@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Timer } from 'lucide-react'; // Timer jest nadal importowany, ale nie używany bezpośrednio w JSX
+import { Timer } from 'lucide-react';
 import { PomodoroModal } from './PomodoroModal';
 import { useWindowSize } from '../hooks/useWindowSize';
 
@@ -10,6 +10,7 @@ export const PomodoroTimer: React.FC = () => {
   const [position, setPosition] = useState({ x: width - 80, y: height - 80 }); // Initial position: bottom-right
   const offset = useRef({ x: 0, y: 0 });
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const hasMoved = useRef(false); // Nowa referencja do śledzenia ruchu myszy
 
   useEffect(() => {
     // Update initial position if window size changes
@@ -19,6 +20,7 @@ export const PomodoroTimer: React.FC = () => {
   const handleMouseDown = (e: React.MouseEvent) => {
     if (buttonRef.current) {
       setIsDragging(true);
+      hasMoved.current = false; // Resetuj flagę ruchu na początku interakcji
       offset.current = {
         x: e.clientX - buttonRef.current.getBoundingClientRect().left,
         y: e.clientY - buttonRef.current.getBoundingClientRect().top,
@@ -28,6 +30,8 @@ export const PomodoroTimer: React.FC = () => {
 
   const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging) return;
+
+    hasMoved.current = true; // Ustaw flagę na true, jeśli mysz się poruszyła
 
     let newX = e.clientX - offset.current.x;
     let newY = e.clientY - offset.current.y;
@@ -64,9 +68,11 @@ export const PomodoroTimer: React.FC = () => {
   }, [isDragging]);
 
   const handleClick = () => {
-    if (!isDragging) { // Only open modal if not dragging
+    // Otwórz modal tylko jeśli nie było ruchu myszy (czyli było to kliknięcie, a nie przeciągnięcie)
+    if (!hasMoved.current) {
       setShowModal(true);
     }
+    // Flaga hasMoved jest resetowana w handleMouseDown dla kolejnej interakcji
   };
 
   return (
@@ -75,7 +81,6 @@ export const PomodoroTimer: React.FC = () => {
         ref={buttonRef}
         onMouseDown={handleMouseDown}
         onClick={handleClick}
-        // Zaktualizowane klasy: większy tekst, brak tła po najechaniu, dodany efekt skalowania
         className="fixed z-40 p-3 cursor-grab active:cursor-grabbing transition-all duration-200 text-5xl hover:scale-110"
         style={{ left: position.x, top: position.y }}
       >
