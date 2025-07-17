@@ -53,6 +53,14 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
     setPrevXp(user.xp);
   }, [lastXpGainTimestamp, user.xp]);
 
+  // Obliczenia dla wyświetlania XP i poziomu
+  const xpForNextLevel = 1000; // Każdy poziom wymaga 1000 XP
+  const xpInCurrentLevel = user.xp % xpForNextLevel;
+  const xpProgress = xpInCurrentLevel / xpForNextLevel;
+
+  // Kolor kryształu (można dostosować w zależności od poziomu, ale na razie stały)
+  const currentCrystalColor = 'from-cyan-500 to-blue-600';
+
   return (
     <div
       className="relative flex flex-col items-center justify-center w-full cursor-pointer select-none"
