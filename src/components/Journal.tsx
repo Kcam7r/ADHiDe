@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Calendar as CalendarIcon, ChevronDown, ChevronUp, Battery, BatteryLow, BatteryMedium, BatteryFull, Zap } from 'lucide-react'; // Zmieniono BatteryEmpty na Battery
+import { Calendar as CalendarIcon, ChevronDown, ChevronUp, Battery, BatteryLow, BatteryMedium, BatteryFull, Zap } from 'lucide-react';
 import { JournalEntry } from '../types';
 import { Calendar } from './Calendar';
 
@@ -79,7 +79,7 @@ export const Journal: React.FC = () => {
 
   const getEnergyIcon = (energy: number) => {
     switch (energy) {
-      case 1: return <Battery className="w-6 h-6 text-red-400" />; // Użyto Battery zamiast BatteryEmpty
+      case 1: return <Battery className="w-6 h-6 text-red-400" />;
       case 2: return <BatteryLow className="w-6 h-6 text-orange-400" />;
       case 3: return <BatteryMedium className="w-6 h-6 text-yellow-400" />;
       case 4: return <BatteryFull className="w-6 h-6 text-green-400" />;
@@ -158,8 +158,8 @@ export const Journal: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="journal-mood" className="block text-sm font-medium text-gray-300 mb-2">
-                  Nastrój (1-5) <span className="text-2xl ml-2">{getMoodEmoji(formData.mood)}</span>
+                <label htmlFor="journal-mood" className="flex items-center text-sm font-medium text-gray-300 mb-2">
+                  <span>Nastrój</span> <span className="text-2xl ml-2">{getMoodEmoji(formData.mood)}</span>
                 </label>
                 <input
                   id="journal-mood"
@@ -177,8 +177,8 @@ export const Journal: React.FC = () => {
               </div>
 
               <div>
-                <label htmlFor="journal-energy" className="block text-sm font-medium text-gray-300 mb-2">
-                  Energia (1-5) <span className="text-2xl ml-2">{getEnergyIcon(formData.energy)}</span>
+                <label htmlFor="journal-energy" className="flex items-center text-sm font-medium text-gray-300 mb-2">
+                  <span>Energia</span> <span className="text-2xl ml-2">{getEnergyIcon(formData.energy)}</span>
                 </label>
                 <input
                   id="journal-energy"
@@ -203,13 +203,13 @@ export const Journal: React.FC = () => {
               >
                 {currentEntry ? 'Aktualizuj wpis' : 'Zapisz wpis'}
               </button>
-              {currentEntry && ( // Przycisk "Nowy wpis" tylko jeśli jest już istniejący wpis
+              {currentEntry && (
                 <button
                   type="button"
                   onClick={() => {
                     setCurrentEntry(null);
                     setFormData({ content: '', mood: 3, energy: 3 });
-                    setSelectedDate(new Date()); // Resetuj do dzisiejszej daty
+                    setSelectedDate(new Date());
                   }}
                   className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition-colors font-medium"
                 >
@@ -231,12 +231,12 @@ export const Journal: React.FC = () => {
           ) : (
             <div className="space-y-3">
               {entriesWithDates
-                .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Sortuj od najnowszych
+                .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                 .map((entry) => (
                 <div
                   key={entry.id}
                   className="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition-colors cursor-pointer"
-                  onClick={() => setSelectedDate(new Date(entry.date))} // Kliknięcie na wpis wybiera datę
+                  onClick={() => setSelectedDate(new Date(entry.date))}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
@@ -250,7 +250,7 @@ export const Journal: React.FC = () => {
                     </div>
                     <button
                       onClick={(e) => {
-                        e.stopPropagation(); // Zapobiegaj wywołaniu onClick rodzica
+                        e.stopPropagation();
                         toggleEntryExpansion(entry.id);
                       }}
                       className="text-gray-400 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-500"
