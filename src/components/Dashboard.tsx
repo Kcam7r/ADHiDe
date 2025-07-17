@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } => 'react';
 import { useApp } from '../contexts/AppContext';
-import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryFull, Brain } from 'lucide-react'; // Poprawiono import BatteryHigh na BatteryFull
-import { Mission, Habit } from '../types'; // Import Mission type
+import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryFull, Brain } from 'lucide-react';
+import { Mission, Habit } from '../types';
 
 export const Dashboard: React.FC = () => {
   const { 
@@ -15,14 +15,14 @@ export const Dashboard: React.FC = () => {
   } = useApp();
   const [showHistory, setShowHistory] = useState(false);
   const [animatingDailyTasks, setAnimatingDailyTasks] = useState<Set<string>>(new Set());
-  const [animatingHabits, setAnimatingHabatingHabits] = useState<Set<string>>(new Set()); // Nowy stan dla animacji nawyków
+  const [animatingHabits, setAnimatingHabatingHabits] = useState<Set<string>>(new Set());
 
   const activeMissions = missions.filter(m => m.isActive);
 
   const getPriorityIcon = (priority: Mission['priority']) => {
     switch (priority) {
       case 'urgent':
-        return <Flame className="w-4 h-4 text-red-400 animate-pulse" />;
+        return <Flame className="w-4 h-4 text-white animate-pulse" />; // Zmieniono na text-white
       case 'important':
         return <Star className="w-4 h-4 text-orange-400" />;
       default:
@@ -33,7 +33,7 @@ export const Dashboard: React.FC = () => {
   const getPriorityColor = (priority: Mission['priority']) => {
     switch (priority) {
       case 'urgent':
-        return 'text-red-400';
+        return 'text-white'; // Zmieniono na text-white
       case 'important':
         return 'text-orange-400';
       default:
@@ -44,13 +44,13 @@ export const Dashboard: React.FC = () => {
   const getEnergyIcon = (energy: Mission['energy']) => {
     switch (energy) {
       case 'low':
-        return <BatteryLow className="w-4 h-4 text-gray-400" />;
+        return <BatteryLow className="w-4 h-4 text-white" />; // Zmieniono na text-white
       case 'medium':
-        return <BatteryMedium className="w-4 h-4 text-gray-400" />;
+        return <BatteryMedium className="w-4 h-4 text-white" />; // Zmieniono na text-white
       case 'high':
-        return <BatteryFull className="w-4 h-4 text-gray-400" />; // Zmieniono na BatteryFull
+        return <BatteryFull className="w-4 h-4 text-white" />; // Zmieniono na text-white
       case 'concentration':
-        return <Brain className="w-4 h-4 text-purple-400" />;
+        return <Brain className="w-4 h-4 text-white" />; // Zmieniono na text-white
       default:
         return null;
     }
@@ -59,10 +59,10 @@ export const Dashboard: React.FC = () => {
   const handleMissionComplete = (missionId: string) => {
     const element = document.getElementById(`mission-${missionId}`);
     if (element) {
-      element.style.animation = 'fadeOut 0.7s ease-out forwards'; // Zwiększona długość animacji
+      element.style.animation = 'fadeOut 0.7s ease-out forwards';
       setTimeout(() => {
         completeMission(missionId); 
-      }, 700); // Opóźnienie usunięcia elementu, aby animacja była widoczna
+      }, 700);
     } else {
       completeMission(missionId); 
     }
@@ -81,12 +81,12 @@ export const Dashboard: React.FC = () => {
         newSet.delete(taskId);
         return newSet;
       });
-    }, 400); // Czas trwania animacji daily-task-complete-pop (zmieniono na 400ms)
+    }, 400);
   };
 
   const handleHabitClick = (habitId: string, habitType: Habit['type']) => {
     setAnimatingHabits(prev => new Set(prev).add(habitId));
-    completeHabit(habitId); // Wywołaj oryginalną logikę
+    completeHabit(habitId);
 
     setTimeout(() => {
       setAnimatingHabits(prev => {
@@ -94,7 +94,7 @@ export const Dashboard: React.FC = () => {
         newSet.delete(habitId);
         return newSet;
       });
-    }, 300); // Czas trwania animacji pulsowania
+    }, 300);
   };
 
   return (
@@ -113,14 +113,14 @@ export const Dashboard: React.FC = () => {
               {habits.map((habit) => (
                 <div
                   key={habit.id}
-                  onClick={() => handleHabitClick(habit.id, habit.type)} // Użyj nowej funkcji obsługi
-                  className={`p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 ${ // Added border-2
+                  onClick={() => handleHabitClick(habit.id, habit.type)}
+                  className={`p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 ${
                     habit.type === 'positive' 
                       ? 'bg-green-600 border-green-500' 
                       : 'bg-red-600 border-red-500'
                   } ${animatingHabits.has(habit.id) 
                       ? (habit.type === 'positive' ? 'animate-habit-pulse-positive' : 'animate-habit-pulse-negative') 
-                      : 'hover:bg-opacity-80' // Keep this, it's a good subtle hover
+                      : 'hover:bg-opacity-80'
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -202,7 +202,6 @@ export const Dashboard: React.FC = () => {
                         {mission.title}
                       </span>
                     </div>
-                    {/* Dodano ikonę energii po prawej stronie */}
                     <div>
                       {getEnergyIcon(mission.energy)}
                     </div>
