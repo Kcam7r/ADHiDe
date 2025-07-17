@@ -18,7 +18,7 @@ interface AppContextType {
   quickThoughts: QuickThought[];
   completedMissionsHistory: Mission[];
   lastXpGainTimestamp: number;
-  xpParticles: XpParticleData[]; // Zmieniono na tablicę
+  xpParticles: XpParticleData[];
   
   addXP: (amount: number, originX?: number, originY?: number) => void;
   resetXP: () => void;
@@ -47,8 +47,9 @@ interface AppContextType {
   addQuickThought: (thought: Omit<QuickThought, 'id' | 'createdAt'>) => void;
   deleteQuickThought: (id: string) => void;
 
-  removeXpParticle: (id: string) => void; // Nowa funkcja do usuwania cząsteczek
-  triggerConfetti: () => void; // Nowa funkcja do wyzwalania konfetti
+  removeXpParticle: (id: string) => void;
+  triggerConfetti: () => void;
+  confettiKey: number; // Nowa właściwość do wyzwalania konfetti
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -77,8 +78,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [quickThoughts, setQuickThoughts] = useLocalStorage<QuickThought[]>('adhd-thoughts', []);
   const [completedMissionsHistory, setCompletedMissionsHistory] = useLocalStorage<Mission[]>('adhd-completed-missions', []);
   const [lastXpGainTimestamp, setLastXpGainTimestamp] = useState(0);
-  const [xpParticles, setXpParticles] = useState<XpParticleData[]>([]); // Zmieniono na tablicę
-  const [shouldTriggerConfetti, setShouldTriggerConfetti] = useState(false); // Nowy stan dla konfetti
+  const [xpParticles, setXpParticles] = useState<XpParticleData[]>([]);
+  const [confettiKey, setConfettiKey] = useState(0); // Nowy stan dla konfetti
 
   const calculateLevel = (xp: number) => Math.floor(xp / 1000) + 1;
 
@@ -113,8 +114,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const triggerConfetti = () => {
-    setShouldTriggerConfetti(true);
-    // Konfetti będzie widoczne przez krótki czas, a następnie zostanie wyłączone przez ConfettiOverlay
+    setConfettiKey(prev => prev + 1); // Inkrementuj klucz, aby wywołać efekt konfetti
   };
 
   const resetXP = () => {
@@ -326,7 +326,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       quickThoughts,
       completedMissionsHistory,
       lastXpGainTimestamp,
-      xpParticles, // Zmieniono na tablicę
+      xpParticles,
       addXP,
       resetXP,
       addHabit,
@@ -348,8 +348,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       updateJournalEntry,
       addQuickThought,
       deleteQuickThought,
-      removeXpParticle, // Dodano do kontekstu
-      triggerConfetti, // Dodano do kontekstu
+      removeXpParticle,
+      triggerConfetti,
+      confettiKey, // Dodano do kontekstu
     }}>
       {children}
     </AppContext.Provider>

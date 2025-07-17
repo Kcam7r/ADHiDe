@@ -4,23 +4,16 @@ import { useApp } from '../contexts/AppContext';
 import { useWindowSize } from '../hooks/useWindowSize';
 
 export const ConfettiOverlay: React.FC = () => {
-  const { user, triggerConfetti: appTriggerConfetti } = useApp(); // Zmieniono nazwę, aby uniknąć konfliktu
+  const { confettiKey } = useApp(); // Zmieniono na confettiKey
   const [showConfetti, setShowConfetti] = useState(false);
-  const prevLevelRef = useRef(user.level);
+  const prevConfettiKeyRef = useRef(confettiKey); // Nowa referencja do śledzenia poprzedniego klucza
   const { width, height } = useWindowSize();
 
-  useEffect(() => {
-    // Trigger confetti only if the level has increased
-    if (user.level > prevLevelRef.current) {
-      setShowConfetti(true);
-    }
-    // Update previous level for the next comparison
-    prevLevelRef.current = user.level;
-  }, [user.level]);
+  // Usunięto useEffect zależny od user.level, aby konfetti było wyzwalane tylko przez triggerConfetti
 
-  // Nowy useEffect do reagowania na wywołanie triggerConfetti z kontekstu
   useEffect(() => {
-    if (appTriggerConfetti) { // Sprawdź, czy funkcja została wywołana
+    // Wyzwalaj konfetti tylko jeśli confettiKey się zmienił i nie jest to początkowe 0
+    if (confettiKey > 0 && confettiKey !== prevConfettiKeyRef.current) {
       setShowConfetti(true);
       // Resetuj stan konfetti po krótkim czasie, aby umożliwić ponowne wywołanie
       const timer = setTimeout(() => {
@@ -28,10 +21,11 @@ export const ConfettiOverlay: React.FC = () => {
       }, 2000); // Czas trwania konfetti
       return () => clearTimeout(timer);
     }
-  }, [appTriggerConfetti]); // Zależność od funkcji triggerConfetti z kontekstu
+    prevConfettiKeyRef.current = confettiKey; // Zaktualizuj poprzedni klucz
+  }, [confettiKey]); // Zależność od confettiKey
 
   const handleConfettiComplete = () => {
-    setShowConfetti(false); // Hide the component only when all pieces are done
+    setShowConfetti(false); // Ukryj komponent tylko, gdy wszystkie kawałki znikną
   };
 
   if (!showConfetti) return null;
