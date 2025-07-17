@@ -14,6 +14,7 @@ export const Dashboard: React.FC = () => {
     completedMissionsHistory
   } = useApp();
   const [showHistory, setShowHistory] = useState(false);
+  const [animatingDailyTasks, setAnimatingDailyTasks] = useState<Set<string>>(new Set());
 
   const activeMissions = missions.filter(m => m.isActive);
 
@@ -40,12 +41,31 @@ export const Dashboard: React.FC = () => {
   };
 
   const handleMissionComplete = (missionId: string) => {
-    completeMission(missionId);
-    // Add celebration animation
     const element = document.getElementById(`mission-${missionId}`);
     if (element) {
-      element.style.animation = 'fadeOut 0.5s ease-out forwards';
+      element.style.animation = 'fadeOut 0.7s ease-out forwards'; // Zwiększona długość animacji
+      setTimeout(() => {
+        completeMission(missionId); 
+      }, 700); // Opóźnienie usunięcia elementu, aby animacja była widoczna
+    } else {
+      completeMission(missionId); 
     }
+  };
+
+  const handleDailyTaskClick = (taskId: string) => {
+    const task = dailyTasks.find(t => t.id === taskId);
+    if (!task || task.completed) return;
+
+    setAnimatingDailyTasks(prev => new Set(prev).add(taskId));
+
+    setTimeout(() => {
+      completeDailyTask(taskId);
+      setAnimatingDailyTasks(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(taskId);
+        return newSet;
+      });
+    }, 300); // Czas trwania animacji daily-task-complete-pop
   };
 
   return (
@@ -98,12 +118,12 @@ export const Dashboard: React.FC = () => {
               {dailyTasks.map((task) => (
                 <div
                   key={task.id}
-                  onClick={() => !task.completed && completeDailyTask(task.id)}
+                  onClick={() => handleDailyTaskClick(task.id)}
                   className={`p-4 rounded-lg transition-all duration-200 cursor-pointer ${
                     task.completed
                       ? 'bg-gray-700 border-2 border-green-500'
                       : 'bg-gray-700 hover:bg-gray-600 border-2 border-gray-600'
-                  }`}
+                  } ${animatingDailyTasks.has(task.id) ? 'animate-daily-task-complete' : ''}`}
                 >
                   <span className={`${task.completed ? 'line-through text-gray-400' : 'text-white'}`}>
                     {task.title}
