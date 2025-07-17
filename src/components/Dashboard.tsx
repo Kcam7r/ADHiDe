@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Flame, Star, Archive } from 'lucide-react';
-import { MissionHistoryModal } from './MissionHistoryModal';
-import { Habit } from '../types'; // Import Habit type
+import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryHigh, Brain } from 'lucide-react'; // Dodano nowe ikony
+import { Mission, Habit } from '../types'; // Import Mission type
 
 export const Dashboard: React.FC = () => {
   const { 
@@ -16,11 +15,11 @@ export const Dashboard: React.FC = () => {
   } = useApp();
   const [showHistory, setShowHistory] = useState(false);
   const [animatingDailyTasks, setAnimatingDailyTasks] = useState<Set<string>>(new Set());
-  const [animatingHabits, setAnimatingHabits] = useState<Set<string>>(new Set()); // Nowy stan dla animacji nawyków
+  const [animatingHabits, setAnimatingHabatingHabits] = useState<Set<string>>(new Set()); // Nowy stan dla animacji nawyków
 
   const activeMissions = missions.filter(m => m.isActive);
 
-  const getPriorityIcon = (priority: string) => {
+  const getPriorityIcon = (priority: Mission['priority']) => {
     switch (priority) {
       case 'urgent':
         return <Flame className="w-4 h-4 text-red-400 animate-pulse" />;
@@ -31,7 +30,7 @@ export const Dashboard: React.FC = () => {
     }
   };
 
-  const getPriorityColor = (priority: string) => {
+  const getPriorityColor = (priority: Mission['priority']) => {
     switch (priority) {
       case 'urgent':
         return 'text-red-400';
@@ -39,6 +38,21 @@ export const Dashboard: React.FC = () => {
         return 'text-orange-400';
       default:
         return 'text-white';
+    }
+  };
+
+  const getEnergyIcon = (energy: Mission['energy']) => {
+    switch (energy) {
+      case 'low':
+        return <BatteryLow className="w-4 h-4 text-gray-400" />;
+      case 'medium':
+        return <BatteryMedium className="w-4 h-4 text-gray-400" />;
+      case 'high':
+        return <BatteryHigh className="w-4 h-4 text-gray-400" />;
+      case 'concentration':
+        return <Brain className="w-4 h-4 text-purple-400" />;
+      default:
+        return null;
     }
   };
 
@@ -187,6 +201,10 @@ export const Dashboard: React.FC = () => {
                       <span className={`font-medium ${getPriorityColor(mission.priority)}`}>
                         {mission.title}
                       </span>
+                    </div>
+                    {/* Dodano ikonę energii po prawej stronie */}
+                    <div>
+                      {getEnergyIcon(mission.energy)}
                     </div>
                   </div>
                   {mission.description && (
