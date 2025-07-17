@@ -6,7 +6,7 @@ import { Project } from '../types';
 export const Garage: React.FC = () => {
   const { projects, addProject, addTaskToProject, activateMission, deactivateMission } = useApp();
   const [showProjectForm, setShowProjectForm] = useState(false);
-  const [expandedProjects, setExpandedProjects] = new Set());
+  const [expandedProjects, setExpandedProjects] = useState<Set<string>>(new Set());
   const [showTaskForms, setShowTaskForms] = useState<Set<string>>(new Set());
 
   const [projectForm, setProjectForm] = useState({
