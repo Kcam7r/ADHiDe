@@ -18,7 +18,31 @@ export const Dashboard: React.FC = () => {
   const [animatingDailyTasks, setAnimatingDailyTasks] = useState<Set<string>>(new Set());
   const [animatingHabits, setAnimatingHabits] = useState<Set<string>>(new Set());
 
-  const activeMissions = missions.filter(m => m.isActive);
+  // Definicja kolejności priorytetów i energii
+  const priorityOrder: Record<Mission['priority'], number> = {
+    urgent: 1,
+    important: 2,
+    normal: 3,
+  };
+
+  const energyOrder: Record<Mission['energy'], number> = {
+    low: 1,
+    medium: 2,
+    high: 3,
+    concentration: 4,
+  };
+
+  const sortedActiveMissions = missions
+    .filter(m => m.isActive)
+    .sort((a, b) => {
+      // Sortowanie po priorytecie
+      const priorityComparison = priorityOrder[a.priority] - priorityOrder[b.priority];
+      if (priorityComparison !== 0) {
+        return priorityComparison;
+      }
+      // Jeśli priorytety są takie same, sortuj po energii
+      return energyOrder[a.energy] - energyOrder[b.energy];
+    });
 
   const getPriorityIcon = (priority: Mission['priority']) => {
     switch (priority) {
@@ -27,7 +51,6 @@ export const Dashboard: React.FC = () => {
       case 'important':
         return <Star className="w-4 h-4 text-white" />;
       default:
-        // Dla 'normal' priority, zwracamy pusty div, aby zachować wyrównanie
         return <div className="w-4 h-4" />; 
     }
   };
@@ -188,7 +211,7 @@ export const Dashboard: React.FC = () => {
               </button>
             </div>
             <div className="space-y-3">
-              {activeMissions.map((mission) => (
+              {sortedActiveMissions.map((mission) => ( // Użycie posortowanej listy
                 <div
                   key={mission.id}
                   id={`mission-${mission.id}`}
@@ -213,7 +236,7 @@ export const Dashboard: React.FC = () => {
                   )}
                 </div>
               ))}
-              {activeMissions.length === 0 && (
+              {sortedActiveMissions.length === 0 && ( // Zmieniono na sortedActiveMissions
                 <div className="text-gray-400 text-center py-4">
                   <p>Brak aktywnych misji</p>
                   <p className="text-sm mt-1">Aktywuj misje w Quest Log lub Garażu</p>
