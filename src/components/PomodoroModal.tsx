@@ -51,6 +51,21 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
     setSelectedMinutes(parseInt(e.target.value));
   };
 
+  // Renderowanie pełnoekranowego zegara, gdy timer jest aktywny
+  if (isActive && time > 0) {
+    return (
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 cursor-pointer"
+        onClick={() => setIsActive(false)} // Kliknięcie na zegar zatrzymuje go i otwiera popup
+      >
+        <span className="text-8xl font-bold text-white select-none">
+          {formatTime(time)}
+        </span>
+      </div>
+    );
+  }
+
+  // Renderowanie popupu z ustawieniami, gdy timer jest zatrzymany lub zakończony
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in">
       <div className="bg-gray-800 p-6 rounded-lg max-w-sm w-full mx-4">
