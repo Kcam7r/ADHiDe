@@ -2,6 +2,12 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { User, Habit, DailyTask, Mission, Project, JournalEntry, QuickThought } from '../types';
 
+interface XpParticleData {
+  id: string;
+  startX: number;
+  startY: number;
+}
+
 interface AppContextType {
   user: User;
   habits: Habit[];
@@ -12,21 +18,21 @@ interface AppContextType {
   quickThoughts: QuickThought[];
   completedMissionsHistory: Mission[];
   lastXpGainTimestamp: number;
-  xpParticleOrigin: { x: number; y: number } | null; // Nowa zmienna: Pochodzenie dla animacji kulki XP
+  xpParticles: XpParticleData[]; // Zmieniono na tablicę
   
-  addXP: (amount: number, originX?: number, originY?: number) => void; // Zmodyfikowano
+  addXP: (amount: number, originX?: number, originY?: number) => void;
   resetXP: () => void;
   addHabit: (habit: Omit<Habit, 'id' | 'count'>) => void;
   updateHabit: (id: string, updates: Partial<Habit>) => void;
-  completeHabit: (id: string, originX?: number, originY?: number) => void; // Zmodyfikowano
+  completeHabit: (id: string, originX?: number, originY?: number) => void;
   deleteHabit: (id: string) => void;
   
   addDailyTask: (task: Omit<DailyTask, 'id' | 'completed'>) => void;
-  completeDailyTask: (id: string, originX?: number, originY?: number) => void; // Zmodyfikowano
+  completeDailyTask: (id: string, originX?: number, originY?: number) => void;
   deleteDailyTask: (id: string) => void;
   
   addMission: (mission: Omit<Mission, 'id' | 'completed'>) => void;
-  completeMission: (id: string, originX?: number, originY?: number) => void; // Zmodyfikowano
+  completeMission: (id: string, originX?: number, originY?: number) => void;
   activateMission: (id: string) => void;
   deactivateMission: (id: string) => void;
   deleteMission: (id: string) => void;
@@ -40,6 +46,8 @@ interface AppContextType {
   
   addQuickThought: (thought: Omit<QuickThought, 'id' | 'createdAt'>) => void;
   deleteQuickThought: (id: string) => void;
+
+  removeXpParticle: (id: string) => void; // Nowa funkcja do usuwania cząsteczek
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -68,7 +76,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [quickThoughts, setQuickThoughts] = useLocalStorage<QuickThought[]>('adhd-thoughts', []);
   const [completedMissionsHistory, setCompletedMissionsHistory] = useLocalStorage<Mission[]>('adhd-completed-missions', []);
   const [lastXpGainTimestamp, setLastXpGainTimestamp] = useState(0);
-  const [xpParticleOrigin, setXpParticleOrigin] = useState<{ x: number; y: number } | null>(null); // Nowy stan
+  const [xpParticles, setXpParticles] = useState<XpParticleData[]>([]); // Zmieniono na tablicę
 
   const calculateLevel = (xp: number) => Math.floor(xp / 1000) + 1;
 
@@ -78,20 +86,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     
     setUser({ ...user, xp: newXP, level: newLevel });
     setLastXpGainTimestamp(Date.now());
+
     if (originX !== undefined && originY !== undefined) {
-      setXpParticleOrigin({ x: originX, y: originY });
+      const numberOfParticles = Math.max(1, Math.floor(amount / 10)); // Jedna kulka na każde 10 XP, minimum 1
+      const newParticles: XpParticleData[] = [];
+      for (let i = 0; i < numberOfParticles; i++) {
+        newParticles.push({
+          id: `${Date.now()}-${i}-${Math.random()}`, // Unikalne ID dla każdej kulki
+          startX: originX,
+          startY: originY,
+        });
+      }
+      setXpParticles(prev => [...prev, ...newParticles]);
     }
   };
 
-  // Wyczyść pochodzenie kulki XP po krótkim opóźnieniu, aby umożliwić zakończenie animacji
-  useEffect(() => {
-    if (xpParticleOrigin) {
-      const timer = setTimeout(() => {
-        setXpParticleOrigin(null);
-      }, 1000); // Dostosuj czas trwania do animacji kulki
-      return () => clearTimeout(timer);
-    }
-  }, [xpParticleOrigin]);
+  const removeXpParticle = (id: string) => {
+    setXpParticles(prev => prev.filter(p => p.id !== id));
+  };
 
   const resetXP = () => {
     setUser({ ...user, xp: 0, level: 1 });
@@ -112,7 +124,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     ));
   };
 
-  const completeHabit = (id: string, originX?: number, originY?: number) => { // Zmodyfikowano
+  const completeHabit = (id: string, originX?: number, originY?: number) => {
     const habit = habits.find(h => h.id === id);
     if (!habit) return;
 
@@ -123,7 +135,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       count: newCount, 
     });
     
-    addXP(xpGain, originX, originY); // Przekaż pochodzenie
+    addXP(xpGain, originX, originY);
   };
 
   const deleteHabit = (id: string) => {
@@ -139,14 +151,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setDailyTasks([...dailyTasks, newTask]);
   };
 
-  const completeDailyTask = (id: string, originX?: number, originY?: number) => { // Zmodyfikowano
+  const completeDailyTask = (id: string, originX?: number, originY?: number) => {
     const task = dailyTasks.find(t => t.id === id);
     if (!task || task.completed) return;
 
     setDailyTasks(dailyTasks.map(task => 
       task.id === id ? { ...task, completed: true, completedAt: new Date() } : task
     ));
-    addXP(10, originX, originY); // Przekaż pochodzenie
+    addXP(10, originX, originY);
   };
 
   const deleteDailyTask = (id: string) => {
@@ -162,7 +174,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setMissions([...missions, newMission]);
   };
 
-  const completeMission = (id: string, originX?: number, originY?: number) => { // Zmodyfikowano
+  const completeMission = (id: string, originX?: number, originY?: number) => {
     const mission = missions.find(m => m.id === id);
     if (!mission || mission.completed) return;
 
@@ -175,7 +187,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     else if (mission.priority === 'important') xpGain += 15;
     if (mission.energy === 'concentration') xpGain += 10;
 
-    addXP(xpGain, originX, originY); // Przekaż pochodzenie
+    addXP(xpGain, originX, originY);
   };
 
   const activateMission = (id: string) => {
@@ -302,7 +314,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       quickThoughts,
       completedMissionsHistory,
       lastXpGainTimestamp,
-      xpParticleOrigin, // Dodano do kontekstu
+      xpParticles, // Zmieniono na tablicę
       addXP,
       resetXP,
       addHabit,
@@ -323,7 +335,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       addJournalEntry,
       updateJournalEntry,
       addQuickThought,
-      deleteQuickThought
+      deleteQuickThought,
+      removeXpParticle // Dodano do kontekstu
     }}>
       {children}
     </AppContext.Provider>

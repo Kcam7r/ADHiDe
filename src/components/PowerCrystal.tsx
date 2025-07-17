@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { XpParticle } from './XpParticle'; // Import nowego komponentu
+import { XpParticle } from './XpParticle';
 
 interface PowerCrystalProps {
   onCrystalClick: () => void;
 }
 
 export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) => {
-  const { user, lastXpGainTimestamp, xpParticleOrigin } = useApp(); // Pobierz xpParticleOrigin
+  const { user, lastXpGainTimestamp, xpParticles, removeXpParticle } = useApp(); // Pobierz xpParticles i removeXpParticle
   const [isHovered, setIsHovered] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
   const [prevXp, setPrevXp] = useState(user.xp);
@@ -110,16 +110,17 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
         {xpInCurrentLevel}/{xpForNextLevel} XP
       </div>
 
-      {/* Animacja kulki XP */}
-      {xpParticleOrigin && crystalCenter.x !== 0 && crystalCenter.y !== 0 && (
+      {/* Animacja kulek XP */}
+      {crystalCenter.x !== 0 && crystalCenter.y !== 0 && xpParticles.map(particle => (
         <XpParticle
-          startX={xpParticleOrigin.x}
-          startY={xpParticleOrigin.y}
+          key={particle.id}
+          startX={particle.startX}
+          startY={particle.startY}
           targetX={crystalCenter.x}
           targetY={crystalCenter.y}
-          onComplete={() => { /* AppContext zajmuje się czyszczeniem pochodzenia */ }}
+          onComplete={() => removeXpParticle(particle.id)}
         />
-      )}
+      ))}
     </div>
   );
 };
