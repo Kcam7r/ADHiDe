@@ -33,8 +33,8 @@ function App() {
         <main className="flex-1 overflow-auto">
           {renderActiveView()}
         </main>
-        <PomodoroTimer />
       </div>
+      <PomodoroTimer /> {/* Render PomodoroTimer here */}
       <ConfettiOverlay /> {/* Render ConfettiOverlay here */}
     </AppProvider>
   );
