@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Flame, Star, Archive, Plus } from 'lucide-react';
 import { MissionHistoryModal } from './MissionHistoryModal';
+import { Habit } from '../types'; // Import Habit type
 
 export const Dashboard: React.FC = () => {
   const { 
@@ -15,6 +16,7 @@ export const Dashboard: React.FC = () => {
   } = useApp();
   const [showHistory, setShowHistory] = useState(false);
   const [animatingDailyTasks, setAnimatingDailyTasks] = useState<Set<string>>(new Set());
+  const [animatingHabits, setAnimatingHabits] = useState<Set<string>>(new Set()); // Nowy stan dla animacji nawyków
 
   const activeMissions = missions.filter(m => m.isActive);
 
@@ -68,6 +70,19 @@ export const Dashboard: React.FC = () => {
     }, 300); // Czas trwania animacji daily-task-complete-pop
   };
 
+  const handleHabitClick = (habitId: string, habitType: Habit['type']) => {
+    setAnimatingHabits(prev => new Set(prev).add(habitId));
+    completeHabit(habitId); // Wywołaj oryginalną logikę
+
+    setTimeout(() => {
+      setAnimatingHabits(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(habitId);
+        return newSet;
+      });
+    }, 300); // Czas trwania animacji pulsowania
+  };
+
   return (
     <div className="flex-1 p-6 bg-gray-900 min-h-screen">
       <div className="max-w-7xl mx-auto">
@@ -84,11 +99,14 @@ export const Dashboard: React.FC = () => {
               {habits.map((habit) => (
                 <div
                   key={habit.id}
-                  onClick={() => completeHabit(habit.id)}
+                  onClick={() => handleHabitClick(habit.id, habit.type)} // Użyj nowej funkcji obsługi
                   className={`p-4 rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 ${
                     habit.type === 'positive' 
                       ? 'bg-green-600 hover:bg-green-500' 
                       : 'bg-red-600 hover:bg-red-500'
+                  } ${animatingHabits.has(habit.id) 
+                      ? (habit.type === 'positive' ? 'animate-habit-pulse-positive' : 'animate-habit-pulse-negative') 
+                      : ''
                   }`}
                 >
                   <div className="flex items-center justify-between">
