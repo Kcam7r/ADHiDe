@@ -13,14 +13,15 @@ export const ConfettiOverlay: React.FC = () => {
     // Trigger confetti only if the level has increased
     if (user.level > prevLevelRef.current) {
       setShowConfetti(true);
-      const timer = setTimeout(() => {
-        setShowConfetti(false);
-      }, 4000); // Show confetti for 4 seconds
-      return () => clearTimeout(timer);
+      // No need for a fixed setTimeout to hide, onConfettiComplete will handle it
     }
     // Update previous level for the next comparison
     prevLevelRef.current = user.level;
   }, [user.level]);
+
+  const handleConfettiComplete = () => {
+    setShowConfetti(false); // Hide the component only when all pieces are done
+  };
 
   if (!showConfetti) return null;
 
@@ -29,17 +30,18 @@ export const ConfettiOverlay: React.FC = () => {
       <Confetti
         width={width}
         height={height}
-        recycle={false} // Only fire once per trigger
-        numberOfPieces={700} // Zwiększona liczba kawałków konfetti
-        gravity={0.05} // Zmniejszona grawitacja, aby spadały wolniej
-        initialVelocityX={{ min: -10, max: 10 }} // Większy rozrzut poziomy
-        initialVelocityY={{ min: -15, max: -8 }} // Większy początkowy impuls w górę
+        recycle={false} // Generate a fixed number of pieces once
+        numberOfPieces={1500} // Significantly more pieces for a bigger burst
+        gravity={0.08} // Slightly increased gravity for a more natural fall
+        initialVelocityX={{ min: -15, max: 15 }} // Wider horizontal spread
+        initialVelocityY={{ min: -30, max: -15 }} // Stronger initial upward velocity
         confettiSource={{
-          x: width / 2,
-          y: height / 2,
-          w: 0, // Źródło z centrum
-          h: 0, // Źródło z centrum
+          x: 0, // Start from left edge
+          y: height, // Start from the very bottom
+          w: width, // Spread across the entire width
+          h: 0, // A thin line at the bottom for the source
         }}
+        onConfettiComplete={handleConfettiComplete} // Callback when all pieces are off screen
       />
     </div>
   );
