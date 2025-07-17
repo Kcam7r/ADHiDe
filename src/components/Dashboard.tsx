@@ -20,7 +20,7 @@ export const Dashboard: React.FC = () => {
   } = useApp();
 
   const [showHistory, setShowHistory] = useState(false);
-  const [animatingHabits, setAnimatingHabits] = useState<Set<string>>(new Set());
+  const [animatingHabits, setAnimatingHabits] = new useState<Set<string>>(new Set());
 
   // New states for Daily Tasks visual management
   const [displayDailyTasks, setDisplayDailyTasks] = useState<DailyTask[]>([]);
@@ -195,7 +195,12 @@ export const Dashboard: React.FC = () => {
     const task = appDailyTasks.find(t => t.id === taskId);
     if (!task || task.completed) return;
 
-    addXP(10, e.clientX, e.clientY); // Dodaj XP natychmiast
+    // Get origin for XP particles
+    const element = e.currentTarget as HTMLElement;
+    const rect = element.getBoundingClientRect();
+    const originX = rect.x + rect.width / 2;
+    const originY = rect.y + rect.height / 2;
+
     showInfoToast(`Zadanie ukończone: ${task.title}! (+10 XP)`);
 
     // Trigger visual shrink-out animation
@@ -203,7 +208,7 @@ export const Dashboard: React.FC = () => {
 
     // After shrink-out animation completes (0.5s), update AppContext
     setTimeout(() => {
-      completeDailyTask(taskId); // This will move it to completedTodayVisual via useEffect
+      completeDailyTask(taskId, originX, originY); // This will move it to completedTodayVisual via useEffect
       setAnimatingOutTasks(prev => {
         const newSet = new Set(prev);
         newSet.delete(taskId);
@@ -225,7 +230,6 @@ export const Dashboard: React.FC = () => {
     if (!habit) return;
 
     const xpGain = habit.type === 'positive' ? 10 : -20;
-    addXP(xpGain, e.clientX, e.clientY); // Dodaj XP natychmiast
     
     if (habit.type === 'positive') {
       showSuccessToast(`Nawyk ukończony: ${habit.name}! (+${xpGain} XP)`);
@@ -233,8 +237,14 @@ export const Dashboard: React.FC = () => {
       showErrorToast(`Nawyk przerwany: ${habit.name}! (${xpGain} XP)`);
     }
 
+    // Get origin for XP particles
+    const element = e.currentTarget as HTMLElement;
+    const rect = element.getBoundingClientRect();
+    const originX = rect.x + rect.width / 2;
+    const originY = rect.y + rect.height / 2;
+
     setAnimatingHabits((prev: Set<string>) => new Set(prev).add(habitId));
-    completeHabit(habitId); // Ta funkcja już aktualizuje count
+    completeHabit(habitId, originX, originY); // Ta funkcja już aktualizuje count
 
     setTimeout(() => {
       setAnimatingHabits((prev: Set<string>) => {
@@ -266,9 +276,6 @@ export const Dashboard: React.FC = () => {
                     habit.type === 'positive' 
                       ? 'bg-green-600 border-green-500' 
                       : 'bg-red-600 border-red-500'
-                  } ${animatingHabits.has(habit.id) 
-                      ? (habit.type === 'positive' ? 'animate-habit-pulse-positive' : 'animate-habit-pulse-negative') 
-                      : 'hover:bg-opacity-80'
                   }`}
                 >
                   <div className="flex items-center justify-between">

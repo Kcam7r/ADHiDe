@@ -24,11 +24,11 @@ interface AppContextType {
   resetXP: () => void;
   addHabit: (habit: Omit<Habit, 'id' | 'count'>) => void;
   updateHabit: (id: string, updates: Partial<Habit>) => void;
-  completeHabit: (id: string) => void;
+  completeHabit: (id: string, originX?: number, originY?: number) => void; // Dodano originX, originY
   deleteHabit: (id: string) => void;
   
   addDailyTask: (task: Omit<DailyTask, 'id' | 'completed'>) => void;
-  completeDailyTask: (id: string) => void;
+  completeDailyTask: (id: string, originX?: number, originY?: number) => void; // Dodano originX, originY
   deleteDailyTask: (id: string) => void;
   
   addMission: (mission: Omit<Mission, 'id' | 'completed'>) => void;
@@ -136,7 +136,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     ));
   };
 
-  const completeHabit = (id: string) => {
+  const completeHabit = (id: string, originX?: number, originY?: number) => {
     const habit = habits.find(h => h.id === id);
     if (!habit) return;
 
@@ -145,6 +145,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     updateHabit(id, { 
       count: newCount, 
     });
+    // Przekazanie originX i originY do addXP
+    addXP(habit.type === 'positive' ? 10 : -20, originX, originY);
   };
 
   const deleteHabit = (id: string) => {
@@ -160,13 +162,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setDailyTasks([...dailyTasks, newTask]);
   };
 
-  const completeDailyTask = (id: string) => {
+  const completeDailyTask = (id: string, originX?: number, originY?: number) => {
     const task = dailyTasks.find(t => t.id === id);
     if (!task || task.completed) return;
 
-    setDailyTasks(dailyTasks.map((taskItem: DailyTask) => 
+    setDailyTasks((dailyTasks: DailyTask[]) => dailyTasks.map((taskItem: DailyTask) => 
       taskItem.id === id ? { ...taskItem, completed: true, completedAt: new Date() } : taskItem
     ));
+    // Przekazanie originX i originY do addXP
+    addXP(10, originX, originY);
   };
 
   const deleteDailyTask = (id: string) => {
