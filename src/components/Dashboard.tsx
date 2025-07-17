@@ -23,9 +23,9 @@ export const Dashboard: React.FC = () => {
   const getPriorityIcon = (priority: Mission['priority']) => {
     switch (priority) {
       case 'urgent':
-        return <Flame className="w-4 h-4 text-red-400 animate-pulse" />; // Zmieniono na text-red-400 dla spójności z ogólnym stylem
+        return <Flame className="w-4 h-4 text-white animate-pulse" />; // Zmieniono na text-white
       case 'important':
-        return <Star className="w-4 h-4 text-orange-400" />;
+        return <Star className="w-4 h-4 text-white" />; // Zmieniono na text-white
       default:
         return null;
     }
@@ -36,7 +36,7 @@ export const Dashboard: React.FC = () => {
       case 'urgent':
         return 'text-white';
       case 'important':
-        return 'text-white'; // Zmieniono na biały kolor tekstu
+        return 'text-white';
       default:
         return 'text-white';
     }
@@ -156,7 +156,7 @@ export const Dashboard: React.FC = () => {
                     task.completed
                       ? 'bg-gray-700 border-2 border-amber-500'
                       : 'bg-gray-700 hover:bg-gray-600 border-2 border-gray-600'
-                  } ${animatingDailyTasks.has(task.id) ? 'animate-daily-task-complete' : ''}`}
+                  }`}
                 >
                   <span className={`${task.completed ? 'line-through text-gray-400' : 'text-white'}`}>
                     {task.title}
