@@ -141,6 +141,7 @@ export const Journal: React.FC = () => {
                     selectedDate={selectedDate}
                     onSelectDate={handleDateSelection}
                     highlightedDates={journalDates}
+                    onClose={() => setShowCalendarPopup(false)} // Przekazanie funkcji zamykającej
                   />
                 </div>
               )}
