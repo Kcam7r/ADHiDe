@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, BookOpen, Calendar, Settings, Lightbulb } from 'lucide-react';
+import { Home, BookOpen, Calendar, Settings, Lightbulb } from 'lucide-react'; // Usunięto X
 import { useApp } from '../contexts/AppContext';
 import { QuickThoughtModal } from './QuickThoughtModal';
 import { QuickThoughtsModal } from './QuickThoughtsModal';

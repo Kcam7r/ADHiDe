@@ -97,24 +97,24 @@ export const Dashboard: React.FC = () => {
     const task = dailyTasks.find(t => t.id === taskId);
     if (!task || task.completed) return;
 
-    setAnimatingDailyTasks(prev => new Set(prev).add(taskId));
+    setAnimatingDailyTasks((prev: Set<string>) => new Set(prev).add(taskId));
 
     setTimeout(() => {
-      completeDailyTask(taskId);
-      setAnimatingDailyTasks(prev => {
+      setAnimatingDailyTasks((prev: Set<string>) => {
         const newSet = new Set(prev);
         newSet.delete(taskId);
         return newSet;
       });
+      completeDailyTask(taskId);
     }, 400);
   };
 
-  const handleHabitClick = (habitId: string, habitType: Habit['type']) => {
-    setAnimatingHabits(prev => new Set(prev).add(habitId));
+  const handleHabitClick = (habitId: string) => { // Usunięto habitType
+    setAnimatingHabits((prev: Set<string>) => new Set(prev).add(habitId));
     completeHabit(habitId);
 
     setTimeout(() => {
-      setAnimatingHabits(prev => {
+      setAnimatingHabits((prev: Set<string>) => {
         const newSet = new Set(prev);
         newSet.delete(habitId);
         return newSet;
@@ -138,7 +138,7 @@ export const Dashboard: React.FC = () => {
               {habits.map((habit) => (
                 <div
                   key={habit.id}
-                  onClick={() => handleHabitClick(habit.id, habit.type)}
+                  onClick={() => handleHabitClick(habit.id)} // Usunięto habit.type
                   className={`p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 ${
                     habit.type === 'positive' 
                       ? 'bg-green-600 border-green-500' 
