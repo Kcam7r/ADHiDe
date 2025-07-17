@@ -9,7 +9,7 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
   const [selectedMinutes, setSelectedMinutes] = useState(25); // Domyślny czas: 25 minut
   const [time, setTime] = useState(selectedMinutes * 60); // Czas w sekundach
   const [isActive, setIsActive] = useState(false);
-  const [isEditingMinutes, setIsEditingMinutes] = useState(false); // Nowy stan do edycji minut
+  const [isEditingMinutes, setIsEditingMinutes] = useState(false); // Stan do edycji minut
   const inputRef = useRef<HTMLInputElement>(null); // Referencja do pola input
 
   // Efekt do obsługi odliczania czasu
@@ -28,7 +28,7 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
     };
   }, [isActive, time]);
 
-  // Efekt do aktualizacji czasu, gdy zmieni się selectedMinutes (np. przez suwak lub ręczne wpisanie)
+  // Efekt do aktualizacji czasu, gdy zmieni się selectedMinutes (np. przez ręczne wpisanie)
   useEffect(() => {
     setTime(selectedMinutes * 60);
     setIsActive(false); // Zatrzymujemy timer po zmianie czasu
@@ -38,6 +38,7 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
   useEffect(() => {
     if (isEditingMinutes && inputRef.current) {
       inputRef.current.focus();
+      inputRef.current.select(); // Zaznacz cały tekst dla łatwiejszego nadpisywania
     }
   }, [isEditingMinutes]);
 
@@ -56,16 +57,10 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
     setTime(selectedMinutes * 60); // Resetuj do aktualnie wybranej wartości
   };
 
-  const handleMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedMinutes(parseInt(e.target.value));
-  };
-
   const handleManualMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     // Pozwól na puste pole podczas wpisywania, ale ustaw domyślną wartość przy zatwierdzeniu
-    if (!isNaN(value)) {
-      setSelectedMinutes(value);
-    }
+    setSelectedMinutes(isNaN(value) ? 0 : value);
   };
 
   const handleInputBlur = () => {
@@ -104,64 +99,42 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in">
       <div className="bg-gray-800 p-6 rounded-lg max-w-sm w-full mx-4">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-white font-bold flex items-center space-x-2">
+        {/* Header with centered title and close button */}
+        <div className="relative mb-4">
+          <h3 className="text-white font-bold flex items-center space-x-2 justify-center">
             <span>🍅</span>
             <span>Pomodoro</span>
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="absolute top-0 right-0 text-gray-400 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
         
-        {/* Suwak do ustawiania czasu */}
-        <div className="mb-6">
-          <label htmlFor="pomodoro-minutes" className="block text-sm font-medium text-gray-300 mb-2">
-            Ustaw czas (minuty):{' '}
-            {isEditingMinutes ? (
-              <input
-                ref={inputRef}
-                type="number"
-                value={selectedMinutes}
-                onChange={handleManualMinutesChange}
-                onBlur={handleInputBlur}
-                onKeyPress={handleInputKeyPress}
-                className="bg-gray-700 text-white rounded-md px-2 py-1 w-20 text-center focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                min="1"
-                max="180"
-              />
-            ) : (
-              <span
-                className="font-bold text-white cursor-pointer hover:text-cyan-400 transition-colors"
-                onClick={() => setIsEditingMinutes(true)}
-              >
-                {selectedMinutes}
-              </span>
-            )}
-          </label>
-          <input
-            id="pomodoro-minutes"
-            type="range"
-            min="5"
-            max="60"
-            step="1"
-            value={selectedMinutes}
-            onChange={handleMinutesChange}
-            className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
-          />
-          <div className="flex justify-between text-xs text-gray-400 mt-1">
-            <span>5 min</span>
-            <span>60 min</span>
-          </div>
-        </div>
-
+        {/* Duży zegar, teraz klikalny do edycji */}
         <div className="text-center my-8">
-          <span className="text-6xl font-bold text-white">
-            {formatTime(time)}
-          </span>
+          {isEditingMinutes ? (
+            <input
+              ref={inputRef}
+              type="number"
+              value={selectedMinutes === 0 ? '' : selectedMinutes} // Pokaż pusty string, jeśli 0 dla lepszego UX
+              onChange={handleManualMinutesChange}
+              onBlur={handleInputBlur}
+              onKeyPress={handleInputKeyPress}
+              className="bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-cyan-500 focus:outline-none text-6xl font-bold w-40 text-center"
+              min="1"
+              max="180"
+            />
+          ) : (
+            <span
+              className="text-6xl font-bold text-white cursor-pointer hover:text-cyan-400 transition-colors"
+              onClick={() => setIsEditingMinutes(true)}
+            >
+              {formatTime(selectedMinutes * 60)} {/* Wyświetl sformatowany czas na podstawie selectedMinutes */}
+            </span>
+          )}
         </div>
 
         <div className="flex justify-center space-x-4">
