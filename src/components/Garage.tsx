@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Plus, ChevronDown, ChevronUp, Play, Pause, Target } from 'lucide-react';
+import { Plus, ChevronDown, ChevronUp, Pause, Target } from 'lucide-react';
 import { Project } from '../types';
 
 export const Garage: React.FC = () => {
-  const { projects, addProject, updateProject, addTaskToProject, activateMission, deactivateMission } = useApp();
+  const { projects, addProject, addTaskToProject, activateMission, deactivateMission } = useApp();
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [expandedProjects, setExpandedProjects] = useState<Set<string>>(new Set());
   const [showTaskForms, setShowTaskForms] = useState<Set<string>>(new Set());
@@ -276,7 +276,7 @@ export const Garage: React.FC = () => {
                             value={taskForms[project.id]?.title || ''}
                             onChange={(e) => setTaskForms({
                               ...taskForms,
-                              [project.id]: { ...taskForms[project.id], title: e.target.value }
+                              [projectId]: { ...taskForms[projectId], title: e.target.value }
                             })}
                             className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
                             placeholder="np. Zaprojektować header"
@@ -291,7 +291,7 @@ export const Garage: React.FC = () => {
                             value={taskForms[project.id]?.priority || 'normal'}
                             onChange={(e) => setTaskForms({
                               ...taskForms,
-                              [project.id]: { ...taskForms[project.id], priority: e.target.value }
+                              [projectId]: { ...taskForms[projectId], priority: e.target.value }
                             })}
                             className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
                           >
@@ -311,7 +311,7 @@ export const Garage: React.FC = () => {
                             value={taskForms[project.id]?.description || ''}
                             onChange={(e) => setTaskForms({
                               ...taskForms,
-                              [project.id]: { ...taskForms[project.id], description: e.target.value }
+                              [projectId]: { ...taskForms[projectId], description: e.target.value }
                             })}
                             className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
                             rows={2}
@@ -326,7 +326,7 @@ export const Garage: React.FC = () => {
                             value={taskForms[project.id]?.energy || 'medium'}
                             onChange={(e) => setTaskForms({
                               ...taskForms,
-                              [project.id]: { ...taskForms[project.id], energy: e.target.value }
+                              [projectId]: { ...taskForms[projectId], energy: e.target.value }
                             })}
                             className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
                           >

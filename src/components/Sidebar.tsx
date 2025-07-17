@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, BookOpen, Calendar, Settings, Lightbulb, X } from 'lucide-react';
+import { Home, BookOpen, Calendar, Settings, Lightbulb } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import { QuickThoughtModal } from './QuickThoughtModal';
 import { QuickThoughtsModal } from './QuickThoughtsModal';
@@ -22,7 +22,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
     { id: 'garage', label: 'Garaż', icon: Settings },
   ];
 
-  const xpForNextLevel = user.level * 1000;
   const progressPercentage = (user.xp % 1000) / 10;
 
   const handleResetConfirm = () => {

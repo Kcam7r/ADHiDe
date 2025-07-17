@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { User, Habit, DailyTask, Mission, Project, JournalEntry, QuickThought } from '../types';
 
@@ -70,7 +70,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // showLevelUp state and logic removed, now handled by ConfettiOverlay
 
   const calculateLevel = (xp: number) => Math.floor(xp / 1000) + 1;
-  const getXpForNextLevel = (level: number) => level * 1000;
+  // getXpForNextLevel removed as it was unused
 
   const addXP = (amount: number) => {
     const newXP = user.xp + amount;

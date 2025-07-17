@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Plus, Play, Pause, Trash2, Edit2 } from 'lucide-react';
-import { Mission, Habit, DailyTask } from '../types';
+import { Plus, Pause, Trash2 } from 'lucide-react';
+import type { Mission, Habit, DailyTask } from '../types';
 
 export const QuestLog: React.FC = () => {
   const { 
@@ -64,7 +64,7 @@ export const QuestLog: React.FC = () => {
       setMissionForm({ title: '', description: '', priority: 'normal', energy: 'medium' });
       setShowMissionForm(false);
     }
-  };
+    };
 
   const tabs = [
     { id: 'habits', label: 'Nawyki', icon: '✨' },

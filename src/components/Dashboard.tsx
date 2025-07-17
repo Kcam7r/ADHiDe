@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Flame, Star, Archive, Plus } from 'lucide-react';
+import { Flame, Star, Archive } from 'lucide-react';
 import { MissionHistoryModal } from './MissionHistoryModal';
 import { Habit } from '../types'; // Import Habit type
 
@@ -15,7 +15,7 @@ export const Dashboard: React.FC = () => {
     completedMissionsHistory
   } = useApp();
   const [showHistory, setShowHistory] = useState(false);
-  const [animatingDailyTasks, setAnimatingDailyTasks] = new Set());
+  const [animatingDailyTasks, setAnimatingDailyTasks] = useState<Set<string>>(new Set());
   const [animatingHabits, setAnimatingHabits] = useState<Set<string>>(new Set()); // Nowy stan dla animacji nawyków
 
   const activeMissions = missions.filter(m => m.isActive);

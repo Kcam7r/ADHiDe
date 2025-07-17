@@ -17,7 +17,6 @@ export const Journal: React.FC = () => {
     energy: 3
   });
 
-  const today = new Date().toDateString();
   const selectedDateString = selectedDate.toDateString();
   const existingEntry = journalEntries.find(entry => 
     new Date(entry.date).toDateString() === selectedDateString
