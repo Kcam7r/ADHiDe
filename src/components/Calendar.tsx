@@ -48,22 +48,22 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
   };
 
   return (
-    <div className="bg-white rounded-lg p-4 shadow-lg text-gray-800 w-full max-w-sm">
+    <div className="bg-gray-800 rounded-lg p-4 shadow-lg text-white w-full max-w-sm border border-gray-700">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
-        <button onClick={handlePrevMonth} className="p-2 rounded-full hover:bg-gray-100 transition-colors">
-          <ChevronLeft className="w-5 h-5 text-gray-600" />
+        <button onClick={handlePrevMonth} className="p-2 rounded-full hover:bg-gray-700 transition-colors">
+          <ChevronLeft className="w-5 h-5 text-gray-300" />
         </button>
         <h2 className="text-lg font-semibold text-center">
           {format(currentMonth, 'MMMM yyyy', { locale: pl })}
         </h2>
-        <button onClick={handleNextMonth} className="p-2 rounded-full hover:bg-gray-100 transition-colors">
-          <ChevronRight className="w-5 h-5 text-gray-600" />
+        <button onClick={handleNextMonth} className="p-2 rounded-full hover:bg-gray-700 transition-colors">
+          <ChevronRight className="w-5 h-5 text-gray-300" />
         </button>
       </div>
 
       {/* Weekdays */}
-      <div className="grid grid-cols-7 text-center text-sm font-medium text-gray-500 mb-2">
+      <div className="grid grid-cols-7 text-center text-sm font-medium text-gray-400 mb-2">
         {weekdays.map((day, index) => (
           <div key={index} className="py-2">
             {day}
@@ -78,9 +78,9 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
             key={index}
             className={`
               relative h-10 flex items-center justify-center rounded-md text-sm cursor-pointer
-              ${day && isSameMonth(day, currentMonth) ? 'text-gray-800' : 'text-gray-400 opacity-60'}
-              ${day && isSameDay(day, selectedDate) ? 'bg-blue-500 text-white font-bold' : 'hover:bg-gray-100'}
-              ${day && isDateHighlighted(day) && !isSameDay(day, selectedDate) ? 'bg-blue-100 text-blue-700 font-medium' : ''}
+              ${day && isSameMonth(day, currentMonth) ? 'text-white' : 'text-gray-500 opacity-60'}
+              ${day && isSameDay(day, selectedDate) ? 'bg-cyan-600 text-white font-bold' : 'hover:bg-gray-700'}
+              ${day && isDateHighlighted(day) && !isSameDay(day, selectedDate) ? 'bg-cyan-700 text-cyan-200 font-medium' : ''}
               
               group
             `}
@@ -88,7 +88,7 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
           >
             {day && format(day, 'd')}
             {/* Subtle border on hover */}
-            <div className="absolute inset-0 border border-transparent group-hover:border-gray-300 rounded-md transition-colors duration-100 pointer-events-none"></div>
+            <div className="absolute inset-0 border border-transparent group-hover:border-gray-600 rounded-md transition-colors duration-100 pointer-events-none"></div>
           </div>
         ))}
       </div>

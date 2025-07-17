@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Edit, Calendar as CalendarIcon } from 'lucide-react';
 import { JournalEntry } from '../types';
-import { CalendarModal } from './CalendarModal'; // Import CalendarModal
+import { Calendar } from './Calendar'; // Import Calendar zamiast CalendarModal
 
 export const Journal: React.FC = () => {
   const { journalEntries, addJournalEntry, updateJournalEntry } = useApp();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date()); // Ustaw domyślnie na dzisiejszą datę
   const [currentEntry, setCurrentEntry] = useState<JournalEntry | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [expandedEntries, setExpandedEntries] = useState<Set<string>>(new Set());
-  const [showCalendarModal, setShowCalendarModal] = useState(false); // Nowy stan do kontroli widoczności modala
+  const [expandedEntries, setExpandedEntries] = new Set<string>();
+  const [showCalendarPopup, setShowCalendarPopup] = useState(false); // Zmieniono nazwę stanu
 
   const [formData, setFormData] = useState({
     content: '',
@@ -101,6 +101,11 @@ export const Journal: React.FC = () => {
 
   const entriesWithDates = journalEntries.filter(entry => !!entry.date);
 
+  const handleDateSelection = (date: Date) => {
+    setSelectedDate(date);
+    setShowCalendarPopup(false); // Zamknij popup po wybraniu daty
+  };
+
   return (
     <div className="flex-1 p-6 bg-gray-900 min-h-screen">
       <div className="max-w-4xl mx-auto">
@@ -111,7 +116,7 @@ export const Journal: React.FC = () => {
           <div className="mb-6">
             <div className="flex items-center justify-center relative mb-4">
               <button
-                onClick={() => setShowCalendarModal(true)} // Otwórz modal kalendarza
+                onClick={() => setShowCalendarPopup(true)} // Otwórz popup kalendarza
                 className="flex items-center space-x-2 text-white hover:text-cyan-400 transition-colors"
               >
                 <CalendarIcon className="w-5 h-5" />
@@ -128,6 +133,16 @@ export const Journal: React.FC = () => {
                   <Edit className="w-4 h-4" />
                   <span>Edytuj</span>
                 </button>
+              )}
+
+              {showCalendarPopup && (
+                <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50">
+                  <Calendar
+                    selectedDate={selectedDate}
+                    onSelectDate={handleDateSelection}
+                    highlightedDates={journalDates}
+                  />
+                </div>
               )}
             </div>
           </div>
@@ -279,15 +294,6 @@ export const Journal: React.FC = () => {
           )}
         </div>
       </div>
-
-      {showCalendarModal && (
-        <CalendarModal
-          onClose={() => setShowCalendarModal(false)}
-          selectedDate={selectedDate}
-          onSelectDate={setSelectedDate}
-          highlightedDates={journalDates}
-        />
-      )}
     </div>
   );
 };
