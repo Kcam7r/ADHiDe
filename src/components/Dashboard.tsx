@@ -27,23 +27,28 @@ export const Dashboard: React.FC = () => {
 
   // Sync appDailyTasks with local display states
   useEffect(() => {
+    // Filter tasks that should be displayed in the active section
     const active = appDailyTasks.filter(task => 
-      !task.completed && !animatingOutTasks.has(task.id) && !completedTodayVisual.some(t => t.id === task.id)
+      !task.completed && !animatingOutTasks.has(task.id)
     );
-    const completed = appDailyTasks.filter(task => 
+    setDisplayDailyTasks(active);
+
+    // Filter tasks that are completed and not yet in completedTodayVisual
+    const newlyCompleted = appDailyTasks.filter(task => 
       task.completed && !completedTodayVisual.some(t => t.id === task.id)
     );
 
-    setDisplayDailyTasks(active);
+    // Add newly completed tasks to the completedTodayVisual list
     setCompletedTodayVisual(prev => {
-      const newCompleted = [...prev];
-      completed.forEach(task => {
-        if (!newCompleted.some(t => t.id === task.id)) {
-          newCompleted.push(task);
+      const updatedCompleted = [...prev];
+      newlyCompleted.forEach(task => {
+        if (!updatedCompleted.some(t => t.id === task.id)) { // Double check to prevent duplicates
+          updatedCompleted.push(task);
         }
       });
-      return newCompleted;
+      return updatedCompleted;
     });
+
   }, [appDailyTasks, animatingOutTasks, completedTodayVisual]);
 
 
@@ -144,29 +149,20 @@ export const Dashboard: React.FC = () => {
 
     // 1. Add to stamped tasks to show the stamp
     setStampedTaskIds(prev => new Set(prev).add(taskId));
+    // 2. Trigger visual move out animation
+    setAnimatingOutTasks(prev => new Set(prev).add(taskId));
 
-    // 2. Immediately mark as completed in AppContext
-    completeDailyTask(taskId, e.clientX, e.clientY);
-
-    // 3. After stamp animation, trigger visual move out
+    // 3. After stamp (0.5s) and slide-out (1.5s) animations complete (total 2s),
+    //    update AppContext and clear animation states.
     setTimeout(() => {
-      setAnimatingOutTasks(prev => new Set(prev).add(taskId));
-      // 4. After move out animation, transfer to completedTodayVisual
-      setTimeout(() => {
-        setDisplayDailyTasks(prev => prev.filter(t => t.id !== taskId));
-        setCompletedTodayVisual(prev => [...prev, task]); // Add the task to the completed section
-        setAnimatingOutTasks(prev => {
-          const newSet = new Set(prev);
-          newSet.delete(taskId);
-          return newSet;
-        });
-        setStampedTaskIds(prev => { // Keep stamp visible on completed task
-          const newSet = new Set(prev);
-          // newSet.delete(taskId); // Only remove if stamp should disappear
-          return newSet;
-        });
-      }, 1500); // Total 2 seconds from click (0.5s stamp + 1.5s move)
-    }, 500); // Stamp animation duration
+      completeDailyTask(taskId, e.clientX, e.clientY); // Update AppContext after animation
+      setAnimatingOutTasks(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(taskId);
+        return newSet;
+      });
+      // StampedTaskIds remains, as the stamp should stay on the completed task
+    }, 2000); // Total animation duration
   };
 
   const handleHabitClick = (habitId: string, e: React.MouseEvent) => {
@@ -266,7 +262,9 @@ export const Dashboard: React.FC = () => {
                       className="relative p-4 rounded-lg bg-gray-700 border-2 border-amber-500 task-completed-visual"
                     >
                       <span className="text-gray-400">{task.title}</span>
-                      <DailyTaskStamp onAnimationEnd={() => { /* Stamp stays visible */ }} />
+                      {stampedTaskIds.has(task.id) && ( // Ensure stamp is still shown here
+                        <DailyTaskStamp onAnimationEnd={() => { /* Stamp stays visible */ }} />
+                      )}
                     </div>
                   ))}
                 </div>
