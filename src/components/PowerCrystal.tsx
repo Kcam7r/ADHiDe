@@ -34,19 +34,17 @@ export const PowerCrystal: React.FC = () => {
 
   return (
     <div
-      className="relative flex flex-col items-center justify-center w-full" // Zmieniono na relative i w-full dla umieszczenia w sidebarze
+      className="relative flex flex-col items-center justify-center w-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
-        className={`relative w-24 h-24 transform rotate-45 overflow-hidden rounded-lg shadow-lg transition-all duration-300 ${currentCrystalColor} ${isFlashing ? 'animate-crystal-flash' : ''}`}
-        style={{
-          clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)', // Diamond shape
-        }}
+        className={`relative w-24 h-24 overflow-hidden rounded-full shadow-lg transition-all duration-300 ${currentCrystalColor} ${isFlashing ? 'animate-crystal-flash' : ''}`}
+        // Usunięto transform rotate-45 i clipPath, dodano rounded-full
       >
         {/* Liquid energy fill */}
         <div
-          className="absolute bottom-0 left-0 right-0 transition-all duration-300 ease-out"
+          className="absolute bottom-0 left-0 right-0 transition-all duration-300 ease-out rounded-full"
           style={{
             height: `${xpProgress * 100}%`,
             background: 'rgba(255,255,255,0.3)', // Semi-transparent white for liquid effect
@@ -54,7 +52,7 @@ export const PowerCrystal: React.FC = () => {
           }}
         />
         {/* Level number */}
-        <div className="absolute inset-0 flex items-center justify-center transform -rotate-45">
+        <div className="absolute inset-0 flex items-center justify-center"> {/* Usunięto transform -rotate-45 */}
           <span className="text-white text-3xl font-bold drop-shadow-lg">
             {user.level}
           </span>
