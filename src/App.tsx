@@ -6,6 +6,7 @@ import { QuestLog } from './components/QuestLog';
 import { Journal } from './components/Journal';
 import { Garage } from './components/Garage';
 import { PomodoroTimer } from './components/PomodoroTimer';
+import { ConfettiOverlay } from './components/ConfettiOverlay'; // Import ConfettiOverlay
 
 function App() {
   const [activeView, setActiveView] = useState('dashboard');
@@ -34,6 +35,7 @@ function App() {
         </main>
         <PomodoroTimer />
       </div>
+      <ConfettiOverlay /> {/* Render ConfettiOverlay here */}
     </AppProvider>
   );
 }

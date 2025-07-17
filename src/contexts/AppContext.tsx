@@ -67,7 +67,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [quickThoughts, setQuickThoughts] = useLocalStorage<QuickThought[]>('adhd-thoughts', []);
   const [completedMissionsHistory, setCompletedMissionsHistory] = useLocalStorage<Mission[]>('adhd-completed-missions', []);
 
-  const [showLevelUp, setShowLevelUp] = useState(false);
+  // showLevelUp state and logic removed, now handled by ConfettiOverlay
 
   const calculateLevel = (xp: number) => Math.floor(xp / 1000) + 1;
   const getXpForNextLevel = (level: number) => level * 1000;
@@ -76,10 +76,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const newXP = user.xp + amount;
     const newLevel = calculateLevel(newXP);
     
-    if (newLevel > user.level) {
-      setShowLevelUp(true);
-      setTimeout(() => setShowLevelUp(false), 3000);
-    }
+    // No direct UI update here, ConfettiOverlay will react to user.level change
     
     setUser({ ...user, xp: newXP, level: newLevel });
   };
@@ -302,14 +299,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       deleteQuickThought
     }}>
       {children}
-      {showLevelUp && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in">
-          <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black p-8 rounded-lg text-center animate-bounce">
-            <h2 className="text-3xl font-bold mb-2">🎉 Gratulacje!</h2>
-            <p className="text-xl">Nowy Poziom: {user.level}</p>
-          </div>
-        </div>
-      )}
+      {/* Level up modal removed, now handled by ConfettiOverlay */}
     </AppContext.Provider>
   );
 };
