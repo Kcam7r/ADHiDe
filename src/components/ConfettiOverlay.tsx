@@ -30,15 +30,15 @@ export const ConfettiOverlay: React.FC = () => {
         width={width}
         height={height}
         recycle={false} // Only fire once per trigger
-        numberOfPieces={200}
-        gravity={0.1}
-        initialVelocityX={{ min: -5, max: 5 }}
-        initialVelocityY={{ min: -10, max: -5 }}
+        numberOfPieces={700} // Zwiększona liczba kawałków konfetti
+        gravity={0.05} // Zmniejszona grawitacja, aby spadały wolniej
+        initialVelocityX={{ min: -10, max: 10 }} // Większy rozrzut poziomy
+        initialVelocityY={{ min: -15, max: -8 }} // Większy początkowy impuls w górę
         confettiSource={{
           x: width / 2,
           y: height / 2,
-          w: width,
-          h: height,
+          w: 0, // Źródło z centrum
+          h: 0, // Źródło z centrum
         }}
       />
     </div>
