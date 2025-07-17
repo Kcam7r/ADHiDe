@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'; // Dodano useState
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { User, Habit, DailyTask, Mission, Project, JournalEntry, QuickThought } from '../types';
 
@@ -10,21 +10,23 @@ interface AppContextType {
   projects: Project[];
   journalEntries: JournalEntry[];
   quickThoughts: QuickThought[];
-  lastXpGainTimestamp: number; // Nowa zmienna do wyzwalania animacji XP
+  completedMissionsHistory: Mission[];
+  lastXpGainTimestamp: number;
+  xpParticleOrigin: { x: number; y: number } | null; // Nowa zmienna: Pochodzenie dla animacji kulki XP
   
-  addXP: (amount: number) => void;
+  addXP: (amount: number, originX?: number, originY?: number) => void; // Zmodyfikowano
   resetXP: () => void;
   addHabit: (habit: Omit<Habit, 'id' | 'count'>) => void;
   updateHabit: (id: string, updates: Partial<Habit>) => void;
-  completeHabit: (id: string) => void;
+  completeHabit: (id: string, originX?: number, originY?: number) => void; // Zmodyfikowano
   deleteHabit: (id: string) => void;
   
   addDailyTask: (task: Omit<DailyTask, 'id' | 'completed'>) => void;
-  completeDailyTask: (id: string) => void;
+  completeDailyTask: (id: string, originX?: number, originY?: number) => void; // Zmodyfikowano
   deleteDailyTask: (id: string) => void;
   
   addMission: (mission: Omit<Mission, 'id' | 'completed'>) => void;
-  completeMission: (id: string) => void;
+  completeMission: (id: string, originX?: number, originY?: number) => void; // Zmodyfikowano
   activateMission: (id: string) => void;
   deactivateMission: (id: string) => void;
   deleteMission: (id: string) => void;
@@ -38,8 +40,6 @@ interface AppContextType {
   
   addQuickThought: (thought: Omit<QuickThought, 'id' | 'createdAt'>) => void;
   deleteQuickThought: (id: string) => void;
-  
-  completedMissionsHistory: Mission[];
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -67,17 +67,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [journalEntries, setJournalEntries] = useLocalStorage<JournalEntry[]>('adhd-journal', []);
   const [quickThoughts, setQuickThoughts] = useLocalStorage<QuickThought[]>('adhd-thoughts', []);
   const [completedMissionsHistory, setCompletedMissionsHistory] = useLocalStorage<Mission[]>('adhd-completed-missions', []);
-  const [lastXpGainTimestamp, setLastXpGainTimestamp] = useState(0); // Nowy stan
+  const [lastXpGainTimestamp, setLastXpGainTimestamp] = useState(0);
+  const [xpParticleOrigin, setXpParticleOrigin] = useState<{ x: number; y: number } | null>(null); // Nowy stan
 
   const calculateLevel = (xp: number) => Math.floor(xp / 1000) + 1;
 
-  const addXP = (amount: number) => {
+  const addXP = (amount: number, originX?: number, originY?: number) => {
     const newXP = user.xp + amount;
     const newLevel = calculateLevel(newXP);
     
     setUser({ ...user, xp: newXP, level: newLevel });
-    setLastXpGainTimestamp(Date.now()); // Wyzwól animację
+    setLastXpGainTimestamp(Date.now());
+    if (originX !== undefined && originY !== undefined) {
+      setXpParticleOrigin({ x: originX, y: originY });
+    }
   };
+
+  // Wyczyść pochodzenie kulki XP po krótkim opóźnieniu, aby umożliwić zakończenie animacji
+  useEffect(() => {
+    if (xpParticleOrigin) {
+      const timer = setTimeout(() => {
+        setXpParticleOrigin(null);
+      }, 1000); // Dostosuj czas trwania do animacji kulki
+      return () => clearTimeout(timer);
+    }
+  }, [xpParticleOrigin]);
 
   const resetXP = () => {
     setUser({ ...user, xp: 0, level: 1 });
@@ -98,7 +112,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     ));
   };
 
-  const completeHabit = (id: string) => {
+  const completeHabit = (id: string, originX?: number, originY?: number) => { // Zmodyfikowano
     const habit = habits.find(h => h.id === id);
     if (!habit) return;
 
@@ -109,7 +123,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       count: newCount, 
     });
     
-    addXP(xpGain);
+    addXP(xpGain, originX, originY); // Przekaż pochodzenie
   };
 
   const deleteHabit = (id: string) => {
@@ -125,14 +139,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setDailyTasks([...dailyTasks, newTask]);
   };
 
-  const completeDailyTask = (id: string) => {
+  const completeDailyTask = (id: string, originX?: number, originY?: number) => { // Zmodyfikowano
     const task = dailyTasks.find(t => t.id === id);
     if (!task || task.completed) return;
 
     setDailyTasks(dailyTasks.map(task => 
       task.id === id ? { ...task, completed: true, completedAt: new Date() } : task
     ));
-    addXP(10);
+    addXP(10, originX, originY); // Przekaż pochodzenie
   };
 
   const deleteDailyTask = (id: string) => {
@@ -148,7 +162,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setMissions([...missions, newMission]);
   };
 
-  const completeMission = (id: string) => {
+  const completeMission = (id: string, originX?: number, originY?: number) => { // Zmodyfikowano
     const mission = missions.find(m => m.id === id);
     if (!mission || mission.completed) return;
 
@@ -161,14 +175,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     else if (mission.priority === 'important') xpGain += 15;
     if (mission.energy === 'concentration') xpGain += 10;
 
-    addXP(xpGain);
+    addXP(xpGain, originX, originY); // Przekaż pochodzenie
   };
 
   const activateMission = (id: string) => {
     setMissions(missions.map(mission => 
       mission.id === id ? { ...mission, isActive: true } : mission
     ));
-    addXP(20);
+    addXP(20); // Brak pochodzenia dla aktywacji
   };
 
   const deactivateMission = (id: string) => {
@@ -179,7 +193,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const deleteMission = (id: string) => {
     setMissions(missions.filter(mission => mission.id !== id));
-    // Also remove from projects if it was a project task
+    // Usuń również z projektów, jeśli było to zadanie projektowe
     setProjects(projects.map(project => ({
       ...project,
       tasks: project.tasks.filter(task => task.id !== id)
@@ -223,7 +237,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       id: Date.now().toString()
     };
     setJournalEntries([newEntry, ...journalEntries]);
-    addXP(25);
+    addXP(25); // Brak pochodzenia
   };
 
   const updateJournalEntry = (id: string, updates: Partial<JournalEntry>) => {
@@ -239,43 +253,43 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       createdAt: new Date()
     };
     setQuickThoughts([newThought, ...quickThoughts]);
-    addXP(5);
+    addXP(5); // Brak pochodzenia
   };
 
   const deleteQuickThought = (id: string) => {
     setQuickThoughts(quickThoughts.filter(thought => thought.id !== id));
   };
 
-  // Reset daily tasks at midnight
+  // Resetuj zadania codzienne o północy
   useEffect(() => {
     const scheduleNextReset = () => {
       const now = new Date();
       const midnight = new Date(now);
-      midnight.setHours(24, 0, 0, 0); // Sets to midnight of the *next* day
+      midnight.setHours(24, 0, 0, 0); // Ustawia na północ *następnego* dnia
 
       const timeToMidnight = midnight.getTime() - now.getTime();
 
-      // Clear any existing timeout to prevent multiple timers
+      // Wyczyść istniejący timeout, aby zapobiec wielu timerom
       if (window.dailyResetTimeout) {
         clearTimeout(window.dailyResetTimeout);
       }
 
       window.dailyResetTimeout = setTimeout(() => {
         setDailyTasks(prevTasks => prevTasks.map(task => ({ ...task, completed: false, completedAt: undefined })));
-        // After resetting, schedule the next reset for the next midnight
+        // Po zresetowaniu, zaplanuj następne zresetowanie na następną północ
         scheduleNextReset();
       }, timeToMidnight);
     };
 
-    scheduleNextReset(); // Initial call to schedule the first reset
+    scheduleNextReset(); // Początkowe wywołanie, aby zaplanować pierwsze zresetowanie
 
-    // Cleanup function to clear the timeout when the component unmounts
+    // Funkcja czyszcząca, aby wyczyścić timeout, gdy komponent zostanie odmontowany
     return () => {
       if (window.dailyResetTimeout) {
         clearTimeout(window.dailyResetTimeout);
       }
     };
-  }, []); // Empty dependency array means it runs once on mount and cleans up on unmount.
+  }, []); // Pusta tablica zależności oznacza, że uruchamia się raz po zamontowaniu i czyści po odmontowaniu.
 
   return (
     <AppContext.Provider value={{
@@ -287,7 +301,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       journalEntries,
       quickThoughts,
       completedMissionsHistory,
-      lastXpGainTimestamp, // Dodano do kontekstu
+      lastXpGainTimestamp,
+      xpParticleOrigin, // Dodano do kontekstu
       addXP,
       resetXP,
       addHabit,

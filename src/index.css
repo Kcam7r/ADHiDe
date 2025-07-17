@@ -73,15 +73,7 @@
   animation: crystal-flash 0.5s ease-out;
 }
 
-@keyframes xp-particle {
-  0% { transform: scale(0) opacity(0); background-color: rgba(255, 255, 255, 0.8); }
-  20% { transform: scale(1) opacity(1); }
-  80% { transform: scale(0.5) opacity(0.5); }
-  100% { transform: scale(0) opacity(0); }
-}
-.animate-xp-particle {
-  animation: xp-particle 0.8s ease-out forwards;
-}
+/* Usunięto animację xp-particle, ponieważ jest teraz obsługiwana przez komponent React */
 
 /* Custom animations for the new PowerCrystal design */
 @keyframes liquid-wave {
@@ -95,25 +87,7 @@
   animation: liquid-wave 4s ease-in-out infinite;
 }
 
-@keyframes xp-streak {
-  0% {
-    transform: translateY(100px) scale(0.2);
-    opacity: 0;
-    filter: blur(5px);
-  }
-  20% {
-    opacity: 1;
-    filter: blur(0px);
-  }
-  100% {
-    transform: translateY(-10px) scale(1); /* Target slightly above center of the orb */
-    opacity: 0;
-    filter: blur(5px);
-  }
-}
-.animate-xp-streak {
-  animation: xp-streak 0.8s ease-out forwards;
-}
+/* Usunięto animację xp-streak, ponieważ jest teraz obsługiwana przez komponent React */
 
 /* Custom shadow for metallic casing */
 .shadow-inner-dark {

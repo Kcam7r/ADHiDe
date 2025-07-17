@@ -81,19 +81,19 @@ export const Dashboard: React.FC = () => {
     }
   };
 
-  const handleMissionComplete = (missionId: string) => {
+  const handleMissionComplete = (missionId: string, e: React.MouseEvent) => { // Zmodyfikowano
     const element = document.getElementById(`mission-${missionId}`);
     if (element) {
       element.style.animation = 'fadeOut 0.7s ease-out forwards';
       setTimeout(() => {
-        completeMission(missionId); 
+        completeMission(missionId, e.clientX, e.clientY); // Przekaż współrzędne
       }, 700);
     } else {
-      completeMission(missionId); 
+      completeMission(missionId, e.clientX, e.clientY); // Przekaż współrzędne
     }
   };
 
-  const handleDailyTaskClick = (taskId: string) => {
+  const handleDailyTaskClick = (taskId: string, e: React.MouseEvent) => { // Zmodyfikowano
     const task = dailyTasks.find(t => t.id === taskId);
     if (!task || task.completed) return;
 
@@ -105,13 +105,13 @@ export const Dashboard: React.FC = () => {
         newSet.delete(taskId);
         return newSet;
       });
-      completeDailyTask(taskId);
+      completeDailyTask(taskId, e.clientX, e.clientY); // Przekaż współrzędne
     }, 400);
   };
 
-  const handleHabitClick = (habitId: string) => {
+  const handleHabitClick = (habitId: string, e: React.MouseEvent) => { // Zmodyfikowano
     setAnimatingHabits((prev: Set<string>) => new Set(prev).add(habitId));
-    completeHabit(habitId);
+    completeHabit(habitId, e.clientX, e.clientY); // Przekaż współrzędne
 
     setTimeout(() => {
       setAnimatingHabits((prev: Set<string>) => {
@@ -138,7 +138,7 @@ export const Dashboard: React.FC = () => {
               {habits.map((habit) => (
                 <div
                   key={habit.id}
-                  onClick={() => handleHabitClick(habit.id)}
+                  onClick={(e) => handleHabitClick(habit.id, e)} // Przekaż event
                   className={`p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 ${
                     habit.type === 'positive' 
                       ? 'bg-green-600 border-green-500' 
@@ -175,7 +175,7 @@ export const Dashboard: React.FC = () => {
               {dailyTasks.map((task) => (
                 <div
                   key={task.id}
-                  onClick={() => handleDailyTaskClick(task.id)}
+                  onClick={(e) => handleDailyTaskClick(task.id, e)} // Przekaż event
                   className={`p-4 rounded-lg transition-all duration-200 cursor-pointer ${
                     task.completed
                       ? 'bg-gray-700 border-2 border-amber-500'
@@ -215,7 +215,7 @@ export const Dashboard: React.FC = () => {
                 <div
                   key={mission.id}
                   id={`mission-${mission.id}`}
-                  onClick={() => handleMissionComplete(mission.id)}
+                  onClick={(e) => handleMissionComplete(mission.id, e)} // Przekaż event
                   className={`p-4 rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 ${
                     mission.projectId ? 'bg-purple-600 hover:bg-purple-500' : 'bg-cyan-600 hover:bg-cyan-500'
                   }`}

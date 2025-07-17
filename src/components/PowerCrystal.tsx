@@ -1,47 +1,62 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../contexts/AppContext';
+import { XpParticle } from './XpParticle'; // Import nowego komponentu
 
 interface PowerCrystalProps {
   onCrystalClick: () => void;
 }
 
 export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) => {
-  const { user, lastXpGainTimestamp } = useApp();
+  const { user, lastXpGainTimestamp, xpParticleOrigin } = useApp(); // Pobierz xpParticleOrigin
   const [isHovered, setIsHovered] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
-  const [showXpParticle, setShowXpParticle] = useState(false);
-  const [prevXp, setPrevXp] = useState(user.xp); // State to track previous XP for threshold detection
+  const [prevXp, setPrevXp] = useState(user.xp);
+  const crystalRef = useRef<HTMLDivElement>(null); // Ref dla kuli kryształu
 
-  const xpForNextLevel = 1000; // XP needed for next level
+  const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
-  const xpProgress = xpInCurrentLevel / xpForNextLevel; // Progress within current level (0 to 1)
+  const xpProgress = xpInCurrentLevel / xpForNextLevel;
 
-  // Define crystal colors based on level
   const getCrystalColor = (level: number) => {
-    if (level >= 15) return 'from-yellow-400 to-amber-600'; // Gold
-    if (level >= 10) return 'from-purple-500 to-indigo-600'; // Purple
-    if (level >= 5) return 'from-green-400 to-emerald-600'; // Green
-    return 'from-cyan-500 to-blue-600'; // Default Blue
+    if (level >= 15) return 'from-yellow-400 to-amber-600';
+    if (level >= 10) return 'from-purple-500 to-indigo-600';
+    if (level >= 5) return 'from-green-400 to-emerald-600';
+    return 'from-cyan-500 to-blue-600';
   };
 
   const currentCrystalColor = getCrystalColor(user.level);
 
-  // Effect for XP gain animation (flash and particle)
+  // Efekt dla animacji zdobywania XP (błysk)
   useEffect(() => {
-    if (lastXpGainTimestamp > 0 && user.xp > prevXp) { // Only animate if XP actually increased
+    if (lastXpGainTimestamp > 0 && user.xp > prevXp) {
       setIsFlashing(true);
-      setShowXpParticle(true);
-
       const flashTimer = setTimeout(() => setIsFlashing(false), 500);
-      const particleTimer = setTimeout(() => setShowXpParticle(false), 800);
-
-      return () => {
-        clearTimeout(flashTimer);
-        clearTimeout(particleTimer);
-      };
+      return () => clearTimeout(flashTimer);
     }
-    setPrevXp(user.xp); // Update previous XP for next comparison
-  }, [lastXpGainTimestamp, user.xp]); // Depend on user.xp to catch level ups and XP changes
+    setPrevXp(user.xp);
+  }, [lastXpGainTimestamp, user.xp]);
+
+  // Oblicz środek kryształu dla celu kulki
+  const [crystalCenter, setCrystalCenter] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const updateCrystalCenter = () => {
+      if (crystalRef.current) {
+        const rect = crystalRef.current.getBoundingClientRect();
+        setCrystalCenter({
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2,
+        });
+      }
+    };
+
+    updateCrystalCenter(); // Oblicz początkową pozycję
+    window.addEventListener('resize', updateCrystalCenter); // Aktualizuj przy zmianie rozmiaru okna
+
+    return () => {
+      window.removeEventListener('resize', updateCrystalCenter);
+    };
+  }, [user.level]); // Przelicz, jeśli pozycja/rozmiar kryształu się zmieni (np. awans na poziom)
 
   return (
     <div
@@ -50,15 +65,15 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
       onMouseLeave={() => setIsHovered(false)}
       onClick={onCrystalClick}
     >
-      {/* Main Orb Container */}
+      {/* Główny kontener kuli */}
       <div className="relative w-32 h-32 rounded-full flex items-center justify-center">
-        {/* Metallic Casing (bottom half) */}
+        {/* Metalowa obudowa (dolna połowa) */}
         <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-b from-stone-700 to-stone-900 rounded-b-full border-t-2 border-stone-600 shadow-inner-dark z-10">
-          {/* Usunięto dekoracyjne elementy wewnątrz obudowy */}
         </div>
 
-        {/* Crystal Orb */}
+        {/* Kula Kryształu */}
         <div
+          ref={crystalRef} // Dołącz ref tutaj
           className={`relative w-full h-full rounded-full overflow-hidden shadow-lg transition-all duration-300
             bg-gradient-to-br ${currentCrystalColor}
             ${isFlashing ? 'animate-crystal-flash' : ''}
@@ -69,15 +84,15 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
             border: '2px solid rgba(255,255,255,0.2)'
           }}
         >
-          {/* Liquid energy fill */}
+          {/* Wypełnienie energią (liquid) */}
           <div
             className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-500 to-yellow-400 transition-all duration-300 ease-out animate-liquid-wave"
             style={{
               height: `${xpProgress * 100}%`,
-              boxShadow: '0 0 15px rgba(255,165,0,0.7)', // Orange glow
+              boxShadow: '0 0 15px rgba(255,165,0,0.7)', // Pomarańczowy blask
             }}
           />
-          {/* Level number */}
+          {/* Numer poziomu */}
           <div className="absolute inset-0 flex items-center justify-center z-30">
             <span className="text-white text-4xl font-bold drop-shadow-lg">
               {user.level}
@@ -86,9 +101,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
         </div>
       </div>
 
-      {/* Usunięto Four Stage Progress Orbs */}
-
-      {/* XP Info on hover */}
+      {/* Informacje o XP po najechaniu myszą */}
       <div
         className={`absolute -top-10 bg-gray-700 text-white text-sm px-3 py-1 rounded-md shadow-md transition-opacity duration-200 whitespace-nowrap ${
           isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
@@ -97,9 +110,15 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
         {xpInCurrentLevel}/{xpForNextLevel} XP
       </div>
 
-      {/* XP Particle animation (simplified streak from bottom to crystal) */}
-      {showXpParticle && (
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-4 bg-yellow-400 rounded-full opacity-0 animate-xp-streak z-50" />
+      {/* Animacja kulki XP */}
+      {xpParticleOrigin && crystalCenter.x !== 0 && crystalCenter.y !== 0 && (
+        <XpParticle
+          startX={xpParticleOrigin.x}
+          startY={xpParticleOrigin.y}
+          targetX={crystalCenter.x}
+          targetY={crystalCenter.y}
+          onComplete={() => { /* AppContext zajmuje się czyszczeniem pochodzenia */ }}
+        />
       )}
     </div>
   );
