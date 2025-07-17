@@ -15,7 +15,7 @@ export const Dashboard: React.FC = () => {
   } = useApp();
   const [showHistory, setShowHistory] = useState(false);
   const [animatingDailyTasks, setAnimatingDailyTasks] = useState<Set<string>>(new Set());
-  const [animatingHabits, setAnimatingHabatingHabits] = useState<Set<string>>(new Set());
+  const [animatingHabits, setAnimatingHabits] = useState<Set<string>>(new Set()); // Poprawiono nazwę zmiennej stanu
 
   const activeMissions = missions.filter(m => m.isActive);
 
@@ -85,11 +85,11 @@ export const Dashboard: React.FC = () => {
   };
 
   const handleHabitClick = (habitId: string, habitType: Habit['type']) => {
-    setAnimatingHabits(prev => new Set(prev).add(habitId));
+    setAnimatingHabits(prev => new Set(prev).add(habitId)); // Użyto poprawnej nazwy
     completeHabit(habitId);
 
     setTimeout(() => {
-      setAnimatingHabits(prev => {
+      setAnimatingHabits(prev => { // Użyto poprawnej nazwy
         const newSet = new Set(prev);
         newSet.delete(habitId);
         return newSet;
