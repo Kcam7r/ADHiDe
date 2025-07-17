@@ -6,7 +6,7 @@ import { Project } from '../types';
 export const Garage: React.FC = () => {
   const { projects, addProject, addTaskToProject, activateMission, deactivateMission } = useApp();
   const [showProjectForm, setShowProjectForm] = useState(false);
-  const [expandedProjects, setExpandedProjects] = useState<Set<string>>(new Set());
+  const [expandedProjects, setExpandedProjects] = new Set());
   const [showTaskForms, setShowTaskForms] = useState<Set<string>>(new Set());
 
   const [projectForm, setProjectForm] = useState({
@@ -364,7 +364,9 @@ export const Garage: React.FC = () => {
                         className={`p-3 rounded-lg border transition-all ${
                           task.completed 
                             ? 'bg-gray-700 border-green-500' 
-                            : 'bg-gray-700 border-gray-600'
+                            : task.isActive // Dodano warunek dla aktywnego zadania
+                              ? 'bg-cyan-600 border-cyan-500' // Styl dla aktywnego zadania
+                              : 'bg-gray-700 border-gray-600'
                         }`}
                       >
                         <div className="flex items-center justify-between">
