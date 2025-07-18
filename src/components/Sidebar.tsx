@@ -61,12 +61,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
         </nav>
 
         {/* Gamification Info - Power Crystal */}
-        <div className="p-4 border-t border-gray-700 flex flex-col items-center mt-8">
+        <div className="p-4 border-t border-gray-700 flex flex-col items-center mt-4">
           <PowerCrystal onCrystalClick={() => setShowResetConfirm(true)} />
         </div>
 
         {/* Quick Thoughts */}
-        <div className="p-2 border-t border-gray-700"> {/* Zmieniono p-4 na p-2 */}
+        <div className="p-2 border-t border-gray-700">
           <h3 className="text-white font-semibold mb-3 flex items-center space-x-2">
             <span>💬</span>
             <span>Szybkie Myśli</span>
