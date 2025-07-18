@@ -152,7 +152,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           ref={crystalRef}
           className={`absolute rounded-full overflow-hidden shadow-lg transition-all duration-300
             ${isFlashing ? 'animate-crystal-flash' : ''}
-            z-20
+            z-20 flex items-center justify-center
             bg-white bg-opacity-15
             `}
           style={{
@@ -175,13 +175,11 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           >
             {/* Bąbelki będą dodawane dynamicznie przez JavaScript */}
           </div>
+          {/* Wyświetlanie poziomu W ŚRODKU kryształu */}
+          <div className="relative text-white text-3xl font-bold z-30 font-indie-flower">
+            {user.level}
+          </div>
         </div>
-
-        {/* Wyświetlanie poziomu NA holderze */}
-        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 text-white text-3xl font-bold z-30 font-indie-flower">
-          {user.level}
-        </div>
-      </div>
 
       {/* Informacje o XP na najechanie myszką */}
       <div
