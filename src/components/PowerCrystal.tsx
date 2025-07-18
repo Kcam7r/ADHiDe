@@ -132,17 +132,17 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       {/* Główny kontener dla kryształu i holdera */}
       <div 
         className="relative w-56 h-76 flex items-center justify-center" /* Powiększono szerokość i wysokość */
-        style={{ transform: 'translateY(-136px)' }} /* Przesunięcie w górę o 5px */
+        style={{ transform: 'translateY(-136px)' }} /* Przywrócono oryginalne przesunięcie w górę */
       >
         {/* Holder Image */}
         <img
           src="/holder2.png" 
           alt="Crystal Holder"
-          className="absolute w-[200px] h-[250px] left-1/2 -translate-x-1/2 z-50 filter-white-invert" /* Powiększono rozmiar */
+          className="absolute w-[200px] h-[250px] left-1/2 -translate-x-1/2 z-50 filter-white-invert"
         />
 
-        {/* Nowy element pod kryształem mocy (okrągła podstawa) - TYMCZASOWO UKRYTY */}
-        {/* <div
+        {/* Nowy element pod kryształem mocy (okrągła podstawa) */}
+        <div
           className="absolute rounded-full bg-gray-800 z-10"
           style={{
             top: baseTop,
@@ -150,10 +150,10 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             width: baseSize,
             height: baseSize,
           }}
-        ></div> */}
+        ></div>
 
-        {/* Kula Kryształu (teraz przezroczysta z efektem szkła) - TYMCZASOWO UKRYTA */}
-        {/* <div
+        {/* Kula Kryształu (teraz przezroczysta z efektem szkła) */}
+        <div
           ref={crystalRef}
           className={`absolute rounded-full overflow-hidden shadow-lg transition-all duration-300
             ${isFlashing ? 'animate-crystal-flash' : ''}
@@ -181,7 +181,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           <div className="relative text-white text-3xl font-bold z-30 font-indie-flower">
             {user.level}
           </div>
-        </div> */}
+        </div>
 
         {/* Informacje o XP na najechanie myszką */}
         <div
