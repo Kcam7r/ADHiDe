@@ -94,7 +94,14 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
               height: `${xpProgress * 100}%`,
               boxShadow: '0 0 15px rgba(255,165,0,0.7)', // Pomarańczowy blask
             }}
-          />
+          >
+            {/* Bubbles inside the liquid */}
+            <div className="bubble bubble-small" style={{ bottom: '0%', left: '20%', animationDelay: '0s' }}></div>
+            <div className="bubble bubble-medium" style={{ bottom: '0%', left: '50%', animationDelay: '1s' }}></div>
+            <div className="bubble bubble-large" style={{ bottom: '0%', left: '80%', animationDelay: '2s' }}></div>
+            <div className="bubble bubble-small" style={{ bottom: '0%', left: '35%', animationDelay: '0.5s' }}></div>
+            <div className="bubble bubble-medium" style={{ bottom: '0%', left: '65%', animationDelay: '1.5s' }}></div>
+          </div>
           {/* Numer poziomu */}
           <div className="absolute inset-0 flex items-center justify-center z-30">
             <span className="text-white text-4xl font-bold drop-shadow-lg">
