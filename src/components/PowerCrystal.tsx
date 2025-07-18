@@ -20,11 +20,12 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Persystowane właściwości stylu dla kryształu (top, left, size w px)
   // Wartości początkowe będą nadpisane przez te z localStorage, jeśli istnieją
-  const [crystalProps] = useLocalStorage('adhd-crystal-props', {
+  const crystalPropsArray = useLocalStorage('adhd-crystal-props', {
     top: 147, // Zaktualizowano dla nowego rozmiaru kontenera (384px - 90px) / 2 = 147
     left: 147, // Zaktualizowano dla nowego rozmiaru kontenera
     size: 90, // Zwiększono rozmiar kryształu
   });
+  const crystalProps = crystalPropsArray[0]; // Jawne pobranie pierwszego elementu
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
     if (typeof window !== 'undefined') {
