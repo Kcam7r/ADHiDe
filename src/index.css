@@ -282,11 +282,11 @@ html {
     opacity: 0.7;
   }
   50% {
-    transform: scale(1.5); /* Rozszerzenie poza rozmiar kryształu */
+    transform: scale(5); /* Rozszerzenie na cały ekran */
     opacity: 0.4;
   }
   100% {
-    transform: scale(2); /* Dalsze rozszerzenie */
+    transform: scale(10); /* Dalsze rozszerzenie, aby pokryć duże ekrany */
     opacity: 0;
   }
 }

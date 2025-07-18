@@ -14,7 +14,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const [isFlashing, setIsFlashing] = useState(false);
   const [prevXp, setPrevXp] = useState(user.xp);
   const [prevLevel, setPrevLevel] = useState(user.level); // Nowy stan do śledzenia poprzedniego poziomu
-  const [showLevelUpFlash, setShowLevelUpFlash] = useState(false); // Nowy stan dla błysku level-up
+  // const [showLevelUpFlash, setShowLevelUpFlash] = useState(false); // USUNIĘTO
   const crystalRef = useRef<HTMLDivElement>(null);
   const liquidRef = useRef<HTMLDivElement>(null);
   const bubbleIntervalRef = useRef<number | null>(null);
@@ -59,12 +59,12 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     }
     setPrevXp(user.xp);
 
-    // Błysk przy awansie na poziom
-    if (user.level > prevLevel) {
-      setShowLevelUpFlash(true);
-      const levelUpFlashTimer = setTimeout(() => setShowLevelUpFlash(false), 800); // Czas trwania animacji
-      return () => clearTimeout(levelUpFlashTimer); // Czyścimy ten konkretny timer
-    }
+    // Błysk przy awansie na poziom - USUNIĘTO LOGIKĘ STĄD
+    // if (user.level > prevLevel) {
+    //   setShowLevelUpFlash(true);
+    //   const levelUpFlashTimer = setTimeout(() => setShowLevelUpFlash(false), 800); // Czas trwania animacji
+    //   return () => clearTimeout(levelUpFlashTimer); // Czyścimy ten konkretny timer
+    // }
     setPrevLevel(user.level); // Aktualizujemy poprzedni poziom
   }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]); // Dodano user.level i prevLevel do zależności
 
@@ -175,13 +175,13 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             border: '2px solid rgba(255,255,255,0.2)'
           }}
         >
-          {/* Błysk rozchodzący się od kryształu przy level-up */}
-          {showLevelUpFlash && (
+          {/* Błysk rozchodzący się od kryształu przy level-up - USUNIĘTO STĄD */}
+          {/* {showLevelUpFlash && (
             <div
               className="absolute w-full h-full rounded-full bg-white opacity-70 animate-level-up-spread-flash z-40"
               style={{ filter: 'blur(5px)' }} // Dodaj rozmycie dla miękkiego blasku
             ></div>
-          )}
+          )} */}
 
           {/* Wypełnienie płynem (żółte) */}
           <div

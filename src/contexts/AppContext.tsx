@@ -53,6 +53,8 @@ interface AppContextType {
   removeXpParticle: (id: string) => void;
   triggerConfetti: () => void;
   confettiKey: number;
+  triggerLevelUpFlash: () => void; // NOWA FUNKCJA
+  levelUpFlashKey: number; // NOWY KLUCZ
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -84,6 +86,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [lastXpGainTimestamp, setLastXpGainTimestamp] = useState(0);
   const [xpParticles, setXpParticles] = useState<XpParticleData[]>([]);
   const [confettiKey, setConfettiKey] = useState(0);
+  const [levelUpFlashKey, setLevelUpFlashKey] = useState(0); // NOWY STAN
 
   const calculateLevel = (xp: number) => Math.floor(xp / 1000) + 1;
 
@@ -114,6 +117,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       if (newLevel > prevUser.level) {
         triggerConfetti(); // Trigger confetti on level up
+        triggerLevelUpFlash(); // WYWOŁANIE NOWEJ FUNKCJI
       }
       return { ...prevUser, xp: newXP, level: newLevel };
     });
@@ -128,6 +132,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return { ...prevUser, xp: newXP, level: newLevel };
     });
     triggerConfetti(); // Wywołaj konfetti dla dużego awansu
+    triggerLevelUpFlash(); // WYWOŁANIE NOWEJ FUNKCJI
   };
 
   const removeXpParticle = (id: string) => {
@@ -136,6 +141,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const triggerConfetti = () => {
     setConfettiKey(prev => prev + 1);
+  };
+
+  const triggerLevelUpFlash = () => { // NOWA FUNKCJA
+    setLevelUpFlashKey(prev => prev + 1);
   };
 
   const resetXP = () => {
@@ -380,6 +389,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       removeXpParticle,
       triggerConfetti,
       confettiKey,
+      triggerLevelUpFlash, // DODANO DO KONTEKSTU
+      levelUpFlashKey, // DODANO DO KONTEKSTU
       setArchivedQuickThoughts, // Dodano do kontekstu
     }}>
       {children}

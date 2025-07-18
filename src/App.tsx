@@ -6,6 +6,7 @@ import { ConfettiOverlay } from './components/ConfettiOverlay';
 import { QuickThoughtFloatingButton } from './components/QuickThoughtFloatingButton';
 import { QuickThoughtModal } from './components/QuickThoughtModal';
 import { QuickThoughtsModal } from './components/QuickThoughtsModal';
+import { LevelUpFlashOverlay } from './components/LevelUpFlashOverlay'; // Import nowego komponentu
 
 // Leniwe ładowanie głównych komponentów widoków
 const Dashboard = lazy(() => import('./components/Dashboard').then(module => ({ default: module.Dashboard })));
@@ -53,6 +54,7 @@ function App() {
       </div>
       <PomodoroTimer />
       <ConfettiOverlay />
+      <LevelUpFlashOverlay /> {/* DODANO NOWY KOMPONENT */}
       
       {/* Pływający przycisk Szybkich Myśli - teraz otwiera modal nowej myśli */}
       <QuickThoughtFloatingButton onOpenNewThought={() => setShowQuickThoughtModal(true)} />
