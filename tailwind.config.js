@@ -8,6 +8,7 @@ export default {
       },
       fontSize: {
         '16xl': '16rem', // Nowy rozmiar czcionki, dwukrotnie większy niż 9xl
+        '48xl': '48rem', // Nowy rozmiar czcionki, trzykrotnie większy niż 16xl
       }
     },
   },

@@ -82,7 +82,7 @@ export const QuickThoughtFloatingButton: React.FC<QuickThoughtFloatingButtonProp
       ref={buttonRef}
       onMouseDown={handleMouseDown}
       onClick={handleClick}
-      className={`fixed z-40 p-3 cursor-grab active:cursor-grabbing text-16xl hover:scale-110 text-yellow-400
+      className={`fixed z-40 p-3 cursor-grab active:cursor-grabbing text-48xl hover:scale-110 text-yellow-400
         ${isDragging ? 'transition-none' : 'transition-all duration-200'}
       `}
       style={{ left: position.x, top: position.y }}
