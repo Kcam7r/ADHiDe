@@ -48,7 +48,7 @@ export const XpParticle: React.FC<XpParticleProps> = ({ id, startX, startY, targ
       ref={particleRef}
       className="fixed z-[100] w-4 h-4 bg-amber-400 rounded-full flex items-center justify-center text-xs font-bold text-white opacity-0"
       style={{
-        transform: `translate(-50%, -50%)`, // Center the particle on its coordinates
+        // Usunięto: transform: `translate(-50%, -50%)`, // Ta transformacja będzie teraz w CSS animacji
         filter: 'drop-shadow(0 0 5px rgba(245, 158, 11, 0.8))', // Amber glow (amber-500)
       }}
     >
