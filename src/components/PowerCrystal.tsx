@@ -122,8 +122,15 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       onMouseLeave={() => setIsHovered(false)}
       onClick={onCrystalClick}
     >
-      {/* Główny kontener dla kryształu */}
+      {/* Główny kontener dla kryształu i holdera */}
       <div className="relative w-80 h-80 flex items-center justify-center">
+        {/* Holder Image - umieszczony pod kryształem */}
+        <img
+          src="/holder.png"
+          alt="Crystal Holder"
+          className="absolute w-48 h-auto bottom-0 left-1/2 -translate-x-1/2 z-10"
+        />
+
         {/* Kula Kryształu (teraz przezroczysta z efektem szkła) */}
         <div
           ref={crystalRef}
