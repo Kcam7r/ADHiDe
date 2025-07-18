@@ -338,18 +338,15 @@ export const Dashboard: React.FC = () => {
                   {completedTodayVisual.map((task) => (
                     <div
                       key={task.id}
-                      className={`relative p-4 rounded-lg bg-gray-700 border-2 border-amber-500 task-completed-visual
+                      className={`p-4 rounded-lg bg-gray-700 border-2 border-amber-500 task-completed-visual flex items-center justify-between
                         ${newlyCompletedAnimatedTasks.has(task.id) ? 'animate-daily-task-grow-in' : ''}
                       `}
                     >
                       <span className="text-gray-400">{task.title}</span>
-                      {/* Static checkmark for completed tasks */}
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <CheckCircle
-                          className="w-12 h-12 text-green-400 opacity-70"
-                          style={{ filter: 'drop-shadow(0 0 10px rgba(74, 222, 128, 0.8))' }}
-                        />
-                      </div>
+                      <CheckCircle
+                        className="w-6 h-6 text-green-400 opacity-70"
+                        style={{ filter: 'drop-shadow(0 0 5px rgba(74, 222, 128, 0.8))' }}
+                      />
                     </div>
                   ))}
                 </div>
