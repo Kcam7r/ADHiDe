@@ -243,11 +243,11 @@ html {
 
 /* Nowa klasa dla koloru drzewa */
 .filter-tree-color {
-  filter: brightness(1.5) saturate(2.5) hue-rotate(100deg) /* Lighter, more vibrant green/cyan */
-          drop-shadow(0px 0px 4px rgba(74,222,128,0.5)) /* Green glow */
-          drop-shadow(1px 1px 3px rgba(0,0,0,0.6))
-          drop-shadow(-1px -1px 3px rgba(255,255,255,0.15))
-          drop-shadow(2px 2px 6px rgba(0,0,0,0.4));
+  filter: brightness(2.5) saturate(3) hue-rotate(100deg) /* Znacznie jaśniejszy, bardziej nasycony zielono-cyjanowy */
+          drop-shadow(0px 0px 6px rgba(74,222,128,0.7)) /* Mocniejszy zielony blask */
+          drop-shadow(1px 1px 4px rgba(0,0,0,0.4))
+          drop-shadow(-1px -1px 4px rgba(255,255,255,0.3))
+          drop-shadow(2px 2px 8px rgba(0,0,0,0.3));
 }
 
 /* Nowa klasacja dla białego holdera (nieużywana, ale zachowana dla kontekstu) */
