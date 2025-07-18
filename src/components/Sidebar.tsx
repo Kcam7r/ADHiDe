@@ -4,7 +4,7 @@ import { useApp } from '../contexts/AppContext';
 import { QuickThoughtModal } from './QuickThoughtModal';
 import { QuickThoughtsModal } from './QuickThoughtsModal';
 import { PowerCrystal } from './PowerCrystal'; // Import PowerCrystal
-import logo from '../assets/logo.png'; // Przywrócono import logo
+// Usunięto import logo, ponieważ jest ono teraz w folderze public i dostępne bezpośrednio
 
 interface SidebarProps {
   activeView: string;
@@ -34,7 +34,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
       <div className="w-64 bg-gray-800 h-screen flex flex-col">
         {/* Header with Logo and Title */}
         <div className="p-6 border-b border-gray-700 flex flex-col items-center justify-center">
-          <img src={logo} alt="ADHiDe Logo" className="w-20 h-20 mb-2" /> {/* Przywrócono użycie logo */}
+          <img src="/logo.png" alt="ADHiDe Logo" className="w-20 h-20 mb-2" /> {/* Zmieniono ścieżkę do logo */}
           <h1 className="text-2xl font-bold text-white text-center">ADHiDe</h1>
         </div>
 
