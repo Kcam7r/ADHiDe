@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Home, BookOpen, Calendar, Settings } from 'lucide-react';
-import { useApp } = '../contexts/AppContext';
+import { useApp } from '../contexts/AppContext';
 import { PowerCrystal } from './PowerCrystal';
 
 interface SidebarProps {
@@ -17,7 +17,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
     { id: 'dashboard', label: 'Pulpit', icon: Home },
     { id: 'questlog', label: 'Quest Log', icon: BookOpen },
     { id: 'journal', label: 'Dziennik', icon: Calendar },
-    { id: 'garage', label: 'Garaż', icon: Settings },
+    { id: 'garage', 'label': 'Garaż', icon: Settings },
   ];
 
   const handleResetConfirm = () => {
@@ -37,7 +37,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
           <img 
             src="/logo.png" 
             alt="ADHiDe Logo" 
-            className="w-48 h-auto mb-2 mt-2 transition-transform duration-200 hover:scale-105" // Klasy przeniesione tutaj
+            className="w-48 h-auto mb-2 mt-2 transition-transform duration-200 hover:scale-105"
           />
         </div>
 
