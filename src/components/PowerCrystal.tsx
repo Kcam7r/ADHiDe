@@ -69,9 +69,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   useEffect(() => {
     // Generuj bąbelki zawsze dla celów testowych
     if (true) { 
-      if (liquidRef.current && !bubbleIntervalRef.current) {
+      if (crystalRef.current && !bubbleIntervalRef.current) { // Zmieniono liquidRef.current na crystalRef.current
         bubbleIntervalRef.current = setInterval(() => {
-          if (liquidRef.current) {
+          if (crystalRef.current) { // Zmieniono liquidRef.current na crystalRef.current
             const bubble = document.createElement('div');
             bubble.className = 'babel';
 
@@ -79,6 +79,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             bubble.style.width = `${size}px`;
             bubble.style.height = `${size}px`;
             bubble.style.left = `${Math.random() * 90 + 5}%`;
+            bubble.style.bottom = `5px`; // Ustawienie startowej pozycji na dole kryształu
 
             const duration = Math.random() * 3 + 2;
             bubble.style.animationDuration = `${duration}s`;
@@ -89,7 +90,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             bubble.style.setProperty('--bubble-drift-x', `${driftX}px`);
             bubble.style.setProperty('--bubble-drift-x-end', `${driftXEnd}px`);
 
-            liquidRef.current.appendChild(bubble);
+            crystalRef.current.appendChild(bubble); // Zmieniono liquidRef.current na crystalRef.current
 
             setTimeout(() => {
               bubble.remove();
@@ -99,11 +100,11 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       }
     } else {
       if (bubbleIntervalRef.current) {
-        clearInterval(bubbleInterval.current);
+        clearInterval(bubbleIntervalRef.current);
         bubbleIntervalRef.current = null;
       }
-      if (liquidRef.current) {
-        liquidRef.current.querySelectorAll('.babel').forEach(b => b.remove());
+      if (crystalRef.current) { // Zmieniono liquidRef.current na crystalRef.current
+        crystalRef.current.querySelectorAll('.babel').forEach(b => b.remove());
       }
     }
 
@@ -171,7 +172,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             width: crystalSize,
             height: crystalSize,
             boxShadow: 'inset 0 0 15px rgba(255,255,255,0.5), 0 0 20px rgba(0,0,0,0.5)',
-            border: '2px solid rgba(255,255,255,0.2)'
+            border: '2px solid rgba(255,255,255,0.2)',
+            overflow: 'visible', // Upewnienie się, że bąbelki nie są obcinane
+            borderRadius: '50%' // Dodatkowe zabezpieczenie dla okrągłego kształtu
           }}
         >
           <div
@@ -183,7 +186,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             ref={liquidRef} // Dołącz ref do elementu płynu
           >
           </div>
-          <div className="relative text-white text-3xl font-bold z-30 font-indie-flower">
+          {/* Poziom XP - zmieniono pozycjonowanie na absolutne i wyśrodkowane */}
+          <div className="absolute inset-0 flex items-center justify-center text-white text-3xl font-bold z-30 font-indie-flower">
             {user.level}
           </div>
         </div>

@@ -241,10 +241,10 @@ html {
     }
     95% { /* Utrzymanie pełnej widoczności do prawie końca */
         opacity: 1;
-        transform: translateY(-200px) translateX(var(--bubble-drift-x-end, -10px)); /* Zwiększony dystans wznoszenia */
+        transform: translateY(-100px) translateX(var(--bubble-drift-x-end, -10px)); /* Zmniejszony dystans wznoszenia, aby były widoczne w krysztale */
     }
     100% {
-        transform: translateY(-200px) translateX(var(--bubble-drift-x-end, -10px)); /* Zwiększony dystans wznoszenia */
+        transform: translateY(-100px) translateX(var(--bubble-drift-x-end, -10px)); /* Zmniejszony dystans wznoszenia */
         opacity: 0; /* Całkowite zanikanie */
     }
 }
