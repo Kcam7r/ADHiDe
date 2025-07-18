@@ -238,3 +238,8 @@ html {
         opacity: 0; /* Całkowite zanikanie */
     }
 }
+
+/* Nowa klasa dla koloru drzewa */
+.filter-tree-color {
+  filter: sepia(100%) saturate(200%) hue-rotate(20deg) brightness(80%);
+}

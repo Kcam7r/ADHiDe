@@ -128,7 +128,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         <img
           src="/holder.png"
           alt="Crystal Holder"
-          className="absolute w-full h-auto bottom-0 left-1/2 -translate-x-1/2 z-5" // Usunięto filter-white-image
+          className="absolute w-full h-auto bottom-0 left-1/2 -translate-x-1/2 z-5 filter-tree-color" // Dodano filter-tree-color
         />
 
         {/* Nowy element pod kryształem mocy */}
