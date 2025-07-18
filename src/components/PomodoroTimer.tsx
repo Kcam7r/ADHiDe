@@ -7,14 +7,8 @@ export const PomodoroTimer: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   
-  // Inicjalizuj pozycję za pomocą funkcji, aby upewnić się, że obiekt window jest dostępny
-  const [position, setPosition] = useState(() => {
-    if (typeof window === 'undefined') {
-      return { x: 0, y: 0 }; // Domyślne dla SSR, zostanie zaktualizowane po stronie klienta
-    }
-    // Początkowa pozycja: 80px od prawej, 80px od dołu ekranu
-    return { x: window.innerWidth - 80, y: window.innerHeight - 80 };
-  });
+  // Inicjalizuj pozycję w prawym dolnym rogu z marginesem 20px
+  const [position, setPosition] = useState({ right: 20, bottom: 20 });
 
   const offset = useRef({ x: 0, y: 0 });
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -24,22 +18,24 @@ export const PomodoroTimer: React.FC = () => {
   useEffect(() => {
     // Upewnij się, że przycisk pozostaje w granicach po zmianie rozmiaru
     if (buttonRef.current) {
-      const maxX = width - buttonRef.current.offsetWidth;
-      const maxY = height - buttonRef.current.offsetHeight;
+      const buttonWidth = buttonRef.current.offsetWidth;
+      const buttonHeight = buttonRef.current.offsetHeight;
+
       setPosition(prev => ({
-        x: Math.max(0, Math.min(prev.x, maxX)),
-        y: Math.max(0, Math.min(prev.y, maxY)),
+        right: Math.max(20, Math.min(prev.right, width - buttonWidth - 20)),
+        bottom: Math.max(20, Math.min(prev.bottom, height - buttonHeight - 20)),
       }));
     }
-  }, [width, height]); // Zależność od width/height z useWindowSize
+  }, [width, height]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (buttonRef.current) {
       setIsDragging(true);
       hasMoved.current = false;
+      const rect = buttonRef.current.getBoundingClientRect();
       offset.current = {
-        x: e.clientX - buttonRef.current.getBoundingClientRect().left,
-        y: e.clientY - buttonRef.current.getBoundingClientRect().top,
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
       };
     }
   };
@@ -49,18 +45,23 @@ export const PomodoroTimer: React.FC = () => {
 
     hasMoved.current = true;
 
-    let newX = e.clientX - offset.current.x;
-    let newY = e.clientY - offset.current.y;
-
     if (buttonRef.current) {
-      const maxX = width - buttonRef.current.offsetWidth;
-      const maxY = height - buttonRef.current.offsetHeight;
+      const buttonWidth = buttonRef.current.offsetWidth;
+      const buttonHeight = buttonRef.current.offsetHeight;
 
-      newX = Math.max(0, Math.min(newX, maxX));
-      newY = Math.max(0, Math.min(newY, maxY));
+      let newLeft = e.clientX - offset.current.x;
+      let newTop = e.clientY - offset.current.y;
+
+      // Oblicz nowe wartości right i bottom
+      let newRight = width - (newLeft + buttonWidth);
+      let newBottom = height - (newTop + buttonHeight);
+
+      // Ogranicz pozycję, aby przycisk pozostawał w widocznym obszarze
+      newRight = Math.max(20, Math.min(newRight, width - buttonWidth - 20));
+      newBottom = Math.max(20, Math.min(newBottom, height - buttonHeight - 20));
+      
+      setPosition({ right: newRight, bottom: newBottom });
     }
-
-    setPosition({ x: newX, y: newY });
   };
 
   const handleMouseUp = () => {
@@ -80,14 +81,12 @@ export const PomodoroTimer: React.FC = () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, width, height]); // Dodano width i height do zależności dla prawidłowego sprawdzania granic podczas przeciągania
+  }, [isDragging, width, height]);
 
   const handleClick = () => {
-    // Otwórz modal tylko jeśli nie było ruchu myszy (czyli było to kliknięcie, a nie przeciągnięcie)
     if (!hasMoved.current) {
       setShowModal(true);
     }
-    // Flaga hasMoved jest resetowana w handleMouseDown dla kolejnej interakcji
   };
 
   return (
@@ -97,7 +96,7 @@ export const PomodoroTimer: React.FC = () => {
         onMouseDown={handleMouseDown}
         onClick={handleClick}
         className={`fixed z-40 p-3 cursor-grab active:cursor-grabbing text-5xl hover:scale-110 ${isDragging ? 'transition-none' : 'transition-all duration-200'}`}
-        style={{ left: position.x, top: position.y }}
+        style={{ right: position.right, bottom: position.bottom }}
         title="Timer Pomodoro"
       >
         🍅

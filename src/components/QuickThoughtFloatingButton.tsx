@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Lightbulb } from 'lucide-react';
 import { useWindowSize } from '../hooks/useWindowSize';
-// Usunięto import useLocalStorage
 
 interface QuickThoughtFloatingButtonProps {
   onOpenNewThought: () => void;
@@ -11,29 +10,34 @@ export const QuickThoughtFloatingButton: React.FC<QuickThoughtFloatingButtonProp
   const { width, height } = useWindowSize();
   const [isDragging, setIsDragging] = useState(false);
   
-  // Używamy useState bezpośrednio, inicjalizując pozycję dynamicznie
-  const [position, setPosition] = useState(() => {
-    if (typeof window === 'undefined') {
-      return { x: 270, y: 0 }; // Wartość domyślna dla SSR
-    }
-    // Początkowa pozycja: 270px od lewej, 80px od dołu ekranu
-    return { x: 270, y: window.innerHeight - 80 };
-  });
+  // Inicjalizuj pozycję: 270px od lewej (aby ominąć sidebar), 20px od dołu
+  const [position, setPosition] = useState({ left: 270, bottom: 20 });
 
   const offset = useRef({ x: 0, y: 0 });
   const buttonRef = useRef<HTMLButtonElement>(null);
   const hasMoved = useRef(false);
 
-  // Usunięto useEffect do aktualizacji 'y' na zmianę wysokości okna,
-  // ponieważ handleMouseMove będzie dynamicznie zarządzać pozycją.
+  useEffect(() => {
+    // Upewnij się, że przycisk pozostaje w granicach po zmianie rozmiaru
+    if (buttonRef.current) {
+      const buttonWidth = buttonRef.current.offsetWidth;
+      const buttonHeight = buttonRef.current.offsetHeight;
+
+      setPosition(prev => ({
+        left: Math.max(270, Math.min(prev.left, width - buttonWidth - 20)),
+        bottom: Math.max(20, Math.min(prev.bottom, height - buttonHeight - 20)),
+      }));
+    }
+  }, [width, height]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (buttonRef.current) {
       setIsDragging(true);
       hasMoved.current = false;
+      const rect = buttonRef.current.getBoundingClientRect();
       offset.current = {
-        x: e.clientX - buttonRef.current.getBoundingClientRect().left,
-        y: e.clientY - buttonRef.current.getBoundingClientRect().top,
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
       };
     }
   };
@@ -43,19 +47,22 @@ export const QuickThoughtFloatingButton: React.FC<QuickThoughtFloatingButtonProp
 
     hasMoved.current = true;
 
-    let newX = e.clientX - offset.current.x;
-    let newY = e.clientY - offset.current.y;
-
     if (buttonRef.current) {
-      const maxX = width - buttonRef.current.offsetWidth;
-      const maxY = height - buttonRef.current.offsetHeight;
+      const buttonWidth = buttonRef.current.offsetWidth;
+      const buttonHeight = buttonRef.current.offsetHeight;
 
-      // Ograniczamy pozycję, aby przycisk pozostawał w widocznym obszarze
-      newX = Math.max(0, Math.min(newX, maxX));
-      newY = Math.max(0, Math.min(newY, maxY));
+      let newLeft = e.clientX - offset.current.x;
+      let newTop = e.clientY - offset.current.y;
+
+      // Oblicz nową wartość bottom
+      let newBottom = height - (newTop + buttonHeight);
+
+      // Ogranicz pozycję, aby przycisk pozostawał w widocznym obszarze
+      newLeft = Math.max(270, Math.min(newLeft, width - buttonWidth - 20));
+      newBottom = Math.max(20, Math.min(newBottom, height - buttonHeight - 20));
+      
+      setPosition({ left: newLeft, bottom: newBottom });
     }
-
-    setPosition({ x: newX, y: newY });
   };
 
   const handleMouseUp = () => {
@@ -75,7 +82,7 @@ export const QuickThoughtFloatingButton: React.FC<QuickThoughtFloatingButtonProp
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, width, height]); // Dodano width i height do zależności dla prawidłowego ograniczania
+  }, [isDragging, width, height]);
 
   const handleClick = () => {
     if (!hasMoved.current) {
@@ -92,7 +99,7 @@ export const QuickThoughtFloatingButton: React.FC<QuickThoughtFloatingButtonProp
         ${isDragging ? 'transition-none' : 'transition-all duration-200'}
         rounded-full
       `}
-      style={{ left: position.x, top: position.y }}
+      style={{ left: position.left, bottom: position.bottom }}
       title="Szybka Myśl"
     >
       <Lightbulb className="w-14 h-14" />
