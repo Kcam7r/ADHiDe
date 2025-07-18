@@ -11,7 +11,7 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) => {
-  const { resetXP } = useApp(); // Usunięto addLargeXP, ponieważ przycisk jest usuwany
+  const { resetXP } = useApp();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showQuickThought, setShowQuickThought] = useState(false);
   const [showQuickThoughts, setShowQuickThoughts] = useState(false);
@@ -66,7 +66,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
         </div>
 
         {/* Quick Thoughts */}
-        <div className="p-4 border-t border-gray-700">
+        <div className="p-2 border-t border-gray-700"> {/* Zmieniono p-4 na p-2 */}
           <h3 className="text-white font-semibold mb-3 flex items-center space-x-2">
             <span>💬</span>
             <span>Szybkie Myśli</span>
