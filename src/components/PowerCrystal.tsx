@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { XpParticle } from './XpParticle';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useLocalStorage }
+from '../hooks/useLocalStorage';
 
 interface PowerCrystalProps {
   onCrystalClick: () => void;
@@ -136,7 +137,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       {/* Główny kontener dla kryształu i holdera - zmieniono na w-96 h-96 */}
       <div 
         className="relative w-96 h-96 flex items-center justify-center"
-        style={{ transform: 'translateY(28px)' }} {/* Zmieniono z 25px na 28px */}
+        style={{ transform: 'translateY(28px)' }}
       >
         {/* Holder Image - teraz w pełni w kontenerze */}
         <img
