@@ -31,7 +31,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
         {/* Header with Logo and Title */}
         <div 
           className="p-6 border-b border-gray-700 flex flex-col items-center justify-center cursor-pointer
-                     transition-transform duration-200 hover:-translate-y-1" {/* Dodano klasy do animacji */}
+                     transition-transform duration-200 hover:-translate-y-1"
           onClick={onOpenQuickThoughtsModal}
           title="Moje Myśli"
         >
