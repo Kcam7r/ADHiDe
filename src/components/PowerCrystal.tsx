@@ -21,9 +21,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Persystowane właściwości stylu dla kryształu (top, left, size w px)
   // Wartości początkowe będą nadpisane przez te z localStorage, jeśli istnieją
   const [crystalProps] = useLocalStorage('adhd-crystal-props', {
-    top: 139.5, // Przywrócona oryginalna wartość top
-    left: 139.5,
-    size: 100,
+    top: 71, // Dostosowano do nowego rozmiaru kontenera (192px) i rozmiaru kryształu (50px)
+    left: 71, // Dostosowano do nowego rozmiaru kontenera (192px) i rozmiaru kryształu (50px)
+    size: 50, // Zmniejszono rozmiar kryształu dwukrotnie
   });
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
@@ -135,10 +135,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       onClick={onCrystalClick}
     >
       {/* Główny kontener dla kryształu i holdera */}
-      {/* Przywrócono to przesunięcie */}
       <div 
-        className="relative w-96 h-96 flex items-center justify-center"
-        style={{ transform: 'translateY(28px)' }} 
+        className="relative w-48 h-48 flex items-center justify-center" /* Zmniejszono rozmiar kontenera dwukrotnie */
+        style={{ transform: 'translateY(14px)' }} /* Dostosowano przesunięcie w pionie */
       >
         {/* Holder Image - teraz w pełni w kontenerze */}
         <img
