@@ -44,8 +44,8 @@ export const QuickThoughtFloatingButton: React.FC<QuickThoughtFloatingButtonProp
       const maxX = width - buttonRef.current.offsetWidth;
       const maxY = height - buttonRef.current.offsetHeight;
 
-      // Ogranicz pozycję X, aby nie wchodzić na sidebar (szerokość sidebar to 256px)
-      newX = Math.max(256, Math.min(newX, maxX));
+      // Usunięto ograniczenie, aby przycisk mógł poruszać się po całym ekranie
+      newX = Math.max(0, Math.min(newX, maxX));
       newY = Math.max(0, Math.min(newY, maxY));
     }
 
