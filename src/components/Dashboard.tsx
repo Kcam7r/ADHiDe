@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryFull, Brain, CheckCircle } from 'lucide-react';
+import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryFull, Brain, CheckCircle, X } from 'lucide-react';
 import { Mission, DailyTask } from '../types';
 import { MissionHistoryModal } from './MissionHistoryModal';
 import { DailyTaskStamp } from './DailyTaskStamp'; // Import the new component
 import { showSuccessToast, showInfoToast, showErrorToast } from '../utils/toast'; // Importuj funkcje toastów
+import { PowerCrystal } from './PowerCrystal'; // Import PowerCrystal
 
 export const Dashboard: React.FC = () => {
   const { 
@@ -15,8 +16,8 @@ export const Dashboard: React.FC = () => {
     completeDailyTask, 
     completeMission,
     completedMissionsHistory,
-    addXP, // Dodano addXP do kontekstu
-    // triggerConfetti, // Usunięto triggerConfetti z kontekstu, ponieważ nie jest używane
+    addXP, 
+    resetXP, // Dodano resetXP
   } = useApp();
 
   const [showHistory, setShowHistory] = useState(false);
@@ -31,6 +32,10 @@ export const Dashboard: React.FC = () => {
   // New states for Mission Completion Animation
   const [fadingOutMissions, setFadingOutMissions] = useState<Set<string>>(new Set());
   const [missionReaction, setMissionReaction] = useState<{[key: string]: Mission['priority'] | null}>({}); // Nowy stan dla reakcji misji
+
+  // Stany dla modalu resetowania XP
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [showFinalResetConfirmButton, setShowFinalResetConfirmButton] = useState(false);
 
   // Sync appDailyTasks with local display states
   useEffect(() => {
@@ -167,11 +172,6 @@ export const Dashboard: React.FC = () => {
       addXP(xpGain, originX, originY);
       showSuccessToast(`Misja ukończona: ${mission.title}! (+${xpGain} XP)`);
 
-      // Usunięto warunek wywołujący confetti
-      // if (mission.priority === 'urgent' || mission.priority === 'important') {
-      //   triggerConfetti();
-      // }
-
       // Etap 3: Zanikanie karty
       setFadingOutMissions(prev => new Set(prev).add(missionId));
 
@@ -254,6 +254,24 @@ export const Dashboard: React.FC = () => {
         return newSet;
       });
     }, 300);
+  };
+
+  // Logika resetowania XP przeniesiona z Sidebar
+  const handleInitialResetClick = () => {
+    setShowResetConfirm(true);
+    setShowFinalResetConfirmButton(false);
+  };
+
+  const handleFinalReset = () => {
+    resetXP();
+    setShowResetConfirm(false);
+    setShowFinalResetConfirmButton(false);
+    showInfoToast('Postęp został zresetowany!');
+  };
+
+  const handleCancelReset = () => {
+    setShowResetConfirm(false);
+    setShowFinalResetConfirmButton(false);
   };
 
   return (
@@ -414,6 +432,78 @@ export const Dashboard: React.FC = () => {
           missions={completedMissionsHistory}
           onClose={() => setShowHistory(false)}
         />
+      )}
+
+      {/* Power Crystal - Przeniesiony na Dashboard */}
+      <div className="fixed bottom-5 right-24 z-40"> {/* Pozycja obok Pomodoro Timer */}
+        <PowerCrystal onCrystalClick={handleInitialResetClick} />
+      </div>
+
+      {/* Reset Confirmation Modal - Przeniesiony na Dashboard */}
+      {showResetConfirm && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              handleCancelReset();
+            }
+          }}
+        >
+          <div className="bg-gray-800 p-6 rounded-lg max-w-md shadow-xl border border-gray-700 relative">
+            {showFinalResetConfirmButton && (
+              <button
+                onClick={handleCancelReset}
+                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+                title="Zamknij"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
+            
+            <h3 className="text-white font-bold mb-4">Resetować postęp?</h3>
+            <p className="text-gray-300 mb-6">
+              {showFinalResetConfirmButton ? 
+                "Jesteś absolutnie pewien? Ta akcja wyzeruje cały Twój postęp i jest nieodwracalna!" : 
+                "Czy na pewno chcesz zresetować wszystkie punkty XP i poziom? Ta akcja jest nieodwracalna."
+              }
+            </p>
+            
+            <div className="flex space-x-4">
+              {showFinalResetConfirmButton ? (
+                <>
+                  <button
+                    onClick={handleCancelReset}
+                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                  >
+                    Anuluj
+                  </button>
+                  <button
+                    onClick={handleFinalReset}
+                    className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                  >
+                    Resetuj
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setShowFinalResetConfirmButton(true)}
+                    className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                  >
+                    Resetuj
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCancelReset}
+                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                  >
+                    Anuluj
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

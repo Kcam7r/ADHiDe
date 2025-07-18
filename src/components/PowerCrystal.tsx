@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { XpParticle } from './XpParticle';
-import { useLocalStorage }
-from '../hooks/useLocalStorage';
+// Usunięto import useLocalStorage
 
 interface PowerCrystalProps {
   onCrystalClick: () => void;
@@ -18,13 +17,10 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const liquidRef = useRef<HTMLDivElement>(null);
   const bubbleIntervalRef = useRef<number | null>(null);
 
-  // Persystowane właściwości stylu dla kryształu (top, left, size w px)
-  // Wartości początkowe będą nadpisane przez te z localStorage, jeśli istnieją
-  const [crystalProps] = useLocalStorage('adhd-crystal-props', {
-    top: 102, // Wyśrodkowanie kryształu 100px w kontenerze 304px wysokości
-    left: 62, // Wyśrodkowanie kryształu 100px w kontenerze 224px szerokości
-    size: 100, // Rozmiar kryształu
-  });
+  // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
+  const crystalSize = 100; // Rozmiar kryształu
+  const crystalTop = 102; // Pozycja Y wewnątrz holdera
+  const crystalLeft = 62; // Pozycja X wewnątrz holdera
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -45,7 +41,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       }
     };
     updateCrystalCenter();
-  }, [crystalProps]);
+  }, [crystalSize, crystalTop, crystalLeft]); // Zależności od stałych wartości
 
   // Efekt dla animacji zysku XP (błysk) i awansu na poziom
   useEffect(() => {
@@ -123,9 +119,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   }, [xpProgress]);
 
   // Obliczenia dla okrągłej podstawy
-  const baseSize = crystalProps.size + 10; // 10px większa niż kryształ
-  const baseTop = crystalProps.top - 5; // Przesunięcie w górę o 5px
-  const baseLeft = crystalProps.left - 5; // Przesunięcie w lewo o 5px
+  const baseSize = crystalSize + 10; // 10px większa niż kryształ
+  const baseTop = crystalTop - 5; // Przesunięcie w górę o 5px
+  const baseLeft = crystalLeft - 5; // Przesunięcie w lewo o 5px
 
   return (
     <div
@@ -166,10 +162,10 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             bg-white bg-opacity-15
             `}
           style={{
-            top: crystalProps.top,
-            left: crystalProps.left,
-            width: crystalProps.size,
-            height: crystalProps.size,
+            top: crystalTop,
+            left: crystalLeft,
+            width: crystalSize,
+            height: crystalSize,
             boxShadow: 'inset 0 0 15px rgba(255,255,255,0.5), 0 0 20px rgba(0,0,0,0.5)',
             border: '2px solid rgba(255,255,255,0.2)'
           }}
