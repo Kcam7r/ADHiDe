@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { XpParticle } from './XpParticle';
 import { useWindowSize } from '../hooks/useWindowSize';
-// Usunięto importy Edit i Check, ponieważ tryb edycji jest usuwany
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface PowerCrystalProps {
@@ -17,7 +16,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const crystalRef = useRef<HTMLDivElement>(null);
   const liquidRef = useRef<HTMLDivElement>(null);
   const bubbleIntervalRef = useRef<number | null>(null);
-  const { width, height } = useWindowSize(); // Nadal używane do obliczania celu cząsteczek XP
+  const { width, height } = useWindowSize();
 
   // Persystowane właściwości stylu dla kryształu (top, left, size w px)
   // Wartości początkowe będą nadpisane przez te z localStorage, jeśli istnieją
@@ -26,9 +25,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     left: 88, // Początkowa pozycja X (w px, dostosowana do okręgu w holderze)
     size: 144, // Początkowy rozmiar (w px, w-36 to 144px)
   });
-
-  // Usunięto stany i logikę dla isDraggingCrystal, isResizingCrystal, crystalOffset, initialCrystalSize, initialMousePos
-  // Usunięto stan editMode
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -119,9 +115,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     };
   }, [xpProgress]);
 
-  // Kolor kryształu (teraz zawsze żółty)
-  const currentCrystalColor = 'from-yellow-400 to-amber-500';
-
   return (
     <div
       className="relative flex flex-col items-center justify-center w-full cursor-pointer select-none"
@@ -129,8 +122,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       onMouseLeave={() => setIsHovered(false)}
       onClick={onCrystalClick}
     >
-      {/* Usunięto przycisk trybu edycji */}
-
       {/* Główny kontener dla holdera i kryształu */}
       <div className="relative w-80 h-80 flex items-center justify-center">
         {/* Obraz holdera */}
@@ -140,13 +131,13 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           className="absolute inset-0 w-full h-full object-contain z-30 filter-white-image"
         />
 
-        {/* Kula Kryształu */}
+        {/* Kula Kryształu (teraz przezroczysta z efektem szkła) */}
         <div
           ref={crystalRef}
           className={`absolute rounded-full overflow-hidden shadow-lg transition-all duration-300
-            bg-gradient-to-br ${currentCrystalColor}
             ${isFlashing ? 'animate-crystal-flash' : ''}
             z-20
+            bg-transparent
             `}
           style={{
             top: crystalProps.top,
@@ -156,10 +147,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             boxShadow: 'inset 0 0 15px rgba(255,255,255,0.5), 0 0 20px rgba(0,0,0,0.5)',
             border: '2px solid rgba(255,255,255,0.2)'
           }}
-          // Usunięto onMouseDown={handleMouseDownCrystal}
         >
-          {/* Usunięto metalową obudowę */}
-          {/* Wypełnienie płynem */}
+          {/* Wypełnienie płynem (żółte) */}
           <div
             className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-500 to-yellow-400 transition-all duration-300 ease-out animate-liquid-wave z-20"
             style={{
@@ -176,8 +165,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
               {user.level}
             </span>
           </div>
-
-          {/* Usunięto uchwyt do zmiany rozmiaru */}
         </div>
       </div>
 
