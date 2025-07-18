@@ -95,30 +95,49 @@ html {
 @keyframes crystal-flash {
   0% {
     box-shadow: 0 0 0px rgba(255, 255, 255, 0);
-    background-color: rgba(255, 255, 255, 0.15); /* Explicitly set to bg-white bg-opacity-15 */
-    opacity: 1; /* Explicitly set */
+    background-color: rgba(255, 255, 255, 0.15);
+    opacity: 1;
   }
   50% {
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.6);
-    background-color: rgba(255, 255, 255, 0.15); /* Explicitly set */
-    opacity: 1; /* Explicitly set */
+    background-color: rgba(255, 255, 255, 0.15);
+    opacity: 1;
   }
   100% {
     box-shadow: 0 0 0px rgba(255, 255, 255, 0);
-    background-color: rgba(255, 255, 255, 0.15); /* Explicitly set */
-    opacity: 1; /* Explicitly set */
+    background-color: rgba(255, 255, 255, 0.15);
+    opacity: 1;
   }
 }
 .animate-crystal-flash {
   animation: crystal-flash 0.5s ease-out;
 }
 
+/* Light Reflection Animations */
+@keyframes crystal-reflection-hover {
+  0% { transform: translateX(-100%) translateY(-100%); }
+  100% { transform: translateX(100%) translateY(100%); }
+}
+.animate-crystal-reflection-hover {
+  animation: crystal-reflection-hover 2s linear infinite;
+}
+
+@keyframes crystal-reflection-xp {
+  0% { transform: translateX(-100%) translateY(-100%); opacity: 1; }
+  50% { opacity: 1; }
+  100% { transform: translateX(100%) translateY(100%); opacity: 0; } /* Fade out after one pass */
+}
+.animate-crystal-reflection-xp {
+  animation: crystal-reflection-xp 2s ease-out forwards; /* Run once and stay at end state */
+}
+
+
 /* Custom animations for the new PowerCrystal design */
 @keyframes liquid-wave {
   0% { transform: translateY(0px); }
-  25% { transform: translateY(-0.2px); } /* Zmniejszona amplituda */
+  25% { transform: translateY(-0.5px); } /* Slightly increased amplitude */
   50% { transform: translateY(0px); }
-  75% { transform: translateY(0.2px); }  /* Zmniejszona amplituda */
+  75% { transform: translateY(0.5px); }  /* Slightly increased amplitude */
   100% { transform: translateY(0px); }
 }
 .animate-liquid-wave {
@@ -126,10 +145,13 @@ html {
   will-change: transform;
 }
 
-/* Custom shadow for metallic casing */
-/* Usunięto: .shadow-inner-dark {
-  box-shadow: inset 0 8px 15px rgba(0,0,0,0.6), inset 0 -8px 15px rgba(0,0,0,0.6);
-} */
+/* New class for holder hover effect */
+.filter-white-invert-hover {
+  filter: invert(100%) 
+          drop-shadow(0px 0px 4px rgba(255,255,255,0.5)) /* Brighter highlight */
+          drop-shadow(2px 2px 6px rgba(0,0,0,0.8)) /* Deeper main shadow */
+          drop-shadow(-2px -2px 6px rgba(255,255,255,0.3)); /* More pronounced highlight */
+}
 
 /* New animations for Daily Task Stamp */
 @keyframes stamp-hit {
@@ -270,50 +292,51 @@ html {
 /* XP Particle Animations */
 @keyframes xp-fly {
   0% {
-    transform: translate(-50%, -50%) translate(0, 0); /* Start centered at origin */
+    transform: translate(-50%, -50%) translate(0, 0);
     opacity: 0;
   }
   10% {
     opacity: 1;
   }
   90% {
-    transform: translate(-50%, -50%) translate(var(--target-x), var(--target-y)); /* Move to target, stay centered */
+    transform: translate(-50%, -50%) translate(var(--target-x), var(--target-y));
     opacity: 1;
   }
   100% {
-    transform: translate(-50%, -50%) translate(var(--target-x), var(--target-y)) scale(0.5); /* Shrink at target */
+    transform: translate(-50%, -50%) translate(var(--target-x), var(--target-y)) scale(0.5);
     opacity: 0;
   }
 }
 
 .animate-xp-particle {
-  animation: xp-fly 1.5s ease-in-out forwards; /* Czas trwania animacji */
+  animation: xp-fly 1.5s ease-in-out forwards;
 }
 
 /* Nowe style i animacje dla bąbelków XP w krysztale */
 @keyframes bubble-rise {
   0% {
-    bottom: var(--bubble-start-bottom); /* Dynamiczna pozycja startowa */
-    transform: scale(0.2); /* Start małe */
+    bottom: var(--bubble-start-bottom);
+    transform: scale(0.2);
     opacity: 0;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
   }
-  20% {
-    opacity: 0.7; /* Pełna widoczność */
+  50% {
+    opacity: var(--bubble-end-opacity); /* Use dynamic end opacity */
+    transform: scale(0.8);
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 1)); /* Brighter glow in middle */
   }
   100% {
-    bottom: 100%; /* Unieś się do góry rodzica (powierzchni płynu) */
-    transform: scale(1); /* Powiększ */
-    opacity: 0; /* Zniknij */
+    bottom: 100%;
+    transform: scale(1);
+    opacity: 0;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
   }
 }
 
 .xp-bubble {
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.6); /* Biały z przezroczystością */
+  background-color: rgba(255, 255, 255, 0.6);
   border-radius: 50%;
-  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8)); /* Jasna poświata */
-  animation: bubble-rise linear infinite; /* Ciągła animacja */
-  pointer-events: none; /* Upewnij się, że nie blokują kliknięć */
+  animation: bubble-rise linear infinite;
+  pointer-events: none;
 }
-
-/* Usunięto: .metallic-3d-effect */

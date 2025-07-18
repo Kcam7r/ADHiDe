@@ -9,6 +9,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const { user, lastXpGainTimestamp, setCrystalPosition } = useApp();
   const [isHovered, setIsHovered] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
+  const [showReflection, setShowReflection] = useState(false); // State for reflection animation
   const [prevXp, setPrevXp] = useState(user.xp);
   const [prevLevel, setPrevLevel] = useState(user.level);
   const crystalRef = useRef<HTMLDivElement>(null);
@@ -54,17 +55,28 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Efekt dla animacji zysku XP (błysk) i awansu na poziom
   useEffect(() => {
     let flashTimer: number | undefined;
+    let reflectionTimer: number | undefined; // New timer for reflection
+
     // Błysk przy zysku XP
     if (lastXpGainTimestamp > 0 && user.xp > prevXp) {
       setIsFlashing(true);
-      flashTimer = setTimeout(() => setIsFlashing(false), 500);
+      setShowReflection(true); // Trigger reflection on XP gain
+
+      flashTimer = setTimeout(() => {
+        setIsFlashing(false);
+      }, 500); // Duration of crystal-flash
+
+      reflectionTimer = setTimeout(() => {
+        setShowReflection(false); // Hide reflection after its animation duration
+      }, 2000); // Duration of crystal-reflection-xp animation
+
     }
     setPrevXp(user.xp);
-
     setPrevLevel(user.level);
 
     return () => {
       if (flashTimer) clearTimeout(flashTimer);
+      if (reflectionTimer) clearTimeout(reflectionTimer);
     };
   }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]);
 
@@ -79,7 +91,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   return (
     <div
-      className="relative flex flex-col items-center justify-end w-full cursor-pointer select-none"
+      className="relative flex flex-col items-center justify-end w-full cursor-pointer select-none group" // Added 'group' class
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleCrystalClick}
@@ -92,11 +104,12 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         <img
           src="/holder2.png" 
           alt="Crystal Holder Duplicate"
-          className="absolute w-[200px] h-[250px] z-[6]"
+          className="absolute w-[200px] h-[250px] z-[6] filter-white-invert group-hover:filter-white-invert-hover transition-filter duration-300" // Added group-hover filter and transition
           style={{ 
             top: 35, 
             left: 12,
-            filter: 'invert(100%) drop-shadow(2px 2px 4px rgba(0,0,0,0.5)) drop-shadow(-2px -2px 4px rgba(255,255,255,0.2))'
+            // Initial filter for 3D effect
+            filter: 'invert(100%) drop-shadow(0px 0px 2px rgba(255,255,255,0.3)) drop-shadow(1px 1px 3px rgba(0,0,0,0.6)) drop-shadow(-1px -1px 3px rgba(255,255,255,0.15)) drop-shadow(2px 2px 6px rgba(0,0,0,0.4))'
           }}
         />
 
@@ -119,14 +132,15 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           }}
         ></div>
 
-        {/* Kula Kryształu (teraz przezroczysta z efektem szkła) */}
+        {/* Kula Kryształu (teraz przez przezroczysta z efektem szkła) */}
         <div
           ref={crystalRef}
           className={`absolute rounded-full shadow-lg transition-all duration-300
             ${isFlashing ? 'animate-crystal-flash' : ''}
             z-20 flex items-center justify-center
             bg-white bg-opacity-15
-            `}
+            group-hover:shadow-xl group-hover:border-cyan-400 group-hover:bg-opacity-20
+            `} // Added group-hover styles
           style={{
             top: crystalTop,
             left: crystalLeft,
@@ -138,11 +152,24 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             borderRadius: '50%'
           }}
         >
+          {/* Light Reflection Effect */}
+          {(isHovered || showReflection) && (
+            <div 
+              className={`absolute inset-0 rounded-full ${isHovered ? 'animate-crystal-reflection-hover' : ''} ${showReflection ? 'animate-crystal-reflection-xp' : ''}`}
+              style={{
+                background: 'radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%)',
+                maskImage: 'radial-gradient(circle, white 50%, transparent 70%)',
+                WebkitMaskImage: 'radial-gradient(circle, white 50%, transparent 70%)',
+                opacity: isHovered ? 0.7 : 1,
+              }}
+            ></div>
+          )}
+
           <div
             className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-500 to-yellow-400 transition-all duration-300 ease-out animate-liquid-wave z-20"
             style={{
               height: `${Math.max(5, xpProgress * 100)}%`,
-              boxShadow: '0 0 15px rgba(255,165,0,0.7)',
+              boxShadow: '0 0 15px rgba(255,165,0,0.7), inset 0 2px 5px rgba(255,255,255,0.3)', // Added inner shadow for meniscus
             }}
             ref={liquidRef}
           >
@@ -159,6 +186,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
                   animationDuration: `${bubble.duration}s`,
                   bottom: `${bubble.startBottomPercentage}%`, // Ustawienie losowej pozycji startowej
                   '--bubble-start-bottom': `${bubble.startBottomPercentage}%`, // Przekazanie zmiennej CSS
+                  '--bubble-end-opacity': `${Math.random() * 0.8 + 0.2}`, // Random end opacity for varied glow
                 } as React.CSSProperties}
               />
             ))}
