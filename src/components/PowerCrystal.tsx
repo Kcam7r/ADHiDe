@@ -21,7 +21,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Persystowane właściwości stylu dla kryształu (top, left, size w px)
   // Wartości początkowe będą nadpisane przez te z localStorage, jeśli istnieją
   const [crystalProps, setCrystalProps] = useLocalStorage('adhd-crystal-props', {
-    top: 120, // Dostosowano do wyśrodkowania dla nowego rozmiaru
+    top: 123, // Zmieniono z 120 na 123, aby przesunąć w dół
     left: 120, // Dostosowano do wyśrodkowania dla nowego rozmiaru
     size: 80, // Nowy, mniejszy rozmiar (w px)
   });
