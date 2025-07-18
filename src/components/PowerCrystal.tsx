@@ -21,9 +21,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Persystowane właściwości stylu dla kryształu (top, left, size w px)
   // Wartości początkowe będą nadpisane przez te z localStorage, jeśli istnieją
   const [crystalProps, setCrystalProps] = useLocalStorage('adhd-crystal-props', {
-    top: 123, // Zmieniono z 120 na 123, aby przesunąć w dół
-    left: 120, // Dostosowano do wyśrodkowania dla nowego rozmiaru
-    size: 80, // Nowy, mniejszy rozmiar (w px)
+    top: 134, // Dostosowano do nowego rozmiaru kontenera i kryształu
+    left: 92, // Dostosowano do nowego rozmiaru kontenera i kryształu
+    size: 200, // Zwiększono rozmiar kryształu
   });
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
@@ -122,13 +122,13 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       onMouseLeave={() => setIsHovered(false)}
       onClick={onCrystalClick}
     >
-      {/* Główny kontener dla kryształu i holdera */}
-      <div className="relative w-80 h-80 flex items-center justify-center">
-        {/* Holder Image - umieszczony pod kryształem */}
+      {/* Główny kontener dla kryształu i holdera - teraz w-96 */}
+      <div className="relative w-96 h-auto flex items-center justify-center">
+        {/* Holder Image - teraz w pełni w kontenerze */}
         <img
           src="/holder.png"
           alt="Crystal Holder"
-          className="absolute w-96 h-auto bottom-0 left-1/2 -translate-x-1/2 z-5 filter-white-image"
+          className="absolute w-full h-auto bottom-0 left-1/2 -translate-x-1/2 z-5 filter-white-image"
         />
 
         {/* Kula Kryształu (teraz przezroczysta z efektem szkła) */}
@@ -136,8 +136,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           ref={crystalRef}
           className={`absolute rounded-full overflow-hidden shadow-lg transition-all duration-300
             ${isFlashing ? 'animate-crystal-flash' : ''}
-            z-20 {/* Z-index pozostaje z-20, aby był nad holderem */}
-            bg-white bg-opacity-15 {/* Nowe półprzezroczyste tło */}
+            z-20
+            bg-white bg-opacity-15
             `}
           style={{
             top: crystalProps.top,
