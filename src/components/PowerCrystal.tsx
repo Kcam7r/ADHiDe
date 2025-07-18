@@ -146,7 +146,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           src="/holder3.png" 
           alt="Crystal Holder Top"
           className="absolute w-[200px] h-[100px] z-[6] filter-white-invert" // Pozycjonowanie i styl
-          style={{ top: 0, left: 12 }}
+          style={{ top: 20, left: 12 }}
         />
 
         {/* Nowy element pod kryształem mocy (okrągła podstawa) */}
