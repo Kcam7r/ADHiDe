@@ -17,9 +17,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const liquidRef = useRef<HTMLDivElement>(null);
 
   // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
-  const crystalSize = 100; // Zmniejszono z 105 na 100
-  const crystalTop = 85; 
-  const crystalLeft = 59; // Przesunięto o 3px w lewo (62 - 3 = 59)
+  const crystalSize = 100; 
+  const crystalTop = 93; // Adjusted: 85 + 8 = 93
+  const crystalLeft = 60; // Adjusted: 59 + 1 = 60
 
   const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
@@ -81,9 +81,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]);
 
   // Obliczenia dla okrągłej podstawy
-  const baseSize = crystalSize + 10; // Zaktualizowano na podstawie nowego crystalSize
-  const baseTop = crystalTop - 5; 
-  const baseLeft = crystalLeft - 5; // Zaktualizowano na podstawie nowego crystalLeft
+  const baseSize = crystalSize + 10; 
+  const baseTop = crystalTop - 5; // Adjusted: 93 - 5 = 88
+  const baseLeft = crystalLeft - 5; // Adjusted: 60 - 5 = 55
 
   const handleCrystalClick = (e: React.MouseEvent) => {
     onCrystalClick();
