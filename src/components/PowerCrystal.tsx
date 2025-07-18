@@ -21,9 +21,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Persystowane właściwości stylu dla kryształu (top, left, size w px)
   // Wartości początkowe będą nadpisane przez te z localStorage, jeśli istnieją
   const [crystalProps] = useLocalStorage('adhd-crystal-props', {
-    top: 139.5, // Przywrócono oryginalną wartość top
-    left: 139.5, // Przywrócono oryginalną wartość left
-    size: 100, // Przywrócono oryginalny rozmiar kryształu
+    top: 71, // Dostosowano do nowego rozmiaru kontenera (192px) i rozmiaru kryształu (50px)
+    left: 71, // Dostosowano do nowego rozmiera kontenera (192px) i rozmiaru kryształu (50px)
+    size: 50, // Zmniejszono rozmiar kryształu dwukrotnie
   });
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
@@ -136,14 +136,14 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     >
       {/* Główny kontener dla kryształu i holdera */}
       <div 
-        className="relative w-96 h-96 flex items-center justify-center" /* Przywrócono oryginalny rozmiar kontenera */
-        style={{ transform: 'translateY(28px)' }} /* Przywrócono oryginalne przesunięcie w pionie */
+        className="relative w-48 h-64 flex items-center justify-center" /* Zmniejszono szerokość i dostosowano wysokość dla proporcji */
+        style={{ transform: 'translateY(14px)' }} /* Dostosowano przesunięcie w pionie */
       >
-        {/* Holder Image - teraz w pełni w kontenerze */}
+        {/* Holder Image - teraz w pełni w kontenerze, zachowując proporcje */}
         <img
           src="/holder2.png" 
           alt="Crystal Holder"
-          className="absolute w-full h-full left-1/2 -translate-x-1/2 z-5 filter invert" 
+          className="absolute h-full w-auto left-1/2 -translate-x-1/2 z-5 filter invert" /* Użyto h-full w-auto dla zachowania proporcji */
         />
 
         {/* Nowy element pod kryształem mocy (okrągła podstawa) */}
