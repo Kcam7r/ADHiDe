@@ -3,9 +3,9 @@ import { AppProvider } from './contexts/AppContext';
 import { Sidebar } from './components/Sidebar';
 import { PomodoroTimer } from './components/PomodoroTimer';
 import { ConfettiOverlay } from './components/ConfettiOverlay';
-import { QuickThoughtFloatingButton } from './components/QuickThoughtFloatingButton'; // Import nowego komponentu
-import { QuickThoughtModal } from './components/QuickThoughtModal'; // Import modala nowej myśli
-import { QuickThoughtsModal } from './components/QuickThoughtsModal'; // Import modala wszystkich myśli
+import { QuickThoughtFloatingButton } from './components/QuickThoughtFloatingButton';
+import { QuickThoughtModal } from './components/QuickThoughtModal';
+import { QuickThoughtsModal } from './components/QuickThoughtsModal';
 
 // Leniwe ładowanie głównych komponentów widoków
 const Dashboard = lazy(() => import('./components/Dashboard').then(module => ({ default: module.Dashboard })));
@@ -15,8 +15,8 @@ const Garage = lazy(() => import('./components/Garage').then(module => ({ defaul
 
 function App() {
   const [activeView, setActiveView] = useState('dashboard');
-  const [showQuickThoughtModal, setShowQuickThoughtModal] = useState(false);
-  const [showQuickThoughtsModal, setShowQuickThoughtsModal] = useState(false);
+  const [showQuickThoughtModal, setShowQuickThoughtModal] = useState(false); // Dla dodawania nowej myśli
+  const [showQuickThoughtsModal, setShowQuickThoughtsModal] = useState(false); // Dla listy myśli
 
   const renderActiveView = () => {
     switch (activeView) {
@@ -31,11 +31,6 @@ function App() {
       default:
         return <Dashboard />;
     }
-  };
-
-  const handleOpenQuickThoughtsList = () => {
-    setShowQuickThoughtModal(false); // Zamknij modal nowej myśli
-    setShowQuickThoughtsModal(true); // Otwórz modal listy myśli
   };
 
   return (
@@ -55,18 +50,23 @@ function App() {
       <PomodoroTimer />
       <ConfettiOverlay />
       
-      {/* Pływający przycisk Szybkich Myśli */}
-      <QuickThoughtFloatingButton onOpenNewThought={() => setShowQuickThoughtModal(true)} />
+      {/* Pływający przycisk Szybkich Myśli - teraz otwiera listę myśli */}
+      <QuickThoughtFloatingButton onOpenThoughtsList={() => setShowQuickThoughtsModal(true)} />
 
       {/* Modale Szybkich Myśli */}
-      {showQuickThoughtModal && (
+      {showQuickThoughtModal && ( // Ten modal jest teraz otwierany z QuickThoughtsModal
         <QuickThoughtModal 
           onClose={() => setShowQuickThoughtModal(false)} 
-          onOpenAllThoughts={handleOpenQuickThoughtsList} // Przekazanie funkcji do otwierania listy
         />
       )}
       {showQuickThoughtsModal && (
-        <QuickThoughtsModal onClose={() => setShowQuickThoughtsModal(false)} />
+        <QuickThoughtsModal 
+          onClose={() => setShowQuickThoughtsModal(false)} 
+          onOpenNewThoughtModal={() => { // Nowa prop do otwierania modala nowej myśli
+            setShowQuickThoughtsModal(false); // Zamknij modal listy
+            setShowQuickThoughtModal(true); // Otwórz modal nowej myśli
+          }}
+        />
       )}
     </AppProvider>
   );

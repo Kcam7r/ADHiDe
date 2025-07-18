@@ -1,16 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Trash2, MoreVertical, CheckCircle, Archive, Target, CalendarDays } from 'lucide-react';
+import { X, Trash2, MoreVertical, CheckCircle, Archive, Target, CalendarDays, Plus } from 'lucide-react'; // Dodano Plus
 import { useApp } from '../contexts/AppContext';
 import { showSuccessToast, showErrorToast, showInfoToast } from '../utils/toast';
 import { format, isSameDay } from 'date-fns';
-import { pl } from 'date-fns/locale'; // Importuj obiekt locale 'pl'
-import { QuickThought } from '../types'; // Importuj typ QuickThought
+import { pl } from 'date-fns/locale';
+import { QuickThought } from '../types';
 
 interface QuickThoughtsModalProps {
   onClose: () => void;
+  onOpenNewThoughtModal: () => void; // Nowa prop
 }
 
-export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose }) => {
+export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose, onOpenNewThoughtModal }) => {
   const { 
     quickThoughts, 
     archivedQuickThoughts,
@@ -20,7 +21,7 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose 
     addJournalEntry, 
     updateJournalEntry, 
     journalEntries,
-    setArchivedQuickThoughts // Dodano setArchivedQuickThoughts
+    setArchivedQuickThoughts
   } = useApp();
 
   const [activeThoughtMenuId, setActiveThoughtMenuId] = useState<string | null>(null);
@@ -31,11 +32,10 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose 
     priority: 'normal' as 'normal' | 'important' | 'urgent',
     energy: 'medium' as 'low' | 'medium' | 'high' | 'concentration'
   });
-  const [showArchived, setShowArchived] = useState(false); // Stan do przełączania widoku
+  const [showArchived, setShowArchived] = useState(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Zamknij menu po kliknięciu poza nim
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -50,7 +50,7 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose 
   }, []);
 
   const formatDate = (date: Date) => {
-    return format(new Date(date), 'dd.MM.yyyy HH:mm', { locale: pl }); // Użyj zaimportowanego obiektu 'pl'
+    return format(new Date(date), 'dd.MM.yyyy HH:mm', { locale: pl });
   };
 
   const handleConvertToDailyTask = (thought: QuickThought) => {
@@ -124,9 +124,18 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose 
             <span>💭</span>
             <span>Moje Myśli</span>
           </h3>
+          {/* Przycisk do otwierania modala nowej myśli */}
+          <button
+            onClick={onOpenNewThoughtModal}
+            className="bg-cyan-600 hover:bg-cyan-700 text-white px-3 py-1 rounded-lg flex items-center space-x-1 transition-colors text-sm"
+            title="Dodaj nową myśl"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Nowa</span>
+          </button>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-gray-400 hover:text-white transition-colors ml-2"
           >
             <X className="w-5 h-5" />
           </button>
@@ -219,8 +228,6 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose 
                     {showArchived && ( // Przycisk usuwania dla zarchiwizowanych myśli
                       <button
                         onClick={() => {
-                          // Tutaj można dodać opcję trwałego usunięcia z archiwum, jeśli będzie potrzebna
-                          // Na razie po prostu usuwamy z listy zarchiwizowanych
                           setArchivedQuickThoughts((prev: QuickThought[]) => prev.filter((t: QuickThought) => t.id !== thought.id));
                           showInfoToast('Myśl trwale usunięta z archiwum.');
                         }}
