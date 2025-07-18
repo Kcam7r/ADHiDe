@@ -19,7 +19,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
   const crystalSize = 100; // Rozmiar kryształu
-  const crystalTop = 102; // Pozycja Y wewnątrz holdera
+  const crystalTop = 70; // Pozycja Y wewnątrz holdera
   const crystalLeft = 62; // Pozycja X wewnątrz holdera
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
@@ -131,16 +131,16 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     >
       {/* Główny kontener dla kryształu i holdera */}
       <div 
-        className="relative w-56 h-76 flex items-center justify-center"
-        style={{ transform: 'translateY(-286px)' }} /* Cały kontener pozostaje na tej wysokości */
+        className="relative w-56 h-[300px] flex items-center justify-center" // Zwiększona wysokość kontenera
+        // Usunięto transform: 'translateY(-286px)'
       >
         {/* Holder Image */}
-        {/* <img
+        <img
           src="/holder2.png" 
           alt="Crystal Holder"
-          className="absolute w-[200px] h-[250px] left-1/2 -translate-x-1/2 z-50 filter-white-invert"
-          style={{ transform: 'translateY(50px)' }}
-        /> */}
+          className="absolute w-[200px] h-[250px] z-[5] filter-white-invert" // Z-index 5, aby był pod kryształem i podstawą
+          style={{ top: 50, left: 12 }} // Pozycjonowanie holdera
+        />
 
         {/* Nowy element pod kryształem mocy (okrągła podstawa) */}
         <div
