@@ -6,7 +6,7 @@ import { PowerCrystal } from './PowerCrystal';
 interface SidebarProps {
   activeView: string;
   onViewChange: (view: string) => void;
-  onOpenQuickThoughtsModal: () => void; // Nowa prop
+  onOpenQuickThoughtsModal: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOpenQuickThoughtsModal }) => {
@@ -30,8 +30,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
       <div className="w-64 bg-gray-800 h-screen flex flex-col">
         {/* Header with Logo and Title */}
         <div 
-          className="p-6 border-b border-gray-700 flex flex-col items-center justify-center cursor-pointer"
-          onClick={onOpenQuickThoughtsModal} // Dodano obsługę kliknięcia na logo
+          className="p-6 border-b border-gray-700 flex flex-col items-center justify-center cursor-pointer
+                     transition-transform duration-200 hover:-translate-y-1" {/* Dodano klasy do animacji */}
+          onClick={onOpenQuickThoughtsModal}
           title="Moje Myśli"
         >
           <img src="/logo.png" alt="ADHiDe Logo" className="w-48 h-auto mb-2 mt-2" />
