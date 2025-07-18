@@ -21,8 +21,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Persystowane właściwości stylu dla kryształu (top, left, size w px)
   // Wartości początkowe będą nadpisane przez te z localStorage, jeśli istnieją
   const [crystalProps, setCrystalProps] = useLocalStorage('adhd-crystal-props', {
-    top: 40, // Początkowa pozycja Y (w px, dostosowana do okręgu w holderze)
-    left: 88, // Początkowa pozycja X (w px, dostosowana do okręgu w holderze)
+    top: 88, // Dostosowano do wyśrodkowania w kontenerze 320x320px dla rozmiaru 144px
+    left: 88, // Dostosowano do wyśrodkowania w kontenerze 320x320px dla rozmiaru 144px
     size: 144, // Początkowy rozmiar (w px, w-36 to 144px)
   });
 
@@ -122,15 +122,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       onMouseLeave={() => setIsHovered(false)}
       onClick={onCrystalClick}
     >
-      {/* Główny kontener dla holdera i kryształu */}
+      {/* Główny kontener dla kryształu */}
       <div className="relative w-80 h-80 flex items-center justify-center">
-        {/* Obraz holdera */}
-        <img
-          src="/holder.png"
-          alt="Crystal Holder"
-          className="absolute inset-0 w-full h-full object-contain z-30 filter-white-image"
-        />
-
         {/* Kula Kryształu (teraz przezroczysta z efektem szkła) */}
         <div
           ref={crystalRef}
