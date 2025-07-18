@@ -3,6 +3,9 @@ import { AppProvider } from './contexts/AppContext';
 import { Sidebar } from './components/Sidebar';
 import { PomodoroTimer } from './components/PomodoroTimer';
 import { ConfettiOverlay } from './components/ConfettiOverlay';
+import { QuickThoughtFloatingButton } from './components/QuickThoughtFloatingButton'; // Import nowego komponentu
+import { QuickThoughtModal } from './components/QuickThoughtModal'; // Import modala nowej myśli
+import { QuickThoughtsModal } from './components/QuickThoughtsModal'; // Import modala wszystkich myśli
 
 // Leniwe ładowanie głównych komponentów widoków
 const Dashboard = lazy(() => import('./components/Dashboard').then(module => ({ default: module.Dashboard })));
@@ -12,6 +15,8 @@ const Garage = lazy(() => import('./components/Garage').then(module => ({ defaul
 
 function App() {
   const [activeView, setActiveView] = useState('dashboard');
+  const [showQuickThoughtModal, setShowQuickThoughtModal] = useState(false);
+  const [showQuickThoughtsModal, setShowQuickThoughtsModal] = useState(false);
 
   const renderActiveView = () => {
     switch (activeView) {
@@ -26,6 +31,11 @@ function App() {
       default:
         return <Dashboard />;
     }
+  };
+
+  const handleOpenQuickThoughtsList = () => {
+    setShowQuickThoughtModal(false); // Zamknij modal nowej myśli
+    setShowQuickThoughtsModal(true); // Otwórz modal listy myśli
   };
 
   return (
@@ -44,6 +54,20 @@ function App() {
       </div>
       <PomodoroTimer />
       <ConfettiOverlay />
+      
+      {/* Pływający przycisk Szybkich Myśli */}
+      <QuickThoughtFloatingButton onOpenNewThought={() => setShowQuickThoughtModal(true)} />
+
+      {/* Modale Szybkich Myśli */}
+      {showQuickThoughtModal && (
+        <QuickThoughtModal 
+          onClose={() => setShowQuickThoughtModal(false)} 
+          onOpenAllThoughts={handleOpenQuickThoughtsList} // Przekazanie funkcji do otwierania listy
+        />
+      )}
+      {showQuickThoughtsModal && (
+        <QuickThoughtsModal onClose={() => setShowQuickThoughtsModal(false)} />
+      )}
     </AppProvider>
   );
 }

@@ -4,9 +4,10 @@ import { useApp } from '../contexts/AppContext';
 
 interface QuickThoughtModalProps {
   onClose: () => void;
+  onOpenAllThoughts: () => void; // Nowa prop do otwierania listy myśli
 }
 
-export const QuickThoughtModal: React.FC<QuickThoughtModalProps> = ({ onClose }) => {
+export const QuickThoughtModal: React.FC<QuickThoughtModalProps> = ({ onClose, onOpenAllThoughts }) => {
   const { addQuickThought } = useApp();
   const [thought, setThought] = useState('');
 
@@ -58,6 +59,15 @@ export const QuickThoughtModal: React.FC<QuickThoughtModalProps> = ({ onClose })
               className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"
             >
               Anuluj
+            </button>
+          </div>
+          <div className="mt-4 text-center">
+            <button
+              type="button"
+              onClick={onOpenAllThoughts}
+              className="text-gray-400 hover:text-white text-sm transition-colors"
+            >
+              Zobacz wszystkie moje myśli
             </button>
           </div>
         </form>

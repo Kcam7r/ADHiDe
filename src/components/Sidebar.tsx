@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { Home, BookOpen, Calendar, Settings, Lightbulb } from 'lucide-react';
+import { Home, BookOpen, Calendar, Settings } from 'lucide-react'; // Usunięto Lightbulb
 import { useApp } from '../contexts/AppContext';
-import { QuickThoughtModal } from './QuickThoughtModal';
-import { QuickThoughtsModal } from './QuickThoughtsModal';
 import { PowerCrystal } from './PowerCrystal';
 
 interface SidebarProps {
@@ -13,8 +11,6 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) => {
   const { resetXP } = useApp();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
-  const [showQuickThought, setShowQuickThought] = useState(false);
-  const [showQuickThoughts, setShowQuickThoughts] = useState(false);
 
   const navigationItems = [
     { id: 'dashboard', label: 'Pulpit', icon: Home },
@@ -61,34 +57,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
         </nav>
 
         {/* Gamification Info - Power Crystal */}
-        <div className="p-4 border-t border-gray-700 flex flex-col items-center mt-0"> {/* Zmieniono mt-4 na mt-0 */}
+        <div className="p-4 border-t border-gray-700 flex flex-col items-center mt-0">
           <PowerCrystal onCrystalClick={() => setShowResetConfirm(true)} />
         </div>
 
-        {/* Quick Thoughts */}
-        <div className="p-2 mt-[-6rem]"> {/* Usunięto border-t i dodano ujemny margines */}
-          <h3 className="text-white font-semibold mb-3 flex items-center space-x-2">
-            <span>💬</span>
-            <span>Szybkie Myśli</span>
-          </h3>
-          <div className="space-y-2">
-            <button
-              onClick={() => setShowQuickThought(true)}
-              className="w-full flex items-center space-x-2 p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors shadow-sm"
-            >
-              <Lightbulb className="w-4 h-4 text-yellow-400" />
-              <span className="text-gray-300 text-sm">Nowa myśl</span>
-            </button>
-            <button
-              onClick={() => setShowQuickThoughts(true)}
-              className="w-full text-left p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors shadow-sm"
-            >
-              <span className="text-300 text-sm">Moje Myśli</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Usunięto tymczasowy przycisk do dodawania dużej ilości XP */}
+        {/* Usunięto sekcję Quick Thoughts */}
       </div>
 
       {/* Reset Confirmation Modal */}
@@ -115,14 +88,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
             </div>
           </div>
         </div>
-      )}
-
-      {/* Quick Thought Modals */}
-      {showQuickThought && (
-        <QuickThoughtModal onClose={() => setShowQuickThought(false)} />
-      )}
-      {showQuickThoughts && (
-        <QuickThoughtsModal onClose={() => setShowQuickThoughts(false)} />
       )}
     </>
   );
