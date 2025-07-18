@@ -3,6 +3,7 @@ import { useApp } from '../contexts/AppContext';
 import { XpParticle } from './XpParticle';
 import { useWindowSize } from '../hooks/useWindowSize';
 import { Edit, Check } from 'lucide-react'; // Import nowych ikon
+import { useLocalStorage } from '../hooks/useLocalStorage'; // Dodano import useLocalStorage
 
 interface PowerCrystalProps {
   onCrystalClick: () => void;
