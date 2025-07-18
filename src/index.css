@@ -223,11 +223,12 @@ html {
 .babel {
     position: absolute;
     bottom: 0;
-    background-color: rgba(178, 246, 255, 0.8); /* Zmieniono na jaśniejszy cyjan z 80% przezroczystości */
+    background-color: rgba(255, 255, 255, 0.9); /* Zmieniono na biały z 90% przezroczystości */
     border-radius: 50%;
     animation: rise linear infinite;
     pointer-events: none;
-    filter: blur(0.5px); /* Zwiększone rozmycie */
+    filter: blur(0.1px); /* Zmniejszone rozmycie */
+    z-index: 26; /* Zwiększony z-index, aby były widoczne nad holder3.png (z-25) */
 }
 
 @keyframes rise {
@@ -236,13 +237,13 @@ html {
         opacity: 0; /* Start niewidoczny */
     }
     5% { /* Szybkie pojawienie się */
-        opacity: 0.9; /* Szczytowa widoczność - zwiększona */
+        opacity: 1; /* Szczytowa widoczność - ustawiono na 1 */
     }
     10% { /* Rozpoczęcie ruchu w górę */
         transform: translateY(calc(var(--bubble-target-y, -32px) * 0.1)) translateX(var(--bubble-drift-x, 0px));
     }
     90% {
-        opacity: 0.9; /* Utrzymanie widoczności - zwiększona */
+        opacity: 1; /* Utrzymanie widoczności - ustawiono na 1 */
         transform: translateY(calc(var(--bubble-target-y, -32px) * 0.9)) translateX(var(--bubble-drift-x-end, -10px));
     }
     100% {

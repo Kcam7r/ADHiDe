@@ -76,7 +76,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             const bubble = document.createElement('div');
             bubble.className = 'babel';
 
-            const size = Math.random() * 8 + 4; // Zwiększono rozmiar z (6+2) na (8+4)
+            const size = Math.random() * 10 + 5; // Zwiększono rozmiar z (8+4) na (10+5)
             bubble.style.width = `${size}px`;
             bubble.style.height = `${size}px`;
             bubble.style.left = `${Math.random() * 90 + 5}%`;
