@@ -71,7 +71,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       const sizeClasses: Bubble['sizeClass'][] = ['bubble-small', 'bubble-medium', 'bubble-large'];
       const randomSizeClass = sizeClasses[Math.floor(Math.random() * sizeClasses.length)];
       const randomLeft = Math.random() * 90 + 5; // 5% do 95% szerokości, aby uniknąć krawędzi
-      const randomDelay = Math.random() * 2; // 0 do 2 sekund opóźnienia startu
+      const randomDelay = Math.random() * 1; // 0 do 1 sekundy opóźnienia startu (szybciej)
       const randomDuration = Math.random() * 2 + 2; // 2 do 4 sekund czasu trwania animacji
 
       const newBubble: Bubble = {
@@ -90,10 +90,10 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       }, (newBubble.duration + newBubble.delay) * 1000 + 100); // Konwertuj na ms, dodaj bufor
     };
 
-    // Rozpocznij dodawanie bąbelków tylko, jeśli postęp XP jest większy niż 5%
-    if (xpProgress > 0.05) { 
-      // Zmniejszona częstotliwość: dodawaj bąbelek co 2 do 5 sekund
-      const interval = setInterval(addRandomBubble, 2000 + Math.random() * 3000);
+    // Rozpocznij dodawanie bąbelków, jeśli postęp XP jest większy niż 1%
+    if (xpProgress > 0.01) { 
+      // Zwiększona częstotliwość: dodawaj bąbelek co 1 do 2.5 sekundy
+      const interval = setInterval(addRandomBubble, 1000 + Math.random() * 1500);
       return () => clearInterval(interval);
     } else {
       setBubbles([]); // Wyczyść bąbelki, jeśli XP jest zbyt niskie
