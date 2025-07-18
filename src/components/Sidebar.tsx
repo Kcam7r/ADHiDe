@@ -11,7 +11,7 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) => {
-  const { resetXP, addLargeXP } = useApp(); // Dodano addLargeXP
+  const { resetXP, addLargeXP } = useApp();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showQuickThought, setShowQuickThought] = useState(false);
   const [showQuickThoughts, setShowQuickThoughts] = useState(false);
@@ -61,7 +61,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
         </nav>
 
         {/* Gamification Info - Power Crystal */}
-        <div className="p-4 border-t border-gray-700 flex flex-col items-center">
+        <div className="p-4 border-t border-gray-700 flex flex-col items-center mt-8"> {/* Dodano mt-8 */}
           <PowerCrystal onCrystalClick={() => setShowResetConfirm(true)} />
         </div>
 
