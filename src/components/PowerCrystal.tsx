@@ -21,9 +21,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Persystowane właściwości stylu dla kryształu (top, left, size w px)
   // Wartości początkowe będą nadpisane przez te z localStorage, jeśli istnieją
   const [crystalProps, setCrystalProps] = useLocalStorage('adhd-crystal-props', {
-    top: 109, // Zaktualizowano dla nowego rozmiaru kontenera (288px - 70px) / 2 = 109
-    left: 109, // Zaktualizowano dla nowego rozmiaru kontenera
-    size: 70, // Zmniejszono rozmiar kryształu
+    top: 120, // Zaktualizowano dla nowego rozmiaru kontenera (320px - 80px) / 2 = 120
+    left: 120, // Zaktualizowano dla nowego rozmiaru kontenera
+    size: 80, // Zwiększono rozmiar kryształu
   });
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
@@ -127,8 +127,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       onMouseLeave={() => setIsHovered(false)}
       onClick={onCrystalClick}
     >
-      {/* Główny kontener dla kryształu i holdera - w-72 h-72 */}
-      <div className="relative w-72 h-72 flex items-center justify-center">
+      {/* Główny kontener dla kryształu i holdera - zmieniono na w-80 h-80 */}
+      <div className="relative w-80 h-80 flex items-center justify-center">
         {/* Holder Image - teraz w pełni w kontenerze */}
         <img
           src="/holder.png"
@@ -181,7 +181,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           </div>
         </div>
 
-        {/* Informacje o XP na najechanie myszką - PRZENIESIONE TUTAJ */}
+        {/* Informacje o XP na najechanie myszką */}
         <div
           className={`absolute -top-10 bg-gray-700 text-white text-sm px-3 py-1 rounded-md shadow-md transition-opacity duration-200 whitespace-nowrap ${
             isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
@@ -190,7 +190,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           {xpInCurrentLevel}/{xpForNextLevel} XP
         </div>
 
-        {/* Animacja cząsteczek XP - PRZENIESIONE TUTAJ */}
+        {/* Animacja cząsteczek XP */}
         {xpParticles.map(particle => (
           <XpParticle
             key={particle.id}
