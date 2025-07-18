@@ -12,7 +12,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const [prevXp, setPrevXp] = useState(user.xp);
   const [prevLevel, setPrevLevel] = useState(user.level);
   const crystalRef = useRef<HTMLDivElement>(null);
-  const levelNumberRef = useRef<HTMLDivElement>(null); // Nowa referencja do cyfry poziomu
+  const levelNumberRef = useRef<HTMLDivElement>(null);
   const liquidRef = useRef<HTMLDivElement>(null);
 
   // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
@@ -20,16 +20,30 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const crystalTop = 96.5;
   const crystalLeft = 59.5;
 
+  // Liczba bąbelków do animacji
+  const numberOfBubbles = 15; 
+
+  // Generowanie właściwości bąbelków raz przy renderowaniu komponentu
+  const bubbles = React.useMemo(() => {
+    return Array.from({ length: numberOfBubbles }).map((_, i) => ({
+      id: `bubble-${i}`,
+      size: Math.random() * (10 - 4) + 4, // Rozmiar od 4px do 10px
+      left: Math.random() * 90 + 5, // Pozycja pozioma od 5% do 95%
+      delay: Math.random() * 3, // Opóźnienie animacji do 3 sekund
+      duration: Math.random() * (5 - 2) + 2, // Czas trwania animacji od 2 do 5 sekund
+    }));
+  }, [numberOfBubbles]); // Zależność od numberOfBubbles, aby generować tylko raz
+
   // useLayoutEffect do pobierania pozycji cyfry poziomu
   useLayoutEffect(() => {
-    if (levelNumberRef.current) { // Użyj nowej referencji
+    if (levelNumberRef.current) {
       const rect = levelNumberRef.current.getBoundingClientRect();
       // Oblicz środek cyfry poziomu
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       setCrystalPosition({ x: centerX, y: centerY });
     }
-  }, [setCrystalPosition, user.level]); // Zależność od user.level, aby aktualizować po zmianie poziomu
+  }, [setCrystalPosition, user.level]);
 
   // Efekt dla animacji zysku XP (błysk) i awansu na poziom
   useEffect(() => {
@@ -115,7 +129,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             height: crystalSize,
             boxShadow: 'inset 0 0 15px rgba(255,255,255,0.5), 0 0 20px rgba(0,0,0,0.5)',
             border: '2px solid rgba(255,255,255,0.2)',
-            overflow: 'hidden',
+            overflow: 'hidden', // Kluczowe dla ukrycia bąbelków poza płynem
             borderRadius: '50%'
           }}
         >
@@ -127,6 +141,20 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             }}
             ref={liquidRef}
           >
+            {/* Bąbelki XP */}
+            {bubbles.map(bubble => (
+              <div
+                key={bubble.id}
+                className="xp-bubble"
+                style={{
+                  width: `${bubble.size}px`,
+                  height: `${bubble.size}px`,
+                  left: `${bubble.left}%`,
+                  animationDelay: `${bubble.delay}s`,
+                  animationDuration: `${bubble.duration}s`,
+                }}
+              />
+            ))}
           </div>
           {/* Poziom XP - zmieniono pozycjonowanie na absolutne i wyśrodkowane */}
           <div ref={levelNumberRef} className="absolute inset-0 flex items-center justify-center text-white text-3xl font-bold z-30 font-indie-flower">
