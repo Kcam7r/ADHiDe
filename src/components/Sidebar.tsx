@@ -34,7 +34,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
       <div className="w-64 bg-gray-800 h-screen flex flex-col">
         {/* Header with Logo and Title */}
         <div className="p-6 border-b border-gray-700 flex flex-col items-center justify-center">
-          <img src="/logo.png" alt="ADHiDe Logo" className="w-32 h-32 mb-2 mt-[-1rem]" /> {/* Zmieniono rozmiar na w-32 h-32 i margines na mt-[-1rem] */}
+          <img src="/logo.png" alt="ADHiDe Logo" className="w-32 h-auto mb-2 mt-[-1rem]" /> {/* Zmieniono h-32 na h-auto */}
           <h1 className="text-2xl font-bold text-white text-center">ADHiDe</h1>
         </div>
 
