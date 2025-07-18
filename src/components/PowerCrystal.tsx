@@ -138,7 +138,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
         {/* Nowy element pod kryształem mocy (okrągła podstawa) */}
         <div
-          className="absolute rounded-full bg-gray-800 z-10" // Z-index 10, aby był pod kryształem (z-20) ale nad holderem (z-5)
+          className="absolute rounded-full bg-gray-800 z-10"
           style={{
             top: baseTop,
             left: baseLeft,
@@ -181,26 +181,27 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           </div>
         </div>
 
-      {/* Informacje o XP na najechanie myszką */}
-      <div
-        className={`absolute -top-10 bg-gray-700 text-white text-sm px-3 py-1 rounded-md shadow-md transition-opacity duration-200 whitespace-nowrap ${
-          isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
-        }`}
-      >
-        {xpInCurrentLevel}/{xpForNextLevel} XP
-      </div>
+        {/* Informacje o XP na najechanie myszką - PRZENIESIONE TUTAJ */}
+        <div
+          className={`absolute -top-10 bg-gray-700 text-white text-sm px-3 py-1 rounded-md shadow-md transition-opacity duration-200 whitespace-nowrap ${
+            isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
+          }`}
+        >
+          {xpInCurrentLevel}/{xpForNextLevel} XP
+        </div>
 
-      {/* Animacja cząsteczek XP */}
-      {xpParticles.map(particle => (
-        <XpParticle
-          key={particle.id}
-          startX={particle.startX}
-          startY={particle.startY}
-          targetX={crystalCenter.x}
-          targetY={crystalCenter.y}
-          onComplete={() => removeXpParticle(particle.id)}
-        />
-      ))}
+        {/* Animacja cząsteczek XP - PRZENIESIONE TUTAJ */}
+        {xpParticles.map(particle => (
+          <XpParticle
+            key={particle.id}
+            startX={particle.startX}
+            startY={particle.startY}
+            targetX={crystalCenter.x}
+            targetY={crystalCenter.y}
+            onComplete={() => removeXpParticle(particle.id)}
+          />
+        ))}
+      </div>
     </div>
   );
 });
