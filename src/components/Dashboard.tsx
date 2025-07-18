@@ -167,9 +167,10 @@ export const Dashboard: React.FC = () => {
       addXP(xpGain, originX, originY);
       showSuccessToast(`Misja ukończona: ${mission.title}! (+${xpGain} XP)`);
 
-      if (mission.priority === 'urgent' || mission.priority === 'important') {
-        triggerConfetti();
-      }
+      // Usunięto warunek wywołujący confetti
+      // if (mission.priority === 'urgent' || mission.priority === 'important') {
+      //   triggerConfetti();
+      // }
 
       // Etap 3: Zanikanie karty
       setFadingOutMissions(prev => new Set(prev).add(missionId));
