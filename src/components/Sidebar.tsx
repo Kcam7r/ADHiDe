@@ -116,19 +116,39 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
             </p>
             
             <div className="flex space-x-4">
-              {/* Przyciski pozostają w tej samej kolejności, zmienia się tylko ich akcja */}
-              <button
-                onClick={showFinalResetConfirmButton ? handleFinalReset : () => setShowFinalResetConfirmButton(true)}
-                className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
-              >
-                Resetuj
-              </button>
-              <button
-                onClick={handleCancelReset}
-                className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
-              >
-                Anuluj
-              </button>
+              {showFinalResetConfirmButton ? (
+                // Drugi etap: Anuluj (lewo), Resetuj (prawo)
+                <>
+                  <button
+                    onClick={handleCancelReset}
+                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                  >
+                    Anuluj
+                  </button>
+                  <button
+                    onClick={handleFinalReset}
+                    className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                  >
+                    Resetuj
+                  </button>
+                </>
+              ) : (
+                // Pierwszy etap: Resetuj (lewo), Anuluj (prawo)
+                <>
+                  <button
+                    onClick={() => setShowFinalResetConfirmButton(true)}
+                    className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                  >
+                    Resetuj
+                  </button>
+                  <button
+                    onClick={handleCancelReset}
+                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                  >
+                    Anuluj
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
