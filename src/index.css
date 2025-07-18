@@ -223,7 +223,7 @@ html {
 .babel {
     position: absolute;
     bottom: 0;
-    background-color: rgba(255, 255, 255, 0.4); /* Zwiększona przezroczystość */
+    background-color: rgba(255, 255, 255, 0.7); /* Zwiększona przezroczystość z 0.4 na 0.7 */
     border-radius: 50%;
     animation: rise linear infinite;
     pointer-events: none;
