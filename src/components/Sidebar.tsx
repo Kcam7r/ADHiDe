@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, BookOpen, Calendar, Settings } from 'lucide-react';
+import { Home, BookOpen, Calendar, Settings, X } from 'lucide-react'; // Import X icon
 import { useApp } from '../contexts/AppContext';
 import { PowerCrystal } from './PowerCrystal';
 
@@ -96,19 +96,28 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
             }
           }}
         >
-          <div className="bg-gray-800 p-6 rounded-lg max-w-md shadow-xl border border-gray-700">
+          <div className="bg-gray-800 p-6 rounded-lg max-w-md shadow-xl border border-gray-700 relative"> {/* Added relative positioning */}
             <h3 className="text-white font-bold mb-4">Resetować postęp?</h3>
             <p className="text-gray-300 mb-6">
               Czy na pewno chcesz zresetować wszystkie punkty XP i poziom? Ta akcja jest nieodwracalna.
             </p>
             
             {showFinalResetConfirmButton ? (
-              <button
-                onClick={handleFinalReset}
-                className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg transition-colors shadow-md text-lg font-semibold"
-              >
-                Wciśnij aby wyzerować XP
-              </button>
+              <>
+                <button
+                  onClick={handleCancelReset}
+                  className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+                  title="Zamknij"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={handleFinalReset}
+                  className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg transition-colors shadow-md text-lg font-semibold"
+                >
+                  Wciśnij aby wyzerować XP
+                </button>
+              </>
             ) : (
               <div className="flex space-x-4">
                 <button
