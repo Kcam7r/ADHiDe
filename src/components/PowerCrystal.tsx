@@ -7,15 +7,23 @@ interface PowerCrystalProps {
   onCrystalClick: () => void;
 }
 
-export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) => {
+interface Bubble {
+  id: string;
+  left: number; // percentage
+  sizeClass: 'bubble-small' | 'bubble-medium' | 'bubble-large';
+  delay: number; // seconds
+  duration: number; // seconds
+}
+
+export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystalClick }) => {
   const { user, lastXpGainTimestamp, xpParticles, removeXpParticle } = useApp();
   const [isHovered, setIsHovered] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
   const [prevXp, setPrevXp] = useState(user.xp);
   const crystalRef = useRef<HTMLDivElement>(null);
   const { width, height } = useWindowSize();
+  const [bubbles, setBubbles] = useState<Bubble[]>([]); // Stan dla bąbelków
 
-  // Initialize crystalCenter with approximate screen center, or 0,0 if window not available
   const [crystalCenter, setCrystalCenter] = useState(() => {
     if (typeof window !== 'undefined') {
       return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
@@ -23,7 +31,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
     return { x: 0, y: 0 };
   });
 
-  // Use useLayoutEffect to ensure crystalCenter is calculated immediately after DOM updates
   useLayoutEffect(() => {
     const updateCrystalCenter = () => {
       if (crystalRef.current) {
@@ -35,13 +42,13 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
       }
     };
 
-    updateCrystalCenter(); // Calculate initial position
-    window.addEventListener('resize', updateCrystalCenter); // Update on window resize
+    updateCrystalCenter();
+    window.addEventListener('resize', updateCrystalCenter);
 
     return () => {
       window.removeEventListener('resize', updateCrystalCenter);
     };
-  }, [width, height, user.level]); // Depend on width/height and user.level for recalculation
+  }, [width, height, user.level]);
 
   // Efekt dla animacji zdobywania XP (błysk)
   useEffect(() => {
@@ -51,7 +58,41 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
       return () => clearTimeout(flashTimer);
     }
     setPrevXp(user.xp);
-  }, [lastXpGainTimestamp, user.xp]);
+  }, [lastXpGainTimestamp, user.xp, prevXp]);
+
+  // Efekt generowania bąbelków
+  useEffect(() => {
+    const addRandomBubble = () => {
+      const sizeClasses: Bubble['sizeClass'][] = ['bubble-small', 'bubble-medium', 'bubble-large'];
+      const randomSizeClass = sizeClasses[Math.floor(Math.random() * sizeClasses.length)];
+      const randomLeft = Math.random() * 90 + 5; // 5% do 95% szerokości, aby uniknąć krawędzi
+      const randomDelay = Math.random() * 2; // 0 do 2 sekund opóźnienia startu
+      const randomDuration = Math.random() * 2 + 2; // 2 do 4 sekund czasu trwania animacji
+
+      const newBubble: Bubble = {
+        id: `${Date.now()}-${Math.random()}`, // Unikalne ID
+        left: randomLeft,
+        sizeClass: randomSizeClass,
+        delay: randomDelay,
+        duration: randomDuration,
+      };
+
+      setBubbles(prev => [...prev, newBubble]);
+
+      // Usuń bąbelek po zakończeniu jego animacji
+      setTimeout(() => {
+        setBubbles(prev => prev.filter(b => b.id !== newBubble.id));
+      }, (newBubble.duration + newBubble.delay) * 1000 + 100); // Konwertuj na ms, dodaj bufor
+    };
+
+    // Rozpocznij dodawanie bąbelków tylko, jeśli postęp XP jest większy od 0
+    if (user.xp > 0) {
+      const interval = setInterval(addRandomBubble, 500 + Math.random() * 1000); // Dodawaj bąbelek co 0.5 do 1.5 sekundy
+      return () => clearInterval(interval);
+    } else {
+      setBubbles([]); // Wyczyść bąbelki, jeśli XP wynosi 0
+    }
+  }, [user.xp]); // Uruchom ponownie efekt, jeśli XP się zmieni (aby rozpocząć/zatrzymać generowanie bąbelków)
 
   // Obliczenia dla wyświetlania XP i poziomu
   const xpForNextLevel = 1000; // Każdy poziom wymaga 1000 XP
@@ -95,12 +136,18 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
               boxShadow: '0 0 15px rgba(255,165,0,0.7)', // Pomarańczowy blask
             }}
           >
-            {/* Bubbles inside the liquid */}
-            <div className="bubble bubble-small" style={{ bottom: '0%', left: '20%', animationDelay: '0s' }}></div>
-            <div className="bubble bubble-medium" style={{ bottom: '0%', left: '50%', animationDelay: '1s' }}></div>
-            <div className="bubble bubble-large" style={{ bottom: '0%', left: '80%', animationDelay: '2s' }}></div>
-            <div className="bubble bubble-small" style={{ bottom: '0%', left: '35%', animationDelay: '0.5s' }}></div>
-            <div className="bubble bubble-medium" style={{ bottom: '0%', left: '65%', animationDelay: '1.5s' }}></div>
+            {/* Dynamically rendered bubbles */}
+            {bubbles.map(bubble => (
+              <div
+                key={bubble.id}
+                className={`bubble ${bubble.sizeClass}`}
+                style={{
+                  left: `${bubble.left}%`,
+                  animationDelay: `${bubble.delay}s`,
+                  animationDuration: `${bubble.duration}s`,
+                }}
+              ></div>
+            ))}
           </div>
           {/* Numer poziomu */}
           <div className="absolute inset-0 flex items-center justify-center z-30">
@@ -133,4 +180,4 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = ({ onCrystalClick }) =>
       ))}
     </div>
   );
-};
+});
