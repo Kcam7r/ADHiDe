@@ -133,7 +133,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   return (
     <div
-      className="relative flex flex-col items-center justify-center w-full cursor-pointer select-none"
+      className="relative flex flex-col items-center justify-end w-full cursor-pointer select-none" // Zmieniono justify-center na justify-end
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onCrystalClick}
