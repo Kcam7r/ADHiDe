@@ -5,7 +5,7 @@ import { Mission, DailyTask } from '../types';
 import { MissionHistoryModal } from './MissionHistoryModal';
 import { DailyTaskStamp } from './DailyTaskStamp'; // Import the new component
 import { showSuccessToast, showInfoToast, showErrorToast } from '../utils/toast'; // Importuj funkcje toastów
-// Usunięto import PowerCrystal
+import { MagnifierWrapper } from './MagnifierWrapper'; // Import MagnifierWrapper
 
 export const Dashboard: React.FC = () => {
   const { 
@@ -281,41 +281,43 @@ export const Dashboard: React.FC = () => {
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Nawyki */}
-          <div className="bg-gray-800 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
-              <span>✨</span>
-              <span>Nawyki</span>
-            </h2>
-            <div className="space-y-3">
-              {habits.map((habit) => (
-                <div
-                  key={habit.id}
-                  onClick={(e) => handleHabitClick(habit.id, e)}
-                  className={`p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 ${
-                    habit.type === 'positive' 
-                      ? 'bg-green-600 border-green-500' 
-                      : 'bg-red-600 border-red-500'
-                  } ${animatingHabits.has(habit.id) 
-                      ? (habit.type === 'positive' ? 'animate-habit-pulse-positive' : 'animate-habit-pulse-negative') 
-                      : 'hover:bg-opacity-80'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-white font-medium">{habit.name}</span>
-                    <span className="text-white text-sm font-bold">
-                      {habit.count}x
-                    </span>
+          <MagnifierWrapper className="lg:col-span-1">
+            <div className="bg-gray-800 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
+                <span>✨</span>
+                <span>Nawyki</span>
+              </h2>
+              <div className="space-y-3">
+                {habits.map((habit) => (
+                  <div
+                    key={habit.id}
+                    onClick={(e) => handleHabitClick(habit.id, e)}
+                    className={`p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 ${
+                      habit.type === 'positive' 
+                        ? 'bg-green-600 border-green-500' 
+                        : 'bg-red-600 border-red-500'
+                    } ${animatingHabits.has(habit.id) 
+                        ? (habit.type === 'positive' ? 'animate-habit-pulse-positive' : 'animate-habit-pulse-negative') 
+                        : 'hover:bg-opacity-80'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-white font-medium">{habit.name}</span>
+                      <span className="text-white text-sm font-bold">
+                        {habit.count}x
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
-              {habits.length === 0 && (
-                <div className="text-gray-400 text-center py-4">
-                  <p>Brak nawyków do wyświetlenia</p>
-                  <p className="text-sm mt-1">Dodaj nowe nawyki w Quest Log</p>
-                </div>
-              )}
+                ))}
+                {habits.length === 0 && (
+                  <div className="text-gray-400 text-center py-4">
+                    <p>Brak nawyków do wyświetlenia</p>
+                    <p className="text-sm mt-1">Dodaj nowe nawyki w Quest Log</p>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          </MagnifierWrapper>
 
           {/* Codzienne */}
           <div className="bg-gray-800 rounded-lg p-6">
