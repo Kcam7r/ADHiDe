@@ -91,7 +91,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         <img
           src="/holder3.png" 
           alt="Crystal Holder Top"
-          className="absolute w-[200px] h-[100px] z-[25] filter-white-invert" // Zmieniono z-index na z-[25]
+          className="absolute w-[200px] h-[100px] z-[15] filter-white-invert" // Zmieniono z-index na z-[15]
           style={{ top: 22, left: 12 }}
         />
 
