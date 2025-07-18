@@ -82,13 +82,13 @@ export const QuickThoughtFloatingButton: React.FC<QuickThoughtFloatingButtonProp
       ref={buttonRef}
       onMouseDown={handleMouseDown}
       onClick={handleClick}
-      className={`fixed z-40 p-3 cursor-grab active:cursor-grabbing text-5xl hover:scale-110 bg-gray-700 rounded-full shadow-lg border border-gray-600 text-yellow-400
+      className={`fixed z-40 cursor-grab active:cursor-grabbing text-5xl hover:scale-110 text-yellow-400
         ${isDragging ? 'transition-none' : 'transition-all duration-200'}
       `}
       style={{ left: position.x, top: position.y }}
       title="Szybka Myśl"
     >
-      <Lightbulb className="w-8 h-8" /> {/* Zwiększona ikona */}
+      <Lightbulb className="w-auto h-auto" /> {/* Usunięto stałe w-8 h-8, aby rozmiar był kontrolowany przez text-5xl */}
     </button>
   );
 };
