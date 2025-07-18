@@ -142,7 +142,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       >
         {/* Holder Image - teraz w pełni w kontenerze */}
         <img
-          src="/holder2.png" {/* Zmieniono na holder2.png */}
+          src="/holder2.png" 
           alt="Crystal Holder"
           className="absolute w-full h-full left-1/2 -translate-x-1/2 z-5 filter invert" 
         />
