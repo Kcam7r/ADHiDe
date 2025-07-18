@@ -175,7 +175,11 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           >
             {/* Bąbelki będą dodawane dynamicznie przez JavaScript */}
           </div>
-          {/* Numer poziomu - USUNIĘTO Z TEGO MIEJSCA */}
+        </div>
+
+        {/* Wyświetlanie poziomu NA holderze */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white text-xl font-bold z-30">
+          LVL {user.level}
         </div>
       </div>
 
@@ -186,11 +190,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         }`}
       >
         {xpInCurrentLevel}/{xpForNextLevel} XP
-      </div>
-
-      {/* Wyświetlanie poziomu pod holderem */}
-      <div className="mt-4 text-white text-xl font-bold">
-        LVL {user.level}
       </div>
 
       {/* Animacja cząsteczek XP */}
