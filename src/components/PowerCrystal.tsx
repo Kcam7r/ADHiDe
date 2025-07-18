@@ -16,6 +16,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const crystalRef = useRef<HTMLDivElement>(null);
   const liquidRef = useRef<HTMLDivElement>(null);
   const bubbleIntervalRef = useRef<number | null>(null);
+  const powerCrystalContainerRef = useRef<HTMLDivElement>(null); // Ref do głównego kontenera
 
   // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
   const crystalSize = 105; // Rozmiar kryształu - Zmieniono ze 100 na 105
@@ -69,17 +70,25 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   useEffect(() => {
     // Generuj bąbelki zawsze dla celów testowych
     if (true) { 
-      if (crystalRef.current && !bubbleIntervalRef.current) { // Zmieniono liquidRef.current na crystalRef.current
+      if (powerCrystalContainerRef.current && !bubbleIntervalRef.current) { // Używamy ref do głównego kontenera
         bubbleIntervalRef.current = setInterval(() => {
-          if (crystalRef.current) { // Zmieniono liquidRef.current na crystalRef.current
+          if (crystalRef.current && powerCrystalContainerRef.current) {
+            const crystalRect = crystalRef.current.getBoundingClientRect();
+            const containerRect = powerCrystalContainerRef.current.getBoundingClientRect();
+
             const bubble = document.createElement('div');
             bubble.className = 'babel';
 
             const size = Math.random() * 20 + 10; // Zwiększono rozmiar
             bubble.style.width = `${size}px`;
             bubble.style.height = `${size}px`;
-            bubble.style.left = `${Math.random() * 90 + 5}%`;
-            bubble.style.bottom = `5px`; // Ustawienie startowej pozycji na dole kryształu
+            
+            // Pozycja startowa bąbelka wewnątrz kryształu, ale względem kontenera nadrzędnego
+            const startX = crystalRect.left - containerRect.left + crystalRect.width * (Math.random() * 0.8 + 0.1);
+            const startY = crystalRect.bottom - containerRect.top - 10; // Start 10px od dołu kryształu
+
+            bubble.style.left = `${startX}px`;
+            bubble.style.top = `${startY}px`; // Używamy top zamiast bottom, aby łatwiej kontrolować ruch w górę
 
             const duration = Math.random() * 3 + 2;
             bubble.style.animationDuration = `${duration}s`;
@@ -89,8 +98,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             
             bubble.style.setProperty('--bubble-drift-x', `${driftX}px`);
             bubble.style.setProperty('--bubble-drift-x-end', `${driftXEnd}px`);
+            bubble.style.setProperty('--bubble-rise-height', `${crystalRect.height + 50}px`); // Wysokość wznoszenia
 
-            crystalRef.current.appendChild(bubble); // Zmieniono liquidRef.current na crystalRef.current
+            powerCrystalContainerRef.current.appendChild(bubble); // Dodajemy do głównego kontenera
 
             setTimeout(() => {
               bubble.remove();
@@ -103,8 +113,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         clearInterval(bubbleIntervalRef.current);
         bubbleIntervalRef.current = null;
       }
-      if (crystalRef.current) { // Zmieniono liquidRef.current na crystalRef.current
-        crystalRef.current.querySelectorAll('.babel').forEach(b => b.remove());
+      if (powerCrystalContainerRef.current) {
+        powerCrystalContainerRef.current.querySelectorAll('.babel').forEach(b => b.remove());
       }
     }
 
@@ -122,6 +132,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   return (
     <div
+      ref={powerCrystalContainerRef} // Przypisanie ref do głównego kontenera
       className="relative flex flex-col items-center justify-end w-full cursor-pointer select-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -173,7 +184,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             height: crystalSize,
             boxShadow: 'inset 0 0 15px rgba(255,255,255,0.5), 0 0 20px rgba(0,0,0,0.5)',
             border: '2px solid rgba(255,255,255,0.2)',
-            overflow: 'visible', // Upewnienie się, że bąbelki nie są obcinane
+            overflow: 'hidden', // PRZYWRÓCONE: Zapewnia, że zawartość wewnątrz kryształu jest obcinana do okręgu
             borderRadius: '50%' // Dodatkowe zabezpieczenie dla okrągłego kształtu
           }}
         >
