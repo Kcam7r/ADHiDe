@@ -115,6 +115,11 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     };
   }, [xpProgress]);
 
+  // Obliczenia dla okrągłej podstawy
+  const baseSize = crystalProps.size + 10; // 10px większa niż kryształ
+  const baseTop = crystalProps.top - 5; // Przesunięcie w górę o 5px
+  const baseLeft = crystalProps.left - 5; // Przesunięcie w lewo o 5px
+
   return (
     <div
       className="relative flex flex-col items-center justify-center w-full cursor-pointer select-none"
@@ -128,17 +133,17 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         <img
           src="/holder.png"
           alt="Crystal Holder"
-          className="absolute w-full h-auto bottom-0 left-1/2 -translate-x-1/2 z-5 filter-tree-color" // Dodano filter-tree-color
+          className="absolute w-full h-auto bottom-0 left-1/2 -translate-x-1/2 z-5 filter-tree-color"
         />
 
-        {/* Nowy element pod kryształem mocy */}
+        {/* Nowy element pod kryształem mocy (okrągła podstawa) */}
         <div
           className="absolute rounded-full bg-gray-800 z-10" // Z-index 10, aby był pod kryształem (z-20) ale nad holderem (z-5)
           style={{
-            top: crystalProps.top,
-            left: crystalProps.left,
-            width: crystalProps.size,
-            height: crystalProps.size,
+            top: baseTop,
+            left: baseLeft,
+            width: baseSize,
+            height: baseSize,
           }}
         ></div>
 
