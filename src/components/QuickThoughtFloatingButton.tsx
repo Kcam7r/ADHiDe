@@ -63,7 +63,7 @@ export const QuickThoughtFloatingButton: React.FC<QuickThoughtFloatingButtonProp
     } else {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
-    }
+    };
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
@@ -84,7 +84,7 @@ export const QuickThoughtFloatingButton: React.FC<QuickThoughtFloatingButtonProp
       onClick={handleClick}
       className={`fixed z-40 p-3 cursor-grab active:cursor-grabbing hover:scale-110 text-yellow-400
         ${isDragging ? 'transition-none' : 'transition-all duration-200'}
-        w-20 h-20 flex items-center justify-center rounded-full bg-gray-800 shadow-lg border border-gray-700
+        rounded-full
       `}
       style={{ left: position.x, top: position.y }}
       title="Szybka Myśl"
