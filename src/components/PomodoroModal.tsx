@@ -101,7 +101,15 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
 
   // Renderowanie popupu z ustawieniami, gdy timer jest zatrzymany lub zakończony
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in">
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in"
+      onClick={(e) => {
+        // Zamknij modal tylko jeśli kliknięto na tło (nie na zawartość modalu)
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
+    >
       <div className="bg-gray-800 p-6 rounded-lg max-w-sm w-full mx-4">
         {/* Header with centered title and close button */}
         <div className="relative mb-4">
