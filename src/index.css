@@ -223,11 +223,11 @@ html {
 .babel {
     position: absolute;
     bottom: 0;
-    background-color: rgba(255, 255, 255, 0.9); /* Zmieniono na biały z 90% przezroczystości */
+    background-color: rgba(255, 255, 255, 1); /* Pełna przezroczystość (biały) */
     border-radius: 50%;
     animation: rise linear infinite;
     pointer-events: none;
-    filter: blur(0.1px); /* Zmniejszone rozmycie */
+    filter: blur(0.5px); /* Delikatne rozmycie */
     z-index: 26; /* Zwiększony z-index, aby były widoczne nad holder3.png (z-25) */
 }
 
@@ -236,18 +236,15 @@ html {
         transform: translateY(0) translateX(0);
         opacity: 0; /* Start niewidoczny */
     }
-    5% { /* Szybkie pojawienie się */
-        opacity: 1; /* Szczytowa widoczność - ustawiono na 1 */
-    }
-    10% { /* Rozpoczęcie ruchu w górę */
-        transform: translateY(calc(var(--bubble-target-y, -32px) * 0.1)) translateX(var(--bubble-drift-x, 0px));
+    10% { /* Szybkie pojawienie się */
+        opacity: 1; /* Pełna widoczność */
     }
     90% {
-        opacity: 1; /* Utrzymanie widoczności - ustawiono na 1 */
-        transform: translateY(calc(var(--bubble-target-y, -32px) * 0.9)) translateX(var(--bubble-drift-x-end, -10px));
+        opacity: 1; /* Utrzymanie pełnej widoczności */
+        transform: translateY(-150px) translateX(var(--bubble-drift-x-end, -10px)); /* Stały, większy dystans wznoszenia */
     }
     100% {
-        transform: translateY(var(--bubble-target-y, -32px)) translateX(var(--bubble-drift-x-end, -10px));
+        transform: translateY(-150px) translateX(var(--bubble-drift-x-end, -10px)); /* Stały, większy dystans wznoszenia */
         opacity: 0; /* Całkowite zanikanie */
     }
 }

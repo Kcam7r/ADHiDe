@@ -76,7 +76,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             const bubble = document.createElement('div');
             bubble.className = 'babel';
 
-            const size = Math.random() * 10 + 5; // Zwiększono rozmiar z (8+4) na (10+5)
+            const size = Math.random() * 15 + 8; // Zwiększono rozmiar z (10+5) na (15+8)
             bubble.style.width = `${size}px`;
             bubble.style.height = `${size}px`;
             bubble.style.left = `${Math.random() * 90 + 5}%`;
@@ -87,8 +87,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             const driftX = Math.random() * 20 - 10;
             const driftXEnd = Math.random() * 20 - 10;
             
-            const currentLiquidHeight = liquidRef.current.clientHeight;
-            bubble.style.setProperty('--bubble-target-y', `-${currentLiquidHeight}px`);
+            // Usunięto ustawianie --bubble-target-y, ponieważ teraz jest stałe w CSS
             bubble.style.setProperty('--bubble-drift-x', `${driftX}px`);
             bubble.style.setProperty('--bubble-drift-x-end', `${driftXEnd}px`);
 
