@@ -56,7 +56,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4">
+        <nav className="p-4"> {/* Usunięto flex-1, aby nawigacja zajmowała tylko potrzebną przestrzeń */}
           <ul className="space-y-2">
             {navigationItems.map((item) => {
               const Icon = item.icon;
@@ -79,10 +79,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
           </ul>
         </nav>
 
-        {/* Gamification Info - Power Crystal - PRZENIESIONO TUTAJ POD NAWIGACJĘ */}
-        <div className="flex flex-col items-center mt-[100px]"> {/* Dodano mt-[100px] */}
+        {/* PowerCrystal container - teraz będzie 100px pod nawigacją */}
+        <div className="flex flex-col items-center mt-[100px]">
           <PowerCrystal onCrystalClick={handleInitialResetClick} />
         </div>
+
+        {/* Pusty div flex-1, aby reszta zawartości była wypchnięta na górę, a pasek boczny wypełniał całą wysokość */}
+        <div className="flex-1"></div> 
       </div>
 
       {/* Reset Confirmation Modal */}
