@@ -20,8 +20,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Persystowane właściwości stylu dla kryształu (top, left, size w px)
   // Wartości początkowe będą nadpisane przez te z localStorage, jeśli istnieją
   const [crystalProps] = useLocalStorage('adhd-crystal-props', {
-    top: 139.5, // Przesunięto o 5px w górę (z 144.5 na 139.5)
-    left: 139.5, // Przesunięto o 5px w lewo (z 144.5 na 139.5)
+    top: 139.5,
+    left: 139.5,
     size: 100,
   });
 
@@ -136,7 +136,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       {/* Główny kontener dla kryształu i holdera - zmieniono na w-96 h-96 */}
       <div 
         className="relative w-96 h-96 flex items-center justify-center"
-        style={{ transform: 'translateY(20px)' }} 
+        style={{ transform: 'translateY(25px)' }} {/* Zmieniono z 20px na 25px */}
       >
         {/* Holder Image - teraz w pełni w kontenerze */}
         <img
