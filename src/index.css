@@ -151,8 +151,8 @@ html {
 
 /* For smooth movement to "Ukończone na dziś" section */
 @keyframes slide-out-down {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(50px); opacity: 0; }
+  0% { transform: translateY(0); opacity: 1; height: auto; padding: 1rem; margin-bottom: 0.75rem; } /* p-4, space-y-3 */
+  100% { transform: translateY(50px); opacity: 0; height: 0; padding: 0; margin-bottom: 0; }
 }
 
 .animate-slide-out-down {
@@ -273,4 +273,23 @@ html {
 }
 .animate-logo-flicker {
   animation: logo-flicker 0.4s ease-in-out infinite; /* Szybka animacja */
+}
+
+/* Nowa animacja dla błysku level-up */
+@keyframes level-up-spread-flash {
+  0% {
+    transform: scale(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.5); /* Rozszerzenie poza rozmiar kryształu */
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(2); /* Dalsze rozszerzenie */
+    opacity: 0;
+  }
+}
+.animate-level-up-spread-flash {
+  animation: level-up-spread-flash 0.8s ease-out forwards;
 }

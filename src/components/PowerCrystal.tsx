@@ -13,6 +13,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const [isHovered, setIsHovered] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
   const [prevXp, setPrevXp] = useState(user.xp);
+  const [prevLevel, setPrevLevel] = useState(user.level); // Nowy stan do śledzenia poprzedniego poziomu
+  const [showLevelUpFlash, setShowLevelUpFlash] = useState(false); // Nowy stan dla błysku level-up
   const crystalRef = useRef<HTMLDivElement>(null);
   const liquidRef = useRef<HTMLDivElement>(null);
   const bubbleIntervalRef = useRef<number | null>(null);
@@ -47,15 +49,24 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     updateCrystalCenter();
   }, [crystalProps]);
 
-  // Efekt dla animacji zysku XP (błysk)
+  // Efekt dla animacji zysku XP (błysk) i awansu na poziom
   useEffect(() => {
+    // Błysk przy zysku XP
     if (lastXpGainTimestamp > 0 && user.xp > prevXp) {
       setIsFlashing(true);
       const flashTimer = setTimeout(() => setIsFlashing(false), 500);
-      return () => clearTimeout(flashTimer);
+      // Nie czyścimy tutaj, ponieważ może być inny timer dla błysku level-up
     }
     setPrevXp(user.xp);
-  }, [lastXpGainTimestamp, user.xp, prevXp]);
+
+    // Błysk przy awansie na poziom
+    if (user.level > prevLevel) {
+      setShowLevelUpFlash(true);
+      const levelUpFlashTimer = setTimeout(() => setShowLevelUpFlash(false), 800); // Czas trwania animacji
+      return () => clearTimeout(levelUpFlashTimer); // Czyścimy ten konkretny timer
+    }
+    setPrevLevel(user.level); // Aktualizujemy poprzedni poziom
+  }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]); // Dodano user.level i prevLevel do zależności
 
   // Obliczenia dla wyświetlania XP i poziomu
   const xpForNextLevel = 1000; // Każdy poziom wymaga 1000 XP
@@ -164,6 +175,14 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             border: '2px solid rgba(255,255,255,0.2)'
           }}
         >
+          {/* Błysk rozchodzący się od kryształu przy level-up */}
+          {showLevelUpFlash && (
+            <div
+              className="absolute w-full h-full rounded-full bg-white opacity-70 animate-level-up-spread-flash z-40"
+              style={{ filter: 'blur(5px)' }} // Dodaj rozmycie dla miękkiego blasku
+            ></div>
+          )}
+
           {/* Wypełnienie płynem (żółte) */}
           <div
             className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-500 to-yellow-400 transition-all duration-300 ease-out animate-liquid-wave z-20"
