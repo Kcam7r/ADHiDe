@@ -18,8 +18,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
   const crystalSize = 100; 
-  const crystalTop = 93; // Adjusted: 85 + 8 = 93
-  const crystalLeft = 60; // Adjusted: 59 + 1 = 60
+  const crystalTop = 103; // Adjusted: 93 + 10 = 103
+  const crystalLeft = 60; 
 
   const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
@@ -82,8 +82,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Obliczenia dla okrągłej podstawy
   const baseSize = crystalSize + 10; 
-  const baseTop = crystalTop - 5; // Adjusted: 93 - 5 = 88
-  const baseLeft = crystalLeft - 5; // Adjusted: 60 - 5 = 55
+  const baseTop = crystalTop - 5; // Adjusted: 103 - 5 = 98
+  const baseLeft = crystalLeft - 5; 
 
   const handleCrystalClick = (e: React.MouseEvent) => {
     onCrystalClick();
