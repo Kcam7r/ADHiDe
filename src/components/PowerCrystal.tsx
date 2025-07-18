@@ -123,7 +123,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
         {/* Nowy element pod kryształem mocy (okrągła podstawa) */}
         <div
-          className="absolute rounded-full bg-gray-800 z-10"
+          className="absolute rounded-full bg-gray-800 z-10 hidden"
           style={{
             top: baseTop,
             left: baseLeft,
