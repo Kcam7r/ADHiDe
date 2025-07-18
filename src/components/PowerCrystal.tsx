@@ -145,7 +145,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         <img
           src="/holder3.png" 
           alt="Crystal Holder Top"
-          className="absolute w-[200px] h-[100px] z-[6] filter-white-invert" // Pozycjonowanie i styl
+          className="absolute w-[200px] h-[100px] z-[25] filter-white-invert" // Zmieniono z-index na z-[25]
           style={{ top: 47, left: 12 }}
         />
 
