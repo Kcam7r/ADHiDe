@@ -119,12 +119,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     };
   }, [xpProgress]);
 
-  // Kolor kryształu (można dostosować w zależności od poziomu)
-  const currentCrystalColor = 'from-cyan-500 to-blue-600';
-
-  // Usunięto handleMouseDownCrystal, handleMouseMoveCrystal, handleMouseUpCrystal
-  // Usunięto handleMouseDownResize, handleMouseMoveResize, handleMouseUpResize
-  // Usunięto globalne listenery zdarzeń myszy dla przeciągania/zmiany rozmiaru
+  // Kolor kryształu (teraz zawsze żółty)
+  const currentCrystalColor = 'from-yellow-400 to-amber-500';
 
   return (
     <div
@@ -162,12 +158,10 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           }}
           // Usunięto onMouseDown={handleMouseDownCrystal}
         >
-          {/* Metalowa obudowa (dolna połowa mniejszej kuli) */}
-          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-b from-stone-700 to-stone-900 rounded-b-full border-t-2 border-stone-600 shadow-inner-dark z-10">
-          </div>
+          {/* Usunięto metalową obudowę */}
           {/* Wypełnienie płynem */}
           <div
-            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-500 to-yellow-400 transition-all duration-300 ease-out animate-liquid-wave z-20" // Zmieniono z-index na z-20
+            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-500 to-yellow-400 transition-all duration-300 ease-out animate-liquid-wave z-20"
             style={{
               height: `${Math.max(5, xpProgress * 100)}%`, // Minimalna wysokość 5%
               boxShadow: '0 0 15px rgba(255,165,0,0.7)', // Pomarańczowy blask

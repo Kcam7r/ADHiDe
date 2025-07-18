@@ -76,14 +76,14 @@
 /* Custom animations for the new PowerCrystal design */
 @keyframes liquid-wave {
   0% { transform: translateY(0px); }
-  25% { transform: translateY(-1.5px); } /* Bardzo subtelna fala w górę */
+  25% { transform: translateY(-0.5px); } /* Zmniejszona amplituda */
   50% { transform: translateY(0px); }
-  75% { transform: translateY(1.5px); }  /* Bardzo subtelna fala w dół */
+  75% { transform: translateY(0.5px); }  /* Zmniejszona amplituda */
   100% { transform: translateY(0px); }
 }
 .animate-liquid-wave {
-  animation: liquid-wave 3s linear infinite; /* Zmieniono ease-in-out na linear */
-  will-change: transform; /* Dodano dla optymalizacji */
+  animation: liquid-wave 3s linear infinite;
+  will-change: transform;
 }
 
 /* Custom shadow for metallic casing */
