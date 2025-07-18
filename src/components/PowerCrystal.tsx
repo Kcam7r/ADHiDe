@@ -18,8 +18,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
   const crystalSize = 105;
-  const crystalTop = 90; // Adjusted for 3/4 view illusion
-  const crystalLeft = 65; // Adjusted for 3/4 view illusion
+  const crystalTop = 85; // Adjusted: 90 - 5 = 85
+  const crystalLeft = 62; // Adjusted: 65 - 3 = 62
 
   const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
@@ -82,8 +82,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Obliczenia dla okrągłej podstawy
   const baseSize = crystalSize + 10;
-  const baseTop = crystalTop - 5;
-  const baseLeft = crystalLeft - 5;
+  const baseTop = crystalTop - 5; // Adjusted: 85 - 5 = 80
+  const baseLeft = crystalLeft - 5; // Adjusted: 62 - 5 = 57
 
   const handleCrystalClick = (e: React.MouseEvent) => {
     onCrystalClick();
@@ -113,7 +113,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
         {/* Nowy element pod kryształem mocy (okrągła podstawa) */}
         <div
-          className="absolute rounded-full bg-gray-800 z-10" // Usunięto klasę 'hidden'
+          className="absolute rounded-full bg-gray-800 z-10"
           style={{
             top: baseTop,
             left: baseLeft,
