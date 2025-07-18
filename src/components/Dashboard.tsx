@@ -21,7 +21,7 @@ export const Dashboard: React.FC = () => {
   } = useApp();
 
   const [showHistory, setShowHistory] = useState(false);
-  const [animatingHabits, setAnimatingHabits] = useState<Set<string>>(new Set());
+  const [animatingHabits, setAnimatingHabits] = new Set());
 
   // New states for Daily Tasks visual management
   const [displayDailyTasks, setDisplayDailyTasks] = useState<DailyTask[]>([]);
@@ -155,11 +155,9 @@ export const Dashboard: React.FC = () => {
     else if (mission.priority === 'important') xpGain += 15;
     if (mission.energy === 'concentration') xpGain += 10;
 
-    // Get origin for XP particles
-    const element = e.currentTarget as HTMLElement;
-    const rect = element.getBoundingClientRect();
-    const originX = rect.x + rect.width / 2;
-    const originY = rect.y + rect.height / 2;
+    // Get origin for XP particles from cursor position
+    const originX = e.clientX;
+    const originY = e.clientY;
 
     // Etap 1: Reakcja karty (pulsowanie/drżenie)
     setMissionReaction(prev => ({ ...prev, [missionId]: mission.priority }));
@@ -196,11 +194,9 @@ export const Dashboard: React.FC = () => {
     const task = appDailyTasks.find(t => t.id === taskId);
     if (!task || task.completed) return;
 
-    // Get origin for XP particles
-    const element = e.currentTarget as HTMLElement;
-    const rect = element.getBoundingClientRect();
-    const originX = rect.x + rect.width / 2;
-    const originY = rect.y + rect.height / 2;
+    // Get origin for XP particles from cursor position
+    const originX = e.clientX;
+    const originY = e.clientY;
 
     showInfoToast(`Zadanie ukończone: ${task.title}! (+10 XP)`);
 
@@ -238,11 +234,9 @@ export const Dashboard: React.FC = () => {
       showErrorToast(`Nawyk przerwany: ${habit.name}! (${xpGain} XP)`);
     }
 
-    // Get origin for XP particles
-    const element = e.currentTarget as HTMLElement;
-    const rect = element.getBoundingClientRect();
-    const originX = rect.x + rect.width / 2;
-    const originY = rect.y + rect.height / 2;
+    // Get origin for XP particles from cursor position
+    const originX = e.clientX;
+    const originY = e.clientY;
 
     setAnimatingHabits((prev: Set<string>) => new Set(prev).add(habitId));
     completeHabit(habitId, originX, originY); // Ta funkcja już aktualizuje count
