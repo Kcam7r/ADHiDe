@@ -21,9 +21,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Persystowane właściwości stylu dla kryształu (top, left, size w px)
   // Wartości początkowe będą nadpisane przez te z localStorage, jeśli istnieją
   const [crystalProps, setCrystalProps] = useLocalStorage('adhd-crystal-props', {
-    top: 13, // Dostosowano pozycję Y kryształu
-    left: 24, // Dostosowano pozycję X kryształu
-    size: 80, // Zmniejszono rozmiar kryształu
+    top: 26, // Dostosowano pozycję Y kryształu (13 * 2)
+    left: 48, // Dostosowano pozycję X kryształu (24 * 2)
+    size: 160, // Zwiększono rozmiar kryształu (80 * 2)
   });
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
@@ -122,8 +122,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       onMouseLeave={() => setIsHovered(false)}
       onClick={onCrystalClick}
     >
-      {/* Główny kontener dla kryształu i holdera - teraz w-32 h-32 */}
-      <div className="relative w-32 h-32 flex items-center justify-center"> {/* Zmieniono w-96 h-96 na w-32 h-32 */}
+      {/* Główny kontener dla kryształu i holdera - teraz w-64 h-64 */}
+      <div className="relative w-64 h-64 flex items-center justify-center"> {/* Zmieniono w-32 h-32 na w-64 h-64 */}
         {/* Holder Image - teraz w pełni w kontenerze */}
         <img
           src="/holder.png"
