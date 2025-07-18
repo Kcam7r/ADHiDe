@@ -48,6 +48,7 @@ interface AppContextType {
   
   addQuickThought: (thought: Omit<QuickThought, 'id' | 'createdAt'>) => void;
   archiveQuickThought: (id: string) => void;
+  setArchivedQuickThoughts: React.Dispatch<React.SetStateAction<QuickThought[]>>; // Dodano
 
   removeXpParticle: (id: string) => void;
   triggerConfetti: () => void;
@@ -369,6 +370,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       removeXpParticle,
       triggerConfetti,
       confettiKey,
+      setArchivedQuickThoughts, // Dodano do kontekstu
     }}>
       {children}
     </AppContext.Provider>

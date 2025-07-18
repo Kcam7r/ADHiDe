@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Trash2, MoreVertical, CheckCircle, Archive, BookOpen, Target, CalendarDays } from 'lucide-react';
+import { X, Trash2, MoreVertical, CheckCircle, Archive, Target, CalendarDays } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import { showSuccessToast, showErrorToast, showInfoToast } from '../utils/toast';
 import { format, isSameDay } from 'date-fns';
 import { pl } from 'date-fns/locale'; // Importuj obiekt locale 'pl'
+import { QuickThought } from '../types'; // Importuj typ QuickThought
 
 interface QuickThoughtsModalProps {
   onClose: () => void;
@@ -220,7 +221,7 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose 
                         onClick={() => {
                           // Tutaj można dodać opcję trwałego usunięcia z archiwum, jeśli będzie potrzebna
                           // Na razie po prostu usuwamy z listy zarchiwizowanych
-                          setArchivedQuickThoughts(prev => prev.filter(t => t.id !== thought.id));
+                          setArchivedQuickThoughts((prev: QuickThought[]) => prev.filter((t: QuickThought) => t.id !== thought.id));
                           showInfoToast('Myśl trwale usunięta z archiwum.');
                         }}
                         className="text-red-400 hover:text-red-300 transition-colors ml-3"
