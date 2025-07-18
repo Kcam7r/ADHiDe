@@ -6,20 +6,37 @@ export const PomodoroTimer: React.FC = () => {
   const { width, height } = useWindowSize();
   const [showModal, setShowModal] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [position, setPosition] = useState({ x: width - 80, y: height - 80 }); // Initial position: bottom-right
+  
+  // Inicjalizuj pozycję za pomocą funkcji, aby upewnić się, że obiekt window jest dostępny
+  const [position, setPosition] = useState(() => {
+    if (typeof window === 'undefined') {
+      return { x: 0, y: 0 }; // Domyślne dla SSR, zostanie zaktualizowane po stronie klienta
+    }
+    // Początkowa pozycja: 80px od prawej, 80px od dołu ekranu
+    return { x: window.innerWidth - 80, y: window.innerHeight - 80 };
+  });
+
   const offset = useRef({ x: 0, y: 0 });
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const hasMoved = useRef(false); // Nowa referencja do śledzenia ruchu myszy
+  const hasMoved = useRef(false);
 
+  // Ten useEffect jest nadal przydatny do obsługi zmiany rozmiaru okna po początkowym renderowaniu
   useEffect(() => {
-    // Update initial position if window size changes
-    setPosition({ x: width - 80, y: height - 80 });
-  }, [width, height]);
+    // Upewnij się, że przycisk pozostaje w granicach po zmianie rozmiaru
+    if (buttonRef.current) {
+      const maxX = width - buttonRef.current.offsetWidth;
+      const maxY = height - buttonRef.current.offsetHeight;
+      setPosition(prev => ({
+        x: Math.max(0, Math.min(prev.x, maxX)),
+        y: Math.max(0, Math.min(prev.y, maxY)),
+      }));
+    }
+  }, [width, height]); // Zależność od width/height z useWindowSize
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (buttonRef.current) {
       setIsDragging(true);
-      hasMoved.current = false; // Resetuj flagę ruchu na początku interakcji
+      hasMoved.current = false;
       offset.current = {
         x: e.clientX - buttonRef.current.getBoundingClientRect().left,
         y: e.clientY - buttonRef.current.getBoundingClientRect().top,
@@ -30,12 +47,11 @@ export const PomodoroTimer: React.FC = () => {
   const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging) return;
 
-    hasMoved.current = true; // Ustaw flagę na true, jeśli mysz się poruszyła
+    hasMoved.current = true;
 
     let newX = e.clientX - offset.current.x;
     let newY = e.clientY - offset.current.y;
 
-    // Keep button within viewport bounds
     if (buttonRef.current) {
       const maxX = width - buttonRef.current.offsetWidth;
       const maxY = height - buttonRef.current.offsetHeight;
@@ -64,7 +80,7 @@ export const PomodoroTimer: React.FC = () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging]);
+  }, [isDragging, width, height]); // Dodano width i height do zależności dla prawidłowego sprawdzania granic podczas przeciągania
 
   const handleClick = () => {
     // Otwórz modal tylko jeśli nie było ruchu myszy (czyli było to kliknięcie, a nie przeciągnięcie)
@@ -80,12 +96,11 @@ export const PomodoroTimer: React.FC = () => {
         ref={buttonRef}
         onMouseDown={handleMouseDown}
         onClick={handleClick}
-        // Dynamiczne klasy: transition-none podczas przeciągania, transition-all w innym przypadku
         className={`fixed z-40 p-3 cursor-grab active:cursor-grabbing text-5xl hover:scale-110 ${isDragging ? 'transition-none' : 'transition-all duration-200'}`}
-        // Dodano atrybut title
-        title="Timer Pomodoro" 
+        style={{ left: position.x, top: position.y }}
+        title="Timer Pomodoro"
       >
-        🍅 {/* Emoji pomidora */}
+        🍅
       </button>
 
       {showModal && <PomodoroModal onClose={() => setShowModal(false)} />}
