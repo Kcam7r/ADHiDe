@@ -223,11 +223,11 @@ html {
 .babel {
     position: absolute;
     bottom: 0;
-    background-color: rgba(255, 255, 255, 0.2); /* Nieco mniej kryjący kolor bazowy */
+    background-color: rgba(255, 255, 255, 0.4); /* Zwiększona przezroczystość */
     border-radius: 50%;
     animation: rise linear infinite;
     pointer-events: none;
-    filter: blur(0.5px); /* Subtelne rozmycie dla bardziej płynnego wyglądu */
+    filter: blur(0.2px); /* Zmniejszone rozmycie */
 }
 
 @keyframes rise {
@@ -236,13 +236,13 @@ html {
         opacity: 0; /* Start niewidoczny */
     }
     5% { /* Szybkie pojawienie się */
-        opacity: 0.7; /* Szczytowa widoczność */
+        opacity: 0.9; /* Szczytowa widoczność - zwiększona */
     }
     10% { /* Rozpoczęcie ruchu w górę */
         transform: translateY(calc(var(--bubble-target-y, -32px) * 0.1)) translateX(var(--bubble-drift-x, 0px));
     }
     90% {
-        opacity: 0.7; /* Utrzymanie widoczności */
+        opacity: 0.9; /* Utrzymanie widoczności - zwiększona */
         transform: translateY(calc(var(--bubble-target-y, -32px) * 0.9)) translateX(var(--bubble-drift-x-end, -10px));
     }
     100% {
