@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Plus, Pause, Trash2, Play } from 'lucide-react'; 
+import { useLocalStorage } from '../hooks/useLocalStorage'; // Import useLocalStorage
 
 export const QuestLog: React.FC = () => {
   const { 
@@ -12,12 +13,13 @@ export const QuestLog: React.FC = () => {
     addMission,
     activateMission,
     deactivateMission,
-    deleteHabit, // Importuj funkcję usuwania nawyku
-    deleteDailyTask, // Importuj funkcję usuwania zadania codziennego
-    deleteMission // Importuj funkcję usuwania misji
+    deleteHabit, 
+    deleteDailyTask, 
+    deleteMission 
   } = useApp();
   
-  const [activeTab, setActiveTab] = useState<'habits' | 'daily' | 'missions'>('habits');
+  // Zmieniono useState na useLocalStorage
+  const [activeTab, setActiveTab] = useLocalStorage<'habits' | 'daily' | 'missions'>('questlog-active-tab', 'habits');
   const [showHabitForm, setShowHabitForm] = useState(false);
   const [showDailyForm, setShowDailyForm] = useState(false);
   const [showMissionForm, setShowMissionForm] = useState(false);
