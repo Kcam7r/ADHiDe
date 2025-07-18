@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { XpParticle } from './XpParticle';
 import { useWindowSize } from '../hooks/useWindowSize';
+import { Edit, Check } from 'lucide-react'; // Import nowych ikon
 
 interface PowerCrystalProps {
   onCrystalClick: () => void;
@@ -15,11 +16,27 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const crystalRef = useRef<HTMLDivElement>(null); // Ref for the actual crystal sphere
   const liquidRef = useRef<HTMLDivElement>(null); // Ref for the XP liquid element
   const bubbleIntervalRef = useRef<number | null>(null); // Ref for bubble interval ID
-  const { width, height } = useWindowSize();
+  const { width, height } = useWindowSize(); // Używamy useWindowSize, ale nie bezpośrednio do pozycji kryształu
+
+  // Nowe stany dla przeciągania i zmiany rozmiaru
+  const [isDraggingCrystal, setIsDraggingCrystal] = useState(false);
+  const [isResizingCrystal, setIsResizingCrystal] = useState(false);
+  const [crystalOffset, setCrystalOffset] = useState({ x: 0, y: 0 });
+  const [initialCrystalSize, setInitialCrystalSize] = useState(0); // Do zmiany rozmiaru
+  const [initialMousePos, setInitialMousePos] = useState({ x: 0, y: 0 }); // Do zmiany rozmiaru
+
+  // Persystowane właściwości stylu dla kryształu (top, left, size w px)
+  const [crystalProps, setCrystalProps] = useLocalStorage('adhd-crystal-props', {
+    top: 40, // Początkowa pozycja Y (w px, dostosowana do okręgu w holderze)
+    left: 88, // Początkowa pozycja X (w px, dostosowana do okręgu w holderze)
+    size: 144, // Początkowy rozmiar (w px, w-36 to 144px)
+  });
+
+  const [editMode, setEditMode] = useState(false); // Tryb edycji
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
     if (typeof window !== 'undefined') {
-      // Initial estimate, will be updated by useLayoutEffect
+      // Początkowe oszacowanie, zostanie zaktualizowane przez useLayoutEffect
       return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     }
     return { x: 0, y: 0 };
@@ -35,17 +52,10 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         });
       }
     };
-
-    // Update on mount and resize
     updateCrystalCenter();
-    window.addEventListener('resize', updateCrystalCenter);
+  }, [crystalProps]); // Recalculate center when crystalProps change
 
-    return () => {
-      window.removeEventListener('resize', updateCrystalCenter);
-    };
-  }, [width, height, user.level]); // Depend on width/height to re-calculate on resize
-
-  // Effect for XP gain animation (flash)
+  // Efekt dla animacji zysku XP (błysk)
   useEffect(() => {
     if (lastXpGainTimestamp > 0 && user.xp > prevXp) {
       setIsFlashing(true);
@@ -55,12 +65,12 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     setPrevXp(user.xp);
   }, [lastXpGainTimestamp, user.xp, prevXp]);
 
-  // Calculations for XP display and level
-  const xpForNextLevel = 1000; // Each level requires 1000 XP
+  // Obliczenia dla wyświetlania XP i poziomu
+  const xpForNextLevel = 1000; // Każdy poziom wymaga 1000 XP
   const xpInCurrentLevel = user.xp % xpForNextLevel;
   const xpProgress = xpInCurrentLevel / xpForNextLevel;
 
-  // Effect for generating bubbles
+  // Efekt do generowania bąbelków
   useEffect(() => {
     if (xpProgress > 0) {
       if (liquidRef.current && !bubbleIntervalRef.current) {
@@ -111,62 +121,172 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     };
   }, [xpProgress]);
 
-  // Crystal color (can be customized based on level, but currently static)
+  // Kolor kryształu (można dostosować w zależności od poziomu)
   const currentCrystalColor = 'from-cyan-500 to-blue-600';
+
+  // Obsługa przeciągania kryształu
+  const handleMouseDownCrystal = (e: React.MouseEvent) => {
+    if (!editMode) return;
+    setIsDraggingCrystal(true);
+    setCrystalOffset({
+      x: e.clientX - (crystalRef.current?.getBoundingClientRect().left || 0),
+      y: e.clientY - (crystalRef.current?.getBoundingClientRect().top || 0),
+    });
+  };
+
+  const handleMouseMoveCrystal = (e: MouseEvent) => {
+    if (!isDraggingCrystal) return;
+    const parentRect = crystalRef.current?.parentElement?.getBoundingClientRect();
+    if (!parentRect) return;
+
+    let newX = e.clientX - parentRect.left - crystalOffset.x;
+    let newY = e.clientY - parentRect.top - crystalOffset.y;
+
+    // Ogranicz do granic rodzica
+    newX = Math.max(0, Math.min(newX, parentRect.width - crystalProps.size));
+    newY = Math.max(0, Math.min(newY, parentRect.height - crystalProps.size));
+
+    setCrystalProps(prev => ({ ...prev, left: newX, top: newY }));
+  };
+
+  const handleMouseUpCrystal = () => {
+    setIsDraggingCrystal(false);
+  };
+
+  // Obsługa zmiany rozmiaru kryształu
+  const handleMouseDownResize = (e: React.MouseEvent) => {
+    if (!editMode) return;
+    e.stopPropagation(); // Zapobiegaj przeciąganiu kryształu podczas zmiany rozmiaru
+    setIsResizingCrystal(true);
+    setInitialMousePos({ x: e.clientX, y: e.clientY });
+    setInitialCrystalSize(crystalProps.size);
+  };
+
+  const handleMouseMoveResize = (e: MouseEvent) => {
+    if (!isResizingCrystal) return;
+    const deltaX = e.clientX - initialMousePos.x;
+    const deltaY = e.clientY - initialMousePos.y;
+    const delta = Math.max(deltaX, deltaY); // Użyj większej delty, aby zachować proporcje
+
+    let newSize = initialCrystalSize + delta;
+
+    // Ogranicz rozmiar (np. min 50px, max 300px)
+    newSize = Math.max(50, Math.min(newSize, 300));
+
+    setCrystalProps(prev => ({ ...prev, size: newSize }));
+  };
+
+  const handleMouseUpResize = () => {
+    setIsResizingCrystal(false);
+  };
+
+  // Globalne listenery zdarzeń myszy dla przeciągania/zmiany rozmiaru
+  useEffect(() => {
+    if (isDraggingCrystal) {
+      window.addEventListener('mousemove', handleMouseMoveCrystal);
+      window.addEventListener('mouseup', handleMouseUpCrystal);
+    } else {
+      window.removeEventListener('mousemove', handleMouseMoveCrystal);
+      window.removeEventListener('mouseup', handleMouseUpCrystal);
+    }
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMoveCrystal);
+      window.removeEventListener('mouseup', handleMouseUpCrystal);
+    };
+  }, [isDraggingCrystal, crystalProps]);
+
+  useEffect(() => {
+    if (isResizingCrystal) {
+      window.addEventListener('mousemove', handleMouseMoveResize);
+      window.addEventListener('mouseup', handleMouseUpResize);
+    } else {
+      window.removeEventListener('mousemove', handleMouseMoveResize);
+      window.removeEventListener('mouseup', handleMouseUpResize);
+    }
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMoveResize);
+      window.removeEventListener('mouseup', handleMouseUpResize);
+    };
+  }, [isResizingCrystal, crystalProps]);
 
   return (
     <div
       className="relative flex flex-col items-center justify-center w-full cursor-pointer select-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={onCrystalClick}
+      onClick={editMode ? undefined : onCrystalClick} // Wyłącz kliknięcie na modal w trybie edycji
     >
-      {/* Main container for the holder and the crystal */}
-      {/* This div defines the overall size of the interactive element including the holder */}
-      <div className="relative w-80 h-80 flex items-center justify-center">
-        {/* Holder image - positioned absolutely to cover this container */}
-        <img src="/holder.png" alt="Crystal Holder" className="absolute inset-0 w-full h-full object-contain z-30 filter-white-image" />
+      {/* Przycisk trybu edycji */}
+      <button
+        className="absolute top-0 right-0 z-50 p-1 rounded-full bg-gray-700 text-gray-300 hover:text-white hover:bg-gray-600 transition-colors"
+        onClick={(e) => { e.stopPropagation(); setEditMode(prev => !prev); }}
+        title={editMode ? "Wyłącz tryb edycji" : "Włącz tryb edycji"}
+      >
+        {editMode ? <Check className="w-4 h-4" /> : <Edit className="w-4 h-4" />}
+      </button>
 
-        {/* Crystal Sphere - scaled down and positioned within the holder's "hole" */}
-        {/* The crystalRef is on this element to correctly calculate XP particle target */}
+      {/* Główny kontener dla holdera i kryształu */}
+      <div className="relative w-80 h-80 flex items-center justify-center">
+        {/* Obraz holdera */}
+        <img
+          src="/holder.png"
+          alt="Crystal Holder"
+          className={`absolute inset-0 w-full h-full object-contain z-30 filter-white-image ${editMode ? 'pointer-events-none' : ''}`}
+        />
+
+        {/* Kula Kryształu */}
         <div
           ref={crystalRef}
-          className={`relative w-36 h-36 rounded-full overflow-hidden shadow-lg transition-all duration-300
+          className={`absolute rounded-full overflow-hidden shadow-lg transition-all duration-300
             bg-gradient-to-br ${currentCrystalColor}
             ${isFlashing ? 'animate-crystal-flash' : ''}
-            z-20 /* Lower z-index than holder image */
-            /* Adjust position to fit the holder's hole */
-            absolute top-[35%] left-1/2 -translate-x-1/2 -translate-y-1/2 /* Center it relative to its own size */
+            z-20
+            ${editMode ? 'cursor-grab active:cursor-grabbing border-2 border-dashed border-cyan-400' : ''}
           `}
           style={{
+            top: crystalProps.top,
+            left: crystalProps.left,
+            width: crystalProps.size,
+            height: crystalProps.size,
             boxShadow: 'inset 0 0 15px rgba(255,255,255,0.5), 0 0 20px rgba(0,0,0,0.5)',
             border: '2px solid rgba(255,255,255,0.2)'
           }}
+          onMouseDown={handleMouseDownCrystal}
         >
-          {/* Metal casing (bottom half of the smaller sphere) */}
+          {/* Metalowa obudowa (dolna połowa mniejszej kuli) */}
           <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-b from-stone-700 to-stone-900 rounded-b-full border-t-2 border-stone-600 shadow-inner-dark z-10">
           </div>
-          {/* Liquid fill */}
+          {/* Wypełnienie płynem */}
           <div
             className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-500 to-yellow-400 transition-all duration-300 ease-out animate-liquid-wave"
             style={{
               height: `${xpProgress * 100}%`,
-              boxShadow: '0 0 15px rgba(255,165,0,0.7)', // Orange glow
+              boxShadow: '0 0 15px rgba(255,165,0,0.7)', // Pomarańczowy blask
             }}
-            ref={liquidRef} // Attach ref to liquid element
+            ref={liquidRef} // Dołącz ref do elementu płynu
           >
-            {/* Bubbles will be dynamically added here by JavaScript */}
+            {/* Bąbelki będą dodawane dynamicznie przez JavaScript */}
           </div>
-          {/* Level number */}
+          {/* Numer poziomu */}
           <div className="absolute inset-0 flex items-center justify-center z-30">
             <span className="text-white text-4xl font-bold drop-shadow-lg">
               {user.level}
             </span>
           </div>
+
+          {/* Uchwyt do zmiany rozmiaru */}
+          {editMode && (
+            <div
+              className="absolute -bottom-2 -right-2 w-6 h-6 bg-cyan-500 rounded-full cursor-nwse-resize z-40 flex items-center justify-center"
+              onMouseDown={handleMouseDownResize}
+            >
+              <span className="text-white text-xs">↔</span>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* XP info on hover */}
+      {/* Informacje o XP na najechanie myszką */}
       <div
         className={`absolute -top-10 bg-gray-700 text-white text-sm px-3 py-1 rounded-md shadow-md transition-opacity duration-200 whitespace-nowrap ${
           isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
@@ -175,7 +295,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         {xpInCurrentLevel}/{xpForNextLevel} XP
       </div>
 
-      {/* XP particles animation */}
+      {/* Animacja cząsteczek XP */}
       {xpParticles.map(particle => (
         <XpParticle
           key={particle.id}
