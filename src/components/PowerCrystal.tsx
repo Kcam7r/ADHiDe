@@ -128,7 +128,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         <img
           src="/holder.png"
           alt="Crystal Holder"
-          className="absolute w-96 h-auto bottom-0 left-1/2 -translate-x-1/2 z-10 filter-white-image"
+          className="absolute w-96 h-auto bottom-0 left-1/2 -translate-x-1/2 z-5 filter-white-image" {/* Zmieniono z-index na z-5 */}
         />
 
         {/* Kula Kryształu (teraz przezroczysta z efektem szkła) */}
@@ -136,8 +136,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           ref={crystalRef}
           className={`absolute rounded-full overflow-hidden shadow-lg transition-all duration-300
             ${isFlashing ? 'animate-crystal-flash' : ''}
-            z-5
-            bg-transparent
+            z-20 {/* Z-index pozostaje z-20, aby był nad holderem */}
+            bg-white bg-opacity-15 {/* Nowe półprzezroczyste tło */}
             `}
           style={{
             top: crystalProps.top,
