@@ -182,24 +182,27 @@
 .babel {
     position: absolute;
     bottom: 0;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.2); /* Nieco mniej kryjący kolor bazowy */
     border-radius: 50%;
     animation: rise linear infinite;
     pointer-events: none;
-    /* filter: blur(0.5px); */ /* Usunięto rozmycie dla lepszej widoczności */
+    filter: blur(0.5px); /* Subtelne rozmycie dla bardziej płynnego wyglądu */
 }
 
 @keyframes rise {
     0% {
         transform: translateY(0) translateX(0);
-        opacity: 0.4; /* Zwiększona początkowa widoczność */
+        opacity: 0; /* Start niewidoczny */
     }
-    10% {
-        opacity: 0.8; /* Szczytowa widoczność szybko */
-        transform: translateY(-20px) translateX(var(--bubble-drift-x, 0px)); /* Bardziej agresywny początkowy ruch w górę */
+    5% { /* Szybkie pojawienie się */
+        opacity: 0.7; /* Szczytowa widoczność */
     }
-    50% {
-        transform: translateX(var(--bubble-drift-x, 10px)); /* Kontynuuj dryf poziomy */
+    10% { /* Rozpoczęcie ruchu w górę */
+        transform: translateY(calc(var(--bubble-target-y, -32px) * 0.1)) translateX(var(--bubble-drift-x, 0px));
+    }
+    90% {
+        opacity: 0.7; /* Utrzymanie widoczności */
+        transform: translateY(calc(var(--bubble-target-y, -32px) * 0.9)) translateX(var(--bubble-drift-x-end, -10px));
     }
     100% {
         transform: translateY(var(--bubble-target-y, -32px)) translateX(var(--bubble-drift-x-end, -10px));
