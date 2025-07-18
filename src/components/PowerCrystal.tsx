@@ -80,6 +80,11 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     };
   }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]);
 
+  // Obliczenia dla okrągłej podstawy
+  const baseSize = crystalSize + 10;
+  const baseTop = crystalTop - 5;
+  const baseLeft = crystalLeft - 5;
+
   const handleCrystalClick = (e: React.MouseEvent) => {
     onCrystalClick();
   };
@@ -105,6 +110,17 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             left: 12,
           }}
         />
+
+        {/* Nowy element pod kryształem mocy (okrągła podstawa) */}
+        <div
+          className="absolute rounded-full bg-gray-800 z-10" // Usunięto klasę 'hidden'
+          style={{
+            top: baseTop,
+            left: baseLeft,
+            width: baseSize,
+            height: baseSize,
+          }}
+        ></div>
 
         {/* Kula Kryształu (teraz przez przezroczysta z efektem szkła) */}
         <div

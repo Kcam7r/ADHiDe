@@ -243,14 +243,14 @@ html {
 
 /* Nowa klasa dla koloru drzewa */
 .filter-tree-color {
-  filter: sepia(100%) saturate(200%) hue-rotate(20deg) brightness(80%)
-          drop-shadow(0px 0px 2px rgba(0,0,0,0.3)) /* Added drop-shadows here */
+  filter: brightness(1.5) saturate(2.5) hue-rotate(100deg) /* Lighter, more vibrant green/cyan */
+          drop-shadow(0px 0px 4px rgba(74,222,128,0.5)) /* Green glow */
           drop-shadow(1px 1px 3px rgba(0,0,0,0.6))
-          drop-shadow(-1px -1px 3px rgba(0,0,0,0.15))
+          drop-shadow(-1px -1px 3px rgba(255,255,255,0.15))
           drop-shadow(2px 2px 6px rgba(0,0,0,0.4));
 }
 
-/* Nowa klasa dla białego holdera */
+/* Nowa klasacja dla białego holdera (nieużywana, ale zachowana dla kontekstu) */
 .filter-white-invert {
   filter: invert(100%);
 }
