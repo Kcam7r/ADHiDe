@@ -210,3 +210,8 @@
         opacity: 0; /* Całkowite zanikanie */
     }
 }
+
+/* Nowa klasa do zmiany koloru obrazu na biały */
+.filter-white-image {
+  filter: brightness(0) invert(1);
+}

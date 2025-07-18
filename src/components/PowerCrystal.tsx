@@ -123,15 +123,15 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     >
       {/* Main container for the holder and the crystal */}
       {/* This div defines the overall size of the interactive element including the holder */}
-      <div className="relative w-40 h-40 flex items-center justify-center">
+      <div className="relative w-80 h-80 flex items-center justify-center"> {/* Zmieniono rozmiar na w-80 h-80 */}
         {/* Holder image - positioned absolutely to cover this container */}
-        <img src="/holder.png" alt="Crystal Holder" className="absolute inset-0 w-full h-full object-contain z-30" />
+        <img src="/holder.png" alt="Crystal Holder" className="absolute inset-0 w-full h-full object-contain z-30 filter-white-image" /> {/* Dodano klasę filter-white-image */}
 
         {/* Crystal Sphere - scaled down and positioned within the holder's "hole" */}
         {/* The crystalRef is on this element to correctly calculate XP particle target */}
         <div
           ref={crystalRef}
-          className={`relative w-24 h-24 rounded-full overflow-hidden shadow-lg transition-all duration-300
+          className={`relative w-48 h-48 rounded-full overflow-hidden shadow-lg transition-all duration-300
             bg-gradient-to-br ${currentCrystalColor}
             ${isFlashing ? 'animate-crystal-flash' : ''}
             z-20 /* Lower z-index than holder image */
