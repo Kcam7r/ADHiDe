@@ -137,7 +137,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
               boxShadow: '0 0 15px rgba(255,165,0,0.7)', // Pomarańczowy blask
             }}
           >
-            {/* Dynamically rendered bubbles */}
+            {/* Dynamically rendered bubbles - MOVED HERE */}
             {bubbles.map(bubble => (
               <div
                 key={bubble.id}
