@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, BookOpen, Calendar, Settings } from 'lucide-react'; // Usunięto Lightbulb
+import { Home, BookOpen, Calendar, Settings } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import { PowerCrystal } from './PowerCrystal';
 
@@ -57,7 +57,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
         </nav>
 
         {/* Gamification Info - Power Crystal */}
-        <div className="p-4 border-t border-gray-700 flex flex-col items-center mt-0">
+        <div className="p-4 border-t border-gray-700 flex flex-col items-center mt-auto">
           <PowerCrystal onCrystalClick={() => setShowResetConfirm(true)} />
         </div>
 
