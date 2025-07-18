@@ -3,10 +3,10 @@ import { Lightbulb } from 'lucide-react';
 import { useWindowSize } from '../hooks/useWindowSize';
 
 interface QuickThoughtFloatingButtonProps {
-  onOpenThoughtsList: () => void; // Zmieniono nazwę propa
+  onOpenNewThought: () => void; // Zmieniono nazwę propa
 }
 
-export const QuickThoughtFloatingButton: React.FC<QuickThoughtFloatingButtonProps> = ({ onOpenThoughtsList }) => {
+export const QuickThoughtFloatingButton: React.FC<QuickThoughtFloatingButtonProps> = ({ onOpenNewThought }) => {
   const { width, height } = useWindowSize();
   const [isDragging, setIsDragging] = useState(false);
   
@@ -86,7 +86,7 @@ export const QuickThoughtFloatingButton: React.FC<QuickThoughtFloatingButtonProp
 
   const handleClick = () => {
     if (!hasMoved.current) {
-      onOpenThoughtsList(); // Wywołaj nową prop
+      onOpenNewThought(); // Wywołaj nową prop
     }
   };
 

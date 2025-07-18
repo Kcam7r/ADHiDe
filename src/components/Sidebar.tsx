@@ -6,9 +6,10 @@ import { PowerCrystal } from './PowerCrystal';
 interface SidebarProps {
   activeView: string;
   onViewChange: (view: string) => void;
+  onOpenQuickThoughtsModal: () => void; // Nowa prop
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOpenQuickThoughtsModal }) => {
   const { resetXP } = useApp();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
@@ -28,7 +29,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
     <>
       <div className="w-64 bg-gray-800 h-screen flex flex-col">
         {/* Header with Logo and Title */}
-        <div className="p-6 border-b border-gray-700 flex flex-col items-center justify-center">
+        <div 
+          className="p-6 border-b border-gray-700 flex flex-col items-center justify-center cursor-pointer"
+          onClick={onOpenQuickThoughtsModal} // Dodano obsługę kliknięcia na logo
+          title="Moje Myśli"
+        >
           <img src="/logo.png" alt="ADHiDe Logo" className="w-48 h-auto mb-2 mt-2" />
         </div>
 

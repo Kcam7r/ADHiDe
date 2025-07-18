@@ -36,7 +36,11 @@ function App() {
   return (
     <AppProvider>
       <div className="flex h-screen bg-gray-900">
-        <Sidebar activeView={activeView} onViewChange={setActiveView} />
+        <Sidebar 
+          activeView={activeView} 
+          onViewChange={setActiveView} 
+          onOpenQuickThoughtsModal={() => setShowQuickThoughtsModal(true)} // Przekazanie funkcji do otwierania listy myśli
+        />
         <main className="flex-1 overflow-auto">
           <Suspense fallback={
             <div className="flex items-center justify-center h-full text-white text-xl">
@@ -50,11 +54,11 @@ function App() {
       <PomodoroTimer />
       <ConfettiOverlay />
       
-      {/* Pływający przycisk Szybkich Myśli - teraz otwiera listę myśli */}
-      <QuickThoughtFloatingButton onOpenThoughtsList={() => setShowQuickThoughtsModal(true)} />
+      {/* Pływający przycisk Szybkich Myśli - teraz otwiera modal nowej myśli */}
+      <QuickThoughtFloatingButton onOpenNewThought={() => setShowQuickThoughtModal(true)} />
 
       {/* Modale Szybkich Myśli */}
-      {showQuickThoughtModal && ( // Ten modal jest teraz otwierany z QuickThoughtsModal
+      {showQuickThoughtModal && ( 
         <QuickThoughtModal 
           onClose={() => setShowQuickThoughtModal(false)} 
         />
@@ -62,9 +66,9 @@ function App() {
       {showQuickThoughtsModal && (
         <QuickThoughtsModal 
           onClose={() => setShowQuickThoughtsModal(false)} 
-          onOpenNewThoughtModal={() => { // Nowa prop do otwierania modala nowej myśli
-            setShowQuickThoughtsModal(false); // Zamknij modal listy
-            setShowQuickThoughtModal(true); // Otwórz modal nowej myśli
+          onOpenNewThoughtModal={() => { 
+            setShowQuickThoughtsModal(false); 
+            setShowQuickThoughtModal(true); 
           }}
         />
       )}
