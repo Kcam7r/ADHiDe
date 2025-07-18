@@ -6,12 +6,13 @@ interface PowerCrystalProps {
 }
 
 export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystalClick }) => {
-  const { user, lastXpGainTimestamp, setCrystalPosition } = useApp(); // Przywrócono setCrystalPosition
+  const { user, lastXpGainTimestamp, setCrystalPosition } = useApp();
   const [isHovered, setIsHovered] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
   const [prevXp, setPrevXp] = useState(user.xp);
   const [prevLevel, setPrevLevel] = useState(user.level);
   const crystalRef = useRef<HTMLDivElement>(null);
+  const levelNumberRef = useRef<HTMLDivElement>(null); // Nowa referencja do cyfry poziomu
   const liquidRef = useRef<HTMLDivElement>(null);
 
   // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
@@ -19,16 +20,16 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const crystalTop = 96.5;
   const crystalLeft = 59.5;
 
-  // useLayoutEffect do pobierania pozycji kryształu
+  // useLayoutEffect do pobierania pozycji cyfry poziomu
   useLayoutEffect(() => {
-    if (crystalRef.current) {
-      const rect = crystalRef.current.getBoundingClientRect();
-      // Oblicz środek kryształu
+    if (levelNumberRef.current) { // Użyj nowej referencji
+      const rect = levelNumberRef.current.getBoundingClientRect();
+      // Oblicz środek cyfry poziomu
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       setCrystalPosition({ x: centerX, y: centerY });
     }
-  }, [setCrystalPosition, crystalSize, crystalTop, crystalLeft]); // Zależności od rozmiaru/pozycji, aby aktualizować po zmianach
+  }, [setCrystalPosition, user.level]); // Zależność od user.level, aby aktualizować po zmianie poziomu
 
   // Efekt dla animacji zysku XP (błysk) i awansu na poziom
   useEffect(() => {
@@ -128,7 +129,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           >
           </div>
           {/* Poziom XP - zmieniono pozycjonowanie na absolutne i wyśrodkowane */}
-          <div className="absolute inset-0 flex items-center justify-center text-white text-3xl font-bold z-30 font-indie-flower">
+          <div ref={levelNumberRef} className="absolute inset-0 flex items-center justify-center text-white text-3xl font-bold z-30 font-indie-flower">
             {user.level}
           </div>
         </div>
