@@ -135,12 +135,12 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         style={{ transform: 'translateY(-286px)' }} /* Cały kontener pozostaje na tej wysokości */
       >
         {/* Holder Image */}
-        <img
+        {/* <img
           src="/holder2.png" 
           alt="Crystal Holder"
           className="absolute w-[200px] h-[250px] left-1/2 -translate-x-1/2 z-50 filter-white-invert"
-          style={{ transform: 'translateY(50px)' }} /* Obniżenie holdera o 50px */
-        />
+          style={{ transform: 'translateY(50px)' }}
+        /> */}
 
         {/* Nowy element pod kryształem mocy (okrągła podstawa) */}
         <div
