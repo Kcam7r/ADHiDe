@@ -63,11 +63,11 @@ export interface PomodoroSession {
   taskId?: string;
 }
 
-// Usunięto: export interface XpParticleData {
-//   id: string;
-//   startX: number;
-//   startY: number;
-//   targetX: number;
-//   targetY: number;
-//   value: number;
-// }
+export interface XpParticleData {
+  id: string;
+  startX: number;
+  startY: number;
+  targetX: number;
+  targetY: number;
+  value: number;
+}

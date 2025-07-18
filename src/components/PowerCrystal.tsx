@@ -6,7 +6,7 @@ interface PowerCrystalProps {
 }
 
 export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystalClick }) => {
-  const { user, lastXpGainTimestamp } = useApp(); // Usunięto setCrystalPosition
+  const { user, lastXpGainTimestamp, setCrystalPosition } = useApp(); // Przywrócono setCrystalPosition
   const [isHovered, setIsHovered] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
   const [prevXp, setPrevXp] = useState(user.xp);
@@ -19,16 +19,16 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const crystalTop = 96.5;
   const crystalLeft = 59.5;
 
-  // Usunięto useLayoutEffect do pobierania pozycji kryształu, ponieważ nie jest już potrzebna dla kulek XP
-  // useLayoutEffect(() => {
-  //   if (crystalRef.current) {
-  //     const rect = crystalRef.current.getBoundingClientRect();
-  //     // Oblicz środek kryształu
-  //     const centerX = rect.left + rect.width / 2;
-  //     const centerY = rect.top + rect.height / 2;
-  //     setCrystalPosition({ x: centerX, y: centerY });
-  //   }
-  // }, [setCrystalPosition, crystalSize, crystalTop, crystalLeft]); // Zależności od rozmiaru/pozycji, aby aktualizować po zmianach
+  // useLayoutEffect do pobierania pozycji kryształu
+  useLayoutEffect(() => {
+    if (crystalRef.current) {
+      const rect = crystalRef.current.getBoundingClientRect();
+      // Oblicz środek kryształu
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      setCrystalPosition({ x: centerX, y: centerY });
+    }
+  }, [setCrystalPosition, crystalSize, crystalTop, crystalLeft]); // Zależności od rozmiaru/pozycji, aby aktualizować po zmianach
 
   // Efekt dla animacji zysku XP (błysk) i awansu na poziom
   useEffect(() => {

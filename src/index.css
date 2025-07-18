@@ -267,6 +267,25 @@ html {
   animation: level-up-spread-flash 0.8s ease-out forwards;
 }
 
-/* USUNIĘTO: XP Particle Animations */
-/* USUNIĘTO: @keyframes xp-fly { ... } */
-/* USUNIĘTO: .animate-xp-particle { ... } */
+/* XP Particle Animations */
+@keyframes xp-fly {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0); /* Start centered at origin */
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    transform: translate(-50%, -50%) translate(var(--target-x), var(--target-y)); /* Move to target, stay centered */
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(var(--target-x), var(--target-y)) scale(0.5); /* Shrink at target */
+    opacity: 0;
+  }
+}
+
+.animate-xp-particle {
+  animation: xp-fly 1.5s ease-in-out forwards; /* Czas trwania animacji */
+}
