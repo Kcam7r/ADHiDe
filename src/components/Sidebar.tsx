@@ -79,8 +79,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
           </ul>
         </nav>
 
-        {/* Gamification Info - Power Crystal - PRZENIESIONO TUTAJ NA DÓŁ */}
-        <div className="mt-auto border-t border-gray-700 flex flex-col items-center py-4">
+        {/* Gamification Info - Power Crystal - PRZENIESIONO TUTAJ POD NAWIGACJĘ */}
+        <div className="flex flex-col items-center mt-[100px]"> {/* Dodano mt-[100px] */}
           <PowerCrystal onCrystalClick={handleInitialResetClick} />
         </div>
       </div>
