@@ -12,9 +12,10 @@ interface AppContextType {
   quickThoughts: QuickThought[];
   completedMissionsHistory: Mission[];
   lastXpGainTimestamp: number;
-  xpParticles: XpParticleData[]; // Przywrócono
+  xpParticles: XpParticleData[];
   archivedQuickThoughts: QuickThought[];
-  crystalPosition: { x: number; y: number } | null; // Dodano
+  crystalPosition: { x: number; y: number } | null;
+  dailyXpGain: number; // Dodano: dzienne zdobyte XP
 
   addXP: (amount: number, originX?: number, originY?: number) => void;
   addLargeXP: (amount: number) => void;
@@ -45,12 +46,12 @@ interface AppContextType {
   archiveQuickThought: (id: string) => void;
   setArchivedQuickThoughts: React.Dispatch<React.SetStateAction<QuickThought[]>>;
 
-  removeXpParticle: (id: string) => void; // Przywrócono
+  removeXpParticle: (id: string) => void;
   triggerConfetti: () => void;
   confettiKey: number;
   triggerLevelUpFlash: () => void;
   levelUpFlashKey: number;
-  setCrystalPosition: React.Dispatch<React.SetStateAction<{ x: number; y: number } | null>>; // Dodano
+  setCrystalPosition: React.Dispatch<React.SetStateAction<{ x: number; y: number } | null>>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -80,15 +81,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [archivedQuickThoughts, setArchivedQuickThoughts] = useLocalStorage<QuickThought[]>('adhd-archived-thoughts', []);
   const [completedMissionsHistory, setCompletedMissionsHistory] = useLocalStorage<Mission[]>('adhd-completed-missions', []);
   const [lastXpGainTimestamp, setLastXpGainTimestamp] = useState(0);
-  const [xpParticles, setXpParticles] = useState<XpParticleData[]>([]); // Przywrócono
+  const [xpParticles, setXpParticles] = useState<XpParticleData[]>([]);
   const [confettiKey, setConfettiKey] = useState(0);
   const [levelUpFlashKey, setLevelUpFlashKey] = useState(0);
-  const [crystalPosition, setCrystalPosition] = useState<{ x: number; y: number } | null>(null); // Dodano
+  const [crystalPosition, setCrystalPosition] = useState<{ x: number; y: number } | null>(null);
+  const [dailyXpGain, setDailyXpGain] = useLocalStorage<number>('adhd-daily-xp-gain', 0); // Nowy stan
 
   const calculateLevel = (xp: number) => Math.floor(xp / 1000) + 1;
 
   const addXP = (amount: number, originX?: number, originY?: number) => {
     setLastXpGainTimestamp(Date.now());
+    setDailyXpGain(prev => prev + amount); // Zwiększ dzienne XP
 
     // Logika generowania cząsteczek XP
     if (originX !== undefined && originY !== undefined && crystalPosition) {
@@ -127,11 +130,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const newLevel = calculateLevel(newXP);
       return { ...prevUser, xp: newXP, level: newLevel };
     });
+    setDailyXpGain(prev => prev + amount); // Zwiększ dzienne XP
     triggerConfetti();
     triggerLevelUpFlash();
   };
 
-  const removeXpParticle = (id: string) => { // Przywrócono
+  const removeXpParticle = (id: string) => {
     setXpParticles(prev => prev.filter(p => p.id !== id));
   };
 
@@ -145,6 +149,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const resetXP = () => {
     setUser({ ...user, xp: 0, level: 1 });
+    setDailyXpGain(0); // Resetuj dzienne XP przy pełnym resecie
   };
 
   const addHabit = (habit: Omit<Habit, 'id' | 'count'>) => {
@@ -319,7 +324,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
-  // Resetuj zadania codzienne o północy
+  // Resetuj zadania codzienne i dzienne XP o północy
   useEffect(() => {
     const scheduleNextReset = () => {
       const now = new Date();
@@ -334,6 +339,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       window.dailyResetTimeout = setTimeout(() => {
         setDailyTasks((prevTasks: DailyTask[]) => prevTasks.map((task: DailyTask) => ({ ...task, completed: false, completedAt: undefined })));
+        setDailyXpGain(0); // Resetuj dzienne XP
         scheduleNextReset();
       }, timeToMidnight);
     };
@@ -359,7 +365,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       archivedQuickThoughts,
       completedMissionsHistory,
       lastXpGainTimestamp,
-      xpParticles, // Przywrócono
+      xpParticles,
       addXP,
       addLargeXP,
       resetXP,
@@ -382,14 +388,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       updateJournalEntry,
       addQuickThought,
       archiveQuickThought,
-      removeXpParticle, // Przywrócono
+      removeXpParticle,
       triggerConfetti,
       confettiKey,
       triggerLevelUpFlash,
       levelUpFlashKey,
       setArchivedQuickThoughts,
-      crystalPosition, // Dodano
-      setCrystalPosition, // Dodano
+      crystalPosition,
+      setCrystalPosition,
+      dailyXpGain, // Przekazano do kontekstu
     }}>
       {children}
     </AppContext.Provider>

@@ -344,3 +344,19 @@ html {
   animation: bubble-rise linear infinite;
   pointer-events: none;
 }
+
+/* Nowa animacja dla pulsującej aury kryształu */
+@keyframes crystal-aura-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.02); /* Lekkie powiększenie */
+    opacity: 0.9; /* Lekkie przyciemnienie */
+  }
+}
+
+.animate-crystal-aura-pulse {
+  animation: crystal-aura-pulse 2s ease-in-out infinite; /* Wolna, pulsująca animacja */
+}

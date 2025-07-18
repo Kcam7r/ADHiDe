@@ -6,13 +6,12 @@ interface PomodoroModalProps {
 }
 
 export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
-  const [selectedMinutes, setSelectedMinutes] = useState(25); // Domyślny czas: 25 minut
-  const [time, setTime] = useState(selectedMinutes * 60); // Czas w sekundach
+  const [selectedMinutes, setSelectedMinutes] = useState(25);
+  const [time, setTime] = useState(selectedMinutes * 60);
   const [isActive, setIsActive] = useState(false);
-  const [isEditingMinutes, setIsEditingMinutes] = useState(false); // Stan do edycji minut
-  const inputRef = useRef<HTMLInputElement>(null); // Referencja do pola input
+  const [isEditingMinutes, setIsEditingMinutes] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  // Efekt do obsługi odliczania czasu
   useEffect(() => {
     let interval: number | null = null;
     if (isActive && time > 0) {
@@ -21,24 +20,21 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
       }, 1000);
     } else if (time === 0) {
       setIsActive(false);
-      // Tutaj można dodać logikę po zakończeniu sesji, np. powiadomienie
     }
     return () => {
       if (interval) clearInterval(interval);
     };
   }, [isActive, time]);
 
-  // Efekt do aktualizacji czasu, gdy zmieni się selectedMinutes (np. przez ręczne wpisanie)
   useEffect(() => {
     setTime(selectedMinutes * 60);
-    setIsActive(false); // Zatrzymujemy timer po zmianie czasu
+    setIsActive(false);
   }, [selectedMinutes]);
 
-  // Efekt do automatycznego focusowania inputa po przejściu w tryb edycji
   useEffect(() => {
     if (isEditingMinutes && inputRef.current) {
       inputRef.current.focus();
-      inputRef.current.select(); // Zaznacz cały tekst dla łatwiejszego nadpisywania
+      inputRef.current.select();
     }
   }, [isEditingMinutes]);
 
@@ -54,7 +50,7 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
 
   const handleReset = () => {
     setIsActive(false);
-    setTime(selectedMinutes * 60); // Resetuj do aktualnie wybranej wartości
+    setTime(selectedMinutes * 60);
   };
 
   const handleSliderMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,16 +59,14 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
 
   const handleManualMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
-    // Pozwól na puste pole podczas wpisywania, ale ustaw domyślną wartość przy zatwierdzeniu
     setSelectedMinutes(isNaN(value) ? 0 : value);
   };
 
   const handleInputBlur = () => {
-    // Upewnij się, że wartość jest w rozsądnym zakresie po zakończeniu edycji
     let finalMinutes = selectedMinutes;
     if (isNaN(finalMinutes) || finalMinutes < 1) {
-      finalMinutes = 1; // Minimalna wartość
-    } else if (finalMinutes > 180) { // Maksymalna wartość, np. 3 godziny
+      finalMinutes = 1;
+    } else if (finalMinutes > 180) {
       finalMinutes = 180;
     }
     setSelectedMinutes(finalMinutes);
@@ -81,16 +75,15 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
 
   const handleInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      inputRef.current?.blur(); // Wywołaj blur, aby uruchomić handleInputBlur
+      inputRef.current?.blur();
     }
   };
 
-  // Renderowanie pełnoekranowego zegara, gdy timer jest aktywny
   if (isActive && time > 0) {
     return (
       <div
         className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 cursor-pointer"
-        onClick={() => setIsActive(false)} // Kliknięcie na zegar zatrzymuje go i otwiera popup
+        onClick={() => setIsActive(false)}
       >
         <span className="text-8xl font-bold text-white select-none">
           {formatTime(time)}
@@ -99,19 +92,16 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
     );
   }
 
-  // Renderowanie popupu z ustawieniami, gdy timer jest zatrzymany lub zakończony
   return (
     <div 
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in"
       onClick={(e) => {
-        // Zamknij modal tylko jeśli kliknięto na tło (nie na zawartość modalu)
         if (e.target === e.currentTarget) {
           onClose();
         }
       }}
     >
       <div className="bg-gray-800 p-6 rounded-lg max-w-sm w-full mx-4">
-        {/* Header with centered title and close button */}
         <div className="relative mb-4">
           <h3 className="text-white font-bold flex items-center space-x-2 justify-center">
             <span>🍅</span>
@@ -119,13 +109,12 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
           </h3>
           <button
             onClick={onClose}
-            className="absolute top-0 right-0 text-gray-400 hover:text-white transition-colors"
+            className="absolute top-0 right-0 text-gray-400 hover:text-white transition-colors active:scale-[0.98] active:brightness-110"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
         
-        {/* Suwak do ustawiania czasu */}
         <div className="mb-6">
           <input
             id="pomodoro-minutes-slider"
@@ -143,13 +132,12 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
           </div>
         </div>
 
-        {/* Duży zegar, teraz klikalny do edycji */}
         <div className="text-center my-8">
           {isEditingMinutes ? (
             <input
               ref={inputRef}
               type="number"
-              value={selectedMinutes === 0 ? '' : selectedMinutes} // Pokaż pusty string, jeśli 0 dla lepszego UX
+              value={selectedMinutes === 0 ? '' : selectedMinutes}
               onChange={handleManualMinutesChange}
               onBlur={handleInputBlur}
               onKeyPress={handleInputKeyPress}
@@ -162,7 +150,7 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
               className="text-6xl font-bold text-white cursor-pointer hover:text-cyan-400 transition-colors"
               onClick={() => setIsEditingMinutes(true)}
             >
-              {formatTime(selectedMinutes * 60)} {/* Wyświetl sformatowany czas na podstawie selectedMinutes */}
+              {formatTime(selectedMinutes * 60)}
             </span>
           )}
         </div>
@@ -170,13 +158,13 @@ export const PomodoroModal: React.FC<PomodoroModalProps> = ({ onClose }) => {
         <div className="flex justify-center space-x-4">
           <button
             onClick={handleStartPause}
-            className="bg-cyan-600 hover:bg-cyan-700 text-white p-3 rounded-full transition-colors"
+            className="bg-cyan-600 hover:bg-cyan-700 text-white p-3 rounded-full transition-colors active:scale-[0.98] active:brightness-110"
           >
             {isActive ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
           </button>
           <button
             onClick={handleReset}
-            className="bg-gray-600 hover:bg-gray-700 text-white p-3 rounded-full transition-colors"
+            className="bg-gray-600 hover:bg-gray-700 text-white p-3 rounded-full transition-colors active:scale-[0.98] active:brightness-110"
           >
             <RotateCcw className="w-6 h-6" />
           </button>

@@ -6,7 +6,7 @@ interface PowerCrystalProps {
 }
 
 export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystalClick }) => {
-  const { user, lastXpGainTimestamp, setCrystalPosition } = useApp();
+  const { user, lastXpGainTimestamp, setCrystalPosition, dailyXpGain } = useApp(); // Dodano dailyXpGain
   const [isHovered, setIsHovered] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
   const [showReflection, setShowReflection] = useState(false); // State for reflection animation
@@ -19,7 +19,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
   const crystalSize = 95; 
   const crystalTop = 107.5; 
-  const crystalLeft = 64.5; // Zmieniono z 62.5 na 64.5, aby wyśrodkować
+  const crystalLeft = 64.5; 
 
   const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
@@ -83,11 +83,16 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Obliczenia dla okrągłej podstawy
   const baseSize = crystalSize + 10; 
   const baseTop = crystalTop - 5; 
-  const baseLeft = crystalLeft - 5; // Zmieniono z 57.5 na 59.5, aby wyśrodkować
+  const baseLeft = crystalLeft - 5; 
 
   const handleCrystalClick = (e: React.MouseEvent) => {
     onCrystalClick();
   };
+
+  // Obliczanie intensywności aury na podstawie dailyXpGain
+  const auraIntensity = Math.min(1, dailyXpGain / 500); // Max intensywność przy 500 XP
+  const auraColor = `rgba(255, 165, 0, ${auraIntensity * 0.8})`; // Bursztynowy kolor
+  const auraShadow = `0 0 ${5 + auraIntensity * 15}px ${auraColor}, inset 0 0 ${2 + auraIntensity * 5}px rgba(255,255,255,${auraIntensity * 0.5})`;
 
   return (
     <div
@@ -130,13 +135,14 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             z-20 flex items-center justify-center
             bg-white bg-opacity-15
             group-hover:shadow-xl group-hover:border-cyan-400 group-hover:bg-opacity-20
-            `} // Added group-hover styles
+            ${dailyXpGain > 0 ? 'animate-crystal-aura-pulse' : ''}
+            `} // Dodano klasę animacji aury
           style={{
             top: crystalTop,
             left: crystalLeft,
             width: crystalSize,
             height: crystalSize,
-            boxShadow: 'inset 0 0 15px rgba(255,255,255,0.5), 0 0 20px rgba(0,0,0,0.5)',
+            boxShadow: auraShadow, // Dynamiczny box-shadow dla aury
             border: '2px solid rgba(255,255,255,0.2)',
             overflow: 'hidden', // Kluczowe dla ukrycia bąbelków poza płynem
             borderRadius: '50%'

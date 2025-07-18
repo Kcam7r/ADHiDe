@@ -33,7 +33,6 @@ export const MissionHistoryModal: React.FC<MissionHistoryModalProps> = ({ missio
     <div 
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
       onClick={(e) => {
-        // Zamknij modal tylko jeśli kliknięto na tło (nie na zawartość modalu)
         if (e.target === e.currentTarget) {
           onClose();
         }
@@ -47,7 +46,7 @@ export const MissionHistoryModal: React.FC<MissionHistoryModalProps> = ({ missio
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-gray-400 hover:text-white transition-colors active:scale-[0.98] active:brightness-110"
           >
             <X className="w-5 h-5" />
           </button>
@@ -64,7 +63,7 @@ export const MissionHistoryModal: React.FC<MissionHistoryModalProps> = ({ missio
               {missions.map((mission) => (
                 <div
                   key={mission.id}
-                  className="bg-gray-700 p-4 rounded-lg border border-gray-600"
+                  className="bg-gray-700 p-4 rounded-lg border border-gray-600 hover:border-gray-500 transition-colors hover:translate-y-[-2px] hover:shadow-lg"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">

@@ -26,7 +26,6 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
   const [currentMonth, setCurrentMonth] = useState(selectedDate);
   const calendarRef = useRef<HTMLDivElement>(null);
 
-  // Obsługa kliknięcia poza kalendarzem
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
@@ -45,9 +44,8 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
     end: endOfMonth(currentMonth),
   });
 
-  // Calculate leading empty days for the grid (Monday = 0 in getDay, but we want Monday = 1)
   const firstDayOfMonth = startOfMonth(currentMonth);
-  const startingDayIndex = (getDay(firstDayOfMonth) + 6) % 7; // Adjust to make Monday 0, Tuesday 1, etc.
+  const startingDayIndex = (getDay(firstDayOfMonth) + 6) % 7;
 
   const emptyDays: (Date | null)[] = Array.from({ length: startingDayIndex }, () => null);
   const days: (Date | null)[] = [...emptyDays, ...daysInMonth];
@@ -77,7 +75,7 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
   };
 
   const currentYear = currentMonth.getFullYear();
-  const years = Array.from({ length: 41 }, (_, i) => currentYear - 20 + i); // 20 lat wstecz, bieżący, 20 lat w przód
+  const years = Array.from({ length: 41 }, (_, i) => currentYear - 20 + i);
 
   const months = Array.from({ length: 12 }, (_, i) => ({
     value: i,
@@ -88,7 +86,7 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
     <div ref={calendarRef} className="bg-gray-800 rounded-lg p-6 shadow-lg text-white w-full max-w-sm border border-gray-700">
       {/* Header with month and year selectors */}
       <div className="flex justify-between items-center mb-4">
-        <button onClick={handlePrevMonth} className="p-2 rounded-full hover:bg-gray-700 transition-colors">
+        <button onClick={handlePrevMonth} className="p-2 rounded-full hover:bg-gray-700 transition-colors active:scale-[0.98] active:brightness-110">
           <ChevronLeft className="w-5 h-5 text-gray-300" />
         </button>
         <div className="flex space-x-2">
@@ -115,7 +113,7 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
             ))}
           </select>
         </div>
-        <button onClick={handleNextMonth} className="p-2 rounded-full hover:bg-gray-700 transition-colors">
+        <button onClick={handleNextMonth} className="p-2 rounded-full hover:bg-gray-700 transition-colors active:scale-[0.98] active:brightness-110">
           <ChevronRight className="w-5 h-5 text-gray-300" />
         </button>
       </div>
@@ -139,7 +137,7 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
               aspect-square h-10
               ${day && isSameMonth(day, currentMonth) ? 'text-white' : 'text-gray-500 opacity-60'}
               ${day && isSameDay(day, selectedDate) ? 'bg-cyan-600 text-white font-bold' : 'hover:bg-gray-700'}
-              group
+              group transition-all duration-100 active:scale-[0.95]
             `}
             onClick={() => day && onSelectDate(day)}
           >
@@ -147,7 +145,6 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onSelectDate, 
             {day && isDateHighlighted(day) && (
               <div className="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-cyan-400"></div>
             )}
-            {/* Subtle border on hover */}
             <div className="absolute inset-0 border border-transparent group-hover:border-gray-600 rounded-md transition-colors duration-100 pointer-events-none"></div>
           </div>
         ))}

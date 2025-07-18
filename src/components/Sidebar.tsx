@@ -51,7 +51,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
           <img 
             src="/logo.png" 
             alt="ADHiDe Logo" 
-            className="w-48 h-auto mb-2 mt-2 transition-all duration-200 hover:scale-105 drop-shadow-[0_0_15px_rgba(74,222,128,0.8)] hover:animate-logo-flicker"
+            className="w-48 h-auto mb-2 mt-2 transition-all duration-200 hover:scale-105 drop-shadow-[0_0_15px_rgba(74,222,128,0.8)] hover:animate-logo-flicker active:scale-[0.98] active:brightness-110"
           />
         </div>
 
@@ -64,7 +64,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
                 <li key={item.id}>
                   <button
                     onClick={() => onViewChange(item.id)}
-                    className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-colors ${
+                    className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-colors 
+                    active:scale-[0.98] active:brightness-110
+                    ${
                       activeView === item.id
                         ? 'bg-cyan-600 text-white shadow-md'
                         : 'text-gray-300 hover:bg-gray-700 hover:text-white'
@@ -83,7 +85,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
         <div className="flex-1"></div> 
 
         {/* PowerCrystal container - teraz będzie na dole sidebara */}
-        <div className="flex flex-col items-center mb-4"> {/* Usunięto mt-[100px], dodano mb-4 dla marginesu od dołu */}
+        <div className="flex flex-col items-center mb-4">
           <PowerCrystal onCrystalClick={handleInitialResetClick} />
         </div>
       </div>
@@ -102,7 +104,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
             {showFinalResetConfirmButton && (
               <button
                 onClick={handleCancelReset}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors active:scale-[0.98] active:brightness-110"
                 title="Zamknij"
               >
                 <X className="w-5 h-5" />
@@ -122,13 +124,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
                 <>
                   <button
                     onClick={handleCancelReset}
-                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md active:scale-[0.98] active:brightness-110"
                   >
                     Anuluj
                   </button>
                   <button
                     onClick={handleFinalReset}
-                    className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                    className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md active:scale-[0.98] active:brightness-110"
                   >
                     Resetuj
                   </button>
@@ -137,14 +139,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
                 <>
                   <button
                     onClick={() => setShowFinalResetConfirmButton(true)}
-                    className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                    className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md active:scale-[0.98] active:brightness-110"
                   >
                     Resetuj
                   </button>
                   <button
                     type="button"
                     onClick={handleCancelReset}
-                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md active:scale-[0.98] active:brightness-110"
                   >
                     Anuluj
                   </button>

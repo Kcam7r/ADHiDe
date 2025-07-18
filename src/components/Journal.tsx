@@ -8,7 +8,7 @@ export const Journal: React.FC = () => {
   const { journalEntries, addJournalEntry, updateJournalEntry } = useApp();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [currentEntry, setCurrentEntry] = useState<JournalEntry | null>(null);
-  const [expandedEntries, setExpandedEntries] = useState<Set<string>>(new Set());
+  const [expandedEntries, setExpandedEntries] = new Set();
   const [showCalendarPopup, setShowCalendarPopup] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -118,7 +118,7 @@ export const Journal: React.FC = () => {
             <div className="flex items-center justify-center relative mb-4">
               <button
                 onClick={() => setShowCalendarPopup(true)}
-                className="flex items-center space-x-2 text-white hover:text-cyan-400 transition-colors p-2 rounded-md"
+                className="flex items-center space-x-2 text-white hover:text-cyan-400 transition-colors p-2 rounded-md active:scale-[0.98] active:brightness-110"
               >
                 <CalendarIcon className="w-6 h-6" />
                 <span className="text-2xl font-semibold">
@@ -199,7 +199,7 @@ export const Journal: React.FC = () => {
             <div className="flex space-x-3">
               <button
                 type="submit"
-                className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2 rounded-lg transition-colors font-medium"
+                className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2 rounded-lg transition-colors font-medium active:scale-[0.98] active:brightness-110"
               >
                 {currentEntry ? 'Aktualizuj wpis' : 'Zapisz wpis'}
               </button>
@@ -211,7 +211,7 @@ export const Journal: React.FC = () => {
                     setFormData({ content: '', mood: 3, energy: 3 });
                     setSelectedDate(new Date());
                   }}
-                  className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition-colors font-medium"
+                  className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition-colors font-medium active:scale-[0.98] active:brightness-110"
                 >
                   Nowy wpis
                 </button>
@@ -235,7 +235,8 @@ export const Journal: React.FC = () => {
                 .map((entry) => (
                 <div
                   key={entry.id}
-                  className="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition-colors cursor-pointer"
+                  className="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition-colors cursor-pointer 
+                  hover:translate-y-[-2px] hover:shadow-lg"
                   onClick={() => setSelectedDate(new Date(entry.date))}
                 >
                   <div className="flex items-center justify-between">
@@ -253,7 +254,7 @@ export const Journal: React.FC = () => {
                         e.stopPropagation();
                         toggleEntryExpansion(entry.id);
                       }}
-                      className="text-gray-400 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-500"
+                      className="text-gray-400 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-500 active:scale-[0.98] active:brightness-110"
                     >
                       {expandedEntries.has(entry.id) ? 
                         <ChevronUp className="w-5 h-5" /> : 

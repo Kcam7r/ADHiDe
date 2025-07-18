@@ -112,7 +112,7 @@ export const Garage: React.FC = () => {
         <div className="mb-6">
           <button
             onClick={() => setShowProjectForm(true)}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-colors shadow-md hover:shadow-lg"
+            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-colors shadow-md hover:shadow-lg active:scale-[0.98] active:brightness-110"
           >
             <Plus className="w-5 h-5" />
             <span>Nowy Projekt</span>
@@ -186,14 +186,14 @@ export const Garage: React.FC = () => {
               <div className="flex space-x-3 mt-6">
                 <button
                   type="submit"
-                  className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg transition-colors shadow-md"
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg transition-colors shadow-md active:scale-[0.98] active:brightness-110"
                 >
                   Dodaj Projekt
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowProjectForm(false)}
-                  className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition-colors shadow-md"
+                  className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition-colors shadow-md active:scale-[0.98] active:brightness-110"
                 >
                   Anuluj
                 </button>
@@ -205,7 +205,8 @@ export const Garage: React.FC = () => {
         {/* Projects List */}
         <div className="space-y-4">
           {projects.map((project) => (
-            <div key={project.id} className="bg-gray-800 rounded-lg p-6 shadow-xl border border-gray-700 hover:border-cyan-600 transition-all duration-300">
+            <div key={project.id} className="bg-gray-800 rounded-lg p-6 shadow-xl border border-gray-700 hover:border-cyan-600 transition-all duration-300 
+            hover:translate-y-[-2px] hover:shadow-xl">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
@@ -231,7 +232,7 @@ export const Garage: React.FC = () => {
                         className="bg-gradient-to-r from-green-500 to-green-700 h-full rounded-full transition-all duration-500 ease-out flex items-center justify-end pr-2"
                         style={{ width: `${getProgressPercentage(project)}%` }}
                       >
-                        {getProgressPercentage(project) > 10 && ( // Show percentage only if enough space
+                        {getProgressPercentage(project) > 10 && (
                           <span className="text-xs font-bold text-white drop-shadow-sm">
                             {getProgressPercentage(project)}%
                           </span>
@@ -247,7 +248,7 @@ export const Garage: React.FC = () => {
                 
                 <button
                   onClick={() => toggleProjectExpansion(project.id)}
-                  className="text-gray-400 hover:text-white transition-colors ml-4 p-2 rounded-full hover:bg-gray-700"
+                  className="text-gray-400 hover:text-white transition-colors ml-4 p-2 rounded-full hover:bg-gray-700 active:scale-[0.98] active:brightness-110"
                 >
                   {expandedProjects.has(project.id) ? 
                     <ChevronUp className="w-6 h-6" /> : 
@@ -262,7 +263,7 @@ export const Garage: React.FC = () => {
                     <h4 className="text-lg font-medium text-white">Zadania Projektu</h4>
                     <button
                       onClick={() => toggleTaskForm(project.id)}
-                      className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors shadow-md"
+                      className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors shadow-md active:scale-[0.98] active:brightness-110"
                     >
                       <Plus className="w-4 h-4" />
                       <span>Dodaj Zadanie</span>
@@ -282,7 +283,7 @@ export const Garage: React.FC = () => {
                             value={taskForms[project.id]?.title || ''}
                             onChange={(e) => setTaskForms({
                               ...taskForms,
-                              [project.id]: { ...taskForms[project.id], title: e.target.value }
+                              [projectId]: { ...taskForms[projectId], title: e.target.value }
                             })}
                             className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
                             placeholder="np. Zaprojektować header"
@@ -297,7 +298,7 @@ export const Garage: React.FC = () => {
                             value={taskForms[project.id]?.priority || 'normal'}
                             onChange={(e) => setTaskForms({
                               ...taskForms,
-                              [project.id]: { ...taskForms[project.id], priority: e.target.value }
+                              [projectId]: { ...taskForms[projectId], priority: e.target.value }
                             })}
                             className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
                           >
@@ -317,7 +318,7 @@ export const Garage: React.FC = () => {
                             value={taskForms[project.id]?.description || ''}
                             onChange={(e) => setTaskForms({
                               ...taskForms,
-                              [project.id]: { ...taskForms[project.id], description: e.target.value }
+                              [projectId]: { ...taskForms[projectId], description: e.target.value }
                             })}
                             className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
                             rows={2}
@@ -332,7 +333,7 @@ export const Garage: React.FC = () => {
                             value={taskForms[project.id]?.energy || 'medium'}
                             onChange={(e) => setTaskForms({
                               ...taskForms,
-                              [project.id]: { ...taskForms[project.id], energy: e.target.value }
+                              [projectId]: { ...taskForms[projectId], energy: e.target.value }
                             })}
                             className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
                           >
@@ -347,14 +348,14 @@ export const Garage: React.FC = () => {
                       <div className="flex space-x-3 mt-4">
                         <button
                           type="submit"
-                          className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                          className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md active:scale-[0.98] active:brightness-110"
                         >
                           Dodaj
                         </button>
                         <button
                           type="button"
                           onClick={() => toggleTaskForm(project.id)}
-                          className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                          className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md active:scale-[0.98] active:brightness-110"
                         >
                           Anuluj
                         </button>
@@ -367,7 +368,9 @@ export const Garage: React.FC = () => {
                     {project.tasks.map((task) => (
                       <div
                         key={task.id}
-                        className={`p-3 rounded-lg border transition-all duration-200 flex items-center justify-between ${
+                        className={`p-3 rounded-lg border transition-all duration-200 
+                        hover:translate-y-[-1px] hover:shadow-md
+                        ${
                           task.completed 
                             ? 'bg-gray-700 border-green-500 opacity-70' 
                             : task.isActive 
@@ -400,7 +403,7 @@ export const Garage: React.FC = () => {
                           ) : (
                             <button
                               onClick={() => task.isActive ? deactivateMission(task.id) : activateMission(task.id)}
-                              className={`p-2 rounded-full transition-colors shadow-sm ${
+                              className={`p-2 rounded-full transition-colors shadow-sm active:scale-[0.98] active:brightness-110 ${
                                 task.isActive
                                   ? 'bg-orange-600 hover:bg-orange-700'
                                   : 'bg-green-600 hover:bg-green-700'

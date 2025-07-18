@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Plus, Pause, Trash2, Play } from 'lucide-react'; 
-import { useLocalStorage } from '../hooks/useLocalStorage'; // Import useLocalStorage
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export const QuestLog: React.FC = () => {
   const { 
@@ -18,7 +18,6 @@ export const QuestLog: React.FC = () => {
     deleteMission 
   } = useApp();
   
-  // Zmieniono useState na useLocalStorage
   const [activeTab, setActiveTab] = useLocalStorage<'habits' | 'daily' | 'missions'>('questlog-active-tab', 'habits');
   const [showHabitForm, setShowHabitForm] = useState(false);
   const [showDailyForm, setShowDailyForm] = useState(false);
@@ -84,7 +83,9 @@ export const QuestLog: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+              className={`px-6 py-3 rounded-lg font-medium transition-colors 
+              active:scale-[0.98] active:brightness-110
+              ${
                 activeTab === tab.id
                   ? 'bg-cyan-600 text-white'
                   : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
@@ -103,7 +104,7 @@ export const QuestLog: React.FC = () => {
               <h2 className="text-xl font-semibold text-white">Nawyki</h2>
               <button
                 onClick={() => setShowHabitForm(true)}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors active:scale-[0.98] active:brightness-110"
               >
                 <Plus className="w-4 h-4" />
                 <span>Dodaj Nawyk</span>
@@ -143,14 +144,14 @@ export const QuestLog: React.FC = () => {
                 <div className="flex space-x-3 mt-4">
                   <button
                     type="submit"
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors active:scale-[0.98] active:brightness-110"
                   >
                     Dodaj
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowHabitForm(false)}
-                    className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors active:scale-[0.98] active:brightness-110"
                   >
                     Anuluj
                   </button>
@@ -162,7 +163,9 @@ export const QuestLog: React.FC = () => {
               {habits.map((habit) => (
                 <div
                   key={habit.id}
-                  className={`p-4 rounded-lg border-2 transition-all hover:shadow-lg ${
+                  className={`p-4 rounded-lg border-2 transition-all hover:shadow-lg 
+                  hover:translate-y-[-2px]
+                  ${
                     habit.type === 'positive' 
                       ? 'bg-green-600 border-green-500' 
                       : 'bg-red-600 border-red-500'
@@ -175,11 +178,11 @@ export const QuestLog: React.FC = () => {
                         Typ: {habit.type === 'positive' ? 'Pozytywny' : 'Negatywny'}
                       </p>
                     </div>
-                    <div className="flex items-center space-x-2"> {/* Dodano flex dla przycisku usuwania */}
+                    <div className="flex items-center space-x-2">
                       <span className="text-white font-bold text-lg">{habit.count}x</span>
                       <button
                         onClick={() => deleteHabit(habit.id)}
-                        className="text-gray-200 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700"
+                        className="text-gray-200 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700 active:scale-[0.98] active:brightness-110"
                         title="Usuń nawyk"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -205,7 +208,7 @@ export const QuestLog: React.FC = () => {
               <h2 className="text-xl font-semibold text-white">Zadania Codzienne</h2>
               <button
                 onClick={() => setShowDailyForm(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors active:scale-[0.98] active:brightness-110"
               >
                 <Plus className="w-4 h-4" />
                 <span>Dodaj Zadanie</span>
@@ -230,14 +233,14 @@ export const QuestLog: React.FC = () => {
                 <div className="flex space-x-3 mt-4">
                   <button
                     type="submit"
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors active:scale-[0.98] active:brightness-110"
                   >
                     Dodaj
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowDailyForm(false)}
-                    className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors active:scale-[0.98] active:brightness-110"
                   >
                     Anuluj
                   </button>
@@ -249,7 +252,9 @@ export const QuestLog: React.FC = () => {
               {dailyTasks.map((task) => (
                 <div
                   key={task.id}
-                  className={`p-4 rounded-lg border-2 transition-all hover:shadow-lg ${
+                  className={`p-4 rounded-lg border-2 transition-all hover:shadow-lg 
+                  hover:translate-y-[-2px]
+                  ${
                     task.completed
                       ? 'bg-gray-700 border-green-500'
                       : 'bg-gray-700 border-gray-600'
@@ -259,13 +264,13 @@ export const QuestLog: React.FC = () => {
                     <h3 className={`font-medium ${task.completed ? 'line-through text-gray-400' : 'text-white'}`}>
                       {task.title}
                     </h3>
-                    <div className="flex items-center space-x-2"> {/* Dodano flex dla przycisku usuwania */}
+                    <div className="flex items-center space-x-2">
                       <div className="text-sm text-gray-400">
                         {task.completed ? 'Ukończone' : 'Do zrobienia'}
                       </div>
                       <button
                         onClick={() => deleteDailyTask(task.id)}
-                        className="text-gray-200 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700"
+                        className="text-gray-200 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700 active:scale-[0.98] active:brightness-110"
                         title="Usuń zadanie"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -291,7 +296,7 @@ export const QuestLog: React.FC = () => {
               <h2 className="text-xl font-semibold text-white">Zadania</h2>
               <button
                 onClick={() => setShowMissionForm(true)}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
+                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors active:scale-[0.98] active:brightness-110"
               >
                 <Plus className="w-4 h-4" />
                 <span>Dodaj Zadanie</span>
@@ -361,14 +366,14 @@ export const QuestLog: React.FC = () => {
                 <div className="flex space-x-3 mt-4">
                   <button
                     type="submit"
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors active:scale-[0.98] active:brightness-110"
                   >
                     Dodaj
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowMissionForm(false)}
-                    className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors active:scale-[0.98] active:brightness-110"
                   >
                     Anuluj
                   </button>
@@ -380,7 +385,9 @@ export const QuestLog: React.FC = () => {
               {missions.map((mission) => (
                 <div
                   key={mission.id}
-                  className={`p-4 rounded-lg border-2 transition-all hover:shadow-lg ${
+                  className={`p-4 rounded-lg border-2 transition-all hover:shadow-lg 
+                  hover:translate-y-[-2px]
+                  ${
                     mission.isActive
                       ? 'bg-cyan-600 border-cyan-500'
                       : 'bg-gray-700 border-gray-600'
@@ -404,7 +411,7 @@ export const QuestLog: React.FC = () => {
                     <div className="flex items-center space-x-2 ml-4">
                       <button
                         onClick={() => mission.isActive ? deactivateMission(mission.id) : activateMission(mission.id)}
-                        className={`p-2 rounded-lg transition-colors ${
+                        className={`p-2 rounded-lg transition-colors active:scale-[0.98] active:brightness-110 ${
                           mission.isActive
                             ? 'bg-orange-600 hover:bg-orange-700'
                             : 'bg-green-600 hover:bg-green-700'
@@ -418,7 +425,7 @@ export const QuestLog: React.FC = () => {
                       </button>
                       <button
                         onClick={() => deleteMission(mission.id)}
-                        className="text-gray-200 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700"
+                        className="text-gray-200 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700 active:scale-[0.98] active:brightness-110"
                         title="Usuń zadanie"
                       >
                         <Trash2 className="w-4 h-4" />

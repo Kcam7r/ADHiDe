@@ -3,60 +3,47 @@ import { useApp } from '../contexts/AppContext';
 import { Flame, Star, Archive, BatteryLow, BatteryMedium, BatteryFull, Brain, CheckCircle } from 'lucide-react';
 import { Mission, DailyTask } from '../types';
 import { MissionHistoryModal } from './MissionHistoryModal';
-import { DailyTaskStamp } from './DailyTaskStamp'; // Import the new component
-import { showSuccessToast, showInfoToast, showErrorToast } from '../utils/toast'; // Importuj funkcje toastów
-// Usunięto import MagnifierWrapper
+import { DailyTaskStamp } from './DailyTaskStamp';
+import { showSuccessToast, showInfoToast, showErrorToast } from '../utils/toast';
 
 export const Dashboard: React.FC = () => {
   const { 
     habits, 
-    dailyTasks: appDailyTasks, // Rename to avoid conflict with local state
+    dailyTasks: appDailyTasks,
     missions, 
     completeHabit, 
     completeDailyTask, 
     completeMission,
     completedMissionsHistory,
     addXP, 
-    // Usunięto resetXP
   } = useApp();
 
   const [showHistory, setShowHistory] = useState(false);
-  const [animatingHabits, setAnimatingHabits] = useState<Set<string>>(new Set()); // Poprawiona linia
+  const [animatingHabits, setAnimatingHabits] = useState<Set<string>>(new Set());
   
-  // New states for Daily Tasks visual management
   const [displayDailyTasks, setDisplayDailyTasks] = useState<DailyTask[]>([]);
   const [completedTodayVisual, setCompletedTodayVisual] = useState<DailyTask[]>([]);
   const [animatingOutTasks, setAnimatingOutTasks] = useState<Set<string>>(new Set());
-  const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedTasks] = useState<Set<string>>(new Set()); // New state for grow-in animation
+  const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedTasks] = useState<Set<string>>(new Set());
 
-  // New states for Mission Completion Animation
   const [fadingOutMissions, setFadingOutMissions] = useState<Set<string>>(new Set());
-  const [missionReaction, setMissionReaction] = useState<{[key: string]: Mission['priority'] | null}>({}); // Nowy stan dla reakcji misji
+  const [missionReaction, setMissionReaction] = useState<{[key: string]: Mission['priority'] | null}>({});
 
-  // Usunięto stany dla modalu resetowania XP
-  // const [showResetConfirm, setShowResetConfirm] = useState(false);
-  // const [showFinalResetConfirmButton, setShowFinalResetConfirmButton] = useState(false);
-
-  // Sync appDailyTasks with local display states
   useEffect(() => {
-    // Filter tasks that should be displayed in the active section
     const active = appDailyTasks.filter(task => 
       !task.completed && !animatingOutTasks.has(task.id)
     );
     setDisplayDailyTasks(active);
 
-    // Filter tasks that are completed and not yet in completedTodayVisual
     const newlyCompleted = appDailyTasks.filter(task => 
       task.completed && !completedTodayVisual.some(t => t.id === task.id)
     );
 
-    // Add newly completed tasks to the completedTodayVisual list
     setCompletedTodayVisual(prev => {
       const updatedCompleted = [...prev];
       newlyCompleted.forEach(task => {
-        if (!updatedCompleted.some(t => t.id === task.id)) { // Double check to prevent duplicates
+        if (!updatedCompleted.some(t => t.id === task.id)) {
           updatedCompleted.push(task);
-          // Add to newlyCompletedAnimatedTasks to trigger grow-in animation
           setNewlyCompletedAnimatedTasks(prevSet => new Set(prevSet).add(task.id));
         }
       });
@@ -66,23 +53,21 @@ export const Dashboard: React.FC = () => {
   }, [appDailyTasks, animatingOutTasks, completedTodayVisual]);
 
 
-  // Daily Reset for completedTodayVisual
   useEffect(() => {
     const now = new Date();
     const midnight = new Date(now);
-    midnight.setHours(24, 0, 0, 0); // Next midnight
+    midnight.setHours(24, 0, 0, 0);
 
     const timeToMidnight = midnight.getTime() - now.getTime();
 
     const resetTimer = setTimeout(() => {
-      setCompletedTodayVisual([]); // Clear completed tasks for the new day
+      setCompletedTodayVisual([]);
     }, timeToMidnight);
 
     return () => clearTimeout(resetTimer);
   }, []);
 
 
-  // Definicja kolejności priorytetów i energii
   const priorityOrder: Record<Mission['priority'], number> = {
     urgent: 1,
     important: 2,
@@ -99,12 +84,10 @@ export const Dashboard: React.FC = () => {
   const sortedActiveMissions = missions
     .filter(m => m.isActive)
     .sort((a, b) => {
-      // Sortowanie po priorytecie
       const priorityComparison = priorityOrder[a.priority] - priorityOrder[b.priority];
       if (priorityComparison !== 0) {
         return priorityComparison;
       }
-      // Jeśli priorytety są takie same, sortuj po energii
       return energyOrder[a.energy] - energyOrder[b.energy];
     });
 
@@ -149,31 +132,24 @@ export const Dashboard: React.FC = () => {
     const mission = missions.find(m => m.id === missionId);
     if (!mission || mission.completed) return;
 
-    // Calculate XP gain
     let xpGain = 50;
     if (mission.priority === 'urgent') xpGain += 30;
     else if (mission.priority === 'important') xpGain += 15;
     if (mission.energy === 'concentration') xpGain += 10;
 
-    // Get origin for XP particles from cursor position
     const originX = e.clientX;
     const originY = e.clientY;
 
-    // Etap 1: Reakcja karty (pulsowanie/drżenie)
     setMissionReaction(prev => ({ ...prev, [missionId]: mission.priority }));
 
-    // Opóźnienie przed etapem 2 (XP, toast, konfetti)
     const reactionDuration = mission.priority === 'urgent' ? 600 : (mission.priority === 'important' ? 400 : 300);
     
     setTimeout(() => {
-      // Etap 2: Dodanie XP, toast, konfetti
       addXP(xpGain, originX, originY);
       showSuccessToast(`Misja ukończona: ${mission.title}! (+${xpGain} XP)`);
 
-      // Etap 3: Zanikanie karty
       setFadingOutMissions(prev => new Set(prev).add(missionId));
 
-      // Po zakończeniu animacji zanikania, usuń misję z kontekstu
       setTimeout(() => {
         completeMission(missionId);
         setFadingOutMissions(prev => {
@@ -181,12 +157,12 @@ export const Dashboard: React.FC = () => {
           newSet.delete(missionId);
           return newSet;
         });
-        setMissionReaction(prev => { // Usuń stan reakcji po zakończeniu animacji
+        setMissionReaction(prev => {
           const newReaction = { ...prev };
           delete newReaction[missionId];
           return newReaction;
         });
-      }, 500); // Czas trwania animate-mission-fade-out
+      }, 500);
     }, reactionDuration);
   };
 
@@ -194,32 +170,28 @@ export const Dashboard: React.FC = () => {
     const task = appDailyTasks.find(t => t.id === taskId);
     if (!task || task.completed) return;
 
-    // Get origin for XP particles from cursor position
     const originX = e.clientX;
     const originY = e.clientY;
 
     showInfoToast(`Zadanie ukończone: ${task.title}! (+10 XP)`);
 
-    // Trigger visual shrink-out animation
     setAnimatingOutTasks(prev => new Set(prev).add(taskId));
 
-    // After shrink-out animation completes (0.5s), update AppContext
     setTimeout(() => {
-      completeDailyTask(taskId, originX, originY); // This will move it to completedTodayVisual via useEffect
+      completeDailyTask(taskId, originX, originY);
       setAnimatingOutTasks(prev => {
         const newSet = new Set(prev);
         newSet.delete(taskId);
         return newSet;
       });
-      // After grow-in animation completes (0.3s), remove from newlyCompletedAnimatedTasks
       setTimeout(() => {
         setNewlyCompletedAnimatedTasks(prevSet => {
           const newSet = new Set(prevSet);
           newSet.delete(taskId);
           return newSet;
         });
-      }, 300); // Duration of grow-in animation
-    }, 500); // Duration of shrink-out animation
+      }, 300);
+    }, 500);
   };
 
   const handleHabitClick = (habitId: string, e: React.MouseEvent) => {
@@ -234,12 +206,11 @@ export const Dashboard: React.FC = () => {
       showErrorToast(`Nawyk przerwany: ${habit.name}! (${xpGain} XP)`);
     }
 
-    // Get origin for XP particles from cursor position
     const originX = e.clientX;
     const originY = e.clientY;
 
     setAnimatingHabits((prev: Set<string>) => new Set(prev).add(habitId));
-    completeHabit(habitId, originX, originY); // Ta funkcja już aktualizuje count
+    completeHabit(habitId, originX, originY);
 
     setTimeout(() => {
       setAnimatingHabits((prev: Set<string>) => {
@@ -249,24 +220,6 @@ export const Dashboard: React.FC = () => {
       });
     }, 300);
   };
-
-  // Usunięto logikę resetowania XP
-  // const handleInitialResetClick = () => {
-  //   setShowResetConfirm(true);
-  //   setShowFinalResetConfirmButton(false);
-  // };
-
-  // const handleFinalReset = () => {
-  //   resetXP();
-  //   setShowResetConfirm(false);
-  //   setShowFinalResetConfirmButton(false);
-  //   showInfoToast('Postęp został zresetowany!');
-  // };
-
-  // const handleCancelReset = () => {
-  //   setShowResetConfirm(false);
-  //   setShowFinalResetConfirmButton(false);
-  // };
 
   return (
     <div className="flex-1 p-6 bg-gray-900 min-h-screen">
@@ -286,7 +239,9 @@ export const Dashboard: React.FC = () => {
                   <div
                     key={habit.id}
                     onClick={(e) => handleHabitClick(habit.id, e)}
-                    className={`p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 ${
+                    className={`p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 
+                    hover:translate-y-[-2px] hover:shadow-lg active:scale-[0.98] active:brightness-110
+                    ${
                       habit.type === 'positive' 
                         ? 'bg-green-600 border-green-500' 
                         : 'bg-red-600 border-red-500'
@@ -325,6 +280,7 @@ export const Dashboard: React.FC = () => {
                   key={task.id}
                   onClick={(e) => handleDailyTaskClick(task.id, e)}
                   className={`relative p-4 rounded-lg transition-all duration-200 cursor-pointer bg-gray-700 border-2 border-gray-600
+                    hover:translate-y-[-2px] hover:shadow-lg active:scale-[0.98] active:brightness-110
                     ${animatingOutTasks.has(task.id) ? 'animate-daily-task-shrink-out' : ''}
                   `}
                 >
@@ -377,7 +333,7 @@ export const Dashboard: React.FC = () => {
               </h2>
               <button
                 onClick={() => setShowHistory(true)}
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-400 hover:text-white transition-colors active:scale-[0.98] active:brightness-110"
               >
                 <Archive className="w-5 h-5" />
               </button>
@@ -388,7 +344,9 @@ export const Dashboard: React.FC = () => {
                   key={mission.id}
                   id={`mission-${mission.id}`}
                   onClick={(e) => handleMissionComplete(mission.id, e)}
-                  className={`p-4 rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 ${
+                  className={`p-4 rounded-lg cursor-pointer transition-all duration-200 
+                  hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110
+                  ${
                     mission.projectId ? 'bg-purple-600 hover:bg-purple-500' : 'bg-cyan-600 hover:bg-cyan-500'
                   } ${fadingOutMissions.has(mission.id) ? 'animate-mission-fade-out' : ''}
                     ${missionReaction[mission.id] === 'normal' ? 'animate-mission-pulse-normal' : ''}
@@ -429,9 +387,6 @@ export const Dashboard: React.FC = () => {
           onClose={() => setShowHistory(false)}
         />
       )}
-
-      {/* Usunięto Power Crystal z Dashboard */}
-      {/* Usunięto Reset Confirmation Modal z Dashboard */}
     </div>
   );
 };

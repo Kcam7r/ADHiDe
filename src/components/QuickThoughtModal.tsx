@@ -4,7 +4,6 @@ import { useApp } from '../contexts/AppContext';
 
 interface QuickThoughtModalProps {
   onClose: () => void;
-  // Usunięto onOpenAllThoughts: () => void;
 }
 
 export const QuickThoughtModal: React.FC<QuickThoughtModalProps> = ({ onClose }) => {
@@ -24,7 +23,6 @@ export const QuickThoughtModal: React.FC<QuickThoughtModalProps> = ({ onClose })
     <div 
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
       onClick={(e) => {
-        // Zamknij modal tylko jeśli kliknięto na tło (nie na zawartość modalu)
         if (e.target === e.currentTarget) {
           onClose();
         }
@@ -38,7 +36,7 @@ export const QuickThoughtModal: React.FC<QuickThoughtModalProps> = ({ onClose })
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-gray-400 hover:text-white transition-colors active:scale-[0.98] active:brightness-110"
           >
             <X className="w-5 h-5" />
           </button>
@@ -57,19 +55,18 @@ export const QuickThoughtModal: React.FC<QuickThoughtModalProps> = ({ onClose })
           <div className="flex space-x-3 mt-4">
             <button
               type="submit"
-              className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg transition-colors"
+              className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg transition-colors active:scale-[0.98] active:brightness-110"
             >
               Zapisz
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"
+              className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors active:scale-[0.98] active:brightness-110"
             >
               Anuluj
             </button>
           </div>
-          {/* Usunięto div z przyciskiem "Zobacz wszystkie moje myśli" */}
         </form>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Trash2, MoreVertical, CheckCircle, Archive, Target, CalendarDays, Plus } from 'lucide-react'; // Dodano Plus
+import { X, Trash2, MoreVertical, CheckCircle, Archive, Target, CalendarDays, Plus } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import { showSuccessToast, showErrorToast, showInfoToast } from '../utils/toast';
 import { format, isSameDay } from 'date-fns';
@@ -8,7 +8,7 @@ import { QuickThought } from '../types';
 
 interface QuickThoughtsModalProps {
   onClose: () => void;
-  onOpenNewThoughtModal: () => void; // Nowa prop
+  onOpenNewThoughtModal: () => void;
 }
 
 export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose, onOpenNewThoughtModal }) => {
@@ -120,7 +120,6 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose,
     <div 
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
       onClick={(e) => {
-        // Zamknij modal tylko jeśli kliknięto na tło (nie na zawartość modalu)
         if (e.target === e.currentTarget) {
           onClose();
         }
@@ -132,10 +131,9 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose,
             <span>💭</span>
             <span>Moje Myśli</span>
           </h3>
-          {/* Przycisk do otwierania modala nowej myśli */}
           <button
             onClick={onOpenNewThoughtModal}
-            className="bg-cyan-600 hover:bg-cyan-700 text-white px-3 py-1 rounded-lg flex items-center space-x-1 transition-colors text-sm"
+            className="bg-cyan-600 hover:bg-cyan-700 text-white px-3 py-1 rounded-lg flex items-center space-x-1 transition-colors text-sm active:scale-[0.98] active:brightness-110"
             title="Dodaj nową myśl"
           >
             <Plus className="w-4 h-4" />
@@ -143,7 +141,7 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose,
           </button>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors ml-2"
+            className="text-gray-400 hover:text-white transition-colors ml-2 active:scale-[0.98] active:brightness-110"
           >
             <X className="w-5 h-5" />
           </button>
@@ -153,7 +151,7 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose,
         <div className="flex justify-center mb-4">
           <button
             onClick={() => setShowArchived(false)}
-            className={`px-4 py-2 rounded-l-lg font-medium transition-colors ${
+            className={`px-4 py-2 rounded-l-lg font-medium transition-colors active:scale-[0.98] active:brightness-110 ${
               !showArchived ? 'bg-cyan-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
             }`}
           >
@@ -161,7 +159,7 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose,
           </button>
           <button
             onClick={() => setShowArchived(true)}
-            className={`px-4 py-2 rounded-r-lg font-medium transition-colors ${
+            className={`px-4 py-2 rounded-r-lg font-medium transition-colors active:scale-[0.98] active:brightness-110 ${
               showArchived ? 'bg-cyan-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
             }`}
           >
@@ -180,7 +178,7 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose,
               {thoughtsToDisplay.map((thought) => (
                 <div
                   key={thought.id}
-                  className="bg-gray-700 p-4 rounded-lg border border-gray-600 hover:border-gray-500 transition-colors relative"
+                  className="bg-gray-700 p-4 rounded-lg border border-gray-600 hover:border-gray-500 transition-colors relative hover:translate-y-[-2px] hover:shadow-lg"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -189,11 +187,11 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose,
                         {formatDate(thought.createdAt)}
                       </p>
                     </div>
-                    {!showArchived && ( // Opcje tylko dla aktywnych myśli
+                    {!showArchived && (
                       <div className="relative" ref={activeThoughtMenuId === thought.id ? menuRef : null}>
                         <button
                           onClick={() => setActiveThoughtMenuId(prev => prev === thought.id ? null : thought.id)}
-                          className="text-gray-400 hover:text-white transition-colors ml-3 p-1 rounded-full hover:bg-gray-600"
+                          className="text-gray-400 hover:text-white transition-colors ml-3 p-1 rounded-full hover:bg-gray-600 active:scale-[0.98] active:brightness-110"
                           title="Opcje"
                         >
                           <MoreVertical className="w-5 h-5" />
@@ -203,28 +201,28 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose,
                           <div className="absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg z-10 border border-gray-600">
                             <button
                               onClick={() => handleConvertToDailyTask(thought)}
-                              className="flex items-center w-full px-4 py-2 text-sm text-white hover:bg-gray-600 rounded-t-md"
+                              className="flex items-center w-full px-4 py-2 text-sm text-white hover:bg-gray-600 rounded-t-md active:scale-[0.98] active:brightness-110"
                             >
                               <CheckCircle className="w-4 h-4 mr-2 text-green-400" />
                               <span>Zadanie Codzienne</span>
                             </button>
                             <button
                               onClick={() => handleConvertToMission(thought)}
-                              className="flex items-center w-full px-4 py-2 text-sm text-white hover:bg-gray-600"
+                              className="flex items-center w-full px-4 py-2 text-sm text-white hover:bg-gray-600 active:scale-[0.98] active:brightness-110"
                             >
                               <Target className="w-4 h-4 mr-2 text-purple-400" />
                               <span>Misja</span>
                             </button>
                             <button
                               onClick={() => handleAddToJournal(thought)}
-                              className="flex items-center w-full px-4 py-2 text-sm text-white hover:bg-gray-600"
+                              className="flex items-center w-full px-4 py-2 text-sm text-white hover:bg-gray-600 active:scale-[0.98] active:brightness-110"
                             >
                               <CalendarDays className="w-4 h-4 mr-2 text-blue-400" />
                               <span>Do Dziennika (Dziś)</span>
                             </button>
                             <button
                               onClick={() => handleArchiveThought(thought.id)}
-                              className="flex items-center w-full px-4 py-2 text-sm text-white hover:bg-gray-600 rounded-b-md"
+                              className="flex items-center w-full px-4 py-2 text-sm text-white hover:bg-gray-600 rounded-b-md active:scale-[0.98] active:brightness-110"
                             >
                               <Archive className="w-4 h-4 mr-2 text-gray-400" />
                               <span>Archiwizuj</span>
@@ -233,13 +231,13 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose,
                         )}
                       </div>
                     )}
-                    {showArchived && ( // Przycisk usuwania dla zarchiwizowanych myśli
+                    {showArchived && (
                       <button
                         onClick={() => {
                           setArchivedQuickThoughts((prev: QuickThought[]) => prev.filter((t: QuickThought) => t.id !== thought.id));
                           showInfoToast('Myśl trwale usunięta z archiwum.');
                         }}
-                        className="text-red-400 hover:text-red-300 transition-colors ml-3"
+                        className="text-red-400 hover:text-red-300 transition-colors ml-3 active:scale-[0.98] active:brightness-110"
                         title="Usuń trwale"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -247,7 +245,6 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose,
                     )}
                   </div>
 
-                  {/* Mission Form for conversion */}
                   {showMissionFormForThought === thought.id && (
                     <form onSubmit={(e) => handleAddMissionSubmit(e, thought.id)} className="mt-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
                       <h4 className="text-white font-semibold mb-3">Przekształć w Misję</h4>
@@ -312,14 +309,14 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose,
                       <div className="flex space-x-3 mt-4">
                         <button
                           type="submit"
-                          className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors"
+                          className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors active:scale-[0.98] active:brightness-110"
                         >
                           Dodaj Misję
                         </button>
                         <button
                           type="button"
                           onClick={() => setShowMissionFormForThought(null)}
-                          className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"
+                          className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors active:scale-[0.98] active:brightness-110"
                         >
                           Anuluj
                         </button>

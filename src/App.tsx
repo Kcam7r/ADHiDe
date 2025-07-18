@@ -7,7 +7,8 @@ import { QuickThoughtFloatingButton } from './components/QuickThoughtFloatingBut
 import { QuickThoughtModal } from './components/QuickThoughtModal';
 import { QuickThoughtsModal } from './components/QuickThoughtsModal';
 import { LevelUpFlashOverlay } from './components/LevelUpFlashOverlay';
-import { XpBubblesOverlay } from './components/XpBubblesOverlay'; // Przywrócono import
+import { XpBubblesOverlay } from './components/XpBubblesOverlay';
+import { AnimatePresence, motion } from 'framer-motion'; // Import AnimatePresence i motion
 
 // Leniwe ładowanie głównych komponentów widoków
 const Dashboard = lazy(() => import('./components/Dashboard').then(module => ({ default: module.Dashboard })));
@@ -43,25 +44,34 @@ function App() {
           onViewChange={setActiveView} 
           onOpenQuickThoughtsModal={() => setShowQuickThoughtsModal(true)}
         />
-        <main className="flex-1 overflow-auto">
-          <Suspense fallback={
-            <div className="flex items-center justify-center h-full text-white text-xl">
-              Ładowanie...
-            </div>
-          }>
-            {renderActiveView()}
-          </Suspense>
+        <main className="flex-1 overflow-hidden"> {/* Zmieniono overflow-auto na overflow-hidden */}
+          <AnimatePresence mode="wait"> {/* Dodano AnimatePresence */}
+            <motion.div
+              key={activeView} // Klucz do animacji przejścia
+              initial={{ opacity: 0, x: 50 }} // Początkowy stan (niewidoczny, przesunięty w prawo)
+              animate={{ opacity: 1, x: 0 }} // Stan docelowy (widoczny, na miejscu)
+              exit={{ opacity: 0, x: -50 }} // Stan wyjścia (zanika, przesuwa się w lewo)
+              transition={{ duration: 0.3, ease: "easeOut" }} // Czas trwania i funkcja przejścia
+              className="h-full w-full" // Upewnij się, że motion.div zajmuje całą dostępną przestrzeń
+            >
+              <Suspense fallback={
+                <div className="flex items-center justify-center h-full text-white text-xl">
+                  Ładowanie...
+                </div>
+              }>
+                {renderActiveView()}
+              </Suspense>
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
       <PomodoroTimer />
       <ConfettiOverlay />
       <LevelUpFlashOverlay />
-      <XpBubblesOverlay /> {/* Przywrócono */}
+      <XpBubblesOverlay />
       
-      {/* Pływający przycisk Szybkich Myśli - teraz otwiera modal nowej myśli */}
       <QuickThoughtFloatingButton onOpenNewThought={() => setShowQuickThoughtModal(true)} />
 
-      {/* Modale Szybkich Myśli */}
       {showQuickThoughtModal && ( 
         <QuickThoughtModal 
           onClose={() => setShowQuickThoughtModal(false)} 
