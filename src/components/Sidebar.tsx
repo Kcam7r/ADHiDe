@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Home, BookOpen, Calendar, Settings, X } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
-// Usunięto import PowerCrystal
+import { PowerCrystal } from './PowerCrystal'; // Import PowerCrystal
+import { showInfoToast } from '../utils/toast'; // Import showInfoToast
 
 interface SidebarProps {
   activeView: string;
@@ -10,10 +11,9 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOpenQuickThoughtsModal }) => {
-  // Usunięto useApp i stany/funkcje związane z resetowaniem XP
-  // const { resetXP } = useApp();
-  // const [showResetConfirm, setShowResetConfirm] = useState(false);
-  // const [showFinalResetConfirmButton, setShowFinalResetConfirmButton] = useState(false);
+  const { resetXP } = useApp(); // Przywrócono useApp
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [showFinalResetConfirmButton, setShowFinalResetConfirmButton] = useState(false);
 
   const navigationItems = [
     { id: 'dashboard', label: 'Pulpit', icon: Home },
@@ -22,7 +22,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
     { id: 'garage', 'label': 'Garaż', icon: Settings },
   ];
 
-  // Usunięto funkcje handleInitialResetClick, handleFinalReset, handleCancelReset
+  // Funkcje resetowania postępu - przywrócone
+  const handleInitialResetClick = () => {
+    setShowResetConfirm(true);
+    setShowFinalResetConfirmButton(false);
+  };
+
+  const handleFinalReset = () => {
+    resetXP();
+    setShowResetConfirm(false);
+    setShowFinalResetConfirmButton(false);
+    showInfoToast('Postęp został zresetowany!');
+  };
+
+  const handleCancelReset = () => {
+    setShowResetConfirm(false);
+    setShowFinalResetConfirmButton(false);
+  };
 
   return (
     <>
@@ -64,16 +80,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
           </ul>
         </nav>
 
-        {/* Gamification Info - Power Crystal - USUNIĘTO Z TEGO MIEJSCA */}
-        {/* <div className="border-t border-gray-700 flex flex-col items-center mt-auto">
+        {/* Gamification Info - Power Crystal - PRZYWRÓCONO TUTAJ */}
+        <div className="border-t border-gray-700 flex flex-col items-center mt-auto py-4"> {/* Dodano padding pionowy */}
           <PowerCrystal onCrystalClick={handleInitialResetClick} />
-        </div> */}
-
-        {/* Usunięto sekcję Quick Thoughts */}
+        </div>
       </div>
 
-      {/* Reset Confirmation Modal - USUNIĘTO Z TEGO MIEJSCA */}
-      {/* {showResetConfirm && (
+      {/* Reset Confirmation Modal - PRZYWRÓCONO TUTAJ */}
+      {showResetConfirm && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
           onClick={(e) => {
@@ -140,7 +154,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
             </div>
           </div>
         </div>
-      )} */}
+      )}
     </>
   );
 };

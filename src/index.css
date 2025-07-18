@@ -256,6 +256,11 @@ html {
   filter: sepia(100%) saturate(200%) hue-rotate(20deg) brightness(80%);
 }
 
+/* Nowa klasa dla białego holdera */
+.filter-white-invert {
+  filter: invert(100%);
+}
+
 /* Nowa animacja dla migotania logo */
 @keyframes logo-flicker {
   0%, 100% {
