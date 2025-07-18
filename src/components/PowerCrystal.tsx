@@ -60,8 +60,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const handleCrystalClick = (e: React.MouseEvent) => {
     // Przekazujemy pozycję kliknięcia do funkcji addXP, aby cząsteczki mogły stamtąd wylecieć
     const rect = e.currentTarget.getBoundingClientRect();
-    const clickX = e.clientX;
-    const clickY = e.clientY;
+    const clickX = rect.x + rect.width / 2; // Używamy centrum kryształu jako punktu startowego
+    const clickY = rect.y + rect.height / 2;
     
     // Zamiast resetXP, wywołujemy onCrystalClick, który jest propsem
     // onCrystalClick może wywołać resetXP lub inną logikę w Sidebar

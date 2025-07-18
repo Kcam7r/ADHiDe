@@ -2,11 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { User, Habit, DailyTask, Mission, Project, JournalEntry, QuickThought } from '../types';
 
-interface XpParticleData {
-  id: string;
-  startX: number;
-  startY: number;
-}
+// Usunięto interfejs XpParticleData
 
 interface AppContextType {
   user: User;
@@ -18,7 +14,7 @@ interface AppContextType {
   quickThoughts: QuickThought[];
   completedMissionsHistory: Mission[];
   lastXpGainTimestamp: number;
-  xpParticles: XpParticleData[];
+  // Usunięto xpParticles: XpParticleData[];
   archivedQuickThoughts: QuickThought[];
   
   addXP: (amount: number, originX?: number, originY?: number) => void;
@@ -50,7 +46,7 @@ interface AppContextType {
   archiveQuickThought: (id: string) => void;
   setArchivedQuickThoughts: React.Dispatch<React.SetStateAction<QuickThought[]>>; // Dodano
 
-  removeXpParticle: (id: string) => void;
+  // Usunięto removeXpParticle: (id: string) => void;
   triggerConfetti: () => void;
   confettiKey: number;
   triggerLevelUpFlash: () => void; // NOWA FUNKCJA
@@ -84,7 +80,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [archivedQuickThoughts, setArchivedQuickThoughts] = useLocalStorage<QuickThought[]>('adhd-archived-thoughts', []);
   const [completedMissionsHistory, setCompletedMissionsHistory] = useLocalStorage<Mission[]>('adhd-completed-missions', []);
   const [lastXpGainTimestamp, setLastXpGainTimestamp] = useState(0);
-  const [xpParticles, setXpParticles] = useState<XpParticleData[]>([]);
+  // Usunięto const [xpParticles, setXpParticles] = useState<XpParticleData[]>([]);
   const [confettiKey, setConfettiKey] = useState(0);
   const [levelUpFlashKey, setLevelUpFlashKey] = useState(0); // NOWY STAN
 
@@ -93,23 +89,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const addXP = (amount: number, originX?: number, originY?: number) => {
     setLastXpGainTimestamp(Date.now());
 
-    setXpParticles(prev => {
-      if (originX !== undefined && originY !== undefined && amount > 0) { 
-        const numberOfParticles = Math.floor(amount / 5); 
-        const newParticles: XpParticleData[] = [];
-        for (let i = 0; i < numberOfParticles; i++) {
-          const offsetX = (Math.random() - 0.5) * 40;
-          const offsetY = (Math.random() - 0.5) * 40;
-          newParticles.push({
-            id: `${Date.now()}-${i}-${Math.random()}`,
-            startX: originX + offsetX,
-            startY: originY + offsetY,
-          });
-        }
-        return [...prev, ...newParticles];
-      }
-      return prev;
-    });
+    // Usunięto logikę generowania cząsteczek XP
+    // setXpParticles(prev => {
+    //   if (originX !== undefined && originY !== undefined && amount > 0) { 
+    //     const numberOfParticles = Math.floor(amount / 5); 
+    //     const newParticles: XpParticleData[] = [];
+    //     for (let i = 0; i < numberOfParticles; i++) {
+    //       const offsetX = (Math.random() - 0.5) * 40;
+    //       const offsetY = (Math.random() - 0.5) * 40;
+    //       newParticles.push({
+    //         id: `${Date.now()}-${i}-${Math.random()}`,
+    //         startX: originX + offsetX,
+    //         startY: originY + offsetY,
+    //       });
+    //     }
+    //     return [...prev, ...newParticles];
+    //   }
+    //   return prev;
+    // });
 
     setUser(prevUser => {
       const newXP = prevUser.xp + amount;
@@ -135,9 +132,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     triggerLevelUpFlash(); // WYWOŁANIE NOWEJ FUNKCJI
   };
 
-  const removeXpParticle = (id: string) => {
-    setXpParticles(prev => prev.filter(p => p.id !== id));
-  };
+  // Usunięto removeXpParticle
+  // const removeXpParticle = (id: string) => {
+  //   setXpParticles(prev => prev.filter(p => p.id !== id));
+  // };
 
   const triggerConfetti = () => {
     setConfettiKey(prev => prev + 1);
@@ -363,7 +361,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       archivedQuickThoughts,
       completedMissionsHistory,
       lastXpGainTimestamp,
-      xpParticles,
+      // Usunięto xpParticles,
       addXP,
       addLargeXP, // Dodano do kontekstu
       resetXP,
@@ -386,7 +384,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       updateJournalEntry,
       addQuickThought,
       archiveQuickThought,
-      removeXpParticle,
+      // Usunięto removeXpParticle,
       triggerConfetti,
       confettiKey,
       triggerLevelUpFlash, // DODANO DO KONTEKSTU

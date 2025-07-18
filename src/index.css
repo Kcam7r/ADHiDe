@@ -219,34 +219,36 @@ html {
   animation: daily-task-grow-in 0.3s ease-out forwards;
 }
 
-/* --- NOWY KOD DLA BĄBELKÓW --- */
+/* --- USUNIĘTO KOD DLA BĄBELKÓW --- */
+/*
 .babel {
     position: absolute;
-    background-color: rgba(74, 222, 128, 1); /* Zmieniono kolor na zielony (green-400) */
+    background-color: rgba(74, 222, 128, 1);
     border-radius: 50%;
     animation: rise linear infinite;
     pointer-events: none;
-    filter: blur(0.1px); /* Minimalne rozmycie */
-    z-index: 26; /* Zwiększony z-index, aby były widoczne nad holder3.png (z-25) */
+    filter: blur(0.1px);
+    z-index: 26;
 }
 
 @keyframes rise {
     0% {
         transform: translateY(0) translateX(var(--bubble-drift-x, 0px));
-        opacity: 0; /* Start niewidoczny */
+        opacity: 0;
     }
-    5% { /* Szybkie pojawienie się */
-        opacity: 1; /* Pełna widoczność */
-    }
-    95% { /* Utrzymanie pełnej widoczności do prawie końca */
+    5% {
         opacity: 1;
-        transform: translateY(calc(-1 * var(--bubble-rise-height, 100px))) translateX(var(--bubble-drift-x-end, -10px)); /* Używamy zmiennej CSS dla wysokości wznoszenia */
+    }
+    95% {
+        opacity: 1;
+        transform: translateY(calc(-1 * var(--bubble-rise-height, 100px))) translateX(var(--bubble-drift-x-end, -10px));
     }
     100% {
-        transform: translateY(calc(-1 * var(--bubble-rise-height, 100px))) translateX(var(--bubble-drift-x-end, -10px)); /* Używamy zmiennej CSS dla wysokości wznoszenia */
-        opacity: 0; /* Całkowite zanikanie */
+        transform: translateY(calc(-1 * var(--bubble-rise-height, 100px))) translateX(var(--bubble-drift-x-end, -10px));
+        opacity: 0;
     }
 }
+*/
 
 /* Nowa klasa dla koloru drzewa */
 .filter-tree-color {
