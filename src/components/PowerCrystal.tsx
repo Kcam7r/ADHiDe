@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { XpParticle } from './XpParticle';
 import { useWindowSize } from '../hooks/useWindowSize';
+import { Edit, Check } from 'lucide-react'; // Import nowych ikon
 import { useLocalStorage } from '../hooks/useLocalStorage'; // Dodano import useLocalStorage
 
 interface PowerCrystalProps {
@@ -18,13 +19,21 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const bubbleIntervalRef = useRef<number | null>(null); // Ref for bubble interval ID
   const { width, height } = useWindowSize();
 
+  // Nowe stany dla przeciągania i zmiany rozmiaru
+  const [isDraggingCrystal, setIsDraggingCrystal] = useState(false);
+  const [isResizingCrystal, setIsResizingCrystal] = useState(false);
+  const [crystalOffset, setCrystalOffset] = useState({ x: 0, y: 0 });
+  const [initialCrystalSize, setInitialCrystalSize] = useState(0); // Do zmiany rozmiaru
+  const [initialMousePos, setInitialMousePos] = useState({ x: 0, y: 0 }); // Do zmiany rozmiaru
+
   // Persystowane właściwości stylu dla kryształu (top, left, size w px)
-  // Wartości początkowe będą nadpisane przez te z localStorage, jeśli istnieją
   const [crystalProps, setCrystalProps] = useLocalStorage('adhd-crystal-props', {
     top: 40, // Początkowa pozycja Y (w px, dostosowana do okręgu w holderze)
     left: 88, // Początkowa pozycja X (w px, dostosowana do okręgu w holderze)
     size: 144, // Początkowy rozmiar (w px, w-36 to 144px)
   });
+
+  const [editMode, setEditMode] = useState(false); // Tryb edycji
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -64,7 +73,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Efekt do generowania bąbelków
   useEffect(() => {
-    if (xpProgress > 0) {
+    // Generuj bąbelki tylko jeśli xpProgress jest większy od 0 (lub minimalnej wartości)
+    if (xpProgress > 0 || Math.max(5, xpProgress * 100) > 0) { // Sprawdź też minimalną wysokość
       if (liquidRef.current && !bubbleIntervalRef.current) {
         bubbleIntervalRef.current = setInterval(() => {
           if (liquidRef.current) {
@@ -116,20 +126,114 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Kolor kryształu (można dostosować w zależności od poziomu)
   const currentCrystalColor = 'from-cyan-500 to-blue-600';
 
+  // Obsługa przeciągania kryształu
+  const handleMouseDownCrystal = (e: React.MouseEvent) => {
+    if (!editMode) return;
+    setIsDraggingCrystal(true);
+    setCrystalOffset({
+      x: e.clientX - (crystalRef.current?.getBoundingClientRect().left || 0),
+      y: e.clientY - (crystalRef.current?.getBoundingClientRect().top || 0),
+    });
+  };
+
+  const handleMouseMoveCrystal = (e: MouseEvent) => {
+    if (!isDraggingCrystal) return;
+    const parentRect = crystalRef.current?.parentElement?.getBoundingClientRect();
+    if (!parentRect) return;
+
+    let newX = e.clientX - parentRect.left - crystalOffset.x;
+    let newY = e.clientY - parentRect.top - crystalOffset.y;
+
+    // Ogranicz do granic rodzica
+    newX = Math.max(0, Math.min(newX, parentRect.width - crystalProps.size));
+    newY = Math.max(0, Math.min(newY, parentRect.height - crystalProps.size));
+
+    setCrystalProps(prev => ({ ...prev, left: newX, top: newY }));
+  };
+
+  const handleMouseUpCrystal = () => {
+    setIsDraggingCrystal(false);
+  };
+
+  // Obsługa zmiany rozmiaru kryształu
+  const handleMouseDownResize = (e: React.MouseEvent) => {
+    if (!editMode) return;
+    e.stopPropagation(); // Zapobiegaj przeciąganiu kryształu podczas zmiany rozmiaru
+    setIsResizingCrystal(true);
+    setInitialMousePos({ x: e.clientX, y: e.clientY });
+    setInitialCrystalSize(crystalProps.size);
+  };
+
+  const handleMouseMoveResize = (e: MouseEvent) => {
+    if (!isResizingCrystal) return;
+    const deltaX = e.clientX - initialMousePos.x;
+    const deltaY = e.clientY - initialMousePos.y;
+    const delta = Math.max(deltaX, deltaY); // Użyj większej delty, aby zachować proporcje
+
+    let newSize = initialCrystalSize + delta;
+
+    // Ogranicz rozmiar (np. min 50px, max 300px)
+    newSize = Math.max(50, Math.min(newSize, 300));
+
+    setCrystalProps(prev => ({ ...prev, size: newSize }));
+  };
+
+  const handleMouseUpResize = () => {
+    setIsResizingCrystal(false);
+  };
+
+  // Globalne listenery zdarzeń myszy dla przeciągania/zmiany rozmiaru
+  useEffect(() => {
+    if (isDraggingCrystal) {
+      window.addEventListener('mousemove', handleMouseMoveCrystal);
+      window.addEventListener('mouseup', handleMouseUpCrystal);
+    } else {
+      window.removeEventListener('mousemove', handleMouseMoveCrystal);
+      window.removeEventListener('mouseup', handleMouseUpCrystal);
+    }
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMoveCrystal);
+      window.removeEventListener('mouseup', handleMouseUpCrystal);
+    };
+  }, [isDraggingCrystal, crystalProps]);
+
+  useEffect(() => {
+    if (isResizingCrystal) {
+      window.addEventListener('mousemove', handleMouseMoveResize);
+      window.addEventListener('mouseup', handleMouseUpResize);
+    } else {
+      window.removeEventListener('mousemove', handleMouseMoveResize);
+      window.removeEventListener('mouseup', handleMouseUpResize);
+    }
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMoveResize);
+      window.removeEventListener('mouseup', handleMouseUpResize);
+    };
+  }, [isResizingCrystal, crystalProps]);
+
   return (
     <div
       className="relative flex flex-col items-center justify-center w-full cursor-pointer select-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={onCrystalClick}
+      onClick={editMode ? undefined : onCrystalClick} // Wyłącz kliknięcie na modal w trybie edycji
     >
+      {/* Przycisk trybu edycji */}
+      <button
+        className="absolute top-0 right-0 z-50 p-1 rounded-full bg-gray-700 text-gray-300 hover:text-white hover:bg-gray-600 transition-colors"
+        onClick={(e) => { e.stopPropagation(); setEditMode(prev => !prev); }}
+        title={editMode ? "Wyłącz tryb edycji" : "Włącz tryb edycji"}
+      >
+        {editMode ? <Check className="w-4 h-4" /> : <Edit className="w-4 h-4" />}
+      </button>
+
       {/* Główny kontener dla holdera i kryształu */}
       <div className="relative w-80 h-80 flex items-center justify-center">
         {/* Obraz holdera */}
         <img
           src="/holder.png"
           alt="Crystal Holder"
-          className="absolute inset-0 w-full h-full object-contain z-30 filter-white-image"
+          className={`absolute inset-0 w-full h-full object-contain z-30 filter-white-image ${editMode ? 'pointer-events-none' : ''}`}
         />
 
         {/* Kula Kryształu */}
@@ -139,6 +243,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             bg-gradient-to-br ${currentCrystalColor}
             ${isFlashing ? 'animate-crystal-flash' : ''}
             z-20
+            ${editMode ? 'cursor-grab active:cursor-grabbing border-2 border-dashed border-cyan-400' : ''}
           `}
           style={{
             top: crystalProps.top,
@@ -148,6 +253,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             boxShadow: 'inset 0 0 15px rgba(255,255,255,0.5), 0 0 20px rgba(0,0,0,0.5)',
             border: '2px solid rgba(255,255,255,0.2)'
           }}
+          onMouseDown={handleMouseDownCrystal}
         >
           {/* Metalowa obudowa (dolna połowa mniejszej kuli) */}
           <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-b from-stone-700 to-stone-900 rounded-b-full border-t-2 border-stone-600 shadow-inner-dark z-10">
@@ -156,7 +262,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           <div
             className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-500 to-yellow-400 transition-all duration-300 ease-out animate-liquid-wave"
             style={{
-              height: `${xpProgress * 100}%`,
+              height: `${Math.max(5, xpProgress * 100)}%`, // Minimalna wysokość 5%
               boxShadow: '0 0 15px rgba(255,165,0,0.7)', // Pomarańczowy blask
             }}
             ref={liquidRef} // Dołącz ref do elementu płynu
@@ -169,6 +275,16 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
               {user.level}
             </span>
           </div>
+
+          {/* Uchwyt do zmiany rozmiaru */}
+          {editMode && (
+            <div
+              className="absolute -bottom-2 -right-2 w-6 h-6 bg-cyan-500 rounded-full cursor-nwse-resize z-40 flex items-center justify-center"
+              onMouseDown={handleMouseDownResize}
+            >
+              <span className="text-white text-xs">↔</span>
+            </div>
+          )}
         </div>
       </div>
 
