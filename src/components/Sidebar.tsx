@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Home, BookOpen, Calendar, Settings } from 'lucide-react';
-import { useApp } from '../contexts/AppContext';
+import { useApp } = '../contexts/AppContext';
 import { PowerCrystal } from './PowerCrystal';
 
 interface SidebarProps {
@@ -30,12 +30,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
       <div className="w-64 bg-gray-800 h-screen flex flex-col">
         {/* Header with Logo and Title */}
         <div 
-          className="p-6 border-b border-gray-700 flex flex-col items-center justify-center cursor-pointer
-                     transition-transform duration-200 hover:scale-105"
+          className="p-6 border-b border-gray-700 flex flex-col items-center justify-center cursor-pointer"
           onClick={onOpenQuickThoughtsModal}
           title="Moje Myśli"
         >
-          <img src="/logo.png" alt="ADHiDe Logo" className="w-48 h-auto mb-2 mt-2" />
+          <img 
+            src="/logo.png" 
+            alt="ADHiDe Logo" 
+            className="w-48 h-auto mb-2 mt-2 transition-transform duration-200 hover:scale-105" // Klasy przeniesione tutaj
+          />
         </div>
 
         {/* Navigation */}
