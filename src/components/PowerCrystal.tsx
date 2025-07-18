@@ -20,19 +20,24 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const crystalTop = 96.5;
   const crystalLeft = 59.5;
 
-  // Liczba bąbelków do animacji
-  const numberOfBubbles = 15; 
+  const xpForNextLevel = 1000;
+  const xpInCurrentLevel = user.xp % xpForNextLevel;
+  const xpProgress = xpInCurrentLevel / xpForNextLevel;
+
+  // Liczba bąbelków do animacji - dynamiczna, zależna od postępu XP
+  // Minimum 5 bąbelków, maksimum 25 (5 + 20 * 1.0)
+  const dynamicNumberOfBubbles = Math.max(5, Math.floor(xpProgress * 20) + 5); 
 
   // Generowanie właściwości bąbelków raz przy renderowaniu komponentu
   const bubbles = React.useMemo(() => {
-    return Array.from({ length: numberOfBubbles }).map((_, i) => ({
-      id: `bubble-${i}`,
+    return Array.from({ length: dynamicNumberOfBubbles }).map((_, i) => ({
+      id: `bubble-${i}-${Date.now()}`, // Dodano Date.now() dla unikalności klucza
       size: Math.random() * (10 - 4) + 4, // Rozmiar od 4px do 10px
       left: Math.random() * 90 + 5, // Pozycja pozioma od 5% do 95%
       delay: Math.random() * 3, // Opóźnienie animacji do 3 sekund
       duration: Math.random() * (5 - 2) + 2, // Czas trwania animacji od 2 do 5 sekund
     }));
-  }, [numberOfBubbles]); // Zależność od numberOfBubbles, aby generować tylko raz
+  }, [dynamicNumberOfBubbles]); // Zależność od dynamicznej liczby bąbelków
 
   // useLayoutEffect do pobierania pozycji cyfry poziomu
   useLayoutEffect(() => {
@@ -61,11 +66,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       if (flashTimer) clearTimeout(flashTimer);
     };
   }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]);
-
-  // Obliczenia dla wyświetlania XP i poziomu
-  const xpForNextLevel = 1000;
-  const xpInCurrentLevel = user.xp % xpForNextLevel;
-  const xpProgress = xpInCurrentLevel / xpForNextLevel;
 
   // Obliczenia dla okrągłej podstawy
   const baseSize = crystalSize + 10;
