@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Lightbulb } from 'lucide-react';
 import { useWindowSize } from '../hooks/useWindowSize';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+// Usunięto import useLocalStorage
 
 interface QuickThoughtFloatingButtonProps {
   onOpenNewThought: () => void;
@@ -10,16 +10,22 @@ interface QuickThoughtFloatingButtonProps {
 export const QuickThoughtFloatingButton: React.FC<QuickThoughtFloatingButtonProps> = ({ onOpenNewThought }) => {
   const { width, height } = useWindowSize();
   const [isDragging, setIsDragging] = useState(false);
-  // Początkowa pozycja: 270px od lewej (szerokość sidebar + margines), 20px od dołu
-  const [position, setPosition] = useLocalStorage('adhd-quick-thought-button-pos', { x: 270, y: height - 80 });
+  
+  // Używamy useState bezpośrednio, inicjalizując pozycję dynamicznie
+  const [position, setPosition] = useState(() => {
+    if (typeof window === 'undefined') {
+      return { x: 270, y: 0 }; // Wartość domyślna dla SSR
+    }
+    // Początkowa pozycja: 270px od lewej, 80px od dołu ekranu
+    return { x: 270, y: window.innerHeight - 80 };
+  });
+
   const offset = useRef({ x: 0, y: 0 });
   const buttonRef = useRef<HTMLButtonElement>(null);
   const hasMoved = useRef(false);
 
-  // Zaktualizuj początkową pozycję Y, jeśli zmieni się wysokość okna
-  useEffect(() => {
-    setPosition(prev => ({ ...prev, y: height - 80 }));
-  }, [height, setPosition]);
+  // Usunięto useEffect do aktualizacji 'y' na zmianę wysokości okna,
+  // ponieważ handleMouseMove będzie dynamicznie zarządzać pozycją.
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (buttonRef.current) {
@@ -44,7 +50,7 @@ export const QuickThoughtFloatingButton: React.FC<QuickThoughtFloatingButtonProp
       const maxX = width - buttonRef.current.offsetWidth;
       const maxY = height - buttonRef.current.offsetHeight;
 
-      // Usunięto ograniczenie, aby przycisk mógł poruszać się po całym ekranie
+      // Ograniczamy pozycję, aby przycisk pozostawał w widocznym obszarze
       newX = Math.max(0, Math.min(newX, maxX));
       newY = Math.max(0, Math.min(newY, maxY));
     }
@@ -69,7 +75,7 @@ export const QuickThoughtFloatingButton: React.FC<QuickThoughtFloatingButtonProp
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging]);
+  }, [isDragging, width, height]); // Dodano width i height do zależności dla prawidłowego ograniczania
 
   const handleClick = () => {
     if (!hasMoved.current) {
