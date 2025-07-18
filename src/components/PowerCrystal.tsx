@@ -15,13 +15,13 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const [prevXp, setPrevXp] = useState(user.xp);
   const [prevLevel, setPrevLevel] = useState(user.level); // Nowy stan do śledzenia poprzedniego poziomu
   const crystalRef = useRef<HTMLDivElement>(null);
-  const liquidRef = useRef<HTMLHTMLDivElement>(null);
+  const liquidRef = useRef<HTMLDivElement>(null);
   const bubbleIntervalRef = useRef<number | null>(null);
 
   // Persystowane właściwości stylu dla kryształu (top, left, size w px)
   // Wartości początkowe będą nadpisane przez te z localStorage, jeśli istnieją
   const [crystalProps] = useLocalStorage('adhd-crystal-props', {
-    top: 139.5,
+    top: 139.5 + 28, // Skorygowana wartość top
     left: 139.5,
     size: 100,
   });
@@ -137,7 +137,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       {/* Główny kontener dla kryształu i holdera - zmieniono na w-96 h-96 */}
       <div 
         className="relative w-96 h-96 flex items-center justify-center"
-        style={{ transform: 'translateY(28px)' }}
+        // Usunięto style={{ transform: 'translateY(28px)' }}
       >
         {/* Holder Image - teraz w pełni w kontenerze */}
         <img
