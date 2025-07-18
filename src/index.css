@@ -182,22 +182,27 @@
 .babel {
     position: absolute;
     bottom: 0;
-    background-color: rgba(255, 255, 255, 0.3); /* Zwiększona widoczność */
+    background-color: rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     animation: rise linear infinite;
-    pointer-events: none; /* Upewnij się, że nie koliduje z kliknięciami */
+    pointer-events: none;
+    filter: blur(0.5px); /* Subtle blur for a more liquid look */
 }
 
 @keyframes rise {
     0% {
         transform: translateY(0) translateX(0);
-        opacity: 1;
+        opacity: 0; /* Start invisible */
+    }
+    10% { /* Quickly fade in as it starts moving */
+        opacity: 0.5; /* Peak subtle visibility */
+        transform: translateY(-5px) translateX(var(--bubble-drift-x, 0px));
     }
     50% {
-        transform: translateX(var(--bubble-drift-x, 10px)); /* Losowy dryf poziomy */
+        transform: translateX(var(--bubble-drift-x, 10px)); /* Continue horizontal drift */
     }
     100% {
         transform: translateY(var(--bubble-target-y, -32px)) translateX(var(--bubble-drift-x-end, -10px));
-        opacity: 0;
+        opacity: 0; /* Fade out completely */
     }
 }
