@@ -139,7 +139,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         <img
           src="/holder2.png" 
           alt="Crystal Holder"
-          className="absolute h-full w-auto left-1/2 -translate-x-1/2 z-5" /* Usunięto filter-white-invert */
+          className="absolute h-full w-auto left-1/2 -translate-x-1/2 z-5 filter-white-invert" /* Przywrócono filter-white-invert */
         />
 
         {/* Nowy element pod kryształem mocy (okrągła podstawa) */}
