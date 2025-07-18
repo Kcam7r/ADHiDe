@@ -16,7 +16,7 @@ export const Dashboard: React.FC = () => {
     completeMission,
     completedMissionsHistory,
     addXP, // Dodano addXP do kontekstu
-    triggerConfetti, // Dodano triggerConfetti do kontekstu
+    // triggerConfetti, // Usunięto triggerConfetti z kontekstu, ponieważ nie jest używane
   } = useApp();
 
   const [showHistory, setShowHistory] = useState(false);

@@ -22,11 +22,13 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Persystowane właściwości stylu dla kryształu (top, left, size w px)
   // Wartości początkowe będą nadpisane przez te z localStorage, jeśli istnieją
-  const [crystalProps, _] = useLocalStorage('adhd-crystal-props', { // Zmieniono na [crystalProps, _]
+  const [crystalProps, setCrystalProps] = useLocalStorage('adhd-crystal-props', { // Zmieniono na [crystalProps, _]
     top: 147, // Zaktualizowano dla nowego rozmiaru kontenera (384px - 90px) / 2 = 147
     left: 147, // Zaktualizowano dla nowego rozmiaru kontenera
     size: 90, // Zwiększono rozmiar kryształu
   });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _ = setCrystalProps; // Celowo nieużywane, aby zachować API useLocalStorage
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -51,11 +53,11 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Efekt dla animacji zysku XP (błysk) i awansu na poziom
   useEffect(() => {
+    let flashTimer: number | undefined;
     // Błysk przy zysku XP
     if (lastXpGainTimestamp > 0 && user.xp > prevXp) {
       setIsFlashing(true);
-      const flashTimer = setTimeout(() => setIsFlashing(false), 500);
-      // Nie czyścimy tutaj, ponieważ może być inny timer dla błysku level-up
+      flashTimer = setTimeout(() => setIsFlashing(false), 500);
     }
     setPrevXp(user.xp);
 
@@ -66,6 +68,10 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     //   return () => clearTimeout(levelUpFlashTimer); // Czyścimy ten konkretny timer
     // }
     setPrevLevel(user.level); // Aktualizujemy poprzedni poziom
+
+    return () => {
+      if (flashTimer) clearTimeout(flashTimer);
+    };
   }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]); // Dodano user.level i prevLevel do zależności
 
   // Obliczenia dla wyświetlania XP i poziomu
@@ -141,7 +147,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       {/* Główny kontener dla kryształu i holdera - zmieniono na w-96 h-96 */}
       <div 
         className="relative w-96 h-96 flex items-center justify-center"
-        style={{ transform: 'translateY(20px)' }} {/* Zmieniono z 50px na 20px */}
+        style={{ transform: 'translateY(20px)' }} 
       >
         {/* Holder Image - teraz w pełni w kontenerze */}
         <img
