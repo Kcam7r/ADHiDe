@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Home, BookOpen, Calendar, Settings, X } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
-import { PowerCrystal } from './PowerCrystal'; // Import PowerCrystal
-import { showInfoToast } from '../utils/toast'; // Import showInfoToast
+import { PowerCrystal } from './PowerCrystal';
+import { showInfoToast } from '../utils/toast';
 
 interface SidebarProps {
   activeView: string;
@@ -11,7 +11,7 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOpenQuickThoughtsModal }) => {
-  const { resetXP } = useApp(); // Przywrócono useApp
+  const { resetXP } = useApp();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showFinalResetConfirmButton, setShowFinalResetConfirmButton] = useState(false);
 
@@ -22,7 +22,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
     { id: 'garage', 'label': 'Garaż', icon: Settings },
   ];
 
-  // Funkcje resetowania postępu - przywrócone
   const handleInitialResetClick = () => {
     setShowResetConfirm(true);
     setShowFinalResetConfirmButton(false);
@@ -56,6 +55,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
           />
         </div>
 
+        {/* Gamification Info - Power Crystal - PRZENIESIONO TUTAJ */}
+        <div className="border-b border-gray-700 flex flex-col items-center py-4"> {/* Zmieniono border-t na border-b i usunięto mt-auto */}
+          <PowerCrystal onCrystalClick={handleInitialResetClick} />
+        </div>
+
         {/* Navigation */}
         <nav className="flex-1 p-4">
           <ul className="space-y-2">
@@ -79,26 +83,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
             })}
           </ul>
         </nav>
-
-        {/* Gamification Info - Power Crystal - PRZYWRÓCONO TUTAJ */}
-        <div className="border-t border-gray-700 flex flex-col items-center mt-auto py-4"> {/* Dodano padding pionowy */}
-          <PowerCrystal onCrystalClick={handleInitialResetClick} />
-        </div>
       </div>
 
-      {/* Reset Confirmation Modal - PRZYWRÓCONO TUTAJ */}
+      {/* Reset Confirmation Modal */}
       {showResetConfirm && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
           onClick={(e) => {
-            // Zamknij modal tylko jeśli kliknięto na tło (nie na zawartość modalu)
             if (e.target === e.currentTarget) {
               handleCancelReset();
             }
           }}
         >
           <div className="bg-gray-800 p-6 rounded-lg max-w-md shadow-xl border border-gray-700 relative">
-            {showFinalResetConfirmButton && ( // Przycisk X widoczny tylko w drugim etapie
+            {showFinalResetConfirmButton && (
               <button
                 onClick={handleCancelReset}
                 className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
@@ -118,7 +116,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
             
             <div className="flex space-x-4">
               {showFinalResetConfirmButton ? (
-                // Drugi etap: Anuluj (lewo), Resetuj (prawo)
                 <>
                   <button
                     onClick={handleCancelReset}
@@ -134,7 +131,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
                   </button>
                 </>
               ) : (
-                // Pierwszy etap: Resetuj (lewo), Anuluj (prawo)
                 <>
                   <button
                     onClick={() => setShowFinalResetConfirmButton(true)}
