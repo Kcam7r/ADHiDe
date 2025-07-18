@@ -55,6 +55,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
           />
         </div>
 
+        {/* Gamification Info - Power Crystal - PRZENIESIONO TUTAJ */}
+        <div className="border-b border-gray-700 flex flex-col items-center py-4"> {/* Zmieniono border-t na border-b i usunięto mt-auto */}
+          <PowerCrystal onCrystalClick={handleInitialResetClick} />
+        </div>
+
         {/* Navigation */}
         <nav className="flex-1 p-4">
           <ul className="space-y-2">
@@ -78,11 +83,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
             })}
           </ul>
         </nav>
-
-        {/* Gamification Info - Power Crystal - PRZYWRÓCONO NA DÓŁ */}
-        <div className="border-t border-gray-700 flex flex-col items-center mt-auto py-4"> {/* Zmieniono border-b na border-t i dodano mt-auto */}
-          <PowerCrystal onCrystalClick={handleInitialResetClick} />
-        </div>
       </div>
 
       {/* Reset Confirmation Modal */}
