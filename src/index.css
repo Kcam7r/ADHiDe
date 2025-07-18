@@ -82,7 +82,8 @@
   100% { transform: translateY(0px); }
 }
 .animate-liquid-wave {
-  animation: liquid-wave 3s ease-in-out infinite;
+  animation: liquid-wave 3s linear infinite; /* Zmieniono ease-in-out na linear */
+  will-change: transform; /* Dodano dla optymalizacji */
 }
 
 /* Custom shadow for metallic casing */
