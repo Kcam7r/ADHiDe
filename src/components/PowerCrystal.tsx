@@ -178,8 +178,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         </div>
 
         {/* Wyświetlanie poziomu NA holderze */}
-        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 text-white text-2xl font-bold z-30 font-indie-flower">
-          LVL {user.level}
+        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 text-white text-3xl font-bold z-30 font-indie-flower">
+          {user.level}
         </div>
       </div>
 
