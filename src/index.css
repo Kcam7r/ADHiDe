@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom Scrollbar Styles */
+/* For Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px; /* Szerokość paska przewijania */
+  height: 8px; /* Wysokość paska przewijania dla przewijania poziomego */
+}
+
+::-webkit-scrollbar-track {
+  background: #1f2937; /* Kolor tła ścieżki paska przewijania (gray-800) */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4b5563; /* Kolor uchwytu paska przewijania (gray-600) */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280; /* Kolor uchwytu po najechaniu (gray-500) */
+}
+
+/* For Firefox (requires specific properties) */
+html {
+  scrollbar-width: thin; /* Ustawia szerokość paska przewijania na cienki */
+  scrollbar-color: #4b5563 #1f2937; /* Kolor uchwytu i ścieżki */
+}
+
+
 @keyframes fadeOut {
   from { opacity: 1; transform: translateY(0) scale(1) rotateZ(0deg); }
   to { opacity: 0; transform: translateY(-50px) scale(0.8) rotateZ(5deg); } /* Misja odlatuje w górę, lekko się zmniejsza i obraca */
