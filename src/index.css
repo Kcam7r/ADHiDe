@@ -93,9 +93,21 @@ html {
 
 /* New animations for PowerCrystal */
 @keyframes crystal-flash {
-  0% { box-shadow: 0 0 0px rgba(255, 255, 255, 0); }
-  50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.6); }
-  100% { box-shadow: 0 0 0px rgba(255, 255, 255, 0); }
+  0% {
+    box-shadow: 0 0 0px rgba(255, 255, 255, 0);
+    background-color: rgba(255, 255, 255, 0.15); /* Explicitly set to bg-white bg-opacity-15 */
+    opacity: 1; /* Explicitly set */
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.15); /* Explicitly set */
+    opacity: 1; /* Explicitly set */
+  }
+  100% {
+    box-shadow: 0 0 0px rgba(255, 255, 255, 0);
+    background-color: rgba(255, 255, 255, 0.15); /* Explicitly set */
+    opacity: 1; /* Explicitly set */
+  }
 }
 .animate-crystal-flash {
   animation: crystal-flash 0.5s ease-out;
