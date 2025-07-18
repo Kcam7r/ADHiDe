@@ -19,16 +19,17 @@ interface AppContextType {
   completedMissionsHistory: Mission[];
   lastXpGainTimestamp: number;
   xpParticles: XpParticleData[];
+  archivedQuickThoughts: QuickThought[]; // Nowy stan dla zarchiwizowanych myśli
   
   addXP: (amount: number, originX?: number, originY?: number) => void;
   resetXP: () => void;
   addHabit: (habit: Omit<Habit, 'id' | 'count'>) => void;
   updateHabit: (id: string, updates: Partial<Habit>) => void;
-  completeHabit: (id: string, originX?: number, originY?: number) => void; // Dodano originX, originY
+  completeHabit: (id: string, originX?: number, originY?: number) => void;
   deleteHabit: (id: string) => void;
   
   addDailyTask: (task: Omit<DailyTask, 'id' | 'completed'>) => void;
-  completeDailyTask: (id: string, originX?: number, originY?: number) => void; // Dodano originX, originY
+  completeDailyTask: (id: string, originX?: number, originY?: number) => void;
   deleteDailyTask: (id: string) => void;
   
   addMission: (mission: Omit<Mission, 'id' | 'completed'>) => void;
@@ -45,11 +46,12 @@ interface AppContextType {
   updateJournalEntry: (id: string, updates: Partial<JournalEntry>) => void;
   
   addQuickThought: (thought: Omit<QuickThought, 'id' | 'createdAt'>) => void;
-  deleteQuickThought: (id: string) => void;
+  archiveQuickThought: (id: string) => void; // Nowa funkcja do archiwizowania
+  // Usunięto deleteQuickThought, ponieważ zastępuje ją archiveQuickThought
 
   removeXpParticle: (id: string) => void;
   triggerConfetti: () => void;
-  confettiKey: number; // Nowa właściwość do wyzwalania konfetti
+  confettiKey: number;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -76,10 +78,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [projects, setProjects] = useLocalStorage<Project[]>('adhd-projects', []);
   const [journalEntries, setJournalEntries] = useLocalStorage<JournalEntry[]>('adhd-journal', []);
   const [quickThoughts, setQuickThoughts] = useLocalStorage<QuickThought[]>('adhd-thoughts', []);
+  const [archivedQuickThoughts, setArchivedQuickThoughts] = useLocalStorage<QuickThought[]>('adhd-archived-thoughts', []); // Nowy stan
   const [completedMissionsHistory, setCompletedMissionsHistory] = useLocalStorage<Mission[]>('adhd-completed-missions', []);
   const [lastXpGainTimestamp, setLastXpGainTimestamp] = useState(0);
   const [xpParticles, setXpParticles] = useState<XpParticleData[]>([]);
-  const [confettiKey, setConfettiKey] = useState(0); // Nowy stan dla konfetti
+  const [confettiKey, setConfettiKey] = useState(0);
 
   const calculateLevel = (xp: number) => Math.floor(xp / 1000) + 1;
 
@@ -90,17 +93,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setUser({ ...user, xp: newXP, level: newLevel });
     setLastXpGainTimestamp(Date.now());
 
-    // Generuj kulki tylko dla pozytywnego zysku XP
     if (originX !== undefined && originY !== undefined && amount > 0) { 
-      // Zmieniono logikę: teraz każda kulka reprezentuje dokładnie 5 XP.
       const numberOfParticles = Math.floor(amount / 5); 
       const newParticles: XpParticleData[] = [];
       for (let i = 0; i < numberOfParticles; i++) {
-        // Dodaj losowe przesunięcie dla startX i startY
-        const offsetX = (Math.random() - 0.5) * 40; // Od -20 do +20 pikseli
-        const offsetY = (Math.random() - 0.5) * 40; // Od -20 do +20 pikseli
+        const offsetX = (Math.random() - 0.5) * 40;
+        const offsetY = (Math.random() - 0.5) * 40;
         newParticles.push({
-          id: `${Date.now()}-${i}-${Math.random()}`, // Unikalne ID dla każdej kulki
+          id: `${Date.now()}-${i}-${Math.random()}`,
           startX: originX + offsetX,
           startY: originY + offsetY,
         });
@@ -114,7 +114,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const triggerConfetti = () => {
-    setConfettiKey(prev => prev + 1); // Inkrementuj klucz, aby wywołać efekt konfetti
+    setConfettiKey(prev => prev + 1);
   };
 
   const resetXP = () => {
@@ -145,7 +145,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     updateHabit(id, { 
       count: newCount, 
     });
-    // Przekazanie originX i originY do addXP
     addXP(habit.type === 'positive' ? 10 : -20, originX, originY);
   };
 
@@ -169,7 +168,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setDailyTasks((prevDailyTasks: DailyTask[]) => prevDailyTasks.map((taskItem: DailyTask) => 
       taskItem.id === id ? { ...taskItem, completed: true, completedAt: new Date() } : taskItem
     ));
-    // Przekazanie originX i originY do addXP
     addXP(10, originX, originY);
   };
 
@@ -182,7 +180,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       ...mission,
       id: Date.now().toString(),
       completed: false,
-      isActive: false, // Domyślnie nieaktywna
+      isActive: false,
     };
     setMissions([...missions, newMission]);
   };
@@ -200,21 +198,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setMissions((prevMissions: Mission[]) => prevMissions.map((mission: Mission) =>
       mission.id === id ? { ...mission, isActive: true } : mission
     ));
-    // NEW: Update the mission's isActive status within projects as well
     setProjects((prevProjects: Project[]) => prevProjects.map((project: Project) => ({
       ...project,
       tasks: project.tasks.map((task: Mission) =>
         task.id === id ? { ...task, isActive: true } : task
       )
     })));
-    addXP(20); // Brak pochodzenia dla aktywacji
+    addXP(20);
   };
 
   const deactivateMission = (id: string) => {
     setMissions((prevMissions: Mission[]) => prevMissions.map((mission: Mission) =>
       mission.id === id ? { ...mission, isActive: false } : mission
     ));
-    // NEW: Update the mission's isActive status within projects as well
     setProjects((prevProjects: Project[]) => prevProjects.map((project: Project) => ({
       ...project,
       tasks: project.tasks.map((task: Mission) =>
@@ -225,7 +221,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const deleteMission = (id: string) => {
     setMissions((prevMissions: Mission[]) => prevMissions.filter((mission: Mission) => mission.id !== id));
-    // Usuń również z projektów, jeśli było to zadanie projektowe
     setProjects((prevProjects: Project[]) => prevProjects.map((project: Project) => ({
       ...project,
       tasks: project.tasks.filter((task: Mission) => task.id !== id)
@@ -254,7 +249,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       id: Date.now().toString(),
       completed: false,
       projectId,
-      isActive: false, // Domyślnie nieaktywna
+      isActive: false,
     };
     
     setProjects((prevProjects: Project[]) => prevProjects.map((project: Project) => 
@@ -262,7 +257,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         ? { ...project, tasks: [...project.tasks, newTask] }
         : project
     ));
-    // Dodaj nowe zadanie do globalnej listy misji
     setMissions((prevMissions: Mission[]) => [...prevMissions, newTask]);
   };
 
@@ -272,7 +266,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       id: Date.now().toString()
     };
     setJournalEntries([newEntry, ...journalEntries]);
-    addXP(25); // Brak pochodzenia
+    addXP(25);
   };
 
   const updateJournalEntry = (id: string, updates: Partial<JournalEntry>) => {
@@ -288,11 +282,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       createdAt: new Date()
     };
     setQuickThoughts([newThought, ...quickThoughts]);
-    addXP(5); // Brak pochodzenia
+    addXP(5);
   };
 
-  const deleteQuickThought = (id: string) => {
-    setQuickThoughts(quickThoughts.filter(thought => thought.id !== id));
+  const archiveQuickThought = (id: string) => {
+    const thoughtToArchive = quickThoughts.find(t => t.id === id);
+    if (thoughtToArchive) {
+      setQuickThoughts(prev => prev.filter(t => t.id !== id));
+      setArchivedQuickThoughts(prev => [thoughtToArchive, ...prev]);
+    }
   };
 
   // Resetuj zadania codzienne o północy
@@ -300,31 +298,28 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const scheduleNextReset = () => {
       const now = new Date();
       const midnight = new Date(now);
-      midnight.setHours(24, 0, 0, 0); // Ustawia na północ *następnego* dnia
+      midnight.setHours(24, 0, 0, 0);
 
       const timeToMidnight = midnight.getTime() - now.getTime();
 
-      // Wyczyść istniejący timeout, aby zapobiec wielu timerom
       if (window.dailyResetTimeout) {
         clearTimeout(window.dailyResetTimeout);
       }
 
       window.dailyResetTimeout = setTimeout(() => {
         setDailyTasks((prevTasks: DailyTask[]) => prevTasks.map((task: DailyTask) => ({ ...task, completed: false, completedAt: undefined })));
-        // Po zresetowaniu, zaplanuj następne zresetowanie na następną północ
         scheduleNextReset();
       }, timeToMidnight);
     };
 
-    scheduleNextReset(); // Początkowe wywołanie, aby zaplanować pierwsze zresetowanie
+    scheduleNextReset();
 
-    // Funkcja czyszcząca, aby wyczyścić timeout, gdy komponent zostanie odmontowany
     return () => {
       if (window.dailyResetTimeout) {
         clearTimeout(window.dailyResetTimeout);
       }
     };
-  }, []); // Pusta tablica zależności oznacza, że uruchamia się raz po zamontowaniu i czyści po odmontowaniu.
+  }, []);
 
   return (
     <AppContext.Provider value={{
@@ -335,6 +330,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       projects,
       journalEntries,
       quickThoughts,
+      archivedQuickThoughts, // Dodano do kontekstu
       completedMissionsHistory,
       lastXpGainTimestamp,
       xpParticles,
@@ -358,7 +354,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       addJournalEntry,
       updateJournalEntry,
       addQuickThought,
-      deleteQuickThought,
+      archiveQuickThought, // Dodano do kontekstu
       removeXpParticle,
       triggerConfetti,
       confettiKey,
