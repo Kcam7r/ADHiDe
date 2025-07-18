@@ -128,7 +128,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         <img
           src="/holder.png"
           alt="Crystal Holder"
-          className="absolute w-48 h-auto bottom-0 left-1/2 -translate-x-1/2 z-10"
+          className="absolute w-96 h-auto bottom-0 left-1/2 -translate-x-1/2 z-10 filter-white-image"
         />
 
         {/* Kula Kryształu (teraz przezroczysta z efektem szkła) */}
