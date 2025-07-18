@@ -92,8 +92,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
     // Rozpocznij dodawanie bąbelków tylko, jeśli postęp XP jest większy niż 5%
     if (xpProgress > 0.05) { 
-      // Zmniejszona częstotliwość: dodawaj bąbelek co 1 do 3 sekundy
-      const interval = setInterval(addRandomBubble, 1000 + Math.random() * 2000);
+      // Zmniejszona częstotliwość: dodawaj bąbelek co 2 do 5 sekund
+      const interval = setInterval(addRandomBubble, 2000 + Math.random() * 3000);
       return () => clearInterval(interval);
     } else {
       setBubbles([]); // Wyczyść bąbelki, jeśli XP jest zbyt niskie
@@ -137,7 +137,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
               boxShadow: '0 0 15px rgba(255,165,0,0.7)', // Pomarańczowy blask
             }}
           >
-            {/* Dynamically rendered bubbles - MOVED HERE */}
+            {/* Dynamically rendered bubbles */}
             {bubbles.map(bubble => (
               <div
                 key={bubble.id}
