@@ -131,6 +131,17 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           className="absolute w-full h-auto bottom-0 left-1/2 -translate-x-1/2 z-5 filter-white-image"
         />
 
+        {/* Nowy element pod kryształem mocy */}
+        <div
+          className="absolute rounded-full bg-gray-800 z-10" // Z-index 10, aby był pod kryształem (z-20) ale nad holderem (z-5)
+          style={{
+            top: crystalProps.top,
+            left: crystalProps.left,
+            width: crystalProps.size,
+            height: crystalProps.size,
+          }}
+        ></div>
+
         {/* Kula Kryształu (teraz przezroczysta z efektem szkła) */}
         <div
           ref={crystalRef}
