@@ -133,12 +133,20 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       <div 
         className="relative w-56 h-[300px] flex items-center justify-center"
       >
-        {/* Holder Image (holder2.png) */}
+        {/* Holder Image (holder2.png) - Pierwsza instancja */}
         <img
           src="/holder2.png" 
           alt="Crystal Holder"
           className="absolute w-[200px] h-[250px] z-[5] filter-white-invert"
           style={{ top: 47, left: 12 }}
+        />
+
+        {/* Holder Image (holder2.png) - Druga instancja, nieco przesunięta */}
+        <img
+          src="/holder2.png" 
+          alt="Crystal Holder Duplicate"
+          className="absolute w-[200px] h-[250px] z-[6] filter-white-invert"
+          style={{ top: 57, left: 22 }}
         />
 
         {/* Nowy element holder3.png */}
