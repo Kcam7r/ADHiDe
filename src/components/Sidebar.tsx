@@ -4,6 +4,7 @@ import { useApp } from '../contexts/AppContext';
 import { QuickThoughtModal } from './QuickThoughtModal';
 import { QuickThoughtsModal } from './QuickThoughtsModal';
 import { PowerCrystal } from './PowerCrystal'; // Import PowerCrystal
+import logo from '../assets/logo.png'; // Import logo
 
 interface SidebarProps {
   activeView: string;
@@ -31,9 +32,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
   return (
     <>
       <div className="w-64 bg-gray-800 h-screen flex flex-col">
-        {/* Header */}
-        <div className="p-6 border-b border-gray-700">
-          <h1 className="text-2xl font-bold text-white">ADHiDe</h1>
+        {/* Header with Logo and Title */}
+        <div className="p-6 border-b border-gray-700 flex flex-col items-center justify-center">
+          <img src={logo} alt="ADHiDe Logo" className="w-20 h-20 mb-2" />
+          <h1 className="text-2xl font-bold text-white text-center">ADHiDe</h1>
         </div>
 
         {/* Navigation */}
@@ -47,7 +49,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
                     onClick={() => onViewChange(item.id)}
                     className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-colors ${
                       activeView === item.id
-                        ? 'bg-cyan-600 text-white'
+                        ? 'bg-cyan-600 text-white shadow-md'
                         : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                     }`}
                   >
@@ -75,14 +77,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
           <div className="space-y-2">
             <button
               onClick={() => setShowQuickThought(true)}
-              className="w-full flex items-center space-x-2 p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+              className="w-full flex items-center space-x-2 p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors shadow-sm"
             >
               <Lightbulb className="w-4 h-4 text-yellow-400" />
               <span className="text-gray-300 text-sm">Nowa myśl</span>
             </button>
             <button
               onClick={() => setShowQuickThoughts(true)}
-              className="w-full text-left p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+              className="w-full text-left p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors shadow-sm"
             >
               <span className="text-gray-300 text-sm">Moje Myśli</span>
             </button>
@@ -93,7 +95,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
       {/* Reset Confirmation Modal */}
       {showResetConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-800 p-6 rounded-lg max-w-md">
+          <div className="bg-gray-800 p-6 rounded-lg max-w-md shadow-xl border border-gray-700">
             <h3 className="text-white font-bold mb-4">Resetować postęp?</h3>
             <p className="text-gray-300 mb-6">
               Czy na pewno chcesz zresetować wszystkie punkty XP i poziom? Ta akcja jest nieodwracalna.
@@ -101,13 +103,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
             <div className="flex space-x-4">
               <button
                 onClick={handleResetConfirm}
-                className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
               >
                 Resetuj
               </button>
               <button
                 onClick={() => setShowResetConfirm(false)}
-                className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"
+                className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
               >
                 Anuluj
               </button>
