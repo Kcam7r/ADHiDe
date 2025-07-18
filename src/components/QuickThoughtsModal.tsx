@@ -3,6 +3,7 @@ import { X, Trash2, MoreVertical, CheckCircle, Archive, BookOpen, Target, Calend
 import { useApp } from '../contexts/AppContext';
 import { showSuccessToast, showErrorToast, showInfoToast } from '../utils/toast';
 import { format, isSameDay } from 'date-fns';
+import { pl } from 'date-fns/locale'; // Importuj obiekt locale 'pl'
 
 interface QuickThoughtsModalProps {
   onClose: () => void;
@@ -47,7 +48,7 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose 
   }, []);
 
   const formatDate = (date: Date) => {
-    return format(new Date(date), 'dd.MM.yyyy HH:mm', { locale: { code: 'pl' } });
+    return format(new Date(date), 'dd.MM.yyyy HH:mm', { locale: pl }); // Użyj zaimportowanego obiektu 'pl'
   };
 
   const handleConvertToDailyTask = (thought: QuickThought) => {
