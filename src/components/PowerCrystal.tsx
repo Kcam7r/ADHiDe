@@ -123,20 +123,20 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     >
       {/* Main container for the holder and the crystal */}
       {/* This div defines the overall size of the interactive element including the holder */}
-      <div className="relative w-80 h-80 flex items-center justify-center"> {/* Zmieniono rozmiar na w-80 h-80 */}
+      <div className="relative w-80 h-80 flex items-center justify-center">
         {/* Holder image - positioned absolutely to cover this container */}
-        <img src="/holder.png" alt="Crystal Holder" className="absolute inset-0 w-full h-full object-contain z-30 filter-white-image" /> {/* Dodano klasę filter-white-image */}
+        <img src="/holder.png" alt="Crystal Holder" className="absolute inset-0 w-full h-full object-contain z-30 filter-white-image" />
 
         {/* Crystal Sphere - scaled down and positioned within the holder's "hole" */}
         {/* The crystalRef is on this element to correctly calculate XP particle target */}
         <div
           ref={crystalRef}
-          className={`relative w-48 h-48 rounded-full overflow-hidden shadow-lg transition-all duration-300
+          className={`relative w-36 h-36 rounded-full overflow-hidden shadow-lg transition-all duration-300
             bg-gradient-to-br ${currentCrystalColor}
             ${isFlashing ? 'animate-crystal-flash' : ''}
             z-20 /* Lower z-index than holder image */
             /* Adjust position to fit the holder's hole */
-            absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 /* Center it */
+            absolute top-[35%] left-1/2 -translate-x-1/2 -translate-y-1/2 /* Center it relative to its own size */
           `}
           style={{
             boxShadow: 'inset 0 0 15px rgba(255,255,255,0.5), 0 0 20px rgba(0,0,0,0.5)',
