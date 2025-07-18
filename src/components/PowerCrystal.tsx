@@ -134,16 +134,17 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       onMouseLeave={() => setIsHovered(false)}
       onClick={onCrystalClick}
     >
-      {/* Główny kontener dla kryształu i holdera - zmieniono na w-96 h-96 */}
+      {/* Główny kontener dla kryształu i holdera */}
+      {/* Przywrócono to przesunięcie */}
       <div 
         className="relative w-96 h-96 flex items-center justify-center"
-        style={{ transform: 'translateY(28px)' }} {/* Przywrócono to przesunięcie */}
+        style={{ transform: 'translateY(28px)' }} 
       >
         {/* Holder Image - teraz w pełni w kontenerze */}
         <img
           src="/holder2.png" {/* Zmieniono na holder2.png */}
           alt="Crystal Holder"
-          className="absolute w-full h-full left-1/2 -translate-x-1/2 z-5 filter invert" {/* Usunięto object-contain object-bottom */}
+          className="absolute w-full h-full left-1/2 -translate-x-1/2 z-5 filter invert" 
         />
 
         {/* Nowy element pod kryształem mocy (okrągła podstawa) */}
