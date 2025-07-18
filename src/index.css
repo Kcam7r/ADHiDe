@@ -180,10 +180,10 @@
 
 /* New bubble animations for PowerCrystal */
 @keyframes bubble-rise {
-  0% { transform: translateY(0) scale(0.5); opacity: 0; }
-  10% { opacity: 1; transform: translateY(-10px) scale(0.8); } /* Appear and start rising */
+  0% { bottom: 0%; transform: scale(0.5); opacity: 0; }
+  10% { opacity: 1; transform: scale(0.8); } /* Appear and start rising */
   80% { opacity: 0.7; }
-  100% { transform: translateY(-150px) scale(1.2); opacity: 0; } /* Rise up and fade out, 150px should be enough to exit the crystal */
+  100% { bottom: 100%; transform: scale(1.2); opacity: 0; } /* Rise up to 100% of parent height and fade out */
 }
 
 .bubble {
