@@ -19,9 +19,10 @@ interface AppContextType {
   completedMissionsHistory: Mission[];
   lastXpGainTimestamp: number;
   xpParticles: XpParticleData[];
-  archivedQuickThoughts: QuickThought[]; // Nowy stan dla zarchiwizowanych myśli
+  archivedQuickThoughts: QuickThought[];
   
   addXP: (amount: number, originX?: number, originY?: number) => void;
+  addLargeXP: (amount: number) => void; // Nowa funkcja
   resetXP: () => void;
   addHabit: (habit: Omit<Habit, 'id' | 'count'>) => void;
   updateHabit: (id: string, updates: Partial<Habit>) => void;
@@ -46,8 +47,7 @@ interface AppContextType {
   updateJournalEntry: (id: string, updates: Partial<JournalEntry>) => void;
   
   addQuickThought: (thought: Omit<QuickThought, 'id' | 'createdAt'>) => void;
-  archiveQuickThought: (id: string) => void; // Nowa funkcja do archiwizowania
-  // Usunięto deleteQuickThought, ponieważ zastępuje ją archiveQuickThought
+  archiveQuickThought: (id: string) => void;
 
   removeXpParticle: (id: string) => void;
   triggerConfetti: () => void;
@@ -78,7 +78,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [projects, setProjects] = useLocalStorage<Project[]>('adhd-projects', []);
   const [journalEntries, setJournalEntries] = useLocalStorage<JournalEntry[]>('adhd-journal', []);
   const [quickThoughts, setQuickThoughts] = useLocalStorage<QuickThought[]>('adhd-thoughts', []);
-  const [archivedQuickThoughts, setArchivedQuickThoughts] = useLocalStorage<QuickThought[]>('adhd-archived-thoughts', []); // Nowy stan
+  const [archivedQuickThoughts, setArchivedQuickThoughts] = useLocalStorage<QuickThought[]>('adhd-archived-thoughts', []);
   const [completedMissionsHistory, setCompletedMissionsHistory] = useLocalStorage<Mission[]>('adhd-completed-missions', []);
   const [lastXpGainTimestamp, setLastXpGainTimestamp] = useState(0);
   const [xpParticles, setXpParticles] = useState<XpParticleData[]>([]);
@@ -107,6 +107,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
       setXpParticles(prev => [...prev, ...newParticles]);
     }
+  };
+
+  // Nowa funkcja do dodawania dużej ilości XP bez generowania cząsteczek
+  const addLargeXP = (amount: number) => {
+    setUser(prevUser => {
+      const newXP = prevUser.xp + amount;
+      const newLevel = calculateLevel(newXP);
+      return { ...prevUser, xp: newXP, level: newLevel };
+    });
+    triggerConfetti(); // Wywołaj konfetti dla dużego awansu
   };
 
   const removeXpParticle = (id: string) => {
@@ -330,11 +340,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       projects,
       journalEntries,
       quickThoughts,
-      archivedQuickThoughts, // Dodano do kontekstu
+      archivedQuickThoughts,
       completedMissionsHistory,
       lastXpGainTimestamp,
       xpParticles,
       addXP,
+      addLargeXP, // Dodano do kontekstu
       resetXP,
       addHabit,
       updateHabit,
@@ -354,7 +365,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       addJournalEntry,
       updateJournalEntry,
       addQuickThought,
-      archiveQuickThought, // Dodano do kontekstu
+      archiveQuickThought,
       removeXpParticle,
       triggerConfetti,
       confettiKey,

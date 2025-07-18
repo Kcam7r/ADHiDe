@@ -3,8 +3,7 @@ import { Home, BookOpen, Calendar, Settings, Lightbulb } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import { QuickThoughtModal } from './QuickThoughtModal';
 import { QuickThoughtsModal } from './QuickThoughtsModal';
-import { PowerCrystal } from './PowerCrystal'; // Import PowerCrystal
-// Usunięto import logo, ponieważ jest ono teraz w folderze public i dostępne bezpośrednio
+import { PowerCrystal } from './PowerCrystal';
 
 interface SidebarProps {
   activeView: string;
@@ -12,7 +11,7 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) => {
-  const { resetXP } = useApp();
+  const { resetXP, addLargeXP } = useApp(); // Dodano addLargeXP
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showQuickThought, setShowQuickThought] = useState(false);
   const [showQuickThoughts, setShowQuickThoughts] = useState(false);
@@ -31,7 +30,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
 
   return (
     <>
-      <div className="w-64 bg-gray-800 h-screen flex flex-col"> {/* Zmieniono w-120 na w-64 */}
+      <div className="w-64 bg-gray-800 h-screen flex flex-col">
         {/* Header with Logo and Title */}
         <div className="p-6 border-b border-gray-700 flex flex-col items-center justify-center">
           <img src="/logo.png" alt="ADHiDe Logo" className="w-48 h-auto mb-2 mt-2" />
@@ -87,6 +86,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
               <span className="text-300 text-sm">Moje Myśli</span>
             </button>
           </div>
+        </div>
+
+        {/* Temporary button for adding large XP */}
+        <div className="p-4 border-t border-gray-700">
+          <button
+            onClick={() => addLargeXP(100000000)}
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+          >
+            Dodaj 100M XP (TEST)
+          </button>
         </div>
       </div>
 
