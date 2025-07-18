@@ -113,7 +113,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     return () => {
       if (bubbleIntervalRef.current) {
         clearInterval(bubbleIntervalRef.current);
-        bubbleIntervalRef.current = null;
       }
     };
   }, [xpProgress]);
@@ -135,15 +134,16 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         className="relative w-56 h-76 flex items-center justify-center" /* Powiększono szerokość i wysokość */
         style={{ transform: 'translateY(-6px)' }} /* Przesunięcie w górę o 20px (14 - 20 = -6) */
       >
-        {/* Holder Image - teraz w pełni w kontenerze, zachowując proporcje */}
+        {/* Holder Image - TYMCZASOWE ZMIANY DLA DIAGNOSTYKI */}
         <img
           src="/holder2.png" 
           alt="Crystal Holder"
-          className="absolute h-full w-auto left-1/2 -translate-x-1/2 z-5 filter-white-invert" /* Przywrócono filter-white-invert */
+          className="absolute w-[150px] h-[200px] left-1/2 -translate-x-1/2 z-50 bg-pink-500 border-4 border-green-500" /* Zmieniono rozmiar, dodano tło i ramkę, zwiększono z-index */
+          // Usunięto filter-white-invert na czas diagnostyki
         />
 
-        {/* Nowy element pod kryształem mocy (okrągła podstawa) */}
-        <div
+        {/* Nowy element pod kryształem mocy (okrągła podstawa) - TYMCZASOWO UKRYTY */}
+        {/* <div
           className="absolute rounded-full bg-gray-800 z-10"
           style={{
             top: baseTop,
@@ -151,10 +151,10 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             width: baseSize,
             height: baseSize,
           }}
-        ></div>
+        ></div> */}
 
-        {/* Kula Kryształu (teraz przezroczysta z efektem szkła) */}
-        <div
+        {/* Kula Kryształu (teraz przezroczysta z efektem szkła) - TYMCZASOWO UKRYTA */}
+        {/* <div
           ref={crystalRef}
           className={`absolute rounded-full overflow-hidden shadow-lg transition-all duration-300
             ${isFlashing ? 'animate-crystal-flash' : ''}
@@ -170,7 +170,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             border: '2px solid rgba(255,255,255,0.2)'
           }}
         >
-          {/* Wypełnienie płynem (żółte) */}
           <div
             className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-500 to-yellow-400 transition-all duration-300 ease-out animate-liquid-wave z-20"
             style={{
@@ -179,13 +178,11 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             }}
             ref={liquidRef} // Dołącz ref do elementu płynu
           >
-            {/* Bąbelki będą dodawane dynamicznie przez JavaScript */}
           </div>
-          {/* Wyświetlanie poziomu W ŚRODKU kryształu */}
           <div className="relative text-white text-3xl font-bold z-30 font-indie-flower">
             {user.level}
           </div>
-        </div>
+        </div> */}
 
         {/* Informacje o XP na najechanie myszką */}
         <div
