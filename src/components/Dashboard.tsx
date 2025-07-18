@@ -5,7 +5,7 @@ import { Mission, DailyTask } from '../types';
 import { MissionHistoryModal } from './MissionHistoryModal';
 import { DailyTaskStamp } from './DailyTaskStamp'; // Import the new component
 import { showSuccessToast, showInfoToast, showErrorToast } from '../utils/toast'; // Importuj funkcje toastów
-import { MagnifierWrapper } from './MagnifierWrapper'; // Import MagnifierWrapper
+// Usunięto import MagnifierWrapper
 
 export const Dashboard: React.FC = () => {
   const { 
@@ -281,7 +281,7 @@ export const Dashboard: React.FC = () => {
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Nawyki */}
-          <MagnifierWrapper className="lg:col-span-1">
+          <div className="lg:col-span-1">
             <div className="bg-gray-800 rounded-lg p-6">
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
                 <span>✨</span>
@@ -317,7 +317,7 @@ export const Dashboard: React.FC = () => {
                 )}
               </div>
             </div>
-          </MagnifierWrapper>
+          </div>
 
           {/* Codzienne */}
           <div className="bg-gray-800 rounded-lg p-6">
