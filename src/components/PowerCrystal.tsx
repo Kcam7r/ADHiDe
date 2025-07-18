@@ -19,7 +19,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
   const crystalSize = 100; // Rozmiar kryształu
-  const crystalTop = 99; // Pozycja Y wewnątrz holdera - Zmieniono z 103 na 99
+  const crystalTop = 96; // Pozycja Y wewnątrz holdera - Zmieniono z 99 na 96
   const crystalLeft = 62; // Pozycja X wewnątrz holdera
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
