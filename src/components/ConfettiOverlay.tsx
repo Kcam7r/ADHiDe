@@ -15,11 +15,7 @@ export const ConfettiOverlay: React.FC = () => {
     // Wyzwalaj konfetti tylko jeśli confettiKey się zmienił i nie jest to początkowe 0
     if (confettiKey > 0 && confettiKey !== prevConfettiKeyRef.current) {
       setShowConfetti(true);
-      // Resetuj stan konfetti po krótkim czasie, aby umożliwić ponowne wywołanie
-      const timer = setTimeout(() => {
-        setShowConfetti(false);
-      }, 2000); // Czas trwania konfetti
-      return () => clearTimeout(timer);
+      // Usunięto setTimeout, aby konfetti znikało naturalnie po zakończeniu animacji
     }
     prevConfettiKeyRef.current = confettiKey; // Zaktualizuj poprzedni klucz
   }, [confettiKey]); // Zależność od confettiKey
