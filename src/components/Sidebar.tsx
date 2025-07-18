@@ -37,7 +37,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
           <img 
             src="/logo.png" 
             alt="ADHiDe Logo" 
-            className="w-48 h-auto mb-2 mt-2 transition-all duration-200 hover:scale-105 hover:drop-shadow-[0_0_15px_rgba(74,222,128,0.8)]"
+            className="w-48 h-auto mb-2 mt-2 transition-all duration-200 hover:scale-105 drop-shadow-[0_0_15px_rgba(74,222,128,0.8)] hover:animate-logo-flicker"
           />
         </div>
 

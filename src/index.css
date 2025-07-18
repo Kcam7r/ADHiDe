@@ -255,3 +255,22 @@ html {
 .filter-tree-color {
   filter: sepia(100%) saturate(200%) hue-rotate(20deg) brightness(80%);
 }
+
+/* Nowa animacja dla migotania logo */
+@keyframes logo-flicker {
+  0%, 100% {
+    filter: drop-shadow(0 0 15px rgba(74,222,128,0.8));
+    opacity: 1;
+  }
+  20%, 80% {
+    filter: drop-shadow(0 0 5px rgba(74,222,128,0.3)); /* Mniejszy blask */
+    opacity: 0.8; /* Lekkie przyciemnienie */
+  }
+  40%, 60% {
+    filter: drop-shadow(0 0 20px rgba(74,222,128,1)); /* Większy blask */
+    opacity: 1;
+  }
+}
+.animate-logo-flicker {
+  animation: logo-flicker 0.4s ease-in-out; /* Szybka animacja */
+}
