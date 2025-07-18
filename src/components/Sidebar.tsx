@@ -31,7 +31,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
         {/* Header with Logo and Title */}
         <div 
           className="p-6 border-b border-gray-700 flex flex-col items-center justify-center cursor-pointer
-                     transition-transform duration-200 hover:scale-105" {/* Zmieniono na hover:scale-105 */}
+                     transition-transform duration-200 hover:scale-105"
           onClick={onOpenQuickThoughtsModal}
           title="Moje Myśli"
         >
