@@ -227,7 +227,7 @@ html {
     border-radius: 50%;
     animation: rise linear infinite;
     pointer-events: none;
-    filter: blur(0.5px); /* Delikatne rozmycie */
+    filter: blur(0.1px); /* Minimalne rozmycie */
     z-index: 26; /* Zwiększony z-index, aby były widoczne nad holder3.png (z-25) */
 }
 
@@ -236,15 +236,15 @@ html {
         transform: translateY(0) translateX(0);
         opacity: 0; /* Start niewidoczny */
     }
-    10% { /* Szybkie pojawienie się */
+    5% { /* Szybkie pojawienie się */
         opacity: 1; /* Pełna widoczność */
     }
-    90% {
-        opacity: 1; /* Utrzymanie pełnej widoczności */
-        transform: translateY(-150px) translateX(var(--bubble-drift-x-end, -10px)); /* Stały, większy dystans wznoszenia */
+    95% { /* Utrzymanie pełnej widoczności do prawie końca */
+        opacity: 1;
+        transform: translateY(-200px) translateX(var(--bubble-drift-x-end, -10px)); /* Zwiększony dystans wznoszenia */
     }
     100% {
-        transform: translateY(-150px) translateX(var(--bubble-drift-x-end, -10px)); /* Stały, większy dystans wznoszenia */
+        transform: translateY(-200px) translateX(var(--bubble-drift-x-end, -10px)); /* Zwiększony dystans wznoszenia */
         opacity: 0; /* Całkowite zanikanie */
     }
 }

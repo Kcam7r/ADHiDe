@@ -67,16 +67,15 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Efekt do generowania bąbelków
   useEffect(() => {
-    // Generuj bąbelki tylko jeśli xpProgress jest większy od 0 (lub minimalnej wartości)
-    // Zapewniamy, że bąbelki pojawiają się, jeśli jest jakikolwiek płyn (min. 5%)
-    if (Math.max(5, xpProgress * 100) > 0) {
+    // Generuj bąbelki zawsze dla celów testowych
+    if (true) { 
       if (liquidRef.current && !bubbleIntervalRef.current) {
         bubbleIntervalRef.current = setInterval(() => {
           if (liquidRef.current) {
             const bubble = document.createElement('div');
             bubble.className = 'babel';
 
-            const size = Math.random() * 15 + 8; // Zwiększono rozmiar z (10+5) na (15+8)
+            const size = Math.random() * 20 + 10; // Zwiększono rozmiar
             bubble.style.width = `${size}px`;
             bubble.style.height = `${size}px`;
             bubble.style.left = `${Math.random() * 90 + 5}%`;
@@ -87,7 +86,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             const driftX = Math.random() * 20 - 10;
             const driftXEnd = Math.random() * 20 - 10;
             
-            // Usunięto ustawianie --bubble-target-y, ponieważ teraz jest stałe w CSS
             bubble.style.setProperty('--bubble-drift-x', `${driftX}px`);
             bubble.style.setProperty('--bubble-drift-x-end', `${driftXEnd}px`);
 
@@ -97,11 +95,11 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
               bubble.remove();
             }, duration * 1000 + 50);
           }
-        }, 500);
+        }, 300); // Zwiększono częstotliwość dla testów
       }
     } else {
       if (bubbleIntervalRef.current) {
-        clearInterval(bubbleIntervalRef.current);
+        clearInterval(bubbleInterval.current);
         bubbleIntervalRef.current = null;
       }
       if (liquidRef.current) {
@@ -162,7 +160,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         {/* Kula Kryształu (teraz przezroczysta z efektem szkła) */}
         <div
           ref={crystalRef}
-          className={`absolute rounded-full overflow-hidden shadow-lg transition-all duration-300
+          className={`absolute rounded-full shadow-lg transition-all duration-300
             ${isFlashing ? 'animate-crystal-flash' : ''}
             z-20 flex items-center justify-center
             bg-white bg-opacity-15
