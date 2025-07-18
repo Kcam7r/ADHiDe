@@ -315,3 +315,15 @@ html {
   animation: bubble-rise linear infinite; /* Ciągła animacja */
   pointer-events: none; /* Upewnij się, że nie blokują kliknięć */
 }
+
+/* Nowa klasa dla efektu 3D na holderze */
+.metallic-3d-effect {
+  /* Zewnętrzne cienie dla głębi i subtelnego blasku */
+  box-shadow:
+    0 8px 16px rgba(0, 0, 0, 0.7), /* Główny cień, lekko przesunięty w dół */
+    0 -4px 8px rgba(255, 255, 255, 0.08), /* Subtelne podświetlenie od góry */
+    /* Wewnętrzne cienie dla efektu fazowania/wypukłości */
+    inset 0 4px 8px rgba(0, 0, 0, 0.3), /* Wewnętrzny cień od góry dla głębi */
+    inset 0 -4px 8px rgba(255, 255, 255, 0.15); /* Wewnętrzne podświetlenie od dołu */
+  transition: box-shadow 0.3s ease-out;
+}

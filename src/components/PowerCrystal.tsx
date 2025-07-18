@@ -92,7 +92,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         <img
           src="/holder2.png" 
           alt="Crystal Holder Duplicate"
-          className="absolute w-[200px] h-[250px] z-[6] filter-white-invert"
+          className="absolute w-[200px] h-[250px] z-[6] filter-white-invert metallic-3d-effect"
           style={{ top: 35, left: 12 }}
         />
 
