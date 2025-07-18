@@ -1,32 +1,34 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useApp } from '../contexts/AppContext';
-// Usunięto import XpParticle, ponieważ nie będzie już renderowany bezpośrednio tutaj
-// Usunięto import useLocalStorage
 
 interface PowerCrystalProps {
   onCrystalClick: () => void;
 }
 
 export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystalClick }) => {
-  const { user, lastXpGainTimestamp, addXP, resetXP } = useApp(); // Usunięto xpParticles, removeXpParticle
+  const { user, lastXpGainTimestamp, setCrystalPosition } = useApp(); // Dodano setCrystalPosition
   const [isHovered, setIsHovered] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
   const [prevXp, setPrevXp] = useState(user.xp);
-  const [prevLevel, setPrevLevel] = useState(user.level); // Nowy stan do śledzenia poprzedniego poziomu
+  const [prevLevel, setPrevLevel] = useState(user.level);
   const crystalRef = useRef<HTMLDivElement>(null);
   const liquidRef = useRef<HTMLDivElement>(null);
-  // Usunięto bubbleIntervalRef, ponieważ bąbelki będą zarządzane przez inny komponent
-  // Usunięto powerCrystalContainerRef, ponieważ bąbelki będą zarządzane przez inny komponent
 
   // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
-  const crystalSize = 105; // Rozmiar kryształu - Zmieniono ze 100 na 105
-  const crystalTop = 96.5; // Pozycja Y wewnątrz holdera - Dostosowano dla wyśrodkowania
-  const crystalLeft = 59.5; // Pozycja X wewnątrz holdera - Dostosowano dla wyśrodkowania
+  const crystalSize = 105;
+  const crystalTop = 96.5;
+  const crystalLeft = 59.5;
 
-  // Usunięto crystalCenter i useLayoutEffect, ponieważ cząsteczki XP będą renderowane globalnie
-  // i nie potrzebują dokładnego centrum kryształu jako celu.
-  // Zamiast tego, PowerCrystal będzie przekazywać swoje centrum do addXP,
-  // a XpBubblesOverlay będzie używać tych danych do animacji.
+  // Użyj useLayoutEffect do pobrania pozycji kryształu po renderowaniu, ale przed malowaniem
+  useLayoutEffect(() => {
+    if (crystalRef.current) {
+      const rect = crystalRef.current.getBoundingClientRect();
+      // Oblicz środek kryształu
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      setCrystalPosition({ x: centerX, y: centerY });
+    }
+  }, [setCrystalPosition, crystalSize, crystalTop, crystalLeft]); // Zależności od rozmiaru/pozycji, aby aktualizować po zmianach
 
   // Efekt dla animacji zysku XP (błysk) i awansu na poziom
   useEffect(() => {
@@ -38,33 +40,24 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     }
     setPrevXp(user.xp);
 
-    setPrevLevel(user.level); // Aktualizujemy poprzedni poziom
+    setPrevLevel(user.level);
 
     return () => {
       if (flashTimer) clearTimeout(flashTimer);
     };
-  }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]); // Dodano user.level i prevLevel do zależności
+  }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]);
 
   // Obliczenia dla wyświetlania XP i poziomu
-  const xpForNextLevel = 1000; // Każdy poziom wymaga 1000 XP
+  const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
   const xpProgress = xpInCurrentLevel / xpForNextLevel;
 
-  // Usunięto useEffect do generowania bąbelków
-
   // Obliczenia dla okrągłej podstawy
-  const baseSize = crystalSize + 10; // 10px większa niż kryształ
-  const baseTop = crystalTop - 5; // Przesunięcie w górę o 5px
-  const baseLeft = crystalLeft - 5; // Przesunięcie w lewo o 5px
+  const baseSize = crystalSize + 10;
+  const baseTop = crystalTop - 5;
+  const baseLeft = crystalLeft - 5;
 
   const handleCrystalClick = (e: React.MouseEvent) => {
-    // Przekazujemy pozycję kliknięcia do funkcji addXP, aby cząsteczki mogły stamtąd wylecieć
-    const rect = e.currentTarget.getBoundingClientRect();
-    const clickX = rect.x + rect.width / 2; // Używamy centrum kryształu jako punktu startowego
-    const clickY = rect.y + rect.height / 2;
-    
-    // Zamiast resetXP, wywołujemy onCrystalClick, który jest propsem
-    // onCrystalClick może wywołać resetXP lub inną logikę w Sidebar
     onCrystalClick();
   };
 
@@ -73,7 +66,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       className="relative flex flex-col items-center justify-end w-full cursor-pointer select-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={handleCrystalClick} // Zmieniono na handleCrystalClick
+      onClick={handleCrystalClick}
     >
       {/* Główny kontener dla kryształu i holdera */}
       <div 
@@ -91,7 +84,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         <img
           src="/holder3.png" 
           alt="Crystal Holder Top"
-          className="absolute w-[200px] h-[100px] z-[15] filter-white-invert" // Zmieniono z-index na z-[15]
+          className="absolute w-[200px] h-[100px] z-[15] filter-white-invert"
           style={{ top: 22, left: 12 }}
         />
 
@@ -121,17 +114,17 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             height: crystalSize,
             boxShadow: 'inset 0 0 15px rgba(255,255,255,0.5), 0 0 20px rgba(0,0,0,0.5)',
             border: '2px solid rgba(255,255,255,0.2)',
-            overflow: 'hidden', // PRZYWRÓCONE: Zapewnia, że zawartość wewnątrz kryształu jest obcinana do okręgu
-            borderRadius: '50%' // Dodatkowe zabezpieczenie dla okrągłego kształtu
+            overflow: 'hidden',
+            borderRadius: '50%'
           }}
         >
           <div
             className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-500 to-yellow-400 transition-all duration-300 ease-out animate-liquid-wave z-20"
             style={{
-              height: `${Math.max(5, xpProgress * 100)}%`, // Minimalna wysokość 5%
-              boxShadow: '0 0 15px rgba(255,165,0,0.7)', // Pomarańczowy blask
+              height: `${Math.max(5, xpProgress * 100)}%`,
+              boxShadow: '0 0 15px rgba(255,165,0,0.7)',
             }}
-            ref={liquidRef} // Dołącz ref do elementu płynu
+            ref={liquidRef}
           >
           </div>
           {/* Poziom XP - zmieniono pozycjonowanie na absolutne i wyśrodkowane */}
@@ -148,8 +141,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         >
           {xpInCurrentLevel}/{xpForNextLevel} XP
         </div>
-
-        {/* Usunięto Animację cząsteczek XP stąd */}
       </div>
     </div>
   );

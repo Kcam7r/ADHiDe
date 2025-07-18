@@ -1,8 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { User, Habit, DailyTask, Mission, Project, JournalEntry, QuickThought } from '../types';
-
-// Usunięto interfejs XpParticleData
+import { User, Habit, DailyTask, Mission, Project, JournalEntry, QuickThought, XpParticleData } from '../types';
 
 interface AppContextType {
   user: User;
@@ -14,11 +12,12 @@ interface AppContextType {
   quickThoughts: QuickThought[];
   completedMissionsHistory: Mission[];
   lastXpGainTimestamp: number;
-  // Usunięto xpParticles: XpParticleData[];
+  xpParticles: XpParticleData[]; // Ponownie dodano
   archivedQuickThoughts: QuickThought[];
-  
+  crystalPosition: { x: number; y: number } | null; // Dodano
+
   addXP: (amount: number, originX?: number, originY?: number) => void;
-  addLargeXP: (amount: number) => void; // Nowa funkcja
+  addLargeXP: (amount: number) => void;
   resetXP: () => void;
   addHabit: (habit: Omit<Habit, 'id' | 'count'>) => void;
   updateHabit: (id: string, updates: Partial<Habit>) => void;
@@ -44,13 +43,14 @@ interface AppContextType {
   
   addQuickThought: (thought: Omit<QuickThought, 'id' | 'createdAt'>) => void;
   archiveQuickThought: (id: string) => void;
-  setArchivedQuickThoughts: React.Dispatch<React.SetStateAction<QuickThought[]>>; // Dodano
+  setArchivedQuickThoughts: React.Dispatch<React.SetStateAction<QuickThought[]>>;
 
-  // Usunięto removeXpParticle: (id: string) => void;
+  removeXpParticle: (id: string) => void; // Ponownie dodano
   triggerConfetti: () => void;
   confettiKey: number;
-  triggerLevelUpFlash: () => void; // NOWA FUNKCJA
-  levelUpFlashKey: number; // NOWY KLUCZ
+  triggerLevelUpFlash: () => void;
+  levelUpFlashKey: number;
+  setCrystalPosition: React.Dispatch<React.SetStateAction<{ x: number; y: number } | null>>; // Dodano
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -80,68 +80,66 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [archivedQuickThoughts, setArchivedQuickThoughts] = useLocalStorage<QuickThought[]>('adhd-archived-thoughts', []);
   const [completedMissionsHistory, setCompletedMissionsHistory] = useLocalStorage<Mission[]>('adhd-completed-missions', []);
   const [lastXpGainTimestamp, setLastXpGainTimestamp] = useState(0);
-  // Usunięto const [xpParticles, setXpParticles] = useState<XpParticleData[]>([]);
+  const [xpParticles, setXpParticles] = useState<XpParticleData[]>([]); // Ponownie dodano
   const [confettiKey, setConfettiKey] = useState(0);
-  const [levelUpFlashKey, setLevelUpFlashKey] = useState(0); // NOWY STAN
+  const [levelUpFlashKey, setLevelUpFlashKey] = useState(0);
+  const [crystalPosition, setCrystalPosition] = useState<{ x: number; y: number } | null>(null); // Dodano
 
   const calculateLevel = (xp: number) => Math.floor(xp / 1000) + 1;
 
   const addXP = (amount: number, originX?: number, originY?: number) => {
     setLastXpGainTimestamp(Date.now());
 
-    // Usunięto logikę generowania cząsteczek XP
-    // setXpParticles(prev => {
-    //   if (originX !== undefined && originY !== undefined && amount > 0) { 
-    //     const numberOfParticles = Math.floor(amount / 5); 
-    //     const newParticles: XpParticleData[] = [];
-    //     for (let i = 0; i < numberOfParticles; i++) {
-    //       const offsetX = (Math.random() - 0.5) * 40;
-    //       const offsetY = (Math.random() - 0.5) * 40;
-    //       newParticles.push({
-    //         id: `${Date.now()}-${i}-${Math.random()}`,
-    //         startX: originX + offsetX,
-    //         startY: originY + offsetY,
-    //       });
-    //     }
-    //     return [...prev, ...newParticles];
-    //   }
-    //   return prev;
-    // });
+    // Logika generowania cząsteczek XP
+    if (originX !== undefined && originY !== undefined && crystalPosition) {
+      const numberOfParticles = Math.floor(amount / 5); // 1 kulka na każde 5 XP
+      const newParticles: XpParticleData[] = [];
+      for (let i = 0; i < numberOfParticles; i++) {
+        const offsetX = (Math.random() - 0.5) * 60; // Losowe przesunięcie X
+        const offsetY = (Math.random() - 0.5) * 60; // Losowe przesunięcie Y
+        newParticles.push({
+          id: `${Date.now()}-${i}-${Math.random()}`,
+          startX: originX + offsetX,
+          startY: originY + offsetY,
+          targetX: crystalPosition.x,
+          targetY: crystalPosition.y,
+          value: 5, // Każda kulka reprezentuje 5 XP
+        });
+      }
+      setXpParticles(prev => [...prev, ...newParticles]);
+    }
 
     setUser(prevUser => {
       const newXP = prevUser.xp + amount;
       const newLevel = calculateLevel(newXP);
 
       if (newLevel > prevUser.level) {
-        triggerConfetti(); // Trigger confetti on level up
-        triggerLevelUpFlash(); // WYWOŁANIE NOWEJ FUNKCJI
+        triggerConfetti();
+        triggerLevelUpFlash();
       }
       return { ...prevUser, xp: newXP, level: newLevel };
     });
   };
 
-  // Nowa funkcja do dodawania dużej ilości XP bez generowania cząsteczek
   const addLargeXP = (amount: number) => {
     setUser(prevUser => {
       const newXP = prevUser.xp + amount;
       const newLevel = calculateLevel(newXP);
-      // addLargeXP już wywołuje confetti, więc nie trzeba dodawać tu dodatkowego warunku na level up
       return { ...prevUser, xp: newXP, level: newLevel };
     });
-    triggerConfetti(); // Wywołaj konfetti dla dużego awansu
-    triggerLevelUpFlash(); // WYWOŁANIE NOWEJ FUNKCJI
+    triggerConfetti();
+    triggerLevelUpFlash();
   };
 
-  // Usunięto removeXpParticle
-  // const removeXpParticle = (id: string) => {
-  //   setXpParticles(prev => prev.filter(p => p.id !== id));
-  // };
+  const removeXpParticle = (id: string) => {
+    setXpParticles(prev => prev.filter(p => p.id !== id));
+  };
 
   const triggerConfetti = () => {
     setConfettiKey(prev => prev + 1);
   };
 
-  const triggerLevelUpFlash = () => { // NOWA FUNKCJA
+  const triggerLevelUpFlash = () => {
     setLevelUpFlashKey(prev => prev + 1);
   };
 
@@ -361,9 +359,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       archivedQuickThoughts,
       completedMissionsHistory,
       lastXpGainTimestamp,
-      // Usunięto xpParticles,
+      xpParticles, // Dodano
       addXP,
-      addLargeXP, // Dodano do kontekstu
+      addLargeXP,
       resetXP,
       addHabit,
       updateHabit,
@@ -384,12 +382,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       updateJournalEntry,
       addQuickThought,
       archiveQuickThought,
-      // Usunięto removeXpParticle,
+      removeXpParticle, // Dodano
       triggerConfetti,
       confettiKey,
-      triggerLevelUpFlash, // DODANO DO KONTEKSTU
-      levelUpFlashKey, // DODANO DO KONTEKSTU
-      setArchivedQuickThoughts, // Dodano do kontekstu
+      triggerLevelUpFlash,
+      levelUpFlashKey,
+      setArchivedQuickThoughts,
+      crystalPosition, // Dodano
+      setCrystalPosition, // Dodano
     }}>
       {children}
     </AppContext.Provider>

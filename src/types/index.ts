@@ -62,3 +62,12 @@ export interface PomodoroSession {
   endTime?: Date;
   taskId?: string;
 }
+
+export interface XpParticleData {
+  id: string;
+  startX: number;
+  startY: number;
+  targetX: number;
+  targetY: number;
+  value: number;
+}

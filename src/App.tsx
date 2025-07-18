@@ -6,8 +6,8 @@ import { ConfettiOverlay } from './components/ConfettiOverlay';
 import { QuickThoughtFloatingButton } from './components/QuickThoughtFloatingButton';
 import { QuickThoughtModal } from './components/QuickThoughtModal';
 import { QuickThoughtsModal } from './components/QuickThoughtsModal';
-import { LevelUpFlashOverlay } from './components/LevelUpFlashOverlay'; // Import nowego komponentu
-// Usunięto import { XpBubblesOverlay } from './components/XpBubblesOverlay'; // Import nowego komponentu
+import { LevelUpFlashOverlay } from './components/LevelUpFlashOverlay';
+import { XpBubblesOverlay } from './components/XpBubblesOverlay'; // Import nowego komponentu
 
 // Leniwe ładowanie głównych komponentów widoków
 const Dashboard = lazy(() => import('./components/Dashboard').then(module => ({ default: module.Dashboard })));
@@ -17,8 +17,8 @@ const Garage = lazy(() => import('./components/Garage').then(module => ({ defaul
 
 function App() {
   const [activeView, setActiveView] = useState('dashboard');
-  const [showQuickThoughtModal, setShowQuickThoughtModal] = useState(false); // Dla dodawania nowej myśli
-  const [showQuickThoughtsModal, setShowQuickThoughtsModal] = useState(false); // Dla listy myśli
+  const [showQuickThoughtModal, setShowQuickThoughtModal] = useState(false);
+  const [showQuickThoughtsModal, setShowQuickThoughtsModal] = useState(false);
 
   const renderActiveView = () => {
     switch (activeView) {
@@ -41,7 +41,7 @@ function App() {
         <Sidebar 
           activeView={activeView} 
           onViewChange={setActiveView} 
-          onOpenQuickThoughtsModal={() => setShowQuickThoughtsModal(true)} // Przekazanie funkcji do otwierania listy myśli
+          onOpenQuickThoughtsModal={() => setShowQuickThoughtsModal(true)}
         />
         <main className="flex-1 overflow-auto">
           <Suspense fallback={
@@ -55,8 +55,8 @@ function App() {
       </div>
       <PomodoroTimer />
       <ConfettiOverlay />
-      <LevelUpFlashOverlay /> {/* DODANO NOWY KOMPONENT */}
-      {/* Usunięto XpBubblesOverlay */}
+      <LevelUpFlashOverlay />
+      <XpBubblesOverlay /> {/* DODANO NOWY KOMPONENT */}
       
       {/* Pływający przycisk Szybkich Myśli - teraz otwiera modal nowej myśli */}
       <QuickThoughtFloatingButton onOpenNewThought={() => setShowQuickThoughtModal(true)} />
