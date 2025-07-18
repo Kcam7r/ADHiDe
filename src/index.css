@@ -181,14 +181,14 @@
 /* New bubble animations for PowerCrystal */
 @keyframes bubble-rise {
   0% { bottom: 0%; transform: scale(0.5); opacity: 0; }
-  10% { opacity: 1; transform: scale(0.8); } /* Appear and start rising */
-  80% { opacity: 0.7; }
+  10% { opacity: 0.5; transform: scale(0.8); } /* Zmniejszona widoczność */
+  80% { opacity: 0.4; } /* Zmniejszona widoczność */
   100% { bottom: 100%; transform: scale(1.2); opacity: 0; } /* Rise up to 100% of parent height and fade out */
 }
 
 .bubble {
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.7); /* White/light yellow for bubbles */
+  background-color: rgba(255, 255, 255, 0.4); /* Zmniejszona widoczność */
   border-radius: 50%;
   pointer-events: none;
   animation: bubble-rise 3s ease-out infinite; /* Adjust duration as needed */

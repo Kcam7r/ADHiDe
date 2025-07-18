@@ -87,7 +87,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
     // Rozpocznij dodawanie bąbelków tylko, jeśli postęp XP jest większy od 0
     if (user.xp > 0) {
-      const interval = setInterval(addRandomBubble, 500 + Math.random() * 1000); // Dodawaj bąbelek co 0.5 do 1.5 sekundy
+      // Zmniejszona częstotliwość: dodawaj bąbelek co 1 do 3 sekundy
+      const interval = setInterval(addRandomBubble, 1000 + Math.random() * 2000);
       return () => clearInterval(interval);
     } else {
       setBubbles([]); // Wyczyść bąbelki, jeśli XP wynosi 0
@@ -136,18 +137,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
               boxShadow: '0 0 15px rgba(255,165,0,0.7)', // Pomarańczowy blask
             }}
           >
-            {/* Dynamically rendered bubbles */}
-            {bubbles.map(bubble => (
-              <div
-                key={bubble.id}
-                className={`bubble ${bubble.sizeClass}`}
-                style={{
-                  left: `${bubble.left}%`,
-                  animationDelay: `${bubble.delay}s`,
-                  animationDuration: `${bubble.duration}s`,
-                }}
-              ></div>
-            ))}
+            {/* Bubbles are now rendered as siblings to this div, but still within crystalRef */}
           </div>
           {/* Numer poziomu */}
           <div className="absolute inset-0 flex items-center justify-center z-30">
@@ -155,6 +145,19 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
               {user.level}
             </span>
           </div>
+
+          {/* Dynamically rendered bubbles - moved here */}
+          {bubbles.map(bubble => (
+            <div
+              key={bubble.id}
+              className={`bubble ${bubble.sizeClass}`}
+              style={{
+                left: `${bubble.left}%`,
+                animationDelay: `${bubble.delay}s`,
+                animationDuration: `${bubble.duration}s`,
+              }}
+            ></div>
+          ))}
         </div>
       </div>
 
