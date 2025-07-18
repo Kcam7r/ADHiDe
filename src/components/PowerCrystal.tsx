@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { XpParticle } from './XpParticle';
-import { useWindowSize } from '../hooks/useWindowSize';
+// Usunięto import useWindowSize, ponieważ jego wartości nie są używane w tym komponencie
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface PowerCrystalProps {
@@ -14,21 +14,18 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const [isFlashing, setIsFlashing] = useState(false);
   const [prevXp, setPrevXp] = useState(user.xp);
   const [prevLevel, setPrevLevel] = useState(user.level); // Nowy stan do śledzenia poprzedniego poziomu
-  // const [showLevelUpFlash, setShowLevelUpFlash] = useState(false); // USUNIĘTO
   const crystalRef = useRef<HTMLDivElement>(null);
   const liquidRef = useRef<HTMLDivElement>(null);
   const bubbleIntervalRef = useRef<number | null>(null);
-  const { width, height } = useWindowSize();
+  // const { width, height } = useWindowSize(); // Usunięto, ponieważ nie jest używane
 
   // Persystowane właściwości stylu dla kryształu (top, left, size w px)
   // Wartości początkowe będą nadpisane przez te z localStorage, jeśli istnieją
-  const [crystalProps, setCrystalProps] = useLocalStorage('adhd-crystal-props', { // Zmieniono na [crystalProps, _]
+  const [crystalProps] = useLocalStorage('adhd-crystal-props', { // Usunięto setCrystalProps, ponieważ nie jest używane
     top: 147, // Zaktualizowano dla nowego rozmiaru kontenera (384px - 90px) / 2 = 147
     left: 147, // Zaktualizowano dla nowego rozmiaru kontenera
     size: 90, // Zwiększono rozmiar kryształu
   });
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _ = setCrystalProps; // Celowo nieużywane, aby zachować API useLocalStorage
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -61,12 +58,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     }
     setPrevXp(user.xp);
 
-    // Błysk przy awansie na poziom - USUNIĘTO LOGIKĘ STĄD
-    // if (user.level > prevLevel) {
-    //   setShowLevelUpFlash(true);
-    //   const levelUpFlashTimer = setTimeout(() => setShowLevelUpFlash(false), 800); // Czas trwania animacji
-    //   return () => clearTimeout(levelUpFlashTimer); // Czyścimy ten konkretny timer
-    // }
     setPrevLevel(user.level); // Aktualizujemy poprzedni poziom
 
     return () => {
@@ -184,14 +175,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             border: '2px solid rgba(255,255,255,0.2)'
           }}
         >
-          {/* Błysk rozchodzący się od kryształu przy level-up - USUNIĘTO STĄD */}
-          {/* {showLevelUpFlash && (
-            <div
-              className="absolute w-full h-full rounded-full bg-white opacity-70 animate-level-up-spread-flash z-40"
-              style={{ filter: 'blur(5px)' }} // Dodaj rozmycie dla miękkiego blasku
-            ></div>
-          )} */}
-
           {/* Wypełnienie płynem (żółte) */}
           <div
             className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-500 to-yellow-400 transition-all duration-300 ease-out animate-liquid-wave z-20"
