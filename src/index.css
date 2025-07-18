@@ -272,5 +272,5 @@ html {
   }
 }
 .animate-logo-flicker {
-  animation: logo-flicker 0.4s ease-in-out; /* Szybka animacja */
+  animation: logo-flicker 0.4s ease-in-out infinite; /* Szybka animacja */
 }
