@@ -7,22 +7,15 @@ interface PowerCrystalProps {
   onCrystalClick: () => void;
 }
 
-interface Bubble {
-  id: string;
-  left: number; // percentage
-  sizeClass: 'bubble-small' | 'bubble-medium' | 'bubble-large';
-  delay: number; // seconds
-  duration: number; // seconds
-}
-
 export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystalClick }) => {
   const { user, lastXpGainTimestamp, xpParticles, removeXpParticle } = useApp();
   const [isHovered, setIsHovered] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
   const [prevXp, setPrevXp] = useState(user.xp);
   const crystalRef = useRef<HTMLDivElement>(null);
+  const liquidRef = useRef<HTMLDivElement>(null); // Ref dla elementu płynu XP
+  const bubbleIntervalRef = useRef<number | null>(null); // Ref dla ID interwału bąbelków
   const { width, height } = useWindowSize();
-  const [bubbles, setBubbles] = useState<Bubble[]>([]); // Stan dla bąbelków
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -67,38 +60,58 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Efekt generowania bąbelków
   useEffect(() => {
-    const addRandomBubble = () => {
-      const sizeClasses: Bubble['sizeClass'][] = ['bubble-small', 'bubble-medium', 'bubble-large'];
-      const randomSizeClass = sizeClasses[Math.floor(Math.random() * sizeClasses.length)];
-      const randomLeft = Math.random() * 90 + 5; // 5% do 95% szerokości, aby uniknąć krawędzi
-      const randomDelay = Math.random() * 1; // 0 do 1 sekundy opóźnienia startu (szybciej)
-      const randomDuration = Math.random() * 2 + 2; // 2 do 4 sekund czasu trwania animacji
+    if (xpProgress > 0) { // Generuj bąbelki tylko, jeśli jest jakiś postęp XP
+      if (liquidRef.current && !bubbleIntervalRef.current) { // Uruchom interwał tylko, jeśli jeszcze nie działa
+        bubbleIntervalRef.current = setInterval(() => {
+          if (liquidRef.current) {
+            const bubble = document.createElement('div');
+            bubble.className = 'babel';
 
-      const newBubble: Bubble = {
-        id: `${Date.now()}-${Math.random()}`, // Unikalne ID
-        left: randomLeft,
-        sizeClass: randomSizeClass,
-        delay: randomDelay,
-        duration: randomDuration,
-      };
+            const size = Math.random() * 6 + 2; // Rozmiar od 2px do 8px
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            bubble.style.left = `${Math.random() * 90 + 5}%`; // Pozycja pozioma od 5% do 95%
 
-      setBubbles(prev => [...prev, newBubble]);
+            const duration = Math.random() * 3 + 2; // Czas trwania animacji od 2s do 5s
+            bubble.style.animationDuration = `${duration}s`;
 
-      // Usuń bąbelek po zakończeniu jego animacji
-      setTimeout(() => {
-        setBubbles(prev => prev.filter(b => b.id !== newBubble.id));
-      }, (newBubble.duration + newBubble.delay) * 1000 + 100); // Konwertuj na ms, dodaj bufor
-    };
+            const driftX = Math.random() * 20 - 10; // Dryf poziomy od -10px do 10px
+            const driftXEnd = Math.random() * 20 - 10; // Końcowy dryf poziomy od -10px do 10px
+            
+            // Wysokość, na jaką bąbelek ma się wznieść, równa aktualnej wysokości płynu
+            const currentLiquidHeight = liquidRef.current.clientHeight;
+            bubble.style.setProperty('--bubble-target-y', `-${currentLiquidHeight}px`);
+            bubble.style.setProperty('--bubble-drift-x', `${driftX}px`);
+            bubble.style.setProperty('--bubble-drift-x-end', `${driftXEnd}px`);
 
-    // Rozpocznij dodawanie bąbelków, jeśli postęp XP jest większy niż 1%
-    if (xpProgress > 0.01) { 
-      // Zwiększona częstotliwość: dodawaj bąbelek co 1 do 2.5 sekundy
-      const interval = setInterval(addRandomBubble, 1000 + Math.random() * 1500);
-      return () => clearInterval(interval);
+            liquidRef.current.appendChild(bubble);
+
+            // Usuń bąbelek po zakończeniu animacji, aby uniknąć zaśmiecania DOM
+            setTimeout(() => {
+              bubble.remove();
+            }, duration * 1000 + 50); // Dodatkowy bufor czasu
+          }
+        }, 500); // Generuj nowy bąbelek co 500ms
+      }
     } else {
-      setBubbles([]); // Wyczyść bąbelki, jeśli XP jest zbyt niskie
+      // Jeśli brak postępu XP, wyczyść interwał i usuń wszystkie istniejące bąbelki
+      if (bubbleIntervalRef.current) {
+        clearInterval(bubbleIntervalRef.current);
+        bubbleIntervalRef.current = null;
+      }
+      if (liquidRef.current) {
+        liquidRef.current.querySelectorAll('.babel').forEach(b => b.remove());
+      }
     }
-  }, [xpProgress]); // Uruchom ponownie efekt, jeśli xpProgress się zmieni
+
+    // Funkcja czyszcząca, aby zatrzymać interwał przy odmontowaniu komponentu
+    return () => {
+      if (bubbleIntervalRef.current) {
+        clearInterval(bubbleIntervalRef.current);
+        bubbleIntervalRef.current = null;
+      }
+    };
+  }, [xpProgress]); // Efekt uruchamia się ponownie, gdy zmienia się xpProgress
 
   // Kolor kryształu (można dostosować w zależności od poziomu, ale na razie stały)
   const currentCrystalColor = 'from-cyan-500 to-blue-600';
@@ -136,19 +149,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
               height: `${xpProgress * 100}%`,
               boxShadow: '0 0 15px rgba(255,165,0,0.7)', // Pomarańczowy blask
             }}
+            ref={liquidRef} // Dołącz ref do elementu płynu
           >
-            {/* Dynamically rendered bubbles */}
-            {bubbles.map(bubble => (
-              <div
-                key={bubble.id}
-                className={`bubble ${bubble.sizeClass}`}
-                style={{
-                  left: `${bubble.left}%`,
-                  animationDelay: `${bubble.delay}s`,
-                  animationDuration: `${bubble.duration}s`,
-                }}
-              ></div>
-            ))}
+            {/* Bąbelki będą dynamicznie dodawane tutaj przez JavaScript */}
           </div>
           {/* Numer poziomu */}
           <div className="absolute inset-0 flex items-center justify-center z-30">
