@@ -97,6 +97,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
           }}
         >
           <div className="bg-gray-800 p-6 rounded-lg max-w-md shadow-xl border border-gray-700 relative">
+            {showFinalResetConfirmButton && ( // Przycisk X widoczny tylko w drugim etapie
+              <button
+                onClick={handleCancelReset}
+                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+                title="Zamknij"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
+            
             <h3 className="text-white font-bold mb-4">Resetować postęp?</h3>
             <p className="text-gray-300 mb-6">
               {showFinalResetConfirmButton ? 
@@ -105,38 +115,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
               }
             </p>
             
-            {showFinalResetConfirmButton ? (
-              <>
-                <button
-                  onClick={handleCancelReset}
-                  className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-                  title="Zamknij"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={handleFinalReset}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg transition-colors shadow-md text-lg font-semibold"
-                >
-                  Wciśnij aby wyzerować XP
-                </button>
-              </>
-            ) : (
-              <div className="flex space-x-4">
-                <button
-                  onClick={handleCancelReset}
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
-                >
-                  Anuluj
-                </button>
-                <button
-                  onClick={() => setShowFinalResetConfirmButton(true)}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
-                >
-                  Resetuj
-                </button>
-              </div>
-            )}
+            <div className="flex space-x-4">
+              {/* Przyciski pozostają w tej samej kolejności, zmienia się tylko ich akcja */}
+              <button
+                onClick={showFinalResetConfirmButton ? handleFinalReset : () => setShowFinalResetConfirmButton(true)}
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+              >
+                Resetuj
+              </button>
+              <button
+                onClick={handleCancelReset}
+                className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+              >
+                Anuluj
+              </button>
+            </div>
           </div>
         </div>
       )}
