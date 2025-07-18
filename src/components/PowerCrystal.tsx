@@ -133,7 +133,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   return (
     <div
-      className="relative flex flex-col items-center justify-end w-full cursor-pointer select-none" // Zmieniono justify-center na justify-end
+      className="relative flex flex-col items-center justify-end w-full cursor-pointer select-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onCrystalClick}
@@ -141,7 +141,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       {/* Główny kontener dla kryształu i holdera - zmieniono na w-96 h-96 */}
       <div 
         className="relative w-96 h-96 flex items-center justify-center"
-        style={{ transform: 'translateY(50px)' }} // Przesunięcie w dół o 50px
+        style={{ transform: 'translateY(20px)' }} {/* Zmieniono z 50px na 20px */}
       >
         {/* Holder Image - teraz w pełni w kontenerze */}
         <img
