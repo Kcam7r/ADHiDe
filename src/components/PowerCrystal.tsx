@@ -18,9 +18,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const bubbleIntervalRef = useRef<number | null>(null);
 
   // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
-  const crystalSize = 100; // Rozmiar kryształu
-  const crystalTop = 99; // Pozycja Y wewnątrz holdera - Zmieniono z 96 na 99
-  const crystalLeft = 62; // Pozycja X wewnątrz holdera
+  const crystalSize = 105; // Rozmiar kryształu - Zmieniono ze 100 na 105
+  const crystalTop = 96.5; // Pozycja Y wewnątrz holdera - Dostosowano dla wyśrodkowania
+  const crystalLeft = 59.5; // Pozycja X wewnątrz holdera - Dostosowano dla wyśrodkowania
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
     if (typeof window !== 'undefined') {
