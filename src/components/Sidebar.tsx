@@ -12,6 +12,7 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOpenQuickThoughtsModal }) => {
   const { resetXP } = useApp();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [showFinalResetConfirmButton, setShowFinalResetConfirmButton] = useState(false); // Nowy stan
 
   const navigationItems = [
     { id: 'dashboard', label: 'Pulpit', icon: Home },
@@ -20,9 +21,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
     { id: 'garage', 'label': 'Garaż', icon: Settings },
   ];
 
-  const handleResetConfirm = () => {
+  const handleInitialResetClick = () => {
+    setShowResetConfirm(true);
+    setShowFinalResetConfirmButton(false); // Upewnij się, że ten stan jest zresetowany
+  };
+
+  const handleFinalReset = () => {
     resetXP();
+    setShowResetConfirm(false); // Zamknij cały modal
+    setShowFinalResetConfirmButton(false); // Zresetuj stan
+  };
+
+  const handleCancelReset = () => {
     setShowResetConfirm(false);
+    setShowFinalResetConfirmButton(false); // Zresetuj stan
   };
 
   return (
@@ -67,7 +79,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
 
         {/* Gamification Info - Power Crystal */}
         <div className="p-4 border-t border-gray-700 flex flex-col items-center mt-auto">
-          <PowerCrystal onCrystalClick={() => setShowResetConfirm(true)} />
+          <PowerCrystal onCrystalClick={handleInitialResetClick} />
         </div>
 
         {/* Usunięto sekcję Quick Thoughts */}
@@ -80,7 +92,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
           onClick={(e) => {
             // Zamknij modal tylko jeśli kliknięto na tło (nie na zawartość modalu)
             if (e.target === e.currentTarget) {
-              setShowResetConfirm(false);
+              handleCancelReset(); // Użyj funkcji anulującej, aby zresetować oba stany
             }
           }}
         >
@@ -89,20 +101,30 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
             <p className="text-gray-300 mb-6">
               Czy na pewno chcesz zresetować wszystkie punkty XP i poziom? Ta akcja jest nieodwracalna.
             </p>
-            <div className="flex space-x-4">
+            
+            {showFinalResetConfirmButton ? (
               <button
-                onClick={handleResetConfirm}
-                className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                onClick={handleFinalReset}
+                className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg transition-colors shadow-md text-lg font-semibold"
               >
-                Resetuj
+                Wciśnij aby wyzerować XP
               </button>
-              <button
-                onClick={() => setShowResetConfirm(false)}
-                className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
-              >
-                Anuluj
-              </button>
-            </div>
+            ) : (
+              <div className="flex space-x-4">
+                <button
+                  onClick={() => setShowFinalResetConfirmButton(true)}
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                >
+                  Resetuj
+                </button>
+                <button
+                  onClick={handleCancelReset}
+                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                >
+                  Anuluj
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
