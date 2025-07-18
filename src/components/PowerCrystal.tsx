@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useApp } from '../contexts/AppContext';
-import { XpParticle } from './XpParticle';
+// Usunięto import XpParticle, ponieważ nie będzie już renderowany bezpośrednio tutaj
 // Usunięto import useLocalStorage
 
 interface PowerCrystalProps {
@@ -8,41 +8,25 @@ interface PowerCrystalProps {
 }
 
 export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystalClick }) => {
-  const { user, lastXpGainTimestamp, xpParticles, removeXpParticle } = useApp();
+  const { user, lastXpGainTimestamp, addXP, resetXP } = useApp(); // Usunięto xpParticles, removeXpParticle
   const [isHovered, setIsHovered] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
   const [prevXp, setPrevXp] = useState(user.xp);
   const [prevLevel, setPrevLevel] = useState(user.level); // Nowy stan do śledzenia poprzedniego poziomu
   const crystalRef = useRef<HTMLDivElement>(null);
   const liquidRef = useRef<HTMLDivElement>(null);
-  const bubbleIntervalRef = useRef<number | null>(null);
-  const powerCrystalContainerRef = useRef<HTMLDivElement>(null); // Ref do głównego kontenera
+  // Usunięto bubbleIntervalRef, ponieważ bąbelki będą zarządzane przez inny komponent
+  // Usunięto powerCrystalContainerRef, ponieważ bąbelki będą zarządzane przez inny komponent
 
   // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
   const crystalSize = 105; // Rozmiar kryształu - Zmieniono ze 100 na 105
   const crystalTop = 96.5; // Pozycja Y wewnątrz holdera - Dostosowano dla wyśrodkowania
   const crystalLeft = 59.5; // Pozycja X wewnątrz holdera - Dostosowano dla wyśrodkowania
 
-  const [crystalCenter, setCrystalCenter] = useState(() => {
-    if (typeof window !== 'undefined') {
-      // Początkowe oszacowanie, zostanie zaktualizowane przez useLayoutEffect
-      return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-    }
-    return { x: 0, y: 0 };
-  });
-
-  useLayoutEffect(() => {
-    const updateCrystalCenter = () => {
-      if (crystalRef.current) {
-        const rect = crystalRef.current.getBoundingClientRect();
-        setCrystalCenter({
-          x: rect.left + rect.width / 2,
-          y: rect.top + rect.height / 2,
-        });
-      }
-    };
-    updateCrystalCenter();
-  }, [crystalSize, crystalTop, crystalLeft]); // Zależności od stałych wartości
+  // Usunięto crystalCenter i useLayoutEffect, ponieważ cząsteczki XP będą renderowane globalnie
+  // i nie potrzebują dokładnego centrum kryształu jako celu.
+  // Zamiast tego, PowerCrystal będzie przekazywać swoje centrum do addXP,
+  // a XpBubblesOverlay będzie używać tych danych do animacji.
 
   // Efekt dla animacji zysku XP (błysk) i awansu na poziom
   useEffect(() => {
@@ -66,77 +50,30 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const xpInCurrentLevel = user.xp % xpForNextLevel;
   const xpProgress = xpInCurrentLevel / xpForNextLevel;
 
-  // Efekt do generowania bąbelków
-  useEffect(() => {
-    // Generuj bąbelki zawsze dla celów testowych
-    if (true) { 
-      if (powerCrystalContainerRef.current && !bubbleIntervalRef.current) { // Używamy ref do głównego kontenera
-        bubbleIntervalRef.current = setInterval(() => {
-          if (crystalRef.current && powerCrystalContainerRef.current) {
-            const crystalRect = crystalRef.current.getBoundingClientRect();
-            const containerRect = powerCrystalContainerRef.current.getBoundingClientRect();
-
-            const bubble = document.createElement('div');
-            bubble.className = 'babel';
-
-            const size = Math.random() * 20 + 10; // Zwiększono rozmiar
-            bubble.style.width = `${size}px`;
-            bubble.style.height = `${size}px`;
-            
-            // Pozycja startowa bąbelka wewnątrz kryształu, ale względem kontenera nadrzędnego
-            const startX = crystalRect.left - containerRect.left + crystalRect.width * (Math.random() * 0.8 + 0.1);
-            const startY = crystalRect.bottom - containerRect.top - 10; // Start 10px od dołu kryształu
-
-            bubble.style.left = `${startX}px`;
-            bubble.style.top = `${startY}px`; // Używamy top zamiast bottom, aby łatwiej kontrolować ruch w górę
-
-            const duration = Math.random() * 3 + 2;
-            bubble.style.animationDuration = `${duration}s`;
-
-            const driftX = Math.random() * 20 - 10;
-            const driftXEnd = Math.random() * 20 - 10;
-            
-            bubble.style.setProperty('--bubble-drift-x', `${driftX}px`);
-            bubble.style.setProperty('--bubble-drift-x-end', `${driftXEnd}px`);
-            bubble.style.setProperty('--bubble-rise-height', `${crystalRect.height + 50}px`); // Wysokość wznoszenia
-
-            powerCrystalContainerRef.current.appendChild(bubble); // Dodajemy do głównego kontenera
-
-            setTimeout(() => {
-              bubble.remove();
-            }, duration * 1000 + 50);
-          }
-        }, 300); // Zwiększono częstotliwość dla testów
-      }
-    } else {
-      if (bubbleIntervalRef.current) {
-        clearInterval(bubbleIntervalRef.current);
-        bubbleIntervalRef.current = null;
-      }
-      if (powerCrystalContainerRef.current) {
-        powerCrystalContainerRef.current.querySelectorAll('.babel').forEach(b => b.remove());
-      }
-    }
-
-    return () => {
-      if (bubbleIntervalRef.current) {
-        clearInterval(bubbleIntervalRef.current);
-      }
-    };
-  }, [xpProgress]);
+  // Usunięto useEffect do generowania bąbelków
 
   // Obliczenia dla okrągłej podstawy
   const baseSize = crystalSize + 10; // 10px większa niż kryształ
   const baseTop = crystalTop - 5; // Przesunięcie w górę o 5px
   const baseLeft = crystalLeft - 5; // Przesunięcie w lewo o 5px
 
+  const handleCrystalClick = (e: React.MouseEvent) => {
+    // Przekazujemy pozycję kliknięcia do funkcji addXP, aby cząsteczki mogły stamtąd wylecieć
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX;
+    const clickY = e.clientY;
+    
+    // Zamiast resetXP, wywołujemy onCrystalClick, który jest propsem
+    // onCrystalClick może wywołać resetXP lub inną logikę w Sidebar
+    onCrystalClick();
+  };
+
   return (
     <div
-      ref={powerCrystalContainerRef} // Przypisanie ref do głównego kontenera
       className="relative flex flex-col items-center justify-end w-full cursor-pointer select-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={onCrystalClick}
+      onClick={handleCrystalClick} // Zmieniono na handleCrystalClick
     >
       {/* Główny kontener dla kryształu i holdera */}
       <div 
@@ -212,17 +149,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           {xpInCurrentLevel}/{xpForNextLevel} XP
         </div>
 
-        {/* Animacja cząsteczek XP */}
-        {xpParticles.map(particle => (
-          <XpParticle
-            key={particle.id}
-            startX={particle.startX}
-            startY={particle.startY}
-            targetX={crystalCenter.x}
-            targetY={crystalCenter.y}
-            onComplete={() => removeXpParticle(particle.id)}
-          />
-        ))}
+        {/* Usunięto Animację cząsteczek XP stąd */}
       </div>
     </div>
   );
