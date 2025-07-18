@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, BookOpen, Calendar, Settings, X } from 'lucide-react'; // Import X icon
+import { Home, BookOpen, Calendar, Settings, X } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import { PowerCrystal } from './PowerCrystal';
 
@@ -12,7 +12,7 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOpenQuickThoughtsModal }) => {
   const { resetXP } = useApp();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
-  const [showFinalResetConfirmButton, setShowFinalResetConfirmButton] = useState(false); // Nowy stan
+  const [showFinalResetConfirmButton, setShowFinalResetConfirmButton] = useState(false);
 
   const navigationItems = [
     { id: 'dashboard', label: 'Pulpit', icon: Home },
@@ -23,18 +23,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
 
   const handleInitialResetClick = () => {
     setShowResetConfirm(true);
-    setShowFinalResetConfirmButton(false); // Upewnij się, że ten stan jest zresetowany
+    setShowFinalResetConfirmButton(false);
   };
 
   const handleFinalReset = () => {
     resetXP();
-    setShowResetConfirm(false); // Zamknij cały modal
-    setShowFinalResetConfirmButton(false); // Zresetuj stan
+    setShowResetConfirm(false);
+    setShowFinalResetConfirmButton(false);
   };
 
   const handleCancelReset = () => {
     setShowResetConfirm(false);
-    setShowFinalResetConfirmButton(false); // Zresetuj stan
+    setShowFinalResetConfirmButton(false);
   };
 
   return (
@@ -92,14 +92,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
           onClick={(e) => {
             // Zamknij modal tylko jeśli kliknięto na tło (nie na zawartość modalu)
             if (e.target === e.currentTarget) {
-              handleCancelReset(); // Użyj funkcji anulującej, aby zresetować oba stany
+              handleCancelReset();
             }
           }}
         >
-          <div className="bg-gray-800 p-6 rounded-lg max-w-md shadow-xl border border-gray-700 relative"> {/* Added relative positioning */}
+          <div className="bg-gray-800 p-6 rounded-lg max-w-md shadow-xl border border-gray-700 relative">
             <h3 className="text-white font-bold mb-4">Resetować postęp?</h3>
             <p className="text-gray-300 mb-6">
-              Czy na pewno chcesz zresetować wszystkie punkty XP i poziom? Ta akcja jest nieodwracalna.
+              {showFinalResetConfirmButton ? 
+                "Jesteś absolutnie pewien? Ta akcja wyzeruje cały Twój postęp i jest nieodwracalna!" : 
+                "Czy na pewno chcesz zresetować wszystkie punkty XP i poziom? Ta akcja jest nieodwracalna."
+              }
             </p>
             
             {showFinalResetConfirmButton ? (
@@ -121,16 +124,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
             ) : (
               <div className="flex space-x-4">
                 <button
-                  onClick={() => setShowFinalResetConfirmButton(true)}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
-                >
-                  Resetuj
-                </button>
-                <button
                   onClick={handleCancelReset}
                   className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
                 >
                   Anuluj
+                </button>
+                <button
+                  onClick={() => setShowFinalResetConfirmButton(true)}
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
+                >
+                  Resetuj
                 </button>
               </div>
             )}
