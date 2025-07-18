@@ -31,7 +31,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
 
   return (
     <>
-      <div className="w-64 bg-gray-800 h-screen flex flex-col">
+      <div className="w-120 bg-gray-800 h-screen flex flex-col"> {/* Zmieniono w-64 na w-120 */}
         {/* Header with Logo and Title */}
         <div className="p-6 border-b border-gray-700 flex flex-col items-center justify-center">
           <img src="/logo.png" alt="ADHiDe Logo" className="w-48 h-auto mb-2 mt-2" /> {/* Zmieniono mt-[-1rem] na mt-2 */}
