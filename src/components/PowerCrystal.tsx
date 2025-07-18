@@ -60,6 +60,11 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     setPrevXp(user.xp);
   }, [lastXpGainTimestamp, user.xp, prevXp]);
 
+  // Obliczenia dla wyświetlania XP i poziomu
+  const xpForNextLevel = 1000; // Każdy poziom wymaga 1000 XP
+  const xpInCurrentLevel = user.xp % xpForNextLevel;
+  const xpProgress = xpInCurrentLevel / xpForNextLevel;
+
   // Efekt generowania bąbelków
   useEffect(() => {
     const addRandomBubble = () => {
@@ -85,20 +90,15 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       }, (newBubble.duration + newBubble.delay) * 1000 + 100); // Konwertuj na ms, dodaj bufor
     };
 
-    // Rozpocznij dodawanie bąbelków tylko, jeśli postęp XP jest większy od 0
-    if (user.xp > 0) {
+    // Rozpocznij dodawanie bąbelków tylko, jeśli postęp XP jest większy niż 5%
+    if (xpProgress > 0.05) { 
       // Zmniejszona częstotliwość: dodawaj bąbelek co 1 do 3 sekundy
       const interval = setInterval(addRandomBubble, 1000 + Math.random() * 2000);
       return () => clearInterval(interval);
     } else {
-      setBubbles([]); // Wyczyść bąbelki, jeśli XP wynosi 0
+      setBubbles([]); // Wyczyść bąbelki, jeśli XP jest zbyt niskie
     }
-  }, [user.xp]); // Uruchom ponownie efekt, jeśli XP się zmieni (aby rozpocząć/zatrzymać generowanie bąbelków)
-
-  // Obliczenia dla wyświetlania XP i poziomu
-  const xpForNextLevel = 1000; // Każdy poziom wymaga 1000 XP
-  const xpInCurrentLevel = user.xp % xpForNextLevel;
-  const xpProgress = xpInCurrentLevel / xpForNextLevel;
+  }, [xpProgress]); // Uruchom ponownie efekt, jeśli xpProgress się zmieni
 
   // Kolor kryształu (można dostosować w zależności od poziomu, ale na razie stały)
   const currentCrystalColor = 'from-cyan-500 to-blue-600';
@@ -137,7 +137,18 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
               boxShadow: '0 0 15px rgba(255,165,0,0.7)', // Pomarańczowy blask
             }}
           >
-            {/* Bubbles are now rendered as siblings to this div, but still within crystalRef */}
+            {/* Dynamically rendered bubbles */}
+            {bubbles.map(bubble => (
+              <div
+                key={bubble.id}
+                className={`bubble ${bubble.sizeClass}`}
+                style={{
+                  left: `${bubble.left}%`,
+                  animationDelay: `${bubble.delay}s`,
+                  animationDuration: `${bubble.duration}s`,
+                }}
+              ></div>
+            ))}
           </div>
           {/* Numer poziomu */}
           <div className="absolute inset-0 flex items-center justify-center z-30">
@@ -145,19 +156,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
               {user.level}
             </span>
           </div>
-
-          {/* Dynamically rendered bubbles - moved here */}
-          {bubbles.map(bubble => (
-            <div
-              key={bubble.id}
-              className={`bubble ${bubble.sizeClass}`}
-              style={{
-                left: `${bubble.left}%`,
-                animationDelay: `${bubble.delay}s`,
-                animationDuration: `${bubble.duration}s`,
-              }}
-            ></div>
-          ))}
         </div>
       </div>
 

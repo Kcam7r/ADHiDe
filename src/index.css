@@ -181,9 +181,9 @@
 /* New bubble animations for PowerCrystal */
 @keyframes bubble-rise {
   0% { bottom: 0%; transform: scale(0.5); opacity: 0; }
-  10% { opacity: 0.5; transform: scale(0.8); } /* Zmniejszona widoczność */
-  80% { opacity: 0.4; } /* Zmniejszona widoczność */
-  100% { bottom: 100%; transform: scale(1.2); opacity: 0; } /* Rise up to 100% of parent height and fade out */
+  10% { opacity: 0.15; transform: scale(0.8); } /* Zmniejszona widoczność */
+  80% { opacity: 0.1; } /* Zmniejszona widoczność */
+  100% { bottom: 90%; transform: scale(1.2); opacity: 0; } /* Rise up to 90% of parent height and fade out */
 }
 
 .bubble {
