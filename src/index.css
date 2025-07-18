@@ -191,10 +191,10 @@ html {
 
 @keyframes mission-pulse-urgent {
   0% { transform: scale(1) rotate(0deg) translateY(0); box-shadow: 0 0 0px rgba(0,0,0,0); }
-  15% { transform: scale(1.04) rotate(-3deg) translateY(-3px); box-shadow: 0 0 25px rgba(255,165,0,0.9); } /* More intense orange glow */
-  30% { transform: scale(1.03) rotate(3deg) translateY(0); box-shadow: 0 0 35px rgba(255,165,0,1); } /* Even more intense */
-  45% { transform: scale(1.04) rotate(-3deg) translateY(-3px); box-shadow: 0 0 25px rgba(255,165,0,0.9); }
-  60% { transform: scale(1.03) rotate(3deg) translateY(0); box-shadow: 0 0 35px rgba(255,165,0,1); }
+  15% { transform: scale(1.05) rotate(-5deg) translateY(-7px); box-shadow: 0 0 30px rgba(255,165,0,0.9); } /* Increased scale, rotation, translateY, glow */
+  30% { transform: scale(1.04) rotate(5deg) translateY(0); box-shadow: 0 0 45px rgba(255,165,0,1); } /* Increased scale, rotation, glow */
+  45% { transform: scale(1.05) rotate(-5deg) translateY(-7px); box-shadow: 0 0 30px rgba(255,165,0,0.9); }
+  60% { transform: scale(1.04) rotate(5deg) translateY(0); box-shadow: 0 0 45px rgba(255,165,0,1); }
   100% { transform: scale(1) rotate(0deg) translateY(0); box-shadow: 0 0 0px rgba(0,0,0,0); }
 }
 .animate-mission-pulse-urgent {
