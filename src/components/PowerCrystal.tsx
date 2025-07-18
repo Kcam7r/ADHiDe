@@ -15,7 +15,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const [prevXp, setPrevXp] = useState(user.xp);
   const [prevLevel, setPrevLevel] = useState(user.level); // Nowy stan do śledzenia poprzedniego poziomu
   const crystalRef = useRef<HTMLDivElement>(null);
-  const liquidRef = useRef<HTMLDivElement>(null);
+  const liquidRef = useRef<HTMLHTMLDivElement>(null);
   const bubbleIntervalRef = useRef<number | null>(null);
 
   // Persystowane właściwości stylu dla kryształu (top, left, size w px)
@@ -143,7 +143,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         <img
           src="/holder.png"
           alt="Crystal Holder"
-          className="absolute w-full h-auto bottom-0 left-1/2 -translate-x-1/2 z-5 filter invert"
+          className="absolute w-full h-full object-contain object-bottom left-1/2 -translate-x-1/2 z-5 filter invert"
         />
 
         {/* Nowy element pod kryształem mocy (okrągła podstawa) */}
