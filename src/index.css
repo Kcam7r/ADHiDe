@@ -243,7 +243,11 @@ html {
 
 /* Nowa klasa dla koloru drzewa */
 .filter-tree-color {
-  filter: sepia(100%) saturate(200%) hue-rotate(20deg) brightness(80%);
+  filter: sepia(100%) saturate(200%) hue-rotate(20deg) brightness(80%)
+          drop-shadow(0px 0px 2px rgba(0,0,0,0.3)) /* Added drop-shadows here */
+          drop-shadow(1px 1px 3px rgba(0,0,0,0.6))
+          drop-shadow(-1px -1px 3px rgba(0,0,0,0.15))
+          drop-shadow(2px 2px 6px rgba(0,0,0,0.4));
 }
 
 /* Nowa klasa dla białego holdera */
@@ -323,7 +327,7 @@ html {
   50% {
     opacity: var(--bubble-end-opacity); /* Use dynamic end opacity */
     transform: scale(0.8);
-    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 1)); /* Brighter glow in middle */
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 1)); /* Brighter glow in middle */
   }
   100% {
     bottom: 100%;

@@ -18,8 +18,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
   const crystalSize = 105;
-  const crystalTop = 96.5;
-  const crystalLeft = 59.5;
+  const crystalTop = 90; // Adjusted for 3/4 view illusion
+  const crystalLeft = 65; // Adjusted for 3/4 view illusion
 
   const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
@@ -80,11 +80,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     };
   }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]);
 
-  // Obliczenia dla okrągłej podstawy
-  const baseSize = crystalSize + 10;
-  const baseTop = crystalTop - 5;
-  const baseLeft = crystalLeft - 5;
-
   const handleCrystalClick = (e: React.MouseEvent) => {
     onCrystalClick();
   };
@@ -103,34 +98,13 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         {/* Holder Image (holder2.png) - teraz zaczyna się w tym samym miejscu co holder3.png */}
         <img
           src="/holder2.png" 
-          alt="Crystal Holder Duplicate"
-          className="absolute w-[200px] h-[250px] z-[6] filter-white-invert group-hover:filter-white-invert-hover transition-filter duration-300" // Added group-hover filter and transition
+          alt="Crystal Holder"
+          className="absolute w-[200px] h-[250px] z-[6] filter-tree-color group-hover:filter-white-invert-hover transition-filter duration-300" // Changed filter
           style={{ 
             top: 35, 
             left: 12,
-            // Initial filter for 3D effect
-            filter: 'invert(100%) drop-shadow(0px 0px 2px rgba(255,255,255,0.3)) drop-shadow(1px 1px 3px rgba(0,0,0,0.6)) drop-shadow(-1px -1px 3px rgba(255,255,255,0.15)) drop-shadow(2px 2px 6px rgba(0,0,0,0.4))'
           }}
         />
-
-        {/* Nowy element holder3.png */}
-        <img
-          src="/holder3.png" 
-          alt="Crystal Holder Top"
-          className="absolute w-[200px] h-[100px] z-[15] filter-white-invert"
-          style={{ top: 22, left: 12, display: 'none' }}
-        />
-
-        {/* Nowy element pod kryształem mocy (okrągła podstawa) */}
-        <div
-          className="absolute rounded-full bg-gray-800 z-10 hidden"
-          style={{
-            top: baseTop,
-            left: baseLeft,
-            width: baseSize,
-            height: baseSize,
-          }}
-        ></div>
 
         {/* Kula Kryształu (teraz przez przezroczysta z efektem szkła) */}
         <div
@@ -152,6 +126,15 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             borderRadius: '50%'
           }}
         >
+          {/* Simulated Holder Reflection/Shadow on Crystal */}
+          <div
+            className="absolute bottom-0 left-0 right-0 h-1/2 rounded-b-full"
+            style={{
+              background: 'radial-gradient(ellipse at bottom, rgba(0,0,0,0.3) 0%, transparent 70%)',
+              zIndex: 25, // Above liquid, below level number
+            }}
+          ></div>
+
           {/* Light Reflection Effect */}
           {(isHovered || showReflection) && (
             <div 
