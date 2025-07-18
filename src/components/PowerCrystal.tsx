@@ -139,7 +139,10 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       onClick={onCrystalClick}
     >
       {/* Główny kontener dla kryształu i holdera - zmieniono na w-96 h-96 */}
-      <div className="relative w-96 h-96 flex items-center justify-center">
+      <div 
+        className="relative w-96 h-96 flex items-center justify-center"
+        style={{ transform: 'translateY(50px)' }} // Przesunięcie w dół o 50px
+      >
         {/* Holder Image - teraz w pełni w kontenerze */}
         <img
           src="/holder.png"
