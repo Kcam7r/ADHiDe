@@ -223,11 +223,11 @@ html {
 .babel {
     position: absolute;
     bottom: 0;
-    background-color: rgba(255, 255, 255, 0.7); /* Zwiększona przezroczystość z 0.4 na 0.7 */
+    background-color: rgba(178, 246, 255, 0.8); /* Zmieniono na jaśniejszy cyjan z 80% przezroczystości */
     border-radius: 50%;
     animation: rise linear infinite;
     pointer-events: none;
-    filter: blur(0.2px); /* Zmniejszone rozmycie */
+    filter: blur(0.5px); /* Zwiększone rozmycie */
 }
 
 @keyframes rise {
