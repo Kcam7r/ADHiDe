@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { XpParticle } from './XpParticle';
-// Usunięto import useWindowSize, ponieważ jego wartości nie są używane w tym komponencie
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface PowerCrystalProps {
@@ -17,14 +16,13 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const crystalRef = useRef<HTMLDivElement>(null);
   const liquidRef = useRef<HTMLDivElement>(null);
   const bubbleIntervalRef = useRef<number | null>(null);
-  // const { width, height } = useWindowSize(); // Usunięto, ponieważ nie jest używane
 
   // Persystowane właściwości stylu dla kryształu (top, left, size w px)
   // Wartości początkowe będą nadpisane przez te z localStorage, jeśli istnieją
-  const [crystalProps] = useLocalStorage('adhd-crystal-props', { // Usunięto setCrystalProps, ponieważ nie jest używane
-    top: 147, // Zaktualizowano dla nowego rozmiaru kontenera (384px - 90px) / 2 = 147
-    left: 147, // Zaktualizowano dla nowego rozmiaru kontenera
-    size: 90, // Zwiększono rozmiar kryształu
+  const [crystalProps] = useLocalStorage('adhd-crystal-props', {
+    top: 152, // Zmieniono z 147 na 152, aby przesunąć kryształ o 5px niżej
+    left: 147,
+    size: 90,
   });
 
   const [crystalCenter, setCrystalCenter] = useState(() => {
