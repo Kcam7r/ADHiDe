@@ -12,13 +12,14 @@ interface QuickThoughtsModalProps {
 export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose }) => {
   const { 
     quickThoughts, 
-    archivedQuickThoughts, // Nowy stan
-    archiveQuickThought, // Nowa funkcja
+    archivedQuickThoughts,
+    archiveQuickThought,
     addDailyTask, 
     addMission, 
     addJournalEntry, 
     updateJournalEntry, 
-    journalEntries 
+    journalEntries,
+    setArchivedQuickThoughts // Dodano setArchivedQuickThoughts
   } = useApp();
 
   const [activeThoughtMenuId, setActiveThoughtMenuId] = useState<string | null>(null);
