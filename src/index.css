@@ -186,23 +186,23 @@
     border-radius: 50%;
     animation: rise linear infinite;
     pointer-events: none;
-    filter: blur(0.5px); /* Subtle blur for a more liquid look */
+    /* filter: blur(0.5px); */ /* Usunięto rozmycie dla lepszej widoczności */
 }
 
 @keyframes rise {
     0% {
         transform: translateY(0) translateX(0);
-        opacity: 0; /* Start invisible */
+        opacity: 0.4; /* Zwiększona początkowa widoczność */
     }
-    10% { /* Quickly fade in as it starts moving */
-        opacity: 0.5; /* Peak subtle visibility */
-        transform: translateY(-5px) translateX(var(--bubble-drift-x, 0px));
+    10% {
+        opacity: 0.8; /* Szczytowa widoczność szybko */
+        transform: translateY(-20px) translateX(var(--bubble-drift-x, 0px)); /* Bardziej agresywny początkowy ruch w górę */
     }
     50% {
-        transform: translateX(var(--bubble-drift-x, 10px)); /* Continue horizontal drift */
+        transform: translateX(var(--bubble-drift-x, 10px)); /* Kontynuuj dryf poziomy */
     }
     100% {
         transform: translateY(var(--bubble-target-y, -32px)) translateX(var(--bubble-drift-x-end, -10px));
-        opacity: 0; /* Fade out completely */
+        opacity: 0; /* Całkowite zanikanie */
     }
 }
