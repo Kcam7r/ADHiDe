@@ -88,26 +88,35 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const calculateLevel = (xp: number) => Math.floor(xp / 1000) + 1;
 
   const addXP = (amount: number, originX?: number, originY?: number) => {
-    const newXP = user.xp + amount;
-    const newLevel = calculateLevel(newXP);
-    
-    setUser({ ...user, xp: newXP, level: newLevel });
     setLastXpGainTimestamp(Date.now());
 
-    if (originX !== undefined && originY !== undefined && amount > 0) { 
-      const numberOfParticles = Math.floor(amount / 5); 
-      const newParticles: XpParticleData[] = [];
-      for (let i = 0; i < numberOfParticles; i++) {
-        const offsetX = (Math.random() - 0.5) * 40;
-        const offsetY = (Math.random() - 0.5) * 40;
-        newParticles.push({
-          id: `${Date.now()}-${i}-${Math.random()}`,
-          startX: originX + offsetX,
-          startY: originY + offsetY,
-        });
+    setXpParticles(prev => {
+      if (originX !== undefined && originY !== undefined && amount > 0) { 
+        const numberOfParticles = Math.floor(amount / 5); 
+        const newParticles: XpParticleData[] = [];
+        for (let i = 0; i < numberOfParticles; i++) {
+          const offsetX = (Math.random() - 0.5) * 40;
+          const offsetY = (Math.random() - 0.5) * 40;
+          newParticles.push({
+            id: `${Date.now()}-${i}-${Math.random()}`,
+            startX: originX + offsetX,
+            startY: originY + offsetY,
+          });
+        }
+        return [...prev, ...newParticles];
       }
-      setXpParticles(prev => [...prev, ...newParticles]);
-    }
+      return prev;
+    });
+
+    setUser(prevUser => {
+      const newXP = prevUser.xp + amount;
+      const newLevel = calculateLevel(newXP);
+
+      if (newLevel > prevUser.level) {
+        triggerConfetti(); // Trigger confetti on level up
+      }
+      return { ...prevUser, xp: newXP, level: newLevel };
+    });
   };
 
   // Nowa funkcja do dodawania dużej ilości XP bez generowania cząsteczek
@@ -115,6 +124,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setUser(prevUser => {
       const newXP = prevUser.xp + amount;
       const newLevel = calculateLevel(newXP);
+      // addLargeXP już wywołuje confetti, więc nie trzeba dodawać tu dodatkowego warunku na level up
       return { ...prevUser, xp: newXP, level: newLevel };
     });
     triggerConfetti(); // Wywołaj konfetti dla dużego awansu
