@@ -11,7 +11,7 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) => {
-  const { resetXP, addLargeXP } = useApp();
+  const { resetXP } = useApp(); // Usunięto addLargeXP, ponieważ przycisk jest usuwany
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showQuickThought, setShowQuickThought] = useState(false);
   const [showQuickThoughts, setShowQuickThoughts] = useState(false);
@@ -61,7 +61,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
         </nav>
 
         {/* Gamification Info - Power Crystal */}
-        <div className="p-4 border-t border-gray-700 flex flex-col items-center mt-8"> {/* Dodano mt-8 */}
+        <div className="p-4 border-t border-gray-700 flex flex-col items-center mt-8">
           <PowerCrystal onCrystalClick={() => setShowResetConfirm(true)} />
         </div>
 
@@ -88,15 +88,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
           </div>
         </div>
 
-        {/* Temporary button for adding large XP */}
-        <div className="p-4 border-t border-gray-700">
-          <button
-            onClick={() => addLargeXP(100000000)}
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
-          >
-            Dodaj 100M XP (TEST)
-          </button>
-        </div>
+        {/* Usunięto tymczasowy przycisk do dodawania dużej ilości XP */}
       </div>
 
       {/* Reset Confirmation Modal */}
