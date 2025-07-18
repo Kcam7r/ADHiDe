@@ -36,6 +36,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       left: Math.random() * 90 + 5, // Pozycja pozioma od 5% do 95%
       delay: Math.random() * 3, // Opóźnienie animacji do 3 sekund
       duration: Math.random() * (5 - 2) + 2, // Czas trwania animacji od 2 do 5 sekund
+      startBottomPercentage: Math.random() * 100, // Losowa pozycja startowa w pionie (0-100% wysokości płynu)
     }));
   }, [dynamicNumberOfBubbles]); // Zależność od dynamicznej liczby bąbelków
 
@@ -152,7 +153,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
                   left: `${bubble.left}%`,
                   animationDelay: `${bubble.delay}s`,
                   animationDuration: `${bubble.duration}s`,
-                }}
+                  bottom: `${bubble.startBottomPercentage}%`, // Ustawienie losowej pozycji startowej
+                  '--bubble-start-bottom': `${bubble.startBottomPercentage}%`, // Przekazanie zmiennej CSS
+                } as React.CSSProperties}
               />
             ))}
           </div>

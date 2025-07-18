@@ -293,21 +293,22 @@ html {
 /* Nowe style i animacje dla bąbelków XP w krysztale */
 @keyframes bubble-rise {
   0% {
-    transform: translateY(0) scale(0.2); /* Start na dole, małe */
+    bottom: var(--bubble-start-bottom); /* Dynamiczna pozycja startowa */
+    transform: scale(0.2); /* Start małe */
     opacity: 0;
   }
   20% {
     opacity: 0.7; /* Pełna widoczność */
   }
   100% {
-    transform: translateY(-100%) scale(1); /* Unieś się do góry rodzica, powiększ */
+    bottom: 100%; /* Unieś się do góry rodzica (powierzchni płynu) */
+    transform: scale(1); /* Powiększ */
     opacity: 0; /* Zniknij */
   }
 }
 
 .xp-bubble {
   position: absolute;
-  bottom: 0; /* Zaczynaj na dole kontenera płynu */
   background-color: rgba(255, 255, 255, 0.6); /* Biały z przezroczystością */
   border-radius: 50%;
   filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8)); /* Jasna poświata */
