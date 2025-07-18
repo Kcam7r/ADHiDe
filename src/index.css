@@ -76,9 +76,9 @@
 /* Custom animations for the new PowerCrystal design */
 @keyframes liquid-wave {
   0% { transform: translateY(0px); }
-  25% { transform: translateY(-2px); } /* Bardzo subtelna fala w górę */
+  25% { transform: translateY(-1.5px); } /* Bardzo subtelna fala w górę */
   50% { transform: translateY(0px); }
-  75% { transform: translateY(2px); }  /* Bardzo subtelna fala w dół */
+  75% { transform: translateY(1.5px); }  /* Bardzo subtelna fala w dół */
   100% { transform: translateY(0px); }
 }
 .animate-liquid-wave {
