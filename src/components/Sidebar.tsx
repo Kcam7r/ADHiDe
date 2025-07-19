@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, BookOpen, Calendar, Settings, X, Lightbulb } from 'lucide-react'; // Dodano Lightbulb
+import { Home, BookOpen, Calendar, Settings, X, Lightbulb, ClipboardList } from 'lucide-react'; // Dodano ClipboardList
 import { useApp } from '../contexts/AppContext';
 import { PowerCrystal } from './PowerCrystal';
 import { showInfoToast } from '../utils/toast';
@@ -8,9 +8,10 @@ interface SidebarProps {
   activeView: string;
   onViewChange: (view: string) => void;
   onOpenQuickThoughtsModal: () => void;
+  onOpenNewQuickThoughtModal: () => void; // Nowa prop
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOpenQuickThoughtsModal }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOpenQuickThoughtsModal, onOpenNewQuickThoughtModal }) => {
   const { resetXP } = useApp();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showFinalResetConfirmButton, setShowFinalResetConfirmButton] = useState(false);
@@ -20,7 +21,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
     { id: 'questlog', label: 'Quest Log', icon: BookOpen },
     { id: 'journal', label: 'Dziennik', icon: Calendar },
     { id: 'garage', label: 'Garaż', icon: Settings },
-    { id: 'quickthoughts', label: 'Moje Myśli', icon: Lightbulb, action: onOpenQuickThoughtsModal }, // Nowa pozycja
+    { id: 'quickthoughts-list', label: 'Lista Myśli', icon: ClipboardList, action: onOpenQuickThoughtsModal }, // Zmieniono id, label i ikonę
+    { id: 'new-quickthought', label: 'Nowa Myśl', icon: Lightbulb, action: onOpenNewQuickThoughtModal }, // Nowa pozycja
   ];
 
   const handleInitialResetClick = () => {
@@ -46,7 +48,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
         {/* Header with Logo and Title */}
         <div 
           className="p-6 border-b border-gray-700 flex flex-col items-center justify-center cursor-pointer"
-          // onClick={onOpenQuickThoughtsModal} // Przeniesiono akcję na dedykowany przycisk
           title="ADHiDe"
         >
           <img 
@@ -64,7 +65,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
               return (
                 <li key={item.id}>
                   <button
-                    onClick={() => item.action ? item.action() : onViewChange(item.id)} // Użyj action jeśli istnieje, w przeciwnym razie onViewChange
+                    onClick={() => item.action ? item.action() : onViewChange(item.id)}
                     className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-colors 
                     active:scale-[0.98] active:brightness-110
                     ${

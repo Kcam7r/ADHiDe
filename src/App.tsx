@@ -3,7 +3,7 @@ import { AppProvider } from './contexts/AppContext';
 import { Sidebar } from './components/Sidebar';
 import { PomodoroTimer } from './components/PomodoroTimer';
 import { ConfettiOverlay } from './components/ConfettiOverlay';
-import { QuickThoughtFloatingButton } from './components/QuickThoughtFloatingButton'; // Przywrócono
+// import { QuickThoughtFloatingButton } from './components/QuickThoughtFloatingButton'; // Usunięto
 import { QuickThoughtModal } from './components/QuickThoughtModal';
 import { QuickThoughtsModal } from './components/QuickThoughtsModal';
 import { LevelUpFlashOverlay } from './components/LevelUpFlashOverlay';
@@ -43,6 +43,7 @@ function App() {
           activeView={activeView} 
           onViewChange={setActiveView} 
           onOpenQuickThoughtsModal={() => setShowQuickThoughtsModal(true)}
+          onOpenNewQuickThoughtModal={() => setShowQuickThoughtModal(true)} {/* Nowa prop */}
         />
         <main className="flex-1 overflow-y-auto">
           <AnimatePresence mode="wait">
@@ -70,8 +71,7 @@ function App() {
       <LevelUpFlashOverlay />
       <XpBubblesOverlay />
       
-      {/* Przywrócono QuickThoughtFloatingButton */}
-      <QuickThoughtFloatingButton onOpenNewThought={() => setShowQuickThoughtModal(true)} />
+      {/* QuickThoughtFloatingButton został usunięty, jego funkcjonalność przeniesiona do Sidebar */}
 
       {showQuickThoughtModal && ( 
         <QuickThoughtModal 
