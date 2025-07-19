@@ -21,7 +21,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Usunięto stałą containerHeight, aby wysokość była dynamiczna
 
   // Pozycje kryształu i podstawy dostosowane do nowego rozmiaru kontenera
-  const crystalSize = 102; 
+  const crystalSize = 104; // Zwiększono rozmiar z 102 na 104
   const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
   const xpProgress = xpInCurrentLevel / xpForNextLevel;
@@ -183,8 +183,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
                   animationDelay: `${bubble.delay}s`,
                   animationDuration: `${bubble.duration}s`,
                   bottom: `${bubble.startBottomPercentage}%`,
-                  '--bubble-start-bottom': `${bubble.startBottomPercentage}%`,
-                  '--bubble-end-opacity': `${Math.random() * 0.8 + 0.2}`,
+                  '--bubble-start-bottom': `${Math.random() * 0.8 + 0.2}`,
                 } as React.CSSProperties}
               />
             ))}
