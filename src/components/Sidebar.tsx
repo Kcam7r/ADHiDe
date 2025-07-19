@@ -24,7 +24,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
 
   const handleInitialResetClick = () => {
     setShowResetConfirm(true);
-    setShowFinalResetConfirmButton(false);
+    setShowFinalResetConfirm(false);
   };
 
   const handleFinalReset = () => {
@@ -84,8 +84,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
         {/* Pusty div flex-1, aby wypchnąć resztę zawartości na dół */}
         <div className="flex-1"></div> 
 
-        {/* PowerCrystal container - teraz będzie na dole sidebara */}
-        <div className="flex flex-col items-center mb-4">
+        {/* PowerCrystal container - teraz będzie na samym dole sidebara */}
+        <div className="flex flex-col items-center"> {/* Usunięto mb-4 */}
           <PowerCrystal onCrystalClick={handleInitialResetClick} />
         </div>
       </div>
