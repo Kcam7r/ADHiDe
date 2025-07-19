@@ -41,7 +41,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   useLayoutEffect(() => {
     if (levelNumberRef.current) {
-      const rect = levelNumber.current.getBoundingClientRect();
+      const rect = levelNumberRef.current.getBoundingClientRect(); // Poprawiono: levelNumber na levelNumberRef.current
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       setCrystalPosition({ x: centerX, y: centerY });
