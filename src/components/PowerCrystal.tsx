@@ -76,8 +76,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Obliczenia dla okrągłej podstawy i kryształu, teraz względem dołu
   // Te wartości są szacunkowe i mogą wymagać dostosowania po podglądzie
   const holderImageBottom = 0; // Holder image at the very bottom of its container
-  const crystalBottom = 120; // Crystal is 120px from the bottom of its container (150 - 30)
-  const baseBottom = 115; // Base is 115px from the bottom of its container (145 - 30)
+  const crystalBottom = 112; // Crystal is 112px from the bottom of its container (120 - 8)
+  const baseBottom = 107; // Base is 107px from the bottom of its container (115 - 8)
 
   const handleCrystalClick = (e: React.MouseEvent) => {
     onCrystalClick();
