@@ -24,21 +24,24 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const crystalSize = 114; 
   const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
-  const xpProgress = xpInCurrentLevel / xpForNextLevel;
+  const xpProgress = xpInCurrentLevel / xpForNextLevel; // Obliczenie postępu (0 do 1)
   const xpPercentage = Math.round(xpProgress * 100); // Obliczenie procentowego postępu
 
   const dynamicNumberOfBubbles = Math.max(5, Math.floor(xpProgress * 20) + 5); 
 
   const bubbles = React.useMemo(() => {
+    // Bąbelki powinny startować tylko w obszarze wypełnionym płynem
+    const maxStartBottomPercentage = xpProgress * 100; 
     return Array.from({ length: dynamicNumberOfBubbles }).map((_, i) => ({
       id: `bubble-${i}-${Date.now()}`,
       size: Math.random() * (10 - 4) + 4,
       left: Math.random() * 90 + 5,
       delay: Math.random() * 3,
       duration: Math.random() * (5 - 2) + 2,
-      startBottomPercentage: Math.random() * 100,
+      // Początkowa pozycja bąbelka jest losowana tylko do wysokości płynu
+      startBottomPercentage: Math.random() * maxStartBottomPercentage, 
     }));
-  }, [dynamicNumberOfBubbles]);
+  }, [dynamicNumberOfBubbles, xpProgress]); // Dodano xpProgress do zależności
 
   useLayoutEffect(() => {
     if (levelNumberRef.current) {
