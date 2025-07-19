@@ -49,6 +49,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
         <div 
           className="p-6 border-b border-gray-700 flex flex-col items-center justify-center cursor-pointer"
           title="ADHiDe"
+          onClick={onOpenQuickThoughtsModal} {/* Dodano onClick */}
         >
           <img 
             src="/logo.png" 
