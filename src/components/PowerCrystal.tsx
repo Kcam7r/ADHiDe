@@ -75,8 +75,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Obliczenia dla okrągłej podstawy i kryształu, teraz względem dołu
   const holderImageBottom = 0; 
-  const crystalBottom = 97; // Przesunięto 1px w dół (z 98 na 97)
-  const baseBottom = 92; // Przesunięto 1px w dół (z 93 na 92)
+  const crystalBottom = 97; 
 
   // Offset dla wyśrodkowania po zmianie rozmiaru
   const horizontalOffset = 1.5; 
@@ -119,17 +118,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             pointerEvents: 'none', // Dodano pointer-events: none
           }}
         />
-
-        {/* Nowy element pod kryształem mocy (okrągła podstawa) */}
-        <div
-          className="absolute rounded-full bg-gray-800 z-10"
-          style={{
-            bottom: baseBottom,
-            left: (containerWidth - (crystalSize + 10)) / 2 + horizontalOffset, // Dostosowano offset
-            width: crystalSize + 10,
-            height: crystalSize + 10,
-          }}
-        ></div>
 
         {/* Kula Kryształu (teraz przez przezroczysta z efektem szkła) */}
         <div
