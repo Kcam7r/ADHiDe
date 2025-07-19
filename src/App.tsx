@@ -43,7 +43,7 @@ function App() {
           activeView={activeView} 
           onViewChange={setActiveView} 
           onOpenQuickThoughtsModal={() => setShowQuickThoughtsModal(true)}
-          onOpenNewQuickThoughtModal={() => setShowQuickThoughtModal(true)} {/* Nowa prop */}
+          onOpenNewQuickThoughtModal={() => setShowQuickThoughtModal(true)} 
         />
         <main className="flex-1 overflow-y-auto">
           <AnimatePresence mode="wait">
