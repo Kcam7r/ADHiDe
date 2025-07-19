@@ -27,25 +27,17 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   const bubbles = React.useMemo(() => {
     const maxStartBottomPercentage = xpProgress * 100; 
-    const newBubbles = Array.from({ length: dynamicNumberOfBubbles }).map((_, i) => {
-      const startBottom = Math.random() * maxStartBottomPercentage; // Start within liquid
-      // Calculate travel distance in pixels from its starting 'bottom' position to the top of the crystal
-      // The crystal's height is `crystalSize` (114px).
-      // If startBottom is 0%, it needs to travel 100% of crystalSize.
-      // If startBottom is 50%, it needs to travel 50% of crystalSize.
-      const travelDistance = crystalSize * (1 - (startBottom / 100)); 
+    return Array.from({ length: dynamicNumberOfBubbles }).map((_, i) => {
       return {
         id: `bubble-${i}-${Date.now()}`,
         size: Math.random() * (10 - 4) + 4,
         left: Math.random() * 90 + 5,
         delay: Math.random() * 3,
         duration: Math.random() * (5 - 2) + 2,
-        startBottomPercentage: startBottom,
-        travelY: -travelDistance, // Negative for translateY upwards
+        startBottomPercentage: Math.random() * maxStartBottomPercentage, 
       };
     });
-    return newBubbles;
-  }, [dynamicNumberOfBubbles, xpProgress, crystalSize]); // Add crystalSize to dependencies
+  }, [dynamicNumberOfBubbles, xpProgress]);
 
   useLayoutEffect(() => {
     if (levelNumberRef.current) {
@@ -176,29 +168,29 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             style={{
               height: `${Math.max(5, xpProgress * 100)}%`,
               boxShadow: '0 0 15px rgba(255,165,0,0.7), inset 0 2px 5px rgba(255,255,255,0.3)',
+              overflow: 'hidden', // Dodano overflow: hidden tutaj
             }}
             ref={liquidRef}
           >
+            {/* Bąbelki XP - TERAZ W ŚRODKU TEGO DIVA */}
+            {bubbles.map(bubble => (
+              <div
+                key={bubble.id}
+                className="xp-bubble"
+                style={{
+                  width: `${bubble.size}px`,
+                  height: `${bubble.size}px`,
+                  left: `${bubble.left}%`,
+                  animationDelay: `${bubble.delay}s`,
+                  animationDuration: `${bubble.duration}s`,
+                  bottom: `${bubble.startBottomPercentage}%`, 
+                } as React.CSSProperties}
+              />
+            ))}
           </div>
           <div ref={levelNumberRef} className="absolute inset-0 flex items-center justify-center text-white text-3xl font-bold z-30 font-indie-flower">
             {user.level}
           </div>
-
-          {bubbles.map(bubble => (
-            <div
-              key={bubble.id}
-              className="xp-bubble"
-              style={{
-                width: `${bubble.size}px`,
-                height: `${bubble.size}px`,
-                left: `${bubble.left}%`,
-                animationDelay: `${bubble.delay}s`,
-                animationDuration: `${bubble.duration}s`,
-                bottom: `${bubble.startBottomPercentage}%`,
-                '--bubble-travel-y': `${bubble.travelY}px`, // Set CSS variable
-              } as React.CSSProperties}
-            />
-          ))}
         </div>
       </div>
     </div>

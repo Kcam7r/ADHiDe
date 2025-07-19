@@ -328,7 +328,8 @@ html {
 /* Nowe style i animacje dla bąbelków XP w krysztale */
 @keyframes bubble-rise {
   0% {
-    transform: translateY(0) scale(0.2);
+    /* bottom jest ustawiane przez inline style w React */
+    transform: scale(0.2);
     opacity: 0;
     filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
   }
@@ -339,7 +340,8 @@ html {
     opacity: 0.8;
   }
   100% {
-    transform: translateY(var(--bubble-travel-y)) scale(1); /* Użyj zmiennej CSS dla odległości podróży */
+    bottom: 100%; /* Unosi się do góry rodzica (elementu płynu) */
+    transform: scale(1);
     opacity: 0;
     filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
   }
