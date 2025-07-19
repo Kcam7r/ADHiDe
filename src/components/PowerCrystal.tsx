@@ -6,10 +6,10 @@ interface PowerCrystalProps {
 }
 
 export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystalClick }) => {
-  const { user, lastXpGainTimestamp, setCrystalPosition, dailyXpGain } = useApp(); // Dodano dailyXpGain
+  const { user, lastXpGainTimestamp, setCrystalPosition, dailyXpGain } = useApp();
   const [isHovered, setIsHovered] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
-  const [showReflection, setShowReflection] = useState(false); // State for reflection animation
+  const [showReflection, setShowReflection] = useState(false);
   const [prevXp, setPrevXp] = useState(user.xp);
   const [prevLevel, setPrevLevel] = useState(user.level);
   const crystalRef = useRef<HTMLDivElement>(null);
@@ -17,59 +17,56 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const liquidRef = useRef<HTMLDivElement>(null);
 
   // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
+  // Zwiększono rozmiar kontenera, aby holder był większy
+  const containerWidth = 300; // Nowa szerokość kontenera
+  const containerHeight = 400; // Nowa wysokość kontenera (proporcjonalnie do 300px szerokości)
+
+  // Pozycje kryształu i podstawy dostosowane do nowego rozmiaru kontenera
   const crystalSize = 95; 
-  const crystalTop = 107.5; 
-  const crystalLeft = 64.5; 
+  const crystalTop = 107.5 + (containerHeight - 300) / 2; // Przesunięcie w dół
+  const crystalLeft = 64.5 + (containerWidth - 224) / 2; // Przesunięcie w prawo
 
   const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
   const xpProgress = xpInCurrentLevel / xpForNextLevel;
 
-  // Liczba bąbelków do animacji - dynamiczna, zależna od postępu XP
-  // Minimum 5 bąbelków, maksimum 25 (5 + 20 * 1.0)
   const dynamicNumberOfBubbles = Math.max(5, Math.floor(xpProgress * 20) + 5); 
 
-  // Generowanie właściwości bąbelków raz przy renderowaniu komponentu
   const bubbles = React.useMemo(() => {
     return Array.from({ length: dynamicNumberOfBubbles }).map((_, i) => ({
-      id: `bubble-${i}-${Date.now()}`, // Dodano Date.now() dla unikalności klucza
-      size: Math.random() * (10 - 4) + 4, // Rozmiar od 4px do 10px
-      left: Math.random() * 90 + 5, // Pozycja pozioma od 5% do 95%
-      delay: Math.random() * 3, // Opóźnienie animacji do 3 sekund
-      duration: Math.random() * (5 - 2) + 2, // Czas trwania animacji od 2 do 5 sekund
-      startBottomPercentage: Math.random() * 100, // Losowa pozycja startowa w pionie (0-100% wysokości płynu)
+      id: `bubble-${i}-${Date.now()}`,
+      size: Math.random() * (10 - 4) + 4,
+      left: Math.random() * 90 + 5,
+      delay: Math.random() * 3,
+      duration: Math.random() * (5 - 2) + 2,
+      startBottomPercentage: Math.random() * 100,
     }));
-  }, [dynamicNumberOfBubbles]); // Zależność od dynamicznej liczby bąbelków
+  }, [dynamicNumberOfBubbles]);
 
-  // useLayoutEffect do pobierania pozycji cyfry poziomu
   useLayoutEffect(() => {
     if (levelNumberRef.current) {
       const rect = levelNumberRef.current.getBoundingClientRect();
-      // Oblicz środek cyfry poziomu
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       setCrystalPosition({ x: centerX, y: centerY });
     }
-  }, [setCrystalPosition, user.level]);
+  }, [setCrystalPosition, user.level, crystalLeft, crystalTop]); // Dodano zależności
 
-  // Efekt dla animacji zysku XP (błysk) i awansu na poziom
   useEffect(() => {
     let flashTimer: number | undefined;
-    let reflectionTimer: number | undefined; // New timer for reflection
+    let reflectionTimer: number | undefined;
 
-    // Błysk przy zysku XP
     if (lastXpGainTimestamp > 0 && user.xp > prevXp) {
       setIsFlashing(true);
-      setShowReflection(true); // Trigger reflection on XP gain
+      setShowReflection(true);
 
       flashTimer = setTimeout(() => {
         setIsFlashing(false);
-      }, 500); // Duration of crystal-flash
+      }, 500);
 
       reflectionTimer = setTimeout(() => {
-        setShowReflection(false); // Hide reflection after its animation duration
-      }, 2000); // Duration of crystal-reflection-xp animation
-
+        setShowReflection(false);
+      }, 2000);
     }
     setPrevXp(user.xp);
     setPrevLevel(user.level);
@@ -89,32 +86,32 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     onCrystalClick();
   };
 
-  // Obliczanie intensywności aury na podstawie dailyXpGain
-  const auraIntensity = Math.min(1, dailyXpGain / 500); // Max intensywność przy 500 XP
-  const auraColor = `rgba(255, 165, 0, ${auraIntensity * 0.8})`; // Bursztynowy kolor
+  const auraIntensity = Math.min(1, dailyXpGain / 500);
+  const auraColor = `rgba(255, 165, 0, ${auraIntensity * 0.8})`;
   const auraShadow = `0 0 ${5 + auraIntensity * 15}px ${auraColor}, inset 0 0 ${2 + auraIntensity * 5}px rgba(255,255,255,${auraIntensity * 0.5})`;
 
   return (
     <div
-      className="relative flex flex-col items-center justify-end w-full cursor-pointer select-none group" // Added 'group' class
+      className="relative flex flex-col items-center justify-end w-full cursor-pointer select-none group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleCrystalClick}
     >
-      {/* Główny kontener dla kryształu i holdera */}
+      {/* Główny kontener dla kryształu i holdera - zmieniono rozmiar */}
       <div 
-        className="relative w-56 h-[300px] flex items-center justify-center"
+        className="relative flex items-center justify-center"
+        style={{ width: `${containerWidth}px`, height: `${containerHeight}px` }}
       >
-        {/* Holder Image (holder4.png) */}
+        {/* Holder Image (holder4.png) - ustawiono width: 100% */}
         <img
           src="/holder4.png" 
           alt="Crystal Holder"
           className="absolute z-[6]" 
           style={{ 
-            top: 50, 
-            left: 7, 
-            width: 1000, // Poprawiono szerokość na 1000px
-            height: 'auto', 
+            top: 0, // Dostosowano pozycję
+            left: 0, // Dostosowano pozycję
+            width: '100%', // Wypełnia szerokość kontenera
+            height: 'auto', // Zachowuje proporcje
           }}
         />
 
@@ -138,15 +135,15 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             bg-white bg-opacity-15
             group-hover:shadow-xl group-hover:border-cyan-400 group-hover:bg-opacity-20
             ${dailyXpGain > 0 ? 'animate-crystal-aura-pulse' : ''}
-            `} // Dodano klasę animacji aury
+            `}
           style={{
             top: crystalTop,
             left: crystalLeft,
             width: crystalSize,
             height: crystalSize,
-            boxShadow: auraShadow, // Dynamiczny box-shadow dla aury
+            boxShadow: auraShadow,
             border: '2px solid rgba(255,255,255,0.2)',
-            overflow: 'hidden', // Kluczowe dla ukrycia bąbelków poza płynem
+            overflow: 'hidden',
             borderRadius: '50%'
           }}
         >
@@ -155,7 +152,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             className="absolute bottom-0 left-0 right-0 h-1/2 rounded-b-full"
             style={{
               background: 'radial-gradient(ellipse at bottom, rgba(0,0,0,0.3) 0%, transparent 70%)',
-              zIndex: 25, // Above liquid, below level number
+              zIndex: 25,
             }}
           ></div>
 
@@ -176,7 +173,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-500 to-yellow-400 transition-all duration-300 ease-out animate-liquid-wave z-20"
             style={{
               height: `${Math.max(5, xpProgress * 100)}%`,
-              boxShadow: '0 0 15px rgba(255,165,0,0.7), inset 0 2px 5px rgba(255,255,255,0.3)', // Added inner shadow for meniscus
+              boxShadow: '0 0 15px rgba(255,165,0,0.7), inset 0 2px 5px rgba(255,255,255,0.3)',
             }}
             ref={liquidRef}
           >
@@ -191,9 +188,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
                   left: `${bubble.left}%`,
                   animationDelay: `${bubble.delay}s`,
                   animationDuration: `${bubble.duration}s`,
-                  bottom: `${bubble.startBottomPercentage}%`, // Ustawienie losowej pozycji startowej
-                  '--bubble-start-bottom': `${bubble.startBottomPercentage}%`, // Przekazanie zmiennej CSS
-                  '--bubble-end-opacity': `${Math.random() * 0.8 + 0.2}`, // Random end opacity for varied glow
+                  bottom: `${bubble.startBottomPercentage}%`,
+                  '--bubble-start-bottom': `${bubble.startBottomPercentage}%`,
+                  '--bubble-end-opacity': `${Math.random() * 0.8 + 0.2}`,
                 } as React.CSSProperties}
               />
             ))}
