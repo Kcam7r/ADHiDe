@@ -17,14 +17,14 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const liquidRef = useRef<HTMLDivElement>(null);
 
   // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
-  // Zwiększono rozmiar kontenera, aby holder był większy
-  const containerWidth = 300; // Nowa szerokość kontenera
-  const containerHeight = 400; // Nowa wysokość kontenera (proporcjonalnie do 300px szerokości)
+  const containerWidth = 300; 
+  const containerHeight = 400; 
 
   // Pozycje kryształu i podstawy dostosowane do nowego rozmiaru kontenera
   const crystalSize = 95; 
-  const crystalTop = 107.5 + (containerHeight - 300) / 2; // Przesunięcie w dół
-  const crystalLeft = 64.5 + (containerWidth - 224) / 2; // Przesunięcie w prawo
+  // Zwiększono bazową wartość top o 50px, aby przesunąć kryształ w dół
+  const crystalTop = 107.5 + 50 + (containerHeight - 300) / 2; 
+  const crystalLeft = 64.5 + (containerWidth - 224) / 2; 
 
   const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
@@ -50,7 +50,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       const centerY = rect.top + rect.height / 2;
       setCrystalPosition({ x: centerX, y: centerY });
     }
-  }, [setCrystalPosition, user.level, crystalLeft, crystalTop]); // Dodano zależności
+  }, [setCrystalPosition, user.level, crystalLeft, crystalTop]);
 
   useEffect(() => {
     let flashTimer: number | undefined;
@@ -97,7 +97,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleCrystalClick}
     >
-      {/* Główny kontener dla kryształu i holdera - zmieniono rozmiar */}
+      {/* Główny kontener dla kryształu i holdera */}
       <div 
         className="relative flex items-center justify-center"
         style={{ width: `${containerWidth}px`, height: `${containerHeight}px` }}
@@ -108,10 +108,10 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           alt="Crystal Holder"
           className="absolute z-[6]" 
           style={{ 
-            top: 0, // Dostosowano pozycję
-            left: 0, // Dostosowano pozycję
-            width: '100%', // Wypełnia szerokość kontenera
-            height: 'auto', // Zachowuje proporcje
+            top: 50, // Przesunięto obrazek w dół o 50px
+            left: 0, 
+            width: '100%', 
+            height: 'auto', 
           }}
         />
 
