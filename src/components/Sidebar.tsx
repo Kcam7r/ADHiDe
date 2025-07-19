@@ -27,7 +27,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
 
   const handleInitialResetClick = () => {
     setShowResetConfirm(true);
-    setShowFinalResetConfirmButton(false);
+    setShowFinalResetConfirm(false);
   };
 
   const handleFinalReset = () => {
@@ -44,7 +44,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
 
   return (
     <>
-      <div className="w-64 bg-gray-800 h-screen flex flex-col">
+      <div className="w-64 bg-gray-800 h-screen flex flex-col overflow-hidden">
         {/* Header with Logo and Title */}
         <div 
           className="p-6 border-b border-gray-700 flex flex-col items-center justify-center cursor-pointer"
