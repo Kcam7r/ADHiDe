@@ -21,7 +21,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Usunięto stałą containerHeight, aby wysokość była dynamiczna
 
   // Pozycje kryształu i podstawy dostosowane do nowego rozmiaru kontenera
-  const crystalSize = 95; 
+  const crystalSize = 100; // Zwiększono rozmiar kryształu z 95 na 100
   const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
   const xpProgress = xpInCurrentLevel / xpForNextLevel;
@@ -74,12 +74,12 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]);
 
   // Obliczenia dla okrągłej podstawy i kryształu, teraz względem dołu
-  // Przesunięcie o 4px do góry i 5px w lewo (z poprzedniego kroku)
-  // Teraz dodatkowo 3px w prawo, a następnie 2px w lewo (czyli finalnie +1px w prawo od pierwotnego -5px)
-  // Nowe przesunięcie: +1px w prawo i +1px w dół
   const holderImageBottom = 0; 
-  const crystalBottom = 100; // 101 - 1 = 100
-  const baseBottom = 95; // 96 - 1 = 95
+  const crystalBottom = 100; 
+  const baseBottom = 95; 
+
+  // Offset dla wyśrodkowania po zmianie rozmiaru
+  const horizontalOffset = 4.5; 
 
   const auraIntensity = Math.min(1, dailyXpGain / 500);
   const auraColor = `rgba(255, 165, 0, ${auraIntensity * 0.8})`;
@@ -125,7 +125,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           className="absolute rounded-full bg-gray-800 z-10"
           style={{
             bottom: baseBottom,
-            left: (containerWidth - (crystalSize + 10)) / 2 + 2, // Zmieniono z +1 na +2 (poprzednio +1, teraz +1)
+            left: (containerWidth - (crystalSize + 10)) / 2 + horizontalOffset, // Dostosowano offset
             width: crystalSize + 10,
             height: crystalSize + 10,
           }}
@@ -144,7 +144,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             `}
           style={{
             bottom: crystalBottom,
-            left: (containerWidth - crystalSize) / 2 + 2, // Zmieniono z +1 na +2 (poprzednio +1, teraz +1)
+            left: (containerWidth - crystalSize) / 2 + horizontalOffset, // Dostosowano offset
             width: crystalSize,
             height: crystalSize,
             boxShadow: auraShadow,
