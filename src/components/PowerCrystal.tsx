@@ -22,8 +22,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Pozycje kryształu i podstawy dostosowane do nowego rozmiaru kontenera
   const crystalSize = 95; 
-  // Zwiększono bazową wartość top o 150px (50px + 100px), aby przesunąć kryształ w dół
-  const crystalTop = 107.5 + 150 + (containerHeight - 300) / 2; 
+  // Przywrócono oryginalną bazową wartość top dla kryształu
+  const crystalTop = 107.5 + (containerHeight - 300) / 2; 
   const crystalLeft = 64.5 + (containerWidth - 224) / 2; 
 
   const xpForNextLevel = 1000;
@@ -108,7 +108,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           alt="Crystal Holder"
           className="absolute z-[6]" 
           style={{ 
-            top: 150, // Przesunięto obrazek w dół o 150px (50 + 100)
+            top: 150, // Przesunięto obrazek w dół o 150px
             left: 0, 
             width: '100%', 
             height: 'auto', 
