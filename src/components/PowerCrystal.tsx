@@ -94,7 +94,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     >
       {/* Główny kontener dla kryształu i holdera */}
       <div 
-        className="relative flex items-center justify-center"
+        className="relative flex items-center justify-center group-hover:scale-105 transition-transform duration-300 ease-out" // Dodano skalowanie na hover
         style={{ width: `${containerWidth}px`, height: 'auto', minHeight: '250px' }} // Dynamiczna wysokość, z minimalną
       >
         {/* Informacje o XP na najechanie myszką - przeniesione na górę, aby nie kolidowały z pozycjonowaniem bottom */}
@@ -112,7 +112,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           alt="Crystal Holder"
           className={`absolute z-[30] transition-all duration-300 ease-out
             filter-dark-green-base
-            ${isHovered ? 'filter-dark-green-hover scale-105' : ''}
+            ${isHovered ? 'filter-dark-green-hover' : ''}
           `}
           style={{ 
             bottom: holderImageBottom, 
