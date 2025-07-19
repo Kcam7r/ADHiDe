@@ -75,7 +75,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Obliczenia dla okrągłej podstawy i kryształu, teraz względem dołu
   const holderImageBottom = 0; 
-  const crystalBottom = 92; // Zmieniono z 93 na 92, aby przesunąć w dół
+  const crystalBottom = 92; 
 
   // Offset dla wyśrodkowania po zmianie rozmiaru
   const horizontalOffset = 1.5; 
@@ -109,13 +109,13 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         <img
           src="/holder4.png" 
           alt="Crystal Holder"
-          className="absolute z-[30]" 
+          className={`absolute z-[30] transition-all duration-300 ease-out ${isHovered ? 'filter-white-invert-hover scale-105' : ''}`} 
           style={{ 
             bottom: holderImageBottom, 
             left: '2.5%', 
             width: '95%', 
             height: 'auto', 
-            pointerEvents: 'none', // Dodano pointer-events: none
+            pointerEvents: 'none', 
           }}
         />
 
