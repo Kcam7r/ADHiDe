@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, BookOpen, Calendar, Settings, X } from 'lucide-react';
+import { Home, BookOpen, Calendar, Settings, X, Lightbulb } from 'lucide-react'; // Dodano Lightbulb
 import { useApp } from '../contexts/AppContext';
 import { PowerCrystal } from './PowerCrystal';
 import { showInfoToast } from '../utils/toast';
@@ -19,12 +19,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
     { id: 'dashboard', label: 'Pulpit', icon: Home },
     { id: 'questlog', label: 'Quest Log', icon: BookOpen },
     { id: 'journal', label: 'Dziennik', icon: Calendar },
-    { id: 'garage', 'label': 'Garaż', icon: Settings },
+    { id: 'garage', label: 'Garaż', icon: Settings },
+    { id: 'quickthoughts', label: 'Moje Myśli', icon: Lightbulb, action: onOpenQuickThoughtsModal }, // Nowa pozycja
   ];
 
   const handleInitialResetClick = () => {
     setShowResetConfirm(true);
-    setShowFinalResetConfirm(false);
+    setShowFinalResetConfirmButton(false);
   };
 
   const handleFinalReset = () => {
@@ -45,8 +46,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
         {/* Header with Logo and Title */}
         <div 
           className="p-6 border-b border-gray-700 flex flex-col items-center justify-center cursor-pointer"
-          onClick={onOpenQuickThoughtsModal}
-          title="Moje Myśli"
+          // onClick={onOpenQuickThoughtsModal} // Przeniesiono akcję na dedykowany przycisk
+          title="ADHiDe"
         >
           <img 
             src="/logo.png" 
@@ -63,11 +64,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
               return (
                 <li key={item.id}>
                   <button
-                    onClick={() => onViewChange(item.id)}
+                    onClick={() => item.action ? item.action() : onViewChange(item.id)} // Użyj action jeśli istnieje, w przeciwnym razie onViewChange
                     className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-colors 
                     active:scale-[0.98] active:brightness-110
                     ${
-                      activeView === item.id
+                      activeView === item.id && !item.action // Aktywny stan tylko dla widoków, nie dla modali
                         ? 'bg-cyan-600 text-white shadow-md'
                         : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                     }`}

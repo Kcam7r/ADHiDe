@@ -3,7 +3,7 @@ import { AppProvider } from './contexts/AppContext';
 import { Sidebar } from './components/Sidebar';
 import { PomodoroTimer } from './components/PomodoroTimer';
 import { ConfettiOverlay } from './components/ConfettiOverlay';
-import { QuickThoughtFloatingButton } from './components/QuickThoughtFloatingButton';
+// import { QuickThoughtFloatingButton } from './components/QuickThoughtFloatingButton'; // Usunięto
 import { QuickThoughtModal } from './components/QuickThoughtModal';
 import { QuickThoughtsModal } from './components/QuickThoughtsModal';
 import { LevelUpFlashOverlay } from './components/LevelUpFlashOverlay';
@@ -70,7 +70,7 @@ function App() {
       <LevelUpFlashOverlay />
       <XpBubblesOverlay />
       
-      <QuickThoughtFloatingButton onOpenNewThought={() => setShowQuickThoughtModal(true)} />
+      {/* Usunięto QuickThoughtFloatingButton */}
 
       {showQuickThoughtModal && ( 
         <QuickThoughtModal 
