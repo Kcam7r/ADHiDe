@@ -175,27 +175,28 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             }}
             ref={liquidRef}
           >
-            {/* Bąbelki XP */}
-            {bubbles.map(bubble => (
-              <div
-                key={bubble.id}
-                className="xp-bubble"
-                style={{
-                  width: `${bubble.size}px`,
-                  height: `${bubble.size}px`,
-                  left: `${bubble.left}%`,
-                  animationDelay: `${bubble.delay}s`,
-                  animationDuration: `${bubble.duration}s`,
-                  bottom: `${bubble.startBottomPercentage}%`,
-                  '--bubble-start-bottom': `${Math.random() * 0.8 + 0.2}`,
-                } as React.CSSProperties}
-              />
-            ))}
+            {/* Bąbelki XP - PRZENIESIONE NA ZEWNĄTRZ TEGO DIVA */}
           </div>
           {/* Poziom XP - zmieniono pozycjonowanie na absolutne i wyśrodkowane */}
           <div ref={levelNumberRef} className="absolute inset-0 flex items-center justify-center text-white text-3xl font-bold z-30 font-indie-flower">
             {user.level}
           </div>
+
+          {/* Bąbelki XP - NOWA LOKALIZACJA (wewnątrz crystalRef, ale poza liquidRef) */}
+          {bubbles.map(bubble => (
+            <div
+              key={bubble.id}
+              className="xp-bubble"
+              style={{
+                width: `${bubble.size}px`,
+                height: `${bubble.size}px`,
+                left: `${bubble.left}%`,
+                animationDelay: `${bubble.delay}s`,
+                animationDuration: `${bubble.duration}s`,
+                bottom: `${bubble.startBottomPercentage}%`, // To jest początkowa pozycja bąbelka
+              } as React.CSSProperties}
+            />
+          ))}
         </div>
       </div>
     </div>

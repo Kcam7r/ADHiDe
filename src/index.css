@@ -147,10 +147,10 @@ html {
 
 /* New filter for dark green holder base state */
 .filter-dark-green-base {
-  filter: brightness(1.2) hue-rotate(112deg) saturate(250%)
-          drop-shadow(0px 0px 3px rgba(57,255,20,0.4)) /* Green glow */
-          drop-shadow(2px 2px 8px rgba(0,0,0,0.8)) /* Deeper main shadow */
-          drop-shadow(-2px -2px 4px rgba(57,255,20,0.2)); /* Lighter green highlight */
+  filter: brightness(1.0) hue-rotate(112deg) saturate(150%) /* Zmniejszona jasność i nasycenie */
+          drop-shadow(0px 0px 1px rgba(57,255,20,0.2)) /* Delikatniejszy zielony blask */
+          drop-shadow(1px 1px 4px rgba(0,0,0,0.6)) /* Mniejszy główny cień */
+          drop-shadow(-1px -1px 2px rgba(57,255,20,0.1)); /* Delikatniejszy zielony highlight */
 }
 
 /* Modified hover filter for dark green holder */
@@ -328,18 +328,18 @@ html {
 /* Nowe style i animacje dla bąbelków XP w krysztale */
 @keyframes bubble-rise {
   0% {
-    bottom: var(--bubble-start-bottom);
+    /* bottom jest ustawiane przez inline style */
     transform: scale(0.2);
     opacity: 0;
     filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
   }
   50% {
-    opacity: var(--bubble-end-opacity); /* Use dynamic end opacity */
+    opacity: 0.8; /* Stała wartość dla widoczności */
     transform: scale(0.8);
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 1)); /* Brighter glow in middle */
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 1)); /* Jaśniejszy blask w środku */
   }
   100% {
-    bottom: 100%;
+    bottom: 100%; /* Unosi się do góry rodzica (crystalRef) */
     transform: scale(1);
     opacity: 0;
     filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
