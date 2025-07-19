@@ -105,11 +105,11 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       <div 
         className="relative w-56 h-[300px] flex items-center justify-center"
       >
-        {/* Holder Image (holder2.png) - teraz zaczyna się w tym samym miejscu co holder3.png */}
+        {/* Holder Image (holder4.png) */}
         <img
-          src="/holder2.png" 
+          src="/holder4.png" 
           alt="Crystal Holder"
-          className="absolute w-[200px] h-[250px] z-[6] filter-tree-color group-hover:filter-white-invert-hover transition-filter duration-300 hidden" // Changed filter and added hidden
+          className="absolute w-[200px] h-[250px] z-[6] filter-tree-color group-hover:filter-white-invert-hover transition-filter duration-300" // Usunięto klasę 'hidden'
           style={{ 
             top: 35, 
             left: 12,
