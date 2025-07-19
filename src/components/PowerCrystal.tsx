@@ -18,14 +18,10 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
   const containerWidth = 300; 
-  const containerHeight = 400; 
+  // Usunięto stałą containerHeight, aby wysokość była dynamiczna
 
   // Pozycje kryształu i podstawy dostosowane do nowego rozmiaru kontenera
   const crystalSize = 95; 
-  // Przywrócono oryginalną bazową wartość top dla kryształu
-  const crystalTop = 107.5 + (containerHeight - 300) / 2; 
-  const crystalLeft = 64.5 + (containerWidth - 224) / 2; 
-
   const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
   const xpProgress = xpInCurrentLevel / xpForNextLevel;
@@ -50,7 +46,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       const centerY = rect.top + rect.height / 2;
       setCrystalPosition({ x: centerX, y: centerY });
     }
-  }, [setCrystalPosition, user.level, crystalLeft, crystalTop]);
+  }, [setCrystalPosition, user.level]);
 
   useEffect(() => {
     let flashTimer: number | undefined;
@@ -77,10 +73,11 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     };
   }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]);
 
-  // Obliczenia dla okrągłej podstawy
-  const baseSize = crystalSize + 10; 
-  const baseTop = crystalTop - 5; 
-  const baseLeft = crystalLeft - 5; 
+  // Obliczenia dla okrągłej podstawy i kryształu, teraz względem dołu
+  // Te wartości są szacunkowe i mogą wymagać dostosowania po podglądzie
+  const holderImageBottom = 0; // Holder image at the very bottom of its container
+  const crystalBottom = 150; // Crystal is 150px from the bottom of its container
+  const baseBottom = 145; // Base is 145px from the bottom of its container
 
   const handleCrystalClick = (e: React.MouseEvent) => {
     onCrystalClick();
@@ -100,15 +97,24 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       {/* Główny kontener dla kryształu i holdera */}
       <div 
         className="relative flex items-center justify-center"
-        style={{ width: `${containerWidth}px`, height: `${containerHeight}px` }}
+        style={{ width: `${containerWidth}px`, height: 'auto', minHeight: '250px' }} // Dynamiczna wysokość, z minimalną
       >
+        {/* Informacje o XP na najechanie myszką - przeniesione na górę, aby nie kolidowały z pozycjonowaniem bottom */}
+        <div
+          className={`absolute -top-10 bg-gray-700 text-white text-sm px-3 py-1 rounded-md shadow-md transition-opacity duration-200 whitespace-nowrap ${
+            isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
+          }`}
+        >
+          {xpInCurrentLevel}/{xpForNextLevel} XP
+        </div>
+
         {/* Holder Image (holder4.png) - ustawiono width: 100% */}
         <img
           src="/holder4.png" 
           alt="Crystal Holder"
           className="absolute z-[6]" 
           style={{ 
-            top: 150, // Przesunięto obrazek w dół o 150px
+            bottom: holderImageBottom, // Pozycjonowanie od dołu
             left: 0, 
             width: '100%', 
             height: 'auto', 
@@ -119,10 +125,10 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         <div
           className="absolute rounded-full bg-gray-800 z-10"
           style={{
-            top: baseTop,
-            left: baseLeft,
-            width: baseSize,
-            height: baseSize,
+            bottom: baseBottom,
+            left: (containerWidth - (crystalSize + 10)) / 2, // Wyśrodkowanie
+            width: crystalSize + 10,
+            height: crystalSize + 10,
           }}
         ></div>
 
@@ -137,8 +143,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             ${dailyXpGain > 0 ? 'animate-crystal-aura-pulse' : ''}
             `}
           style={{
-            top: crystalTop,
-            left: crystalLeft,
+            bottom: crystalBottom,
+            left: (containerWidth - crystalSize) / 2, // Wyśrodkowanie
             width: crystalSize,
             height: crystalSize,
             boxShadow: auraShadow,
@@ -199,15 +205,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           <div ref={levelNumberRef} className="absolute inset-0 flex items-center justify-center text-white text-3xl font-bold z-30 font-indie-flower">
             {user.level}
           </div>
-        </div>
-
-        {/* Informacje o XP na najechanie myszką */}
-        <div
-          className={`absolute -top-10 bg-gray-700 text-white text-sm px-3 py-1 rounded-md shadow-md transition-opacity duration-200 whitespace-nowrap ${
-            isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
-          }`}
-        >
-          {xpInCurrentLevel}/{xpForNextLevel} XP
         </div>
       </div>
     </div>
