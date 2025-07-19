@@ -75,7 +75,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Obliczenia dla okrągłej podstawy i kryształu, teraz względem dołu
   const holderImageBottom = 0; 
-  const crystalBottom = 94; // Zmieniono z 95 na 94, aby przesunąć w dół
+  const crystalBottom = 93; // Zmieniono z 94 na 93, aby przesunąć w dół
 
   // Offset dla wyśrodkowania po zmianie rozmiaru
   const horizontalOffset = 1.5; 
