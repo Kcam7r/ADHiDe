@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, BookOpen, Calendar, Settings, X, Lightbulb, ClipboardList } from 'lucide-react'; // Dodano ClipboardList
+import { Home, BookOpen, Calendar, Settings, X, Lightbulb, ClipboardList } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import { PowerCrystal } from './PowerCrystal';
 import { showInfoToast } from '../utils/toast';
@@ -8,7 +8,7 @@ interface SidebarProps {
   activeView: string;
   onViewChange: (view: string) => void;
   onOpenQuickThoughtsModal: () => void;
-  onOpenNewQuickThoughtModal: () => void; // Nowa prop
+  onOpenNewQuickThoughtModal: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOpenQuickThoughtsModal, onOpenNewQuickThoughtModal }) => {
@@ -21,8 +21,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
     { id: 'questlog', label: 'Quest Log', icon: BookOpen },
     { id: 'journal', label: 'Dziennik', icon: Calendar },
     { id: 'garage', label: 'Garaż', icon: Settings },
-    { id: 'quickthoughts-list', label: 'Lista Myśli', icon: ClipboardList, action: onOpenQuickThoughtsModal }, // Zmieniono id, label i ikonę
-    { id: 'new-quickthought', label: 'Nowa Myśl', icon: Lightbulb, action: onOpenNewQuickThoughtModal }, // Nowa pozycja
+    { id: 'quickthoughts-list', label: 'Lista Myśli', icon: ClipboardList, action: onOpenQuickThoughtsModal },
+    { id: 'new-quickthought', label: 'Nowa Myśl', icon: Lightbulb, action: onOpenNewQuickThoughtModal },
   ];
 
   const handleInitialResetClick = () => {
@@ -49,7 +49,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
         <div 
           className="p-6 border-b border-gray-700 flex flex-col items-center justify-center cursor-pointer"
           title="ADHiDe"
-          onClick={onOpenQuickThoughtsModal} {/* Dodano onClick */}
+          onClick={onOpenQuickThoughtsModal}
         >
           <img 
             src="/logo.png" 
@@ -70,7 +70,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
                     className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-colors 
                     active:scale-[0.98] active:brightness-110
                     ${
-                      activeView === item.id && !item.action // Aktywny stan tylko dla widoków, nie dla modali
+                      activeView === item.id && !item.action
                         ? 'bg-cyan-600 text-white shadow-md'
                         : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                     }`}
@@ -88,7 +88,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
         <div className="flex-1"></div> 
 
         {/* PowerCrystal container - teraz będzie na samym dole sidebara */}
-        <div className="flex flex-col items-center"> {/* Usunięto mb-4 */}
+        <div className="flex flex-col items-center">
           <PowerCrystal onCrystalClick={handleInitialResetClick} />
         </div>
       </div>
