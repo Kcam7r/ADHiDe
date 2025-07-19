@@ -113,7 +113,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           style={{ 
             top: 50, 
             left: 7, 
-            width: 600, // Zmieniono z 550 na 600 (powiększenie o 50px)
+            width: 800, // Zmieniono z 600 na 800 (powiększenie o 200px)
             height: 'auto', 
           }}
         />
