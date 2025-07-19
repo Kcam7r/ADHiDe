@@ -75,10 +75,10 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Obliczenia dla okrągłej podstawy i kryształu, teraz względem dołu
   const holderImageBottom = 0; 
-  const crystalBottom = 93; // Zmieniono z 94 na 93, aby przesunąć w dół
+  const crystalBottom = 93; 
 
   // Offset dla wyśrodkowania po zmianie rozmiaru
-  const horizontalOffset = 1.5; 
+  const horizontalOffset = 0.5; // Zmieniono z 1.5 na 0.5, aby przesunąć w lewo
 
   const auraIntensity = Math.min(1, dailyXpGain / 500);
   const auraColor = `rgba(255, 165, 0, ${auraIntensity * 0.8})`;
