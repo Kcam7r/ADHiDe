@@ -41,7 +41,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   useLayoutEffect(() => {
     if (levelNumberRef.current) {
-      const rect = levelNumberRef.current.getBoundingClientRect(); // Poprawiono: levelNumber na levelNumberRef.current
+      const rect = levelNumberRef.current.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       setCrystalPosition({ x: centerX, y: centerY });
@@ -74,10 +74,10 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]);
 
   // Obliczenia dla okrągłej podstawy i kryształu, teraz względem dołu
-  // Te wartości są szacunkowe i mogą wymagać dostosowania po podglądzie
-  const holderImageBottom = 0; // Holder image at the very bottom of its container
-  const crystalBottom = 117; // Crystal is 117px from the bottom of its container (112 + 5)
-  const baseBottom = 112; // Base is 112px from the bottom of its container (107 + 5)
+  // Przesunięcie o 20px w dół i 5px w prawo
+  const holderImageBottom = 0; 
+  const crystalBottom = 97; // 117 - 20 = 97
+  const baseBottom = 92; // 112 - 20 = 92
 
   const handleCrystalClick = (e: React.MouseEvent) => {
     onCrystalClick();
@@ -108,15 +108,15 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           {xpInCurrentLevel}/{xpForNextLevel} XP
         </div>
 
-        {/* Holder Image (holder4.png) - ustawiono width: 100% */}
+        {/* Holder Image (holder4.png) - bez zmian */}
         <img
           src="/holder4.png" 
           alt="Crystal Holder"
           className="absolute z-[6]" 
           style={{ 
-            bottom: holderImageBottom, // Pozycjonowanie od dołu
-            left: '2.5%', // Przesunięcie w lewo, aby wyśrodkować
-            width: '95%', // Zmniejszona szerokość
+            bottom: holderImageBottom, 
+            left: '2.5%', 
+            width: '95%', 
             height: 'auto', 
           }}
         />
@@ -126,7 +126,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           className="absolute rounded-full bg-gray-800 z-10"
           style={{
             bottom: baseBottom,
-            left: (containerWidth - (crystalSize + 10)) / 2, // Wyśrodkowanie
+            left: (containerWidth - (crystalSize + 10)) / 2 + 5, // Przesunięcie w prawo o 5px
             width: crystalSize + 10,
             height: crystalSize + 10,
           }}
@@ -144,7 +144,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             `}
           style={{
             bottom: crystalBottom,
-            left: (containerWidth - crystalSize) / 2, // Wyśrodkowanie
+            left: (containerWidth - crystalSize) / 2 + 5, // Przesunięcie w prawo o 5px
             width: crystalSize,
             height: crystalSize,
             boxShadow: auraShadow,
