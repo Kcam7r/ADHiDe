@@ -21,7 +21,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Usunięto stałą containerHeight, aby wysokość była dynamiczna
 
   // Pozycje kryształu i podstawy dostosowane do nowego rozmiaru kontenera
-  const crystalSize = 102; // Powiększono o 2px (ze 100 na 102)
+  const crystalSize = 102; 
   const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
   const xpProgress = xpInCurrentLevel / xpForNextLevel;
@@ -75,11 +75,11 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Obliczenia dla okrągłej podstawy i kryształu, teraz względem dołu
   const holderImageBottom = 0; 
-  const crystalBottom = 99; // Dostosowano, aby skompensować wzrost rozmiaru w dół
-  const baseBottom = 94; // Dostosowano, aby skompensować wzrost rozmiaru w dół
+  const crystalBottom = 98; // Przesunięto 1px w dół (z 99 na 98)
+  const baseBottom = 93; // Przesunięto 1px w dół (z 94 na 93)
 
   // Offset dla wyśrodkowania po zmianie rozmiaru
-  const horizontalOffset = 2.5; // Dostosowano, aby skompensować przesunięcie w prawo
+  const horizontalOffset = 1.5; // Przesunięto 1px w lewo (z 2.5 na 1.5)
 
   const auraIntensity = Math.min(1, dailyXpGain / 500);
   const auraColor = `rgba(255, 165, 0, ${auraIntensity * 0.8})`;
