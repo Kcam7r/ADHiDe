@@ -16,32 +16,36 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const levelNumberRef = useRef<HTMLDivElement>(null);
   const liquidRef = useRef<HTMLDivElement>(null);
 
-  // Stałe właściwości stylu dla kryształu, teraz kontrolowane przez rodzica
   const containerWidth = 300; 
-  // Usunięto stałą containerHeight, aby wysokość była dynamiczna
-
-  // Pozycje kryształu i podstawy dostosowane do nowego rozmiaru kontenera
   const crystalSize = 114; 
   const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
-  const xpProgress = xpInCurrentLevel / xpForNextLevel; // Obliczenie postępu (0 do 1)
-  const xpPercentage = Math.round(xpProgress * 100); // Obliczenie procentowego postępu
+  const xpProgress = xpInCurrentLevel / xpForNextLevel;
+  const xpPercentage = Math.round(xpProgress * 100);
 
   const dynamicNumberOfBubbles = Math.max(5, Math.floor(xpProgress * 20) + 5); 
 
   const bubbles = React.useMemo(() => {
-    // Bąbelki powinny startować tylko w obszarze wypełnionym płynem
     const maxStartBottomPercentage = xpProgress * 100; 
-    return Array.from({ length: dynamicNumberOfBubbles }).map((_, i) => ({
-      id: `bubble-${i}-${Date.now()}`,
-      size: Math.random() * (10 - 4) + 4,
-      left: Math.random() * 90 + 5,
-      delay: Math.random() * 3,
-      duration: Math.random() * (5 - 2) + 2,
-      // Początkowa pozycja bąbelka jest losowana tylko do wysokości płynu
-      startBottomPercentage: Math.random() * maxStartBottomPercentage, 
-    }));
-  }, [dynamicNumberOfBubbles, xpProgress]); // Dodano xpProgress do zależności
+    const newBubbles = Array.from({ length: dynamicNumberOfBubbles }).map((_, i) => {
+      const startBottom = Math.random() * maxStartBottomPercentage; // Start within liquid
+      // Calculate travel distance in pixels from its starting 'bottom' position to the top of the crystal
+      // The crystal's height is `crystalSize` (114px).
+      // If startBottom is 0%, it needs to travel 100% of crystalSize.
+      // If startBottom is 50%, it needs to travel 50% of crystalSize.
+      const travelDistance = crystalSize * (1 - (startBottom / 100)); 
+      return {
+        id: `bubble-${i}-${Date.now()}`,
+        size: Math.random() * (10 - 4) + 4,
+        left: Math.random() * 90 + 5,
+        delay: Math.random() * 3,
+        duration: Math.random() * (5 - 2) + 2,
+        startBottomPercentage: startBottom,
+        travelY: -travelDistance, // Negative for translateY upwards
+      };
+    });
+    return newBubbles;
+  }, [dynamicNumberOfBubbles, xpProgress, crystalSize]); // Add crystalSize to dependencies
 
   useLayoutEffect(() => {
     if (levelNumberRef.current) {
@@ -77,11 +81,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
     };
   }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]);
 
-  // Obliczenia dla okrągłej podstawy i kryształu, teraz względem dołu
   const holderImageBottom = 0; 
   const crystalBottom = 92; 
 
-  // Offset dla wyśrodkowania po zmianie rozmiaru
   const horizontalOffset = 1.5; 
 
   const auraIntensity = Math.min(1, dailyXpGain / 500);
@@ -93,12 +95,11 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       className="relative flex flex-col items-center justify-end w-full select-none group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      // Usunięto onClick z tego elementu
     >
       {/* Główny kontener dla kryształu i holdera */}
       <div 
-        className="relative flex items-center justify-center group-hover:scale-105 transition-transform duration-300 ease-out" // Dodano skalowanie na hover
-        style={{ width: `${containerWidth}px`, height: 'auto', minHeight: '250px' }} // Dynamiczna wysokość, z minimalną
+        className="relative flex items-center justify-center group-hover:scale-105 transition-transform duration-300 ease-out"
+        style={{ width: `${containerWidth}px`, height: 'auto', minHeight: '250px' }}
       >
         {/* Informacje o XP na najechanie myszką - przeniesione na górę, aby nie kolidowały z pozycjonowaniem bottom */}
         <div
@@ -129,7 +130,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         {/* Kula Kryształu (teraz przez przezroczysta z efektem szkła) */}
         <div
           ref={crystalRef}
-          onClick={onCrystalClick} // Przeniesiono onClick tutaj
+          onClick={onCrystalClick}
           className={`absolute rounded-full shadow-lg transition-all duration-300 cursor-pointer
             ${isFlashing ? 'animate-crystal-flash' : ''}
             z-20 flex items-center justify-center
@@ -139,12 +140,12 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             `}
           style={{
             bottom: crystalBottom,
-            left: (containerWidth - crystalSize) / 2 + horizontalOffset, // Dostosowano offset
+            left: (containerWidth - crystalSize) / 2 + horizontalOffset,
             width: crystalSize,
             height: crystalSize,
             boxShadow: auraShadow,
             border: '2px solid rgba(255,255,255,0.2)',
-            overflow: 'hidden',
+            overflow: 'hidden', // This is important for clipping bubbles
             borderRadius: '50%'
           }}
         >
@@ -178,14 +179,11 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             }}
             ref={liquidRef}
           >
-            {/* Bąbelki XP - PRZENIESIONE NA ZEWNĄTRZ TEGO DIVA */}
           </div>
-          {/* Poziom XP - zmieniono pozycjonowanie na absolutne i wyśrodkowane */}
           <div ref={levelNumberRef} className="absolute inset-0 flex items-center justify-center text-white text-3xl font-bold z-30 font-indie-flower">
             {user.level}
           </div>
 
-          {/* Bąbelki XP - NOWA LOKALIZACJA (wewnątrz crystalRef, ale poza liquidRef) */}
           {bubbles.map(bubble => (
             <div
               key={bubble.id}
@@ -196,7 +194,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
                 left: `${bubble.left}%`,
                 animationDelay: `${bubble.delay}s`,
                 animationDuration: `${bubble.duration}s`,
-                bottom: `${bubble.startBottomPercentage}%`, // To jest początkowa pozycja bąbelka
+                bottom: `${bubble.startBottomPercentage}%`,
+                '--bubble-travel-y': `${bubble.travelY}px`, // Set CSS variable
               } as React.CSSProperties}
             />
           ))}

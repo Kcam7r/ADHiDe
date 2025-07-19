@@ -328,19 +328,18 @@ html {
 /* Nowe style i animacje dla bąbelków XP w krysztale */
 @keyframes bubble-rise {
   0% {
-    /* bottom jest ustawiane przez inline style */
-    transform: scale(0.2);
+    transform: translateY(0) scale(0.2);
     opacity: 0;
     filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
   }
-  50% {
-    opacity: 0.8; /* Stała wartość dla widoczności */
-    transform: scale(0.8);
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 1)); /* Jaśniejszy blask w środku */
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
   }
   100% {
-    bottom: 100%; /* Unosi się do góry rodzica (crystalRef) */
-    transform: scale(1);
+    transform: translateY(var(--bubble-travel-y)) scale(1); /* Użyj zmiennej CSS dla odległości podróży */
     opacity: 0;
     filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
   }
@@ -352,6 +351,7 @@ html {
   border-radius: 50%;
   animation: bubble-rise linear infinite;
   pointer-events: none;
+  transform: translateX(-50%); /* Wyśrodkuj poziomo */
 }
 
 /* Nowa animacja dla pulsującej aury kryształu */
