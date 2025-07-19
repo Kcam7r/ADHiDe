@@ -110,7 +110,10 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         <img
           src="/holder4.png" 
           alt="Crystal Holder"
-          className={`absolute z-[30] transition-all duration-300 ease-out ${isHovered ? 'filter-white-invert-hover scale-105' : ''}`} 
+          className={`absolute z-[30] transition-all duration-300 ease-out
+            filter-dark-green-base
+            ${isHovered ? 'filter-dark-green-hover scale-105' : ''}
+          `}
           style={{ 
             bottom: holderImageBottom, 
             left: '2.5%', 
