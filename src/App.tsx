@@ -44,7 +44,7 @@ function App() {
           onViewChange={setActiveView} 
           onOpenQuickThoughtsModal={() => setShowQuickThoughtsModal(true)}
         />
-        <main className="flex-1 overflow-hidden"> {/* Zmieniono overflow-auto na overflow-hidden */}
+        <main className="flex-1 overflow-y-auto"> {/* Zmieniono overflow-hidden na overflow-y-auto */}
           <AnimatePresence mode="wait"> {/* Dodano AnimatePresence */}
             <motion.div
               key={activeView} // Klucz do animacji przejścia
