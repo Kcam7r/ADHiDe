@@ -25,6 +25,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
   const xpProgress = xpInCurrentLevel / xpForNextLevel;
+  const xpPercentage = Math.round(xpProgress * 100); // Obliczenie procentowego postępu
 
   const dynamicNumberOfBubbles = Math.max(5, Math.floor(xpProgress * 20) + 5); 
 
@@ -102,7 +103,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
           }`}
         >
-          {xpInCurrentLevel}/{xpForNextLevel} XP
+          {xpPercentage}%
         </div>
 
         {/* Holder Image (holder4.png) - bez zmian */}
