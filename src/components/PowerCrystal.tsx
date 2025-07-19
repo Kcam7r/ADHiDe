@@ -111,9 +111,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           alt="Crystal Holder"
           className="absolute z-[6]" 
           style={{ 
-            top: 50, // Zmieniono z 10 na 50 (przesunięcie o 40px w dół)
-            left: 7, // Zmieniono z -33 na 7 (przesunięcie o 40px w prawo)
-            width: 550, 
+            top: 50, 
+            left: 7, 
+            width: 600, // Zmieniono z 550 na 600 (powiększenie o 50px)
             height: 'auto', 
           }}
         />
