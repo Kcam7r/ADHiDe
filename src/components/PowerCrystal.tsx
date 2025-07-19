@@ -81,20 +81,16 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const crystalBottom = 100; // 101 - 1 = 100
   const baseBottom = 95; // 96 - 1 = 95
 
-  const handleCrystalClick = (e: React.MouseEvent) => {
-    onCrystalClick();
-  };
-
   const auraIntensity = Math.min(1, dailyXpGain / 500);
   const auraColor = `rgba(255, 165, 0, ${auraIntensity * 0.8})`;
   const auraShadow = `0 0 ${5 + auraIntensity * 15}px ${auraColor}, inset 0 0 ${2 + auraIntensity * 5}px rgba(255,255,255,${auraIntensity * 0.5})`;
 
   return (
     <div
-      className="relative flex flex-col items-center justify-end w-full cursor-pointer select-none group"
+      className="relative flex flex-col items-center justify-end w-full select-none group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={handleCrystalClick}
+      // Usunięto onClick z tego elementu
     >
       {/* Główny kontener dla kryształu i holdera */}
       <div 
@@ -120,6 +116,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             left: '2.5%', 
             width: '95%', 
             height: 'auto', 
+            pointerEvents: 'none', // Dodano pointer-events: none
           }}
         />
 
@@ -137,7 +134,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         {/* Kula Kryształu (teraz przez przezroczysta z efektem szkła) */}
         <div
           ref={crystalRef}
-          className={`absolute rounded-full shadow-lg transition-all duration-300
+          onClick={onCrystalClick} // Przeniesiono onClick tutaj
+          className={`absolute rounded-full shadow-lg transition-all duration-300 cursor-pointer
             ${isFlashing ? 'animate-crystal-flash' : ''}
             z-20 flex items-center justify-center
             bg-white bg-opacity-15
