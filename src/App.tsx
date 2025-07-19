@@ -3,12 +3,12 @@ import { AppProvider } from './contexts/AppContext';
 import { Sidebar } from './components/Sidebar';
 import { PomodoroTimer } from './components/PomodoroTimer';
 import { ConfettiOverlay } from './components/ConfettiOverlay';
-// import { QuickThoughtFloatingButton } from './components/QuickThoughtFloatingButton'; // Usunięto
+import { QuickThoughtFloatingButton } from './components/QuickThoughtFloatingButton'; // Przywrócono
 import { QuickThoughtModal } from './components/QuickThoughtModal';
 import { QuickThoughtsModal } from './components/QuickThoughtsModal';
 import { LevelUpFlashOverlay } from './components/LevelUpFlashOverlay';
 import { XpBubblesOverlay } from './components/XpBubblesOverlay';
-import { AnimatePresence, motion } from 'framer-motion'; // Import AnimatePresence i motion
+import { AnimatePresence, motion } from 'framer-motion';
 
 // Leniwe ładowanie głównych komponentów widoków
 const Dashboard = lazy(() => import('./components/Dashboard').then(module => ({ default: module.Dashboard })));
@@ -44,15 +44,15 @@ function App() {
           onViewChange={setActiveView} 
           onOpenQuickThoughtsModal={() => setShowQuickThoughtsModal(true)}
         />
-        <main className="flex-1 overflow-y-auto"> {/* Zmieniono overflow-hidden na overflow-y-auto */}
-          <AnimatePresence mode="wait"> {/* Dodano AnimatePresence */}
+        <main className="flex-1 overflow-y-auto">
+          <AnimatePresence mode="wait">
             <motion.div
-              key={activeView} // Klucz do animacji przejścia
-              initial={{ opacity: 0, x: 50 }} // Początkowy stan (niewidoczny, przesunięty w prawo)
-              animate={{ opacity: 1, x: 0 }} // Stan docelowy (widoczny, na miejscu)
-              exit={{ opacity: 0, x: -50 }} // Stan wyjścia (zanika, przesuwa się w lewo)
-              transition={{ duration: 0.3, ease: "easeOut" }} // Czas trwania i funkcja przejścia
-              className="h-full w-full" // Upewnij się, że motion.div zajmuje całą dostępną przestrzeń
+              key={activeView}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="h-full w-full"
             >
               <Suspense fallback={
                 <div className="flex items-center justify-center h-full text-white text-xl">
@@ -70,7 +70,8 @@ function App() {
       <LevelUpFlashOverlay />
       <XpBubblesOverlay />
       
-      {/* Usunięto QuickThoughtFloatingButton */}
+      {/* Przywrócono QuickThoughtFloatingButton */}
+      <QuickThoughtFloatingButton onOpenNewThought={() => setShowQuickThoughtModal(true)} />
 
       {showQuickThoughtModal && ( 
         <QuickThoughtModal 
