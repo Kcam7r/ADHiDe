@@ -21,7 +21,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   // Usunięto stałą containerHeight, aby wysokość była dynamiczna
 
   // Pozycje kryształu i podstawy dostosowane do nowego rozmiaru kontenera
-  const crystalSize = 108; // Zwiększono rozmiar z 106 na 108
+  const crystalSize = 108; 
   const xpForNextLevel = 1000;
   const xpInCurrentLevel = user.xp % xpForNextLevel;
   const xpProgress = xpInCurrentLevel / xpForNextLevel;
@@ -75,7 +75,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
 
   // Obliczenia dla okrągłej podstawy i kryształu, teraz względem dołu
   const holderImageBottom = 0; 
-  const crystalBottom = 95; 
+  const crystalBottom = 94; // Zmieniono z 95 na 94, aby przesunąć w dół
 
   // Offset dla wyśrodkowania po zmianie rozmiaru
   const horizontalOffset = 1.5; 
@@ -109,7 +109,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         <img
           src="/holder4.png" 
           alt="Crystal Holder"
-          className="absolute z-[30]" // Zmieniono z-index z z-[6] na z-[30], aby był na przodzie
+          className="absolute z-[30]" 
           style={{ 
             bottom: holderImageBottom, 
             left: '2.5%', 
