@@ -92,7 +92,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]);
 
   const holderImageBottom = 0; 
-  const crystalBottom = 92; 
+  const crystalBottom = 91; // Zmieniono z 92 na 91
 
   const horizontalOffset = 1.5; 
 
