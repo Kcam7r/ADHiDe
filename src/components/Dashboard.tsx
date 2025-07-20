@@ -27,7 +27,7 @@ export const Dashboard: React.FC = () => {
   const [displayDailyTasks, setDisplayDailyTasks] = useState<DailyTask[]>([]);
   const [completedTodayVisual, setCompletedTodayVisual] = useState<DailyTask[]>([]);
   const [animatingOutTasks, setAnimatingOutTasks] = useState(new Set<string>());
-  const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedAnimatedTasks] = new Set<string>();
+  const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedAnimatedTasks] = useState(new Set<string>());
 
   const [fadingOutMissions, setFadingOutMissions] = useState(new Set<string>());
   const [missionReaction, setMissionReaction] = useState<{[key: string]: Mission['priority'] | null}>({});
@@ -331,7 +331,7 @@ export const Dashboard: React.FC = () => {
                 <span>Nawyki</span>
               </h2>
               <div className="flex-1 min-h-0 h-0">
-                <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={36} itemMarginYPx={12}>
+                <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={44} itemMarginYPx={12}>
                   {renderHabitItems()}
                 </ScrollableList>
               </div>
@@ -350,7 +350,7 @@ export const Dashboard: React.FC = () => {
                 {/* Sekcja zadań do wykonania */}
                 <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
                 <div className="flex-1 min-h-0 h-0">
-                  <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={36} itemMarginYPx={12}>
+                  <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={44} itemMarginYPx={12}>
                     {renderDailyTaskItems(displayDailyTasks)}
                   </ScrollableList>
                 </div>
@@ -358,7 +358,7 @@ export const Dashboard: React.FC = () => {
                 {/* Sekcja ukończonych zadań */}
                 <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col min-h-0 h-0">
                   <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
-                  <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={36} itemMarginYPx={12}>
+                  <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={44} itemMarginYPx={12}>
                     {renderDailyTaskItems(completedTodayVisual, true)}
                   </ScrollableList>
                 </div>
@@ -382,7 +382,7 @@ export const Dashboard: React.FC = () => {
                 </button>
               </div>
               <div className="flex-1 min-h-0 h-0">
-                <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={58} itemMarginYPx={12}>
+                <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={72} itemMarginYPx={12}>
                   {renderMissionItems()}
                 </ScrollableList>
               </div>

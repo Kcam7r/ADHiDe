@@ -283,7 +283,7 @@ export const QuestLog: React.FC = () => {
             )}
 
             <div className="flex-1 min-h-0 h-0">
-              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={66} itemMarginYPx={12}>
+              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={80} itemMarginYPx={12}>
                 {renderHabitItems()}
               </ScrollableList>
             </div>
@@ -338,7 +338,7 @@ export const QuestLog: React.FC = () => {
             )}
 
             <div className="flex-1 min-h-0 h-0">
-              <ScrollableList emptyMessage="Brak zadań codziennych" itemHeightPx={66} itemMarginYPx={12}>
+              <ScrollableList emptyMessage="Brak zadań codziennych" itemHeightPx={60} itemMarginYPx={12}>
                 {renderDailyTaskItems()}
               </ScrollableList>
             </div>
@@ -438,7 +438,7 @@ export const QuestLog: React.FC = () => {
             )}
 
             <div className="flex-1 min-h-0 h-0">
-              <ScrollableList emptyMessage="Brak zadań do wyświetlenia" itemHeightPx={90} itemMarginYPx={12}>
+              <ScrollableList emptyMessage="Brak zadań do wyświetlenia" itemHeightPx={104} itemMarginYPx={12}>
                 {renderMissionItems()}
               </ScrollableList>
             </div>
