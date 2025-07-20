@@ -330,7 +330,7 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={36} itemMarginYPx={12} containerPaddingTopPx={8} visibleItemsCount={9}>
+              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={36} itemMarginYPx={12}>
                 {renderHabitItems()}
               </ScrollableList>
             </div>
@@ -347,14 +347,14 @@ export const Dashboard: React.FC = () => {
               <div className="flex flex-col flex-1">
                 {/* Sekcja zadań do wykonania */}
                 <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
-                <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={36} itemMarginYPx={12} containerPaddingTopPx={8} visibleItemsCount={5}>
+                <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={36} itemMarginYPx={12}>
                   {renderDailyTaskItems(displayDailyTasks)}
                 </ScrollableList>
 
                 {/* Sekcja ukończonych zadań */}
                 <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col">
                   <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
-                  <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={36} itemMarginYPx={12} containerPaddingTopPx={8} visibleItemsCount={5}>
+                  <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={36} itemMarginYPx={12}>
                     {renderDailyTaskItems(completedTodayVisual, true)}
                   </ScrollableList>
                 </div>
@@ -377,7 +377,7 @@ export const Dashboard: React.FC = () => {
                   <Archive className="w-5 h-5" />
                 </button>
               </div>
-              <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={60} itemMarginYPx={12} containerPaddingTopPx={8} visibleItemsCount={9}> {/* Zmieniono itemHeightPx na 60 dla misji, aby uwzględnić opis */}
+              <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={60} itemMarginYPx={12}>
                 {renderMissionItems()}
               </ScrollableList>
             </div>

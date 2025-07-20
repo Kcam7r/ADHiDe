@@ -111,8 +111,8 @@ export const Journal: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 p-6 bg-gray-900 h-full"> {/* Zmieniono min-h-screen na h-full */}
-      <div className="max-w-4xl mx-auto h-full flex flex-col"> {/* Dodano h-full i flex flex-col */}
+    <div className="flex-1 p-6 bg-gray-900 h-full">
+      <div className="max-w-4xl mx-auto h-full flex flex-col">
         <h1 className="text-3xl font-bold text-white mb-8">Dziennik</h1>
         
         {/* Tabs */}
@@ -145,7 +145,7 @@ export const Journal: React.FC = () => {
 
         {activeTab === 'entries' && (
           <>
-            <div className="bg-gray-800 rounded-lg p-6 shadow-lg flex-1 flex flex-col"> {/* Dodano flex-1 flex flex-col */}
+            <div className="bg-gray-800 rounded-lg p-6 shadow-lg flex-1 flex flex-col">
               {/* Date Selection */}
               <div className="mb-6">
                 <div className="flex items-center justify-center relative mb-4">
@@ -173,7 +173,7 @@ export const Journal: React.FC = () => {
               </div>
 
               {/* Entry Form or Display */}
-              <form onSubmit={handleSubmit} className="space-y-6 flex-1 flex flex-col"> {/* Dodano flex-1 flex flex-col */}
+              <form onSubmit={handleSubmit} className="space-y-6 flex-1 flex flex-col">
                 <div>
                   <label htmlFor="journal-content" className="block text-sm font-medium text-gray-300 mb-2">
                     Wpis
@@ -254,9 +254,9 @@ export const Journal: React.FC = () => {
             </div>
 
             {/* Recent Entries */}
-            <div className="mt-8 bg-gray-800 rounded-lg p-6 shadow-lg flex-1 overflow-y-auto min-h-0"> {/* Dodano flex-1 overflow-y-auto min-h-0 */}
+            <div className="mt-8 bg-gray-800 rounded-lg p-6 shadow-lg flex-1 overflow-y-auto min-h-0">
               <h2 className="text-xl font-semibold text-white mb-4">Ostatnie wpisy</h2>
-              <ScrollableList emptyMessage="Brak wpisów w dzienniku" itemHeightPx={80}> {/* Zmieniono itemHeightPx na 80 */}
+              <ScrollableList emptyMessage="Brak wpisów w dzienniku" itemHeightPx={80}>
                 {entriesWithDates
                   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                   .map((entry) => (
