@@ -256,7 +256,7 @@ export const Journal: React.FC = () => {
             {/* Recent Entries */}
             <div className="mt-8 bg-gray-800 rounded-lg p-6 shadow-lg flex-1 overflow-y-auto min-h-0"> {/* Dodano flex-1 overflow-y-auto min-h-0 */}
               <h2 className="text-xl font-semibold text-white mb-4">Ostatnie wpisy</h2>
-              <ScrollableList emptyMessage="Brak wpisów w dzienniku" itemHeightPx={52}> {/* Zmieniono itemHeightPx na 52 dla p-4 */}
+              <ScrollableList emptyMessage="Brak wpisów w dzienniku" itemHeightPx={60}> {/* Zmieniono itemHeightPx na 60 */}
                 {entriesWithDates
                   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                   .map((entry) => (
