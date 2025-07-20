@@ -357,7 +357,7 @@ html {
   position: absolute;
   background-color: rgba(255, 255, 255, 0.6); /* Półprzezroczysty biały bąbelek */
   border-radius: 50%;
-  animation: bubble-rise var(--bubble-duration) cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite; 
+  animation: bubble-rise 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; /* Usunięto infinite, ustawiono duration */
   pointer-events: none;
   transform: translateX(-50%); /* Pozostawione tutaj jako domyślne wyśrodkowanie */
   filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5)); /* Subtelny blask dla wszystkich bąbelków */

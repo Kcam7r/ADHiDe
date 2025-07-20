@@ -12,6 +12,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const [showReflection, setShowReflection] = useState(false);
   const [prevXp, setPrevXp] = useState(user.xp);
   const [prevLevel, setPrevLevel] = useState(user.level);
+  const [activeBubbles, setActiveBubbles] = useState<Array<{ id: string; size: number; left: number; driftX: number; delay: number }>>([]); // Nowy stan dla aktywnych bąbelków
+  
   const crystalRef = useRef<HTMLDivElement>(null);
   const levelNumberRef = useRef<HTMLDivElement>(null);
   const liquidRef = useRef<HTMLDivElement>(null);
@@ -22,27 +24,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const xpInCurrentLevel = user.xp % xpForNextLevel;
   const xpProgress = xpInCurrentLevel / xpForNextLevel;
   const xpPercentage = Math.round(xpProgress * 100);
-
-  // Zmniejszona liczba bąbelków: min 2, max 10 (wcześniej max 25)
-  const dynamicNumberOfBubbles = Math.max(2, Math.floor(xpProgress * 8) + 2); 
-
-  const bubbles = React.useMemo(() => {
-    return Array.from({ length: dynamicNumberOfBubbles }).map((_, i) => {
-      const startDelay = Math.random() * 3; // Bazowe opóźnienie
-      // Dodatkowe opóźnienie, aby symulować start z niższej pozycji w płynie
-      // Im niższy poziom płynu (xpProgress), tym większe opóźnienie dla bąbelków
-      const depthDelay = (1 - xpProgress) * 2; // Od 0 do 2 sekund dodatkowego opóźnienia
-      const driftX = (Math.random() - 0.5) * 20; // Losowy dryf między -10px a 10px
-      return {
-        id: `bubble-${i}-${Date.now()}`,
-        size: Math.random() * (10 - 4) + 4,
-        left: Math.random() * 90 + 5,
-        delay: startDelay + depthDelay, // Całkowite opóźnienie
-        duration: Math.random() * (4 - 3) + 3, // Czas trwania między 3s a 4s (wcześniej 1.5s a 2.5s)
-        driftX: driftX, // Nowa właściwość dla dryfu
-      };
-    });
-  }, [dynamicNumberOfBubbles, xpProgress]);
 
   useLayoutEffect(() => {
     if (levelNumberRef.current) {
@@ -68,6 +49,35 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       reflectionTimer = setTimeout(() => {
         setShowReflection(false);
       }, 2000);
+
+      // Generowanie bąbelków XP
+      const xpGained = user.xp - prevXp;
+      const numberOfNewBubbles = Math.max(1, Math.floor(xpGained / 10)); // 1 bąbelek na każde 10 XP
+
+      const newBubbles = Array.from({ length: numberOfNewBubbles }).map((_, i) => {
+        const bubbleId = `${Date.now()}-${i}-${Math.random()}`;
+        const bubbleSize = Math.random() * (10 - 4) + 4; // Rozmiar między 4px a 10px
+        const bubbleLeft = Math.random() * 90 + 5; // Pozycja między 5% a 95%
+        const bubbleDriftX = (Math.random() - 0.5) * 20; // Dryf między -10px a 10px
+        const bubbleDelay = Math.random() * 0.5; // Niewielkie losowe opóźnienie dla efektu rozłożenia
+
+        return {
+          id: bubbleId,
+          size: bubbleSize,
+          left: bubbleLeft,
+          driftX: bubbleDriftX,
+          delay: bubbleDelay,
+        };
+      });
+
+      setActiveBubbles(prev => [...prev, ...newBubbles]);
+
+      // Usuwanie bąbelków po zakończeniu ich animacji (2 sekundy + opóźnienie)
+      newBubbles.forEach(bubble => {
+        setTimeout(() => {
+          setActiveBubbles(prev => prev.filter(b => b.id !== bubble.id));
+        }, 2000 + bubble.delay * 1000); 
+      });
     }
     setPrevXp(user.xp);
     setPrevLevel(user.level);
@@ -79,7 +89,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]);
 
   const holderImageBottom = 0; 
-  const crystalBottom = 92; // Przywrócono poprzednią wartość
+  const crystalBottom = 92; 
 
   const horizontalOffset = 1.5; 
 
@@ -98,7 +108,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         className="relative flex items-center justify-center group-hover:scale-105 transition-transform duration-300 ease-out"
         style={{ width: `${containerWidth}px`, height: 'auto', minHeight: '250px' }}
       >
-        {/* Informacje o XP na najechanie myszką - przeniesione na górę, aby nie kolidowały z pozycjonowaniem bottom */}
+        {/* Informacje o XP na najechanie myszką */}
         <div
           className={`absolute -top-10 bg-gray-700 text-white text-sm px-3 py-1 rounded-md shadow-md transition-opacity duration-200 whitespace-nowrap ${
             isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
@@ -124,13 +134,13 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           }}
         />
 
-        {/* Kula Kryształu (teraz przez przezroczysta z efektem szkła) */}
+        {/* Kula Kryształu */}
         <div
           ref={crystalRef}
           onClick={onCrystalClick}
           className={`absolute rounded-full shadow-lg transition-all duration-300 cursor-pointer
             ${isFlashing ? 'animate-crystal-flash' : ''}
-            z-[35] flex items-center justify-center {/* Zmieniono z-index na wyższy niż holder */}
+            z-[35] flex items-center justify-center
             bg-white bg-opacity-15
             group-hover:shadow-xl group-hover:border-cyan-400 group-hover:bg-opacity-20
             ${dailyXpGain > 0 ? 'animate-crystal-aura-pulse' : ''}
@@ -142,7 +152,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             height: crystalSize,
             boxShadow: auraShadow,
             border: '2px solid rgba(255,255,255,0.2)',
-            overflow: 'hidden', // This is important for clipping bubbles
+            overflow: 'hidden', 
             borderRadius: '50%'
           }}
         >
@@ -173,12 +183,11 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             style={{
               height: `${Math.max(5, xpProgress * 100)}%`,
               boxShadow: '0 0 15px rgba(255,165,0,0.7), inset 0 2px 5px rgba(255,255,255,0.3)',
-              // Usunięto overflow: hidden; z tego elementu
             }}
             ref={liquidRef}
           >
             {/* Bąbelki XP - TERAZ W ŚRODKU TEGO DIVA */}
-            {bubbles.map(bubble => (
+            {activeBubbles.map(bubble => (
               <div
                 key={bubble.id}
                 className="xp-bubble"
@@ -187,8 +196,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
                   height: `${bubble.size}px`,
                   left: `${bubble.left}%`,
                   animationDelay: `${bubble.delay}s`,
-                  '--bubble-duration': `${bubble.duration}s`, // Ustawienie zmiennej CSS
-                  '--bubble-drift-x': `${bubble.driftX}px`, // Ustawienie zmiennej CSS dla dryfu
+                  '--bubble-drift-x': `${bubble.driftX}px`, 
                 } as React.CSSProperties}
               />
             ))}
