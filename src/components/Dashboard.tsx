@@ -328,13 +328,7 @@ export const Dashboard: React.FC = () => {
                 <span>Nawyki</span>
               </h2>
               <Carousel className="flex-1">
-                {habits.length === 0 ? (
-                  <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
-                    <p>Brak nawyków do wyświetlenia</p>
-                  </div>
-                ) : (
-                  renderHabitItems()
-                )}
+                {renderHabitItems()}
               </Carousel>
             </div>
           </div>
