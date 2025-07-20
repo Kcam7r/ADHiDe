@@ -12,7 +12,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const [showReflection, setShowReflection] = useState(false);
   const [prevXp, setPrevXp] = useState(user.xp);
   const [prevLevel, setPrevLevel] = useState(user.level);
-  const [activeBubbles, setActiveBubbles] = useState<Array<{ id: string; size: number; left: number; driftX: number; delay: number }>>([]); // Nowy stan dla aktywnych bąbelków
+  const [activeBubbles, setActiveBubbles] = useState<Array<{ id: string; size: number; left: number; driftX: number; delay: number }>>([]);
   
   const crystalRef = useRef<HTMLDivElement>(null);
   const levelNumberRef = useRef<HTMLDivElement>(null);
@@ -24,6 +24,9 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const xpInCurrentLevel = user.xp % xpForNextLevel;
   const xpProgress = xpInCurrentLevel / xpForNextLevel;
   const xpPercentage = Math.round(xpProgress * 100);
+
+  // Stała liczba bąbelków tła
+  const CONTINUOUS_BUBBLE_COUNT = 5; 
 
   useLayoutEffect(() => {
     if (levelNumberRef.current) {
@@ -186,16 +189,33 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             }}
             ref={liquidRef}
           >
-            {/* Bąbelki XP - TERAZ W ŚRODKU TEGO DIVA */}
+            {/* Stałe bąbelki tła */}
+            {Array.from({ length: CONTINUOUS_BUBBLE_COUNT }).map((_, i) => (
+              <div
+                key={`continuous-bubble-${i}`}
+                className="xp-bubble xp-bubble-continuous"
+                style={{
+                  width: `${Math.random() * (8 - 3) + 3}px`, // Mniejszy zakres rozmiarów
+                  height: `${Math.random() * (8 - 3) + 3}px`,
+                  left: `${Math.random() * 90 + 5}%`,
+                  animationDelay: `${Math.random() * 5}s`, // Dłuższe losowe opóźnienie
+                  '--bubble-duration': `${Math.random() * (8 - 5) + 5}s`, // Wolniejsza animacja
+                  '--bubble-drift-x': `${(Math.random() - 0.5) * 10}px`, // Mniejszy dryf
+                } as React.CSSProperties}
+              />
+            ))}
+
+            {/* Bąbelki XP (wybuchowe) */}
             {activeBubbles.map(bubble => (
               <div
                 key={bubble.id}
-                className="xp-bubble"
+                className="xp-bubble" // Ta klasa będzie używać animacji 'bubble-rise'
                 style={{
                   width: `${bubble.size}px`,
                   height: `${bubble.size}px`,
                   left: `${bubble.left}%`,
                   animationDelay: `${bubble.delay}s`,
+                  '--bubble-duration': `2s`, // Jawnie ustawiony czas trwania dla bąbelków wybuchowych
                   '--bubble-drift-x': `${bubble.driftX}px`, 
                 } as React.CSSProperties}
               />

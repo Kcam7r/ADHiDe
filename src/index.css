@@ -353,15 +353,46 @@ html {
   }
 }
 
+/* Nowa animacja dla ciągłych bąbelków tła */
+@keyframes continuous-bubble-rise {
+  0% {
+    bottom: 0%;
+    transform: translateX(var(--bubble-drift-x, 0px)) scale(0.1);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.5;
+  }
+  80% {
+    bottom: 90%;
+    transform: translateX(var(--bubble-drift-x, 0px)) scale(0.8);
+    opacity: 0.5;
+  }
+  100% {
+    bottom: 100%;
+    transform: translateX(var(--bubble-drift-x, 0px)) scale(0);
+    opacity: 0;
+  }
+}
+
 .xp-bubble {
   position: absolute;
   background-color: rgba(255, 255, 255, 0.6); /* Półprzezroczysty biały bąbelek */
   border-radius: 50%;
-  animation: bubble-rise 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; /* Usunięto infinite, ustawiono duration */
   pointer-events: none;
-  transform: translateX(-50%); /* Pozostawione tutaj jako domyślne wyśrodkowanie */
+  transform: translateX(-50%); /* Wyśrodkowanie bąbelka poziomo */
   filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5)); /* Subtelny blask dla wszystkich bąbelków */
   will-change: transform, opacity, filter; /* Dodano will-change */
+}
+
+/* Style dla bąbelków wybuchowych (domyślna animacja) */
+.xp-bubble:not(.xp-bubble-continuous) {
+  animation: bubble-rise var(--bubble-duration, 2s) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Style dla ciągłych bąbelków tła */
+.xp-bubble-continuous {
+  animation: continuous-bubble-rise var(--bubble-duration, 6s) linear infinite;
 }
 
 /* Nowa animacja dla pulsującej aury kryształu */
