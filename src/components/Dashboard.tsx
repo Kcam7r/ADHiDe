@@ -315,14 +315,14 @@ export const Dashboard: React.FC = () => {
   );
 
   return (
-    <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-950 h-full"> {/* Zmieniono tło na gradient */}
-      <div className="max-w-7xl mx-auto flex-1 flex flex-col p-6"> {/* Zmieniono h-full na flex-1 */}
+    <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-950"> {/* Usunięto h-full, flex-1 wystarczy */}
+      <div className="max-w-7xl mx-auto flex-1 flex flex-col p-6">
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full"> {/* Zmieniono flex-1 na h-full */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1"> {/* Zmieniono h-full na flex-1 */}
           {/* Nawyki */}
           <div className="lg:col-span-1 h-full">
             <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col">
-              <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm"> {/* Dodano text-shadow-sm */}
+              <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
@@ -331,7 +331,7 @@ export const Dashboard: React.FC = () => {
                   {renderHabitItems()}
                 </Carousel>
               ) : (
-                <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
+                <div className="space-y-3 flex-1 overflow-y-auto min-h-0"> {/* Dodano min-h-0 */}
                   {renderHabitItems()}
                   {habits.length === 0 && (
                     <div className="text-gray-400 text-center h-full flex items-center justify-center">
@@ -345,7 +345,7 @@ export const Dashboard: React.FC = () => {
 
           {/* Codzienne */}
           <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col">
-            <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm"> {/* Dodano text-shadow-sm */}
+            <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
               <span>🗓️</span>
               <span>Codzienne</span>
             </h2>
@@ -358,7 +358,7 @@ export const Dashboard: React.FC = () => {
                   {renderDailyTaskItems(displayDailyTasks)}
                 </Carousel>
               ) : (
-                <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
+                <div className="space-y-3 flex-1 overflow-y-auto min-h-0"> {/* Dodano min-h-0 */}
                   {renderDailyTaskItems(displayDailyTasks)}
                   {displayDailyTasks.length === 0 && (
                     <div className="text-gray-400 text-center h-full flex items-center justify-center">
@@ -376,7 +376,7 @@ export const Dashboard: React.FC = () => {
                     {renderDailyTaskItems(completedTodayVisual, true)}
                   </Carousel>
                 ) : (
-                  <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
+                  <div className="space-y-3 flex-1 overflow-y-auto min-h-0"> {/* Dodano min-h-0 */}
                     {renderDailyTaskItems(completedTodayVisual, true)}
                     {completedTodayVisual.length === 0 && (
                       <div className="text-gray-400 text-center h-full flex items-center justify-center">
@@ -392,7 +392,7 @@ export const Dashboard: React.FC = () => {
           {/* Misje */}
           <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-white flex items-center space-x-2 text-shadow-sm"> {/* Dodano text-shadow-sm */}
+              <h2 className="text-xl font-semibold text-white flex items-center space-x-2 text-shadow-sm">
                 <span>🎯</span>
                 <span>Misje</span>
               </h2>
@@ -408,7 +408,7 @@ export const Dashboard: React.FC = () => {
                 {renderMissionItems()}
               </Carousel>
             ) : (
-              <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
+              <div className="space-y-3 flex-1 overflow-y-auto min-h-0"> {/* Dodano min-h-0 */}
                 {renderMissionItems()}
                 {sortedActiveMissions.length === 0 && (
                   <div className="text-gray-400 text-center h-full flex items-center justify-center">
