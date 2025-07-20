@@ -317,7 +317,7 @@ export const Dashboard: React.FC = () => {
                 <span>Nawyki</span>
               </h2>
               {habits.length > 9 ? (
-                <Carousel itemsPerPage={8} contentHeightClass="h-[608px]"> {/* Zmieniono itemsPerPage na 8, contentHeightClass na h-[608px] */}
+                <Carousel itemsPerPage={7} contentHeightClass="h-[504px]"> {/* Zmieniono itemsPerPage na 7, contentHeightClass na h-[504px] */}
                   {renderHabitItems()}
                 </Carousel>
               ) : (
@@ -341,7 +341,7 @@ export const Dashboard: React.FC = () => {
               <span>Codzienne</span>
             </h2>
             {displayDailyTasks.length > 9 ? (
-              <Carousel itemsPerPage={8} contentHeightClass="h-[608px]"> {/* Zmieniono itemsPerPage na 8, contentHeightClass na h-[608px] */}
+              <Carousel itemsPerPage={7} contentHeightClass="h-[504px]"> {/* Zmieniono itemsPerPage na 7, contentHeightClass na h-[504px] */}
                 {renderDailyTaskItems()}
               </Carousel>
             ) : (
@@ -394,7 +394,7 @@ export const Dashboard: React.FC = () => {
               </button>
             </div>
             {sortedActiveMissions.length > 9 ? (
-              <Carousel itemsPerPage={8} contentHeightClass="h-[608px]"> {/* Zmieniono itemsPerPage na 8, contentHeightClass na h-[608px] */}
+              <Carousel itemsPerPage={7} contentHeightClass="h-[504px]"> {/* Zmieniono itemsPerPage na 7, contentHeightClass na h-[504px] */}
                 {renderMissionItems()}
               </Carousel>
             ) : (

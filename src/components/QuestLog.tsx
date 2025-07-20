@@ -283,7 +283,7 @@ export const QuestLog: React.FC = () => {
             )}
 
             {habits.length > 9 ? (
-              <Carousel itemsPerPage={8} contentHeightClass="h-[608px]"> {/* Zmieniono itemsPerPage na 8, contentHeightClass na h-[608px] */}
+              <Carousel itemsPerPage={7} contentHeightClass="h-[504px]"> {/* Zmieniono itemsPerPage na 7, contentHeightClass na h-[504px] */}
                 {renderHabitItems()}
               </Carousel>
             ) : (
@@ -348,7 +348,7 @@ export const QuestLog: React.FC = () => {
             )}
 
             {dailyTasks.length > 9 ? (
-              <Carousel itemsPerPage={8} contentHeightClass="h-[608px]"> {/* Zmieniono itemsPerPage na 8, contentHeightClass na h-[608px] */}
+              <Carousel itemsPerPage={7} contentHeightClass="h-[504px]"> {/* Zmieniono itemsPerPage na 7, contentHeightClass na h-[504px] */}
                 {renderDailyTaskItems()}
               </Carousel>
             ) : (
@@ -458,7 +458,7 @@ export const QuestLog: React.FC = () => {
             )}
 
             {missions.length > 9 ? (
-              <Carousel itemsPerPage={8} contentHeightClass="h-[608px]"> {/* Zmieniono itemsPerPage na 8, contentHeightClass na h-[608px] */}
+              <Carousel itemsPerPage={7} contentHeightClass="h-[504px]"> {/* Zmieniono itemsPerPage na 7, contentHeightClass na h-[504px] */}
                 {renderMissionItems()}
               </Carousel>
             ) : (
