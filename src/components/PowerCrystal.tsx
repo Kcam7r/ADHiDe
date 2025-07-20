@@ -32,12 +32,14 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       // Dodatkowe opóźnienie, aby symulować start z niższej pozycji w płynie
       // Im niższy poziom płynu (xpProgress), tym większe opóźnienie dla bąbelków
       const depthDelay = (1 - xpProgress) * 2; // Od 0 do 2 sekund dodatkowego opóźnienia
+      const driftX = (Math.random() - 0.5) * 20; // Losowy dryf między -10px a 10px
       return {
         id: `bubble-${i}-${Date.now()}`,
         size: Math.random() * (10 - 4) + 4,
         left: Math.random() * 90 + 5,
         delay: startDelay + depthDelay, // Całkowite opóźnienie
         duration: Math.random() * (4 - 3) + 3, // Czas trwania między 3s a 4s (wcześniej 1.5s a 2.5s)
+        driftX: driftX, // Nowa właściwość dla dryfu
       };
     });
   }, [dynamicNumberOfBubbles, xpProgress]);
@@ -186,6 +188,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
                   left: `${bubble.left}%`,
                   animationDelay: `${bubble.delay}s`,
                   '--bubble-duration': `${bubble.duration}s`, // Ustawienie zmiennej CSS
+                  '--bubble-drift-x': `${bubble.driftX}px`, // Ustawienie zmiennej CSS dla dryfu
                 } as React.CSSProperties}
               />
             ))}
