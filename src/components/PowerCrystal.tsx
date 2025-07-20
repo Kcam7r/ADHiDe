@@ -171,7 +171,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           {/* Light Reflection Effect */}
           {(isHovered || showReflection) && (
             <div 
-              className={`absolute inset-0 rounded-full ${isHovered ? 'animate-crystal-reflection-hover' : ''} ${showReflection ? 'animate-crystal-reflection-xp' : ''}`}
+              className={`absolute inset-0 rounded-full z-[40] ${isHovered ? 'animate-crystal-reflection-hover' : ''} ${showReflection ? 'animate-crystal-reflection-xp' : ''}`}
               style={{
                 background: 'radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%)',
                 maskImage: 'radial-gradient(circle, white 50%, transparent 70%)',
