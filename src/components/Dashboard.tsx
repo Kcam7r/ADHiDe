@@ -316,7 +316,7 @@ export const Dashboard: React.FC = () => {
   );
 
   return (
-    <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-950 flex flex-col">
+    <div className="h-full bg-gradient-to-br from-gray-900 to-gray-950 flex flex-col"> {/* Zmieniono flex-1 na h-full */}
       {/* Nagłówek 'Pulpit' jest teraz poza głównym kontenerem zawartości */}
       <h1 className="text-3xl font-bold text-white mb-4 px-6 pt-6">Pulpit</h1> 
       
