@@ -332,7 +332,7 @@ export const Dashboard: React.FC = () => {
                   {renderHabitItems()}
                 </Carousel>
               ) : (
-                <div className="space-y-3 flex-1 overflow-y-auto">
+                <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
                   {renderHabitItems()}
                   {habits.length === 0 && (
                     <div className="text-gray-400 text-center h-full flex items-center justify-center">
@@ -359,7 +359,7 @@ export const Dashboard: React.FC = () => {
                   {renderDailyTaskItems(displayDailyTasks)}
                 </Carousel>
               ) : (
-                <div className="space-y-3 flex-1 overflow-y-auto">
+                <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
                   {renderDailyTaskItems(displayDailyTasks)}
                   {displayDailyTasks.length === 0 && (
                     <div className="text-gray-400 text-center h-full flex items-center justify-center">
@@ -377,7 +377,7 @@ export const Dashboard: React.FC = () => {
                     {renderDailyTaskItems(completedTodayVisual, true)}
                   </Carousel>
                 ) : (
-                  <div className="space-y-3 flex-1 overflow-y-auto">
+                  <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
                     {renderDailyTaskItems(completedTodayVisual, true)}
                     {completedTodayVisual.length === 0 && (
                       <div className="text-gray-400 text-center h-full flex items-center justify-center">
@@ -409,7 +409,7 @@ export const Dashboard: React.FC = () => {
                 {renderMissionItems()}
               </Carousel>
             ) : (
-              <div className="space-y-3 flex-1 overflow-y-auto">
+              <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
                 {renderMissionItems()}
                 {sortedActiveMissions.length === 0 && (
                   <div className="text-gray-400 text-center h-full flex items-center justify-center">
