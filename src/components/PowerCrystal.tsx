@@ -79,7 +79,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]);
 
   const holderImageBottom = 0; 
-  const crystalBottom = 130; // Zmieniono z 92 na 130, aby podnieść kryształ
+  const crystalBottom = 92; // Przywrócono poprzednią wartość
 
   const horizontalOffset = 1.5; 
 
@@ -107,7 +107,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           {xpPercentage}%
         </div>
 
-        {/* Holder Image (holder4.png) - bez zmian */}
+        {/* Holder Image (holder4.png) */}
         <img
           src="/holder4.png" 
           alt="Crystal Holder" 
@@ -130,7 +130,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           onClick={onCrystalClick}
           className={`absolute rounded-full shadow-lg transition-all duration-300 cursor-pointer
             ${isFlashing ? 'animate-crystal-flash' : ''}
-            z-20 flex items-center justify-center
+            z-[35] flex items-center justify-center {/* Zmieniono z-index na wyższy niż holder */}
             bg-white bg-opacity-15
             group-hover:shadow-xl group-hover:border-cyan-400 group-hover:bg-opacity-20
             ${dailyXpGain > 0 ? 'animate-crystal-aura-pulse' : ''}
