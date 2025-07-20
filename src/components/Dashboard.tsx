@@ -352,11 +352,11 @@ export const Dashboard: React.FC = () => {
             {/* Karuzela dla zadań do wykonania */}
             <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
             {displayDailyTasks.length > 4 ? (
-              <Carousel itemsPerPage={4} contentHeightClass="h-[288px]">
+              <Carousel itemsPerPage={4} contentHeightClass="h-[318px]">
                 {renderDailyTaskItems(displayDailyTasks)}
               </Carousel>
             ) : (
-              <div className="space-y-3 h-[288px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
+              <div className="space-y-3 h-[318px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
                 {renderDailyTaskItems(displayDailyTasks)}
                 {displayDailyTasks.length === 0 && (
                   <div className="text-gray-400 text-center h-full flex items-center justify-center">
