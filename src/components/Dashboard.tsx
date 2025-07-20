@@ -225,94 +225,101 @@ export const Dashboard: React.FC = () => {
   };
 
   const renderHabitItems = () => (
-    habits.map((habit) => (
-      <div
-        key={habit.id}
-        onClick={(e) => handleHabitClick(habit.id, e)}
-        className={`group p-2 rounded-lg cursor-pointer transition-all duration-200 border-2 shadow-inner-subtle
-        hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110
-        ${
-          habit.type === 'positive' 
-            ? 'bg-green-600 border-green-500 shadow-glow-green' 
-            : 'bg-red-600 border-red-500 shadow-glow-red'
-        } ${animatingHabits.has(habit.id) 
-            ? (habit.type === 'positive' ? 'animate-habit-pulse-positive' : 'animate-habit-pulse-negative') 
-            : 'hover:bg-opacity-80'
-        } min-h-[44px] flex items-center justify-between`} {/* Dodano min-h i flex items-center */}
-      >
-        <span className="text-white font-medium">{habit.name}</span>
-        <span className="text-white text-sm font-bold">
-          {habit.count}x
-        </span>
-      </div>
-    ))
+    habits.map((habit) => {
+      const baseClasses = "group p-2 rounded-lg cursor-pointer transition-all duration-200 border-2 shadow-inner-subtle hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110";
+      const typeClasses = habit.type === 'positive' 
+        ? 'bg-green-600 border-green-500 shadow-glow-green' 
+        : 'bg-red-600 border-red-500 shadow-glow-red';
+      const animationClasses = animatingHabits.has(habit.id) 
+        ? (habit.type === 'positive' ? 'animate-habit-pulse-positive' : 'animate-habit-pulse-negative') 
+        : 'hover:bg-opacity-80';
+      const layoutClasses = "min-h-[44px] flex items-center justify-between";
+
+      return (
+        <div
+          key={habit.id}
+          onClick={(e) => handleHabitClick(habit.id, e)}
+          className={`${baseClasses} ${typeClasses} ${animationClasses} ${layoutClasses}`}
+        >
+          <span className="text-white font-medium">{habit.name}</span>
+          <span className="text-white text-sm font-bold">
+            {habit.count}x
+          </span>
+        </div>
+      );
+    })
   );
 
   const renderDailyTaskItems = (tasks: DailyTask[], isCompletedSection: boolean = false) => (
-    tasks.map((task) => (
-      <div
-        key={task.id}
-        onClick={!isCompletedSection ? (e) => handleDailyTaskClick(task.id, e) : undefined}
-        className={`group relative p-2 rounded-lg transition-all duration-200 shadow-inner-subtle
-          ${!isCompletedSection ? 'cursor-pointer hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110' : ''}
-          ${isCompletedSection 
-            ? 'bg-gray-700 border-2 border-amber-500 task-completed-visual flex items-center justify-between' 
-            : 'bg-gray-700 border-2 border-gray-600 shadow-glow-cyan'}
-          ${animatingOutTasks.has(task.id) ? 'animate-daily-task-shrink-out' : ''}
-          ${isCompletedSection && newlyCompletedAnimatedTasks.has(task.id) ? 'animate-daily-task-grow-in' : ''}
-          min-h-[44px] flex items-center justify-between`} {/* Dodano min-h i flex items-center */}
-      >
-        <span className={`${isCompletedSection ? 'text-gray-400' : 'text-white'}`}>
-          {task.title}
-        </span>
-        {isCompletedSection && (
-          <CheckCircle
-            className="w-6 h-6 text-green-400 opacity-70"
-            style={{ filter: 'drop-shadow(0 0 5px rgba(74, 222, 128, 0.8))' }}
-          />
-        )}
-        {!isCompletedSection && animatingOutTasks.has(task.id) && (
-          <DailyTaskStamp onAnimationEnd={() => { /* No action needed here, task will move to completedTodayVisual */ }} />
-        )}
-      </div>
-    ))
+    tasks.map((task) => {
+      const baseClasses = `group relative p-2 rounded-lg transition-all duration-200 shadow-inner-subtle`;
+      const interactiveClasses = !isCompletedSection ? 'cursor-pointer hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110' : '';
+      const completionClasses = isCompletedSection 
+        ? 'bg-gray-700 border-2 border-amber-500 task-completed-visual flex items-center justify-between' 
+        : 'bg-gray-700 border-2 border-gray-600 shadow-glow-cyan';
+      const animationClasses = `${animatingOutTasks.has(task.id) ? 'animate-daily-task-shrink-out' : ''} ${isCompletedSection && newlyCompletedAnimatedTasks.has(task.id) ? 'animate-daily-task-grow-in' : ''}`;
+      const layoutClasses = "min-h-[44px] flex items-center justify-between";
+
+      return (
+        <div
+          key={task.id}
+          onClick={!isCompletedSection ? (e) => handleDailyTaskClick(task.id, e) : undefined}
+          className={`${baseClasses} ${interactiveClasses} ${completionClasses} ${animationClasses} ${layoutClasses}`}
+        >
+          <span className={`${isCompletedSection ? 'text-gray-400' : 'text-white'}`}>
+            {task.title}
+          </span>
+          {isCompletedSection && (
+            <CheckCircle
+              className="w-6 h-6 text-green-400 opacity-70"
+              style={{ filter: 'drop-shadow(0 0 5px rgba(74, 222, 128, 0.8))' }}
+            />
+          )}
+          {!isCompletedSection && animatingOutTasks.has(task.id) && (
+            <DailyTaskStamp onAnimationEnd={() => { /* No action needed here, task will move to completedTodayVisual */ }} />
+          )}
+        </div>
+      );
+    })
   );
 
   const renderMissionItems = () => (
-    sortedActiveMissions.map((mission) => (
-      <div
-        key={mission.id}
-        id={`mission-${mission.id}`}
-        onClick={(e) => handleMissionComplete(mission.id, e)}
-        className={`group p-2 rounded-lg cursor-pointer transition-all duration-200 border-2 shadow-inner-subtle
-        hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110 flex flex-col justify-between
-        ${
-          mission.projectId ? 'bg-purple-600 border-purple-500 shadow-glow-purple' : 'bg-cyan-600 border-cyan-500 shadow-glow-cyan'
-        } ${fadingOutMissions.has(mission.id) ? 'animate-mission-fade-out' : ''}
-          ${missionReaction[mission.id] === 'normal' ? 'animate-mission-pulse-normal' : ''}
-          ${missionReaction[mission.id] === 'important' ? 'animate-mission-pulse-important' : ''}
-          ${missionReaction[mission.id] === 'urgent' ? 'animate-mission-pulse-urgent' : ''}
-        } min-h-[72px]`} {/* Dodano min-h */}
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            {getPriorityIcon(mission.priority)}
-            <span className={`font-medium ${getPriorityColor(mission.priority)}`}>
-              {mission.title}
-            </span>
+    sortedActiveMissions.map((mission) => {
+      const baseClasses = `group p-2 rounded-lg cursor-pointer transition-all duration-200 border-2 shadow-inner-subtle hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110 flex flex-col justify-between`;
+      const projectClasses = mission.projectId ? 'bg-purple-600 border-purple-500 shadow-glow-purple' : 'bg-cyan-600 border-cyan-500 shadow-glow-cyan';
+      const fadeOutClass = fadingOutMissions.has(mission.id) ? 'animate-mission-fade-out' : '';
+      const reactionClass = missionReaction[mission.id] === 'normal' ? 'animate-mission-pulse-normal' : 
+                            (missionReaction[mission.id] === 'important' ? 'animate-mission-pulse-important' : 
+                            (missionReaction[mission.id] === 'urgent' ? 'animate-mission-pulse-urgent' : ''));
+      const layoutClasses = "min-h-[72px]";
+
+      return (
+        <div
+          key={mission.id}
+          id={`mission-${mission.id}`}
+          onClick={(e) => handleMissionComplete(mission.id, e)}
+          className={`${baseClasses} ${projectClasses} ${fadeOutClass} ${reactionClass} ${layoutClasses}`}
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              {getPriorityIcon(mission.priority)}
+              <span className={`font-medium ${getPriorityColor(mission.priority)}`}>
+                {mission.title}
+              </span>
+            </div>
+            <div>
+              {getEnergyIcon(mission.energy)}
+            </div>
           </div>
-          <div>
-            {getEnergyIcon(mission.energy)}
-          </div>
+          {/* Opis misji zostanie ukryty, jeśli nie zmieści się w nowej wysokości */}
+          {mission.description && (
+            <p className="text-gray-200 text-sm mt-2 overflow-hidden text-ellipsis whitespace-nowrap">
+              {mission.description}
+            </p>
+          )}
         </div>
-        {/* Opis misji zostanie ukryty, jeśli nie zmieści się w nowej wysokości */}
-        {mission.description && (
-          <p className="text-gray-200 text-sm mt-2 overflow-hidden text-ellipsis whitespace-nowrap">
-            {mission.description}
-          </p>
-        )}
-      </div>
-    ))
+      );
+    })
   );
 
   return (

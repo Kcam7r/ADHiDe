@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } => {
 import { useApp } from '../contexts/AppContext';
 import { Plus, Pause, Trash2, Play } from 'lucide-react'; 
 import { useLocalStorage } from '../hooks/useLocalStorage';
@@ -74,114 +74,61 @@ export const QuestLog: React.FC = () => {
   ];
 
   const renderHabitItems = () => (
-    habits.map((habit) => (
-      <div
-        key={habit.id}
-        className={`p-4 rounded-lg border-2 transition-all hover:shadow-lg 
-        hover:translate-y-[-2px] min-h-[80px] flex flex-col justify-center
-        ${
-          habit.type === 'positive' 
-            ? 'bg-green-600 border-green-500' 
-            : 'bg-red-600 border-red-500'
-        }`}
-      >
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-white font-medium">{habit.name}</h3>
-            <p className="text-gray-200 text-sm">
-              Typ: {habit.type === 'positive' ? 'Pozytywny' : 'Negatywny'}
-            </p>
-          </div>
-          <div className="flex items-center space-x-2">
-            <span className="text-white font-bold text-lg">{habit.count}x</span>
-            <button
-              onClick={() => deleteHabit(habit.id)}
-              className="text-gray-200 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700 active:scale-[0.98] active:brightness-110"
-              title="Usuń nawyk"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
+    habits.map((habit) => {
+      const baseClasses = `p-4 rounded-lg border-2 transition-all hover:shadow-lg hover:translate-y-[-2px] min-h-[80px] flex flex-col justify-center`;
+      const typeClasses = habit.type === 'positive' 
+        ? 'bg-green-600 border-green-500' 
+        : 'bg-red-600 border-red-500';
+      return (
+        <div
+          key={habit.id}
+          className={`${baseClasses} ${typeClasses}`}
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-white font-medium">{habit.name}</h3>
+              <p className="text-gray-200 text-sm">
+                Typ: {habit.type === 'positive' ? 'Pozytywny' : 'Negatywny'}
+              </p>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="text-white font-bold text-lg">{habit.count}x</span>
+              <button
+                onClick={() => deleteHabit(habit.id)}
+                className="text-gray-200 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700 active:scale-[0.98] active:brightness-110"
+                title="Usuń nawyk"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    ))
+      );
+    })
   );
 
   const renderDailyTaskItems = () => (
-    dailyTasks.map((task) => (
-      <div
-        key={task.id}
-        className={`p-4 rounded-lg border-2 transition-all hover:shadow-lg 
-        hover:translate-y-[-2px] min-h-[60px] flex items-center justify-between
-        ${
-          task.completed
-            ? 'bg-gray-700 border-green-500'
-            : 'bg-gray-700 border-gray-600'
-        }`}
-      >
-        <h3 className={`font-medium ${task.completed ? 'line-through text-gray-400' : 'text-white'}`}>
-          {task.title}
-        </h3>
-        <div className="flex items-center space-x-2">
-          <div className="text-sm text-gray-400">
-            {task.completed ? 'Ukończone' : 'Do zrobienia'}
-          </div>
-          <button
-            onClick={() => deleteDailyTask(task.id)}
-            className="text-gray-200 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700 active:scale-[0.98] active:brightness-110"
-            title="Usuń zadanie"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-    ))
-  );
+    dailyTasks.map((task) => {
+      const baseClasses = `p-4 rounded-lg border-2 transition-all hover:shadow-lg hover:translate-y-[-2px] min-h-[60px] flex items-center justify-between`;
+      const completionClasses = task.completed
+        ? 'bg-gray-700 border-green-500'
+        : 'bg-gray-700 border-gray-600';
+      const textClasses = task.completed ? 'line-through text-gray-400' : 'text-white';
 
-  const renderMissionItems = () => (
-    missions.map((mission) => (
-      <div
-        key={mission.id}
-        className={`p-4 rounded-lg border-2 transition-all hover:shadow-lg 
-        hover:translate-y-[-2px] min-h-[104px] flex flex-col justify-center
-        ${
-          mission.isActive
-            ? 'bg-cyan-600 border-cyan-500'
-            : 'bg-gray-700 border-gray-600'
-        }`}
-      >
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <h3 className="text-white font-medium mb-1">{mission.title}</h3>
-            {mission.description && (
-              <p className="text-gray-200 text-sm mb-2">{mission.description}</p>
-            )}
-            <div className="flex items-center space-x-4 text-xs text-gray-300">
-              <span className="px-2 py-1 bg-gray-600 rounded">
-                {mission.priority}
-              </span>
-              <span className="px-2 py-1 bg-gray-600 rounded">
-                {mission.energy}
-              </span>
+      return (
+        <div
+          key={task.id}
+          className={`${baseClasses} ${completionClasses}`}
+        >
+          <h3 className={`font-medium ${textClasses}`}>
+            {task.title}
+          </h3>
+          <div className="flex items-center space-x-2">
+            <div className="text-sm text-gray-400">
+              {task.completed ? 'Ukończone' : 'Do zrobienia'}
             </div>
-          </div>
-          <div className="flex items-center space-x-2 ml-4">
             <button
-              onClick={() => mission.isActive ? deactivateMission(mission.id) : activateMission(mission.id)}
-              className={`p-2 rounded-lg transition-colors active:scale-[0.98] active:brightness-110 ${
-                mission.isActive
-                  ? 'bg-orange-600 hover:bg-orange-700'
-                  : 'bg-green-600 hover:bg-green-700'
-              }`}
-            >
-              {mission.isActive ? (
-                <Pause className="w-4 h-4 text-white" />
-              ) : (
-                <Play className="w-4 h-4 text-white" />
-              )}
-            </button>
-            <button
-              onClick={() => deleteMission(mission.id)}
+              onClick={() => deleteDailyTask(task.id)}
               className="text-gray-200 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700 active:scale-[0.98] active:brightness-110"
               title="Usuń zadanie"
             >
@@ -189,8 +136,64 @@ export const QuestLog: React.FC = () => {
             </button>
           </div>
         </div>
-      </div>
-    ))
+      );
+    })
+  );
+
+  const renderMissionItems = () => (
+    missions.map((mission) => {
+      const baseClasses = `p-4 rounded-lg border-2 transition-all hover:shadow-lg hover:translate-y-[-2px] min-h-[104px] flex flex-col justify-center`;
+      const activeClasses = mission.isActive
+        ? 'bg-cyan-600 border-cyan-500'
+        : 'bg-gray-700 border-gray-600';
+
+      return (
+        <div
+          key={mission.id}
+          className={`${baseClasses} ${activeClasses}`}
+        >
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <h3 className="text-white font-medium mb-1">{mission.title}</h3>
+              {mission.description && (
+                <p className="text-gray-200 text-sm mb-2">{mission.description}</p>
+              )}
+              <div className="flex items-center space-x-4 text-xs text-gray-300">
+                <span className="px-2 py-1 bg-gray-600 rounded">
+                  {mission.priority}
+                </span>
+                <span className="px-2 py-1 bg-gray-600 rounded">
+                  {mission.energy}
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2 ml-4">
+              <button
+                onClick={() => mission.isActive ? deactivateMission(mission.id) : activateMission(mission.id)}
+                className={`p-2 rounded-lg transition-colors active:scale-[0.98] active:brightness-110 ${
+                  mission.isActive
+                    ? 'bg-orange-600 hover:bg-orange-700'
+                    : 'bg-green-600 hover:bg-green-700'
+                }`}
+              >
+                {mission.isActive ? (
+                  <Pause className="w-4 h-4 text-white" />
+                ) : (
+                  <Play className="w-4 h-4 text-white" />
+                )}
+              </button>
+              <button
+                onClick={() => deleteMission(mission.id)}
+                className="text-gray-200 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700 active:scale-[0.98] active:brightness-110"
+                title="Usuń zadanie"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    })
   );
 
   return (
