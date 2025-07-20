@@ -22,14 +22,14 @@ export const Dashboard: React.FC = () => {
   } = useApp();
 
   const [showHistory, setShowHistory] = useState(false);
-  const [animatingHabits, setAnimatingHabits] = useState<Set<string>>(new Set()); // Poprawiona inicjalizacja
+  const [animatingHabits, setAnimatingHabits] = useState<Set<string>>(new Set());
   
   const [displayDailyTasks, setDisplayDailyTasks] = useState<DailyTask[]>([]);
   const [completedTodayVisual, setCompletedTodayVisual] = useState<DailyTask[]>([]);
-  const [animatingOutTasks, setAnimatingOutTasks] = useState<Set<string>>(new Set()); // Poprawiona inicjalizacja
-  const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedTasks] = useState<Set<string>>(new Set()); // Poprawiona inicjalizacja
+  const [animatingOutTasks, setAnimatingOutTasks] = useState<Set<string>>(new Set());
+  const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedTasks] = useState<Set<string>>(new Set());
 
-  const [fadingOutMissions, setFadingOutMissions] = useState<Set<string>>(new Set()); // Poprawiona inicjalizacja
+  const [fadingOutMissions, setFadingOutMissions] = useState<Set<string>>(new Set());
   const [missionReaction, setMissionReaction] = useState<{[key: string]: Mission['priority'] | null}>({});
 
   useEffect(() => {
@@ -289,7 +289,7 @@ export const Dashboard: React.FC = () => {
         className={`group p-4 rounded-lg cursor-pointer transition-all duration-200 shadow-inner-subtle
         hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110
         ${
-          mission.projectId ? 'bg-purple-600 hover:bg-purple-500 shadow-glow-purple' : 'bg-cyan-600 hover:bg-cyan-500 shadow-glow-cyan'
+          mission.projectId ? 'bg-purple-600 border-purple-500 shadow-glow-purple' : 'bg-cyan-600 border-cyan-500 shadow-glow-cyan'
         } ${fadingOutMissions.has(mission.id) ? 'animate-mission-fade-out' : ''}
           ${missionReaction[mission.id] === 'normal' ? 'animate-mission-pulse-normal' : ''}
           ${missionReaction[mission.id] === 'important' ? 'animate-mission-pulse-important' : ''}
@@ -326,20 +326,15 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              {habits.length > 9 ? (
-                <Carousel className="flex-1">
-                  {renderHabitItems()}
-                </Carousel>
-              ) : (
-                <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
-                  {renderHabitItems()}
-                  {habits.length === 0 && (
-                    <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
-                      <p>Brak nawyków do wyświetlenia</p>
-                    </div>
-                  )}
-                </div>
-              )}
+              <Carousel className="flex-1"> {/* Zawsze używaj Carousel */}
+                {habits.length === 0 ? (
+                  <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
+                    <p>Brak nawyków do wyświetlenia</p>
+                  </div>
+                ) : (
+                  renderHabitItems()
+                )}
+              </Carousel>
             </div>
           </div>
 
@@ -353,38 +348,28 @@ export const Dashboard: React.FC = () => {
             <div className="flex flex-col flex-1">
               {/* Karuzela dla zadań do wykonania */}
               <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
-              {displayDailyTasks.length > 7 ? (
-                <Carousel className="flex-1">
-                  {renderDailyTaskItems(displayDailyTasks)}
-                </Carousel>
-              ) : (
-                <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
-                  {renderDailyTaskItems(displayDailyTasks)}
-                  {displayDailyTasks.length === 0 && (
-                    <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
-                      <p>Brak zadań do wykonania</p>
-                    </div>
-                  )}
-                </div>
-              )}
+              <Carousel className="flex-1"> {/* Zawsze używaj Carousel */}
+                {displayDailyTasks.length === 0 ? (
+                  <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
+                    <p>Brak zadań do wykonania</p>
+                  </div>
+                ) : (
+                  renderDailyTaskItems(displayDailyTasks)
+                )}
+              </Carousel>
 
               {/* Karuzela dla ukończonych zadań */}
               <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col">
                 <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
-                {completedTodayVisual.length > 1 ? (
-                  <Carousel itemHeightPx={72} className="flex-1">
-                    {renderDailyTaskItems(completedTodayVisual, true)}
-                  </Carousel>
-                ) : (
-                  <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
-                    {renderDailyTaskItems(completedTodayVisual, true)}
-                    {completedTodayVisual.length === 0 && (
-                      <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
-                        <p>Brak ukończonych zadań</p>
-                      </div>
-                    )}
-                  </div>
-                )}
+                <Carousel itemHeightPx={72} className="flex-1"> {/* Zawsze używaj Carousel */}
+                  {completedTodayVisual.length === 0 ? (
+                    <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
+                      <p>Brak ukończonych zadań</p>
+                    </div>
+                  ) : (
+                    renderDailyTaskItems(completedTodayVisual, true)
+                  )}
+                </Carousel>
               </div>
             </div>
           </div>
@@ -403,20 +388,15 @@ export const Dashboard: React.FC = () => {
                 <Archive className="w-5 h-5" />
               </button>
             </div>
-            {sortedActiveMissions.length > 9 ? (
-              <Carousel className="flex-1">
-                {renderMissionItems()}
-              </Carousel>
-            ) : (
-              <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
-                {renderMissionItems()}
-                {sortedActiveMissions.length === 0 && (
-                  <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
-                    <p>Brak aktywnych misji</p>
-                  </div>
-                )}
-              </div>
-            )}
+            <Carousel className="flex-1"> {/* Zawsze używaj Carousel */}
+              {sortedActiveMissions.length === 0 ? (
+                <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
+                  <p>Brak aktywnych misji</p>
+                </div>
+              ) : (
+                renderMissionItems()
+              )}
+            </Carousel>
           </div>
         </div>
       </div>
