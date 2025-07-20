@@ -330,7 +330,7 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={44} visibleItemsCount={10}>
+              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={44} visibleItemsCount={10} className="flex-1">
                 {renderHabitItems()}
               </ScrollableList>
             </div>
@@ -346,14 +346,14 @@ export const Dashboard: React.FC = () => {
             <div className="flex flex-col flex-1 min-h-0">
               {/* Sekcja zadań do wykonania */}
               <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
-              <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={44} visibleItemsCount={5}>
+              <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={44} visibleItemsCount={5} className="flex-1">
                 {renderDailyTaskItems(displayDailyTasks)}
               </ScrollableList>
 
               {/* Sekcja ukończonych zadań */}
               <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col min-h-0">
                 <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
-                <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={44} visibleItemsCount={5}>
+                <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={44} visibleItemsCount={5} className="flex-1">
                   {renderDailyTaskItems(completedTodayVisual, true)}
                 </ScrollableList>
               </div>
@@ -374,7 +374,7 @@ export const Dashboard: React.FC = () => {
                 <Archive className="w-5 h-5" />
               </button>
             </div>
-            <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={44} visibleItemsCount={10}>
+            <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={44} visibleItemsCount={10} className="flex-1">
               {renderMissionItems()}
             </ScrollableList>
           </div>
