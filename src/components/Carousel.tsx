@@ -9,7 +9,7 @@ interface CarouselProps {
 export const Carousel: React.FC<CarouselProps> = ({
   children,
   className,
-  itemHeightPx = 76, // Domyślna wysokość elementu (np. p-4 + space-y-3 daje ok. 76px na element)
+  itemHeightPx = 68, // Zmieniono z 76 na 68
 }) => {
   const items = Children.toArray(children).filter(isValidElement);
   const contentRef = useRef<HTMLDivElement>(null);

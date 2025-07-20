@@ -230,7 +230,7 @@ export const Dashboard: React.FC = () => {
       <div
         key={habit.id}
         onClick={(e) => handleHabitClick(habit.id, e)}
-        className={`group p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 shadow-inner-subtle
+        className={`group p-3 rounded-lg cursor-pointer transition-all duration-200 border-2 shadow-inner-subtle
         hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110
         ${
           habit.type === 'positive' 
