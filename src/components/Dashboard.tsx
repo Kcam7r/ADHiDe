@@ -330,7 +330,7 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={60} visibleItemsCount={10}> {/* Zmieniono visibleItemsCount na 10 */}
+              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={60} visibleItemsCount={9}> {/* Zmieniono visibleItemsCount na 9 */}
                 {renderHabitItems()}
               </ScrollableList>
             </div>
