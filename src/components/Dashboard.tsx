@@ -322,9 +322,9 @@ export const Dashboard: React.FC = () => {
       <h1 className="text-3xl font-bold text-white mb-4 px-6 pt-6">Pulpit</h1> 
       
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col px-6 pb-6"> 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start"> {/* Usunięto h-full */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start h-full"> {/* Dodano h-full */}
           {/* Nawyki */}
-          <div className="lg:col-span-1 flex flex-col">
+          <div className="lg:col-span-1 flex flex-col flex-1"> {/* Dodano flex-1 */}
             <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1">
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
                 <span>✨</span>
@@ -337,7 +337,7 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Codzienne */}
-          <div className="lg:col-span-1 flex flex-col">
+          <div className="lg:col-span-1 flex flex-col flex-1"> {/* Dodano flex-1 */}
             <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1">
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
                 <span>🗓️</span>
@@ -363,7 +363,7 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Misje */}
-          <div className="lg:col-span-1 flex flex-col">
+          <div className="lg:col-span-1 flex flex-col flex-1"> {/* Dodano flex-1 */}
             <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold text-white flex items-center space-x-2 text-shadow-sm">
