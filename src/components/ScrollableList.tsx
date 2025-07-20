@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, Children, isValidElement, useMemo } from 'react';
-import { ChevronUp, ChevronDown } => 'lucide-react';
+import { ChevronUp, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ScrollableListProps {
