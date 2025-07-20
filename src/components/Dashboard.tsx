@@ -5,8 +5,6 @@ import { Mission, DailyTask } from '../types';
 import { MissionHistoryModal } from './MissionHistoryModal';
 import { DailyTaskStamp } from './DailyTaskStamp';
 import { showSuccessToast, showInfoToast, showErrorToast } from '../utils/toast';
-import { Carousel } from './Carousel'; // Import Carousel
-import { CylinderCarousel } from './CylinderCarousel'; // Import CylinderCarousel
 
 export const Dashboard: React.FC = () => {
   console.log("Dashboard component is loading.");
@@ -23,14 +21,14 @@ export const Dashboard: React.FC = () => {
   } = useApp();
 
   const [showHistory, setShowHistory] = useState(false);
-  const [animatingHabits, setAnimatingHabits] = useState(new Set<string>()); // Poprawiona inicjalizacja
+  const [animatingHabits, setAnimatingHabits] = useState(new Set<string>());
   
   const [displayDailyTasks, setDisplayDailyTasks] = useState<DailyTask[]>([]);
   const [completedTodayVisual, setCompletedTodayVisual] = useState<DailyTask[]>([]);
-  const [animatingOutTasks, setAnimatingOutTasks] = useState(new Set<string>()); // Poprawiona inicjalizacja
-  const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedTasks] = useState(new Set<string>()); // Poprawiona inicjalizacja
+  const [animatingOutTasks, setAnimatingOutTasks] = useState(new Set<string>());
+  const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedTasks] = useState(new Set<string>());
 
-  const [fadingOutMissions, setFadingOutMissions] = useState(new Set<string>()); // Poprawiona inicjalizacja
+  const [fadingOutMissions, setFadingOutMissions] = useState(new Set<string>());
   const [missionReaction, setMissionReaction] = useState<{[key: string]: Mission['priority'] | null}>({});
 
   useEffect(() => {
@@ -316,13 +314,10 @@ export const Dashboard: React.FC = () => {
   );
 
   return (
-    <div className="h-full bg-gradient-to-br from-gray-900 to-gray-950 flex flex-col"> {/* Zmieniono flex-1 na h-full */}
-      {/* Nagłówek 'Pulpit' jest teraz poza głównym kontenerem zawartości */}
+    <div className="h-full bg-gradient-to-br from-gray-900 to-gray-950 flex flex-col">
       <h1 className="text-3xl font-bold text-white mb-4 px-6 pt-6">Pulpit</h1> 
       
-      {/* Ten kontener teraz rozciąga się na całą pozostałą wysokość */}
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col px-6 pb-6"> 
-        {/* Kontener siatki dla trzech sekcji */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0"> 
           {/* Nawyki */}
           <div className="lg:col-span-1 min-h-0">
@@ -331,16 +326,17 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              {/* Zmieniono CylinderCarousel na Carousel */}
-              <Carousel className="flex-1">
-                {habits.length === 0 ? (
-                  <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
-                    <p>Brak nawyków do wyświetlenia</p>
-                  </div>
-                ) : (
-                  renderHabitItems()
-                )}
-              </Carousel>
+              <div className="flex-1 overflow-y-auto min-h-0 hide-scrollbar pt-2">
+                <div className="space-y-3">
+                  {habits.length === 0 ? (
+                    <div className="text-gray-400 text-center flex items-center justify-center h-full">
+                      <p>Brak nawyków do wyświetlenia</p>
+                    </div>
+                  ) : (
+                    renderHabitItems()
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -352,30 +348,34 @@ export const Dashboard: React.FC = () => {
             </h2>
             
             <div className="flex flex-col flex-1 min-h-0">
-              {/* Karuzela dla zadań do wykonania */}
+              {/* Sekcja zadań do wykonania */}
               <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
-              <Carousel className="flex-1">
-                {displayDailyTasks.length === 0 ? (
-                  <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
-                    <p>Brak zadań do wykonania</p>
-                  </div>
-                ) : (
-                  renderDailyTaskItems(displayDailyTasks)
-                )}
-              </Carousel>
-
-              {/* Karuzela dla ukończonych zadań */}
-              <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col min-h-0">
-                <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
-                <Carousel itemHeightPx={72} className="flex-1">
-                  {completedTodayVisual.length === 0 ? (
-                    <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
-                      <p>Brak ukończonych zadań</p>
+              <div className="flex-1 overflow-y-auto min-h-0 hide-scrollbar pt-2">
+                <div className="space-y-3">
+                  {displayDailyTasks.length === 0 ? (
+                    <div className="text-gray-400 text-center flex items-center justify-center h-full">
+                      <p>Brak zadań do wykonania</p>
                     </div>
                   ) : (
-                    renderDailyTaskItems(completedTodayVisual, true)
+                    renderDailyTaskItems(displayDailyTasks)
                   )}
-                </Carousel>
+                </div>
+              </div>
+
+              {/* Sekcja ukończonych zadań */}
+              <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col min-h-0">
+                <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
+                <div className="flex-1 overflow-y-auto min-h-0 hide-scrollbar pt-2">
+                  <div className="space-y-3">
+                    {completedTodayVisual.length === 0 ? (
+                      <div className="text-gray-400 text-center flex items-center justify-center h-full">
+                        <p>Brak ukończonych zadań</p>
+                      </div>
+                    ) : (
+                      renderDailyTaskItems(completedTodayVisual, true)
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -394,15 +394,17 @@ export const Dashboard: React.FC = () => {
                 <Archive className="w-5 h-5" />
               </button>
             </div>
-            <Carousel className="flex-1">
-              {sortedActiveMissions.length === 0 ? (
-                <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
-                  <p>Brak aktywnych misji</p>
-                </div>
-              ) : (
-                renderMissionItems()
-              )}
-            </Carousel>
+            <div className="flex-1 overflow-y-auto min-h-0 hide-scrollbar pt-2">
+              <div className="space-y-3">
+                {sortedActiveMissions.length === 0 ? (
+                  <div className="text-gray-400 text-center flex items-center justify-center h-full">
+                    <p>Brak aktywnych misji</p>
+                  </div>
+                ) : (
+                  renderMissionItems()
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>

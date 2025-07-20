@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Plus, ChevronDown, ChevronUp, Pause, Target, CheckCircle } from 'lucide-react';
-import { Project, Mission } from '../types'; // Dodano Mission do importu
-import { Carousel } from './Carousel'; // Import Carousel
+import { Project, Mission } from '../types';
 
 export const Garage: React.FC = () => {
   const { projects, addProject, addTaskToProject, activateMission, deactivateMission } = useApp();
@@ -173,8 +172,8 @@ export const Garage: React.FC = () => {
 
 
   return (
-    <div className="flex-1 p-6 bg-gray-900 h-full"> {/* Zmieniono min-h-screen na h-full */}
-      <div className="max-w-6xl mx-auto h-full flex flex-col"> {/* Dodano h-full i flex flex-col */}
+    <div className="flex-1 p-6 bg-gray-900 h-full">
+      <div className="max-w-6xl mx-auto h-full flex flex-col">
         <h1 className="text-3xl font-bold text-white mb-8">Garaż</h1>
         
         <div className="mb-6">
@@ -271,9 +270,14 @@ export const Garage: React.FC = () => {
         )}
 
         {/* Projects List */}
-        <div className="space-y-4 flex-1 flex flex-col"> {/* Zmieniono overflow-y-auto min-h-0 na flex flex-col */}
-          <Carousel className="flex-1"> {/* Zmieniono h-full na flex-1 */}
-            {projects.map((project) => (
+        <div className="space-y-4 flex-1 flex flex-col overflow-y-auto min-h-0 hide-scrollbar pt-2">
+          {projects.length === 0 ? (
+            <div className="bg-gray-800 rounded-lg p-6 text-gray-400 text-center py-16 shadow-xl border border-gray-700 flex-1 flex items-center justify-center">
+              <p className="text-lg">Brak projektów w garażu</p>
+              <p className="text-sm mt-2">Dodaj swój pierwszy projekt, aby rozpocząć organizację!</p>
+            </div>
+          ) : (
+            projects.map((project) => (
               <div key={project.id} className="bg-gray-800 rounded-lg p-6 shadow-xl border border-gray-700 hover:border-cyan-600 transition-all duration-300 
               hover:translate-y-[-2px] hover:shadow-xl">
                 <div className="flex items-center justify-between">
@@ -433,20 +437,15 @@ export const Garage: React.FC = () => {
                     )}
 
                     {/* Tasks List */}
-                    <Carousel className="h-64"> {/* Ograniczona wysokość dla karuzeli zadań */}
-                      {renderTaskItems(project.tasks)}
-                    </Carousel>
+                    <div className="h-64 overflow-y-auto min-h-0 hide-scrollbar pt-2">
+                      <div className="space-y-3">
+                        {renderTaskItems(project.tasks)}
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
-            ))}
-          </Carousel>
-          
-          {projects.length === 0 && (
-            <div className="bg-gray-800 rounded-lg p-6 text-gray-400 text-center py-16 shadow-xl border border-gray-700">
-              <p className="text-lg">Brak projektów w garażu</p>
-              <p className="text-sm mt-2">Dodaj swój pierwszy projekt, aby rozpocząć organizację!</p>
-            </div>
+            ))
           )}
         </div>
       </div>

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Plus, Pause, Trash2, Play } from 'lucide-react'; 
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { Carousel } from './Carousel'; // Import Carousel
 
 export const QuestLog: React.FC = () => {
   const { 
@@ -196,8 +195,8 @@ export const QuestLog: React.FC = () => {
   );
 
   return (
-    <div className="flex-1 p-6 bg-gray-900 h-full"> {/* Zmieniono min-h-screen na h-full */}
-      <div className="max-w-4xl mx-auto h-full flex flex-col"> {/* Dodano h-full i flex flex-col */}
+    <div className="flex-1 p-6 bg-gray-900 h-full">
+      <div className="max-w-4xl mx-auto h-full flex flex-col">
         <h1 className="text-3xl font-bold text-white mb-8">Quest Log</h1>
         
         {/* Tabs */}
@@ -282,14 +281,17 @@ export const QuestLog: React.FC = () => {
               </form>
             )}
 
-            <Carousel className="flex-1">
-              {renderHabitItems()}
-              {habits.length === 0 && (
-                <div className="text-gray-400 text-center h-full flex items-center justify-center">
-                  <p>Brak nawyków do wyświetlenia</p>
-                </div>
-              )}
-            </Carousel>
+            <div className="flex-1 overflow-y-auto min-h-0 hide-scrollbar pt-2">
+              <div className="space-y-3">
+                {habits.length === 0 ? (
+                  <div className="text-gray-400 text-center flex items-center justify-center h-full">
+                    <p>Brak nawyków do wyświetlenia</p>
+                  </div>
+                ) : (
+                  renderHabitItems()
+                )}
+              </div>
+            </div>
           </div>
         )}
 
@@ -340,14 +342,17 @@ export const QuestLog: React.FC = () => {
               </form>
             )}
 
-            <Carousel className="flex-1">
-              {renderDailyTaskItems()}
-              {dailyTasks.length === 0 && (
-                <div className="text-gray-400 text-center h-full flex items-center justify-center">
-                  <p>Brak zadań codziennych</p>
-                </div>
-              )}
-            </Carousel>
+            <div className="flex-1 overflow-y-auto min-h-0 hide-scrollbar pt-2">
+              <div className="space-y-3">
+                {dailyTasks.length === 0 ? (
+                  <div className="text-gray-400 text-center flex items-center justify-center h-full">
+                    <p>Brak zadań codziennych</p>
+                  </div>
+                ) : (
+                  renderDailyTaskItems()
+                )}
+              </div>
+            </div>
           </div>
         )}
 
@@ -443,14 +448,17 @@ export const QuestLog: React.FC = () => {
               </form>
             )}
 
-            <Carousel className="flex-1">
-              {renderMissionItems()}
-              {missions.length === 0 && (
-                <div className="text-gray-400 text-center h-full flex items-center justify-center">
-                  <p>Brak zadań do wyświetlenia</p>
-                </div>
-              )}
-            </Carousel>
+            <div className="flex-1 overflow-y-auto min-h-0 hide-scrollbar pt-2">
+              <div className="space-y-3">
+                {missions.length === 0 ? (
+                  <div className="text-gray-400 text-center flex items-center justify-center h-full">
+                    <p>Brak zadań do wyświetlenia</p>
+                  </div>
+                ) : (
+                  renderMissionItems()
+                )}
+              </div>
+            </div>
           </div>
         )}
       </div>
