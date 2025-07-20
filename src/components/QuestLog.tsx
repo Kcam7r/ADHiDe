@@ -352,7 +352,7 @@ export const QuestLog: React.FC = () => {
               </Carousel>
             ) : (
               <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
-                {renderDailyTaskItems(dailyTasks)}
+                {renderDailyTaskItems()}
                 {dailyTasks.length === 0 && (
                   <div className="text-gray-400 text-center h-full flex items-center justify-center">
                     <p>Brak zadań codziennych</p>
