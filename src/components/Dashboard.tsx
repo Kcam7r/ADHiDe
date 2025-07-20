@@ -248,21 +248,30 @@ export const Dashboard: React.FC = () => {
     ))
   );
 
-  const renderDailyTaskItems = () => (
-    displayDailyTasks.map((task) => (
+  const renderDailyTaskItems = (tasks: DailyTask[], isCompletedSection: boolean = false) => (
+    tasks.map((task) => (
       <div
         key={task.id}
-        onClick={(e) => handleDailyTaskClick(task.id, e)}
-        className={`relative p-4 rounded-lg transition-all duration-200 cursor-pointer bg-gray-700 border-2 border-gray-600
-          hover:translate-y-[-2px] hover:shadow-lg active:scale-[0.98] active:brightness-110
+        onClick={!isCompletedSection ? (e) => handleDailyTaskClick(task.id, e) : undefined}
+        className={`relative p-4 rounded-lg transition-all duration-200 
+          ${!isCompletedSection ? 'cursor-pointer hover:translate-y-[-2px] hover:shadow-lg active:scale-[0.98] active:brightness-110' : ''}
+          ${isCompletedSection 
+            ? 'bg-gray-700 border-2 border-amber-500 task-completed-visual flex items-center justify-between' 
+            : 'bg-gray-700 border-2 border-gray-600'}
           ${animatingOutTasks.has(task.id) ? 'animate-daily-task-shrink-out' : ''}
+          ${isCompletedSection && newlyCompletedAnimatedTasks.has(task.id) ? 'animate-daily-task-grow-in' : ''}
         `}
       >
-        <span className={`text-white`}>
+        <span className={`${isCompletedSection ? 'text-gray-400' : 'text-white'}`}>
           {task.title}
         </span>
-        {/* Render DailyTaskStamp only if it's currently animating out */}
-        {animatingOutTasks.has(task.id) && (
+        {isCompletedSection && (
+          <CheckCircle
+            className="w-6 h-6 text-green-400 opacity-70"
+            style={{ filter: 'drop-shadow(0 0 5px rgba(74, 222, 128, 0.8))' }}
+          />
+        )}
+        {!isCompletedSection && animatingOutTasks.has(task.id) && (
           <DailyTaskStamp onAnimationEnd={() => { /* No action needed here, task will move to completedTodayVisual */ }} />
         )}
       </div>
@@ -316,8 +325,8 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              {habits.length > 9 ? (
-                <Carousel itemsPerPage={7} contentHeightClass="h-[504px]"> {/* Zmieniono itemsPerPage na 7, contentHeightClass na h-[504px] */}
+              {habits.length > 7 ? (
+                <Carousel itemsPerPage={7} contentHeightClass="h-[504px]">
                   {renderHabitItems()}
                 </Carousel>
               ) : (
@@ -340,43 +349,42 @@ export const Dashboard: React.FC = () => {
               <span>🗓️</span>
               <span>Codzienne</span>
             </h2>
-            {displayDailyTasks.length > 9 ? (
-              <Carousel itemsPerPage={7} contentHeightClass="h-[504px]"> {/* Zmieniono itemsPerPage na 7, contentHeightClass na h-[504px] */}
-                {renderDailyTaskItems()}
+            
+            {/* Karuzela dla zadań do wykonania */}
+            <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
+            {displayDailyTasks.length > 3 ? (
+              <Carousel itemsPerPage={3} contentHeightClass="h-[216px]">
+                {renderDailyTaskItems(displayDailyTasks)}
               </Carousel>
             ) : (
-              <div className="space-y-3">
-                {renderDailyTaskItems()}
-              </div>
-            )}
-            {displayDailyTasks.length === 0 && completedTodayVisual.length === 0 && (
-              <div className="text-gray-400 text-center py-4">
-                <p>Brak zadań codziennych</p>
-                <p className="text-sm mt-1">Dodaj nowe zadania w Quest Log</p>
+              <div className="space-y-3 h-[216px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
+                {renderDailyTaskItems(displayDailyTasks)}
+                {displayDailyTasks.length === 0 && (
+                  <div className="text-gray-400 text-center py-4">
+                    <p>Brak zadań do wykonania</p>
+                  </div>
+                )}
               </div>
             )}
 
-            {completedTodayVisual.length > 0 && (
-              <div className="mt-6 pt-4 border-t border-gray-700">
-                <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
-                <div className="space-y-3">
-                  {completedTodayVisual.map((task) => (
-                    <div
-                      key={task.id}
-                      className={`p-4 rounded-lg bg-gray-700 border-2 border-amber-500 task-completed-visual flex items-center justify-between
-                        ${newlyCompletedAnimatedTasks.has(task.id) ? 'animate-daily-task-grow-in' : ''}
-                      `}
-                    >
-                      <span className="text-gray-400">{task.title}</span>
-                      <CheckCircle
-                        className="w-6 h-6 text-green-400 opacity-70"
-                        style={{ filter: 'drop-shadow(0 0 5px rgba(74, 222, 128, 0.8))' }}
-                      />
+            {/* Karuzela dla ukończonych zadań */}
+            <div className="mt-6 pt-4 border-t border-gray-700">
+              <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
+              {completedTodayVisual.length > 3 ? (
+                <Carousel itemsPerPage={3} contentHeightClass="h-[216px]">
+                  {renderDailyTaskItems(completedTodayVisual, true)}
+                </Carousel>
+              ) : (
+                <div className="space-y-3 h-[216px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
+                  {renderDailyTaskItems(completedTodayVisual, true)}
+                  {completedTodayVisual.length === 0 && (
+                    <div className="text-gray-400 text-center py-4">
+                      <p>Brak ukończonych zadań</p>
                     </div>
-                  ))}
+                  )}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* Misje */}
@@ -393,8 +401,8 @@ export const Dashboard: React.FC = () => {
                 <Archive className="w-5 h-5" />
               </button>
             </div>
-            {sortedActiveMissions.length > 9 ? (
-              <Carousel itemsPerPage={7} contentHeightClass="h-[504px]"> {/* Zmieniono itemsPerPage na 7, contentHeightClass na h-[504px] */}
+            {sortedActiveMissions.length > 7 ? (
+              <Carousel itemsPerPage={7} contentHeightClass="h-[504px]">
                 {renderMissionItems()}
               </Carousel>
             ) : (
