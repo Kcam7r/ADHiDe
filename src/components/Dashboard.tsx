@@ -22,14 +22,14 @@ export const Dashboard: React.FC = () => {
   } = useApp();
 
   const [showHistory, setShowHistory] = useState(false);
-  const [animatingHabits, setAnimatingHabits] = new Set();
+  const [animatingHabits, setAnimatingHabits] = useState(new Set<string>()); // Poprawiona inicjalizacja
   
   const [displayDailyTasks, setDisplayDailyTasks] = useState<DailyTask[]>([]);
   const [completedTodayVisual, setCompletedTodayVisual] = useState<DailyTask[]>([]);
-  const [animatingOutTasks, setAnimatingOutTasks] = new Set();
-  const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedTasks] = new Set();
+  const [animatingOutTasks, setAnimatingOutTasks] = useState(new Set<string>()); // Poprawiona inicjalizacja
+  const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedTasks] = useState(new Set<string>()); // Poprawiona inicjalizacja
 
-  const [fadingOutMissions, setFadingOutMissions] = new Set();
+  const [fadingOutMissions, setFadingOutMissions] = useState(new Set<string>()); // Poprawiona inicjalizacja
   const [missionReaction, setMissionReaction] = useState<{[key: string]: Mission['priority'] | null}>({});
 
   useEffect(() => {
