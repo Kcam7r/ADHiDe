@@ -315,26 +315,26 @@ export const Dashboard: React.FC = () => {
   );
 
   return (
-    <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-950"> {/* Usunięto h-full, flex-1 wystarczy */}
-      <div className="max-w-7xl mx-auto flex-1 flex flex-col p-6">
+    <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-950 flex flex-col"> {/* Dodano flex flex-col */}
+      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col"> {/* Usunięto p-6, dodano w-full */}
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1"> {/* Zmieniono h-full na flex-1 */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 flex-1"> {/* Dodano p-6 tutaj */}
           {/* Nawyki */}
           <div className="lg:col-span-1 h-full">
-            <div className="bg-gray-800 rounded-lg h-full flex flex-col"> {/* Usunięto p-6 */}
-              <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm px-6 pt-6"> {/* Dodano px-6 pt-6 */}
+            <div className="bg-gray-800 rounded-lg h-full flex flex-col">
+              <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm px-6 pt-6">
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
               {habits.length > 9 ? (
-                <Carousel className="flex-1 px-6 pb-6"> {/* Dodano px-6 pb-6 */}
+                <Carousel className="flex-1 px-6 pb-6">
                   {renderHabitItems()}
                 </Carousel>
               ) : (
-                <div className="space-y-3 flex-1 overflow-y-auto min-h-0 px-6 pb-6"> {/* Dodano px-6 pb-6 */}
+                <div className="space-y-3 flex-1 overflow-y-auto min-h-0 px-6 pb-6">
                   {renderHabitItems()}
                   {habits.length === 0 && (
-                    <div className="text-gray-400 text-center h-full flex items-center justify-center">
+                    <div className="text-gray-400 text-center flex-1 flex items-center justify-center"> {/* Zmieniono h-full na flex-1 */}
                       <p>Brak nawyków do wyświetlenia</p>
                     </div>
                   )}
@@ -344,13 +344,13 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Codzienne */}
-          <div className="bg-gray-800 rounded-lg h-full flex flex-col"> {/* Usunięto p-6 */}
-            <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm px-6 pt-6"> {/* Dodano px-6 pt-6 */}
+          <div className="bg-gray-800 rounded-lg h-full flex flex-col">
+            <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm px-6 pt-6">
               <span>🗓️</span>
               <span>Codzienne</span>
             </h2>
             
-            <div className="flex flex-col flex-1 px-6 pb-6"> {/* Dodano px-6 pb-6 */}
+            <div className="flex flex-col flex-1 px-6 pb-6">
               {/* Karuzela dla zadań do wykonania */}
               <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
               {displayDailyTasks.length > 7 ? (
@@ -361,7 +361,7 @@ export const Dashboard: React.FC = () => {
                 <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
                   {renderDailyTaskItems(displayDailyTasks)}
                   {displayDailyTasks.length === 0 && (
-                    <div className="text-gray-400 text-center h-full flex items-center justify-center">
+                    <div className="text-gray-400 text-center flex-1 flex items-center justify-center"> {/* Zmieniono h-full na flex-1 */}
                       <p>Brak zadań do wykonania</p>
                     </div>
                   )}
@@ -379,7 +379,7 @@ export const Dashboard: React.FC = () => {
                   <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
                     {renderDailyTaskItems(completedTodayVisual, true)}
                     {completedTodayVisual.length === 0 && (
-                      <div className="text-gray-400 text-center h-full flex items-center justify-center">
+                      <div className="text-gray-400 text-center flex-1 flex items-center justify-center"> {/* Zmieniono h-full na flex-1 */}
                         <p>Brak ukończonych zadań</p>
                       </div>
                     )}
@@ -390,8 +390,8 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Misje */}
-          <div className="bg-gray-800 rounded-lg h-full flex flex-col"> {/* Usunięto p-6 */}
-            <div className="flex items-center justify-between mb-4 px-6 pt-6"> {/* Dodano px-6 pt-6 */}
+          <div className="bg-gray-800 rounded-lg h-full flex flex-col">
+            <div className="flex items-center justify-between mb-4 px-6 pt-6">
               <h2 className="text-xl font-semibold text-white flex items-center space-x-2 text-shadow-sm">
                 <span>🎯</span>
                 <span>Misje</span>
@@ -404,14 +404,14 @@ export const Dashboard: React.FC = () => {
               </button>
             </div>
             {sortedActiveMissions.length > 9 ? (
-              <Carousel className="flex-1 px-6 pb-6"> {/* Dodano px-6 pb-6 */}
+              <Carousel className="flex-1 px-6 pb-6">
                 {renderMissionItems()}
               </Carousel>
             ) : (
-              <div className="space-y-3 flex-1 overflow-y-auto min-h-0 px-6 pb-6"> {/* Dodano px-6 pb-6 */}
+              <div className="space-y-3 flex-1 overflow-y-auto min-h-0 px-6 pb-6">
                 {renderMissionItems()}
                 {sortedActiveMissions.length === 0 && (
-                  <div className="text-gray-400 text-center h-full flex items-center justify-center">
+                  <div className="text-gray-400 text-center flex-1 flex items-center justify-center"> {/* Zmieniono h-full na flex-1 */}
                     <p>Brak aktywnych misji</p>
                   </div>
                 )}
