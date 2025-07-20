@@ -324,59 +324,63 @@ export const Dashboard: React.FC = () => {
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col px-6 pb-6"> 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start h-full">
           {/* Nawyki */}
-          <div className="lg:col-span-1">
-            <div className="bg-gray-800 rounded-lg flex flex-col p-6"> {/* Usunięto flex-1 */}
+          <div className="lg:col-span-1 flex flex-col h-full"> {/* Dodano flex flex-col h-full */}
+            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1"> {/* Dodano flex-1 */}
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={80} visibleItemsCount={9}>
+              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={40} itemMarginYPx={12} containerPaddingTopPx={8} visibleItemsCount={9}> {/* Zmieniono itemHeightPx */}
                 {renderHabitItems()}
               </ScrollableList>
             </div>
           </div>
 
           {/* Codzienne */}
-          <div className="bg-gray-800 rounded-lg flex flex-col p-6"> {/* Usunięto flex-1 */}
-            <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
-              <span>🗓️</span>
-              <span>Codzienne</span>
-            </h2>
+          <div className="lg:col-span-1 flex flex-col h-full"> {/* Dodano flex flex-col h-full */}
+            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1"> {/* Dodano flex-1 */}
+              <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
+                <span>🗓️</span>
+                <span>Codzienne</span>
+              </h2>
             
-            <div className="flex flex-col"> {/* Usunięto flex-1 tutaj */}
-              {/* Sekcja zadań do wykonania */}
-              <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
-              <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={80} visibleItemsCount={5}>
-                {renderDailyTaskItems(displayDailyTasks)}
-              </ScrollableList>
-
-              {/* Sekcja ukończonych zadań */}
-              <div className="mt-6 pt-4 border-t border-gray-700"> {/* Usunięto flex-1 flex flex-col */}
-                <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
-                <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={80} visibleItemsCount={5}>
-                  {renderDailyTaskItems(completedTodayVisual, true)}
+              <div className="flex flex-col flex-1"> {/* Dodano flex-1 tutaj */}
+                {/* Sekcja zadań do wykonania */}
+                <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
+                <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={40} itemMarginYPx={12} containerPaddingTopPx={8} visibleItemsCount={5}> {/* Zmieniono itemHeightPx */}
+                  {renderDailyTaskItems(displayDailyTasks)}
                 </ScrollableList>
+
+                {/* Sekcja ukończonych zadań */}
+                <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col"> {/* Dodano flex-1 flex flex-col */}
+                  <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
+                  <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={40} itemMarginYPx={12} containerPaddingTopPx={8} visibleItemsCount={5}> {/* Zmieniono itemHeightPx */}
+                    {renderDailyTaskItems(completedTodayVisual, true)}
+                  </ScrollableList>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Misje */}
-          <div className="bg-gray-800 rounded-lg flex flex-col p-6"> {/* Usunięto flex-1 */}
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-white flex items-center space-x-2 text-shadow-sm">
-                <span>🎯</span>
-                <span>Misje</span>
-              </h2>
-              <button
-                onClick={() => setShowHistory(true)}
-                className="text-gray-400 hover:text-white transition-colors active:scale-[0.98] active:brightness-110"
-              >
-                <Archive className="w-5 h-5" />
-              </button>
+          <div className="lg:col-span-1 flex flex-col h-full"> {/* Dodano flex flex-col h-full */}
+            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1"> {/* Dodano flex-1 */}
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold text-white flex items-center space-x-2 text-shadow-sm">
+                  <span>🎯</span>
+                  <span>Misje</span>
+                </h2>
+                <button
+                  onClick={() => setShowHistory(true)}
+                  className="text-gray-400 hover:text-white transition-colors active:scale-[0.98] active:brightness-110"
+                >
+                  <Archive className="w-5 h-5" />
+                </button>
+              </div>
+              <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={40} itemMarginYPx={12} containerPaddingTopPx={8} visibleItemsCount={9}> {/* Zmieniono itemHeightPx */}
+                {renderMissionItems()}
+              </ScrollableList>
             </div>
-            <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={90} visibleItemsCount={9}>
-              {renderMissionItems()}
-            </ScrollableList>
           </div>
         </div>
       </div>
