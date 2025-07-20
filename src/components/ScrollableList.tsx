@@ -112,7 +112,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
           ref={scrollContainerRef}
           className="overflow-y-auto hide-scrollbar"
           style={{ 
-            height: `${calculatedMaxHeight}px`, // Apply fixed height to the scrollable area
+            // Usunięto sztywne ustawienie wysokości, aby lista mogła rosnąć
             scrollSnapType: 'y mandatory',
           }}
         >
