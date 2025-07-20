@@ -322,9 +322,9 @@ export const Dashboard: React.FC = () => {
       <h1 className="text-3xl font-bold text-white mb-4 px-6 pt-6">Pulpit</h1> 
       
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col px-6 pb-6"> 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6"> {/* Usunięto flex-1 min-h-0 */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Nawyki */}
-          <div className="lg:col-span-1"> {/* Usunięto min-h-0 */}
+          <div className="lg:col-span-1">
             <div className="bg-gray-800 rounded-lg flex flex-col p-6">
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
                 <span>✨</span>
@@ -337,13 +337,13 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Codzienne */}
-          <div className="bg-gray-800 rounded-lg flex flex-col p-6"> {/* Usunięto flex-1 min-h-0 */}
+          <div className="bg-gray-800 rounded-lg flex flex-col p-6">
             <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
               <span>🗓️</span>
               <span>Codzienne</span>
             </h2>
             
-            <div className="flex flex-col flex-1 min-h-0">
+            <div className="flex flex-col"> {/* Usunięto flex-1 min-h-0 */}
               {/* Sekcja zadań do wykonania */}
               <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
               <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={60} visibleItemsCount={5}>
@@ -351,7 +351,7 @@ export const Dashboard: React.FC = () => {
               </ScrollableList>
 
               {/* Sekcja ukończonych zadań */}
-              <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col min-h-0">
+              <div className="mt-6 pt-4 border-t border-gray-700"> {/* Usunięto flex-1 flex flex-col min-h-0 */}
                 <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
                 <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={60} visibleItemsCount={5}>
                   {renderDailyTaskItems(completedTodayVisual, true)}
