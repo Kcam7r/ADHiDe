@@ -24,10 +24,10 @@ export const Dashboard: React.FC = () => {
   const [showHistory, setShowHistory] = useState(false);
   const [animatingHabits, setAnimatingHabits] = useState(new Set<string>());
   
-  const [displayDailyTasks, setDisplayDailyTasks]m = useState<DailyTask[]>([]);
+  const [displayDailyTasks, setDisplayDailyTasks] = useState<DailyTask[]>([]);
   const [completedTodayVisual, setCompletedTodayVisual] = useState<DailyTask[]>([]);
   const [animatingOutTasks, setAnimatingOutTasks] = useState(new Set<string>());
-  const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedTasks] = useState(new Set<string>());
+  const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedAnimatedTasks] = useState(new Set<string>());
 
   const [fadingOutMissions, setFadingOutMissions] = useState(new Set<string>());
   const [missionReaction, setMissionReaction] = useState<{[key: string]: Mission['priority'] | null}>({});
