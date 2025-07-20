@@ -143,18 +143,18 @@ html {
 
 /* New filter for dark green holder base state */
 .filter-dark-green-base {
-  filter: brightness(1.0) hue-rotate(112deg) saturate(150%) /* Zmniejszona jasność i nasycenie */
-          drop-shadow(0px 0px 1px rgba(57,255,20,0.2)) /* Delikatniejszy zielony blask */
-          drop-shadow(1px 1px 4px rgba(0,0,0,0.6)) /* Mniejszy główny cień */
-          drop-shadow(-1px -1px 2px rgba(57,255,20,0.1)); /* Delikatniejszy zielony highlight */
+  filter: brightness(1.0) hue-rotate(112deg) saturate(150%)
+          drop-shadow(0px 0px 0.5px rgba(57,255,20,0.1)) /* Reduced intensity */
+          drop-shadow(1px 1px 4px rgba(0,0,0,0.6))
+          drop-shadow(-1px -1px 2px rgba(57,255,20,0.05)); /* Reduced intensity */
 }
 
 /* Modified hover filter for dark green holder */
 .filter-dark-green-hover {
   filter: brightness(2) hue-rotate(115deg) saturate(400%)
-          drop-shadow(0px 0 12px rgba(57,255,20,0.9)) /* Stronger green glow */
-          drop-shadow(2px 2px 10px rgba(0,0,0,0.9)) /* Deeper main shadow */
-          drop-shadow(-2px -2px 10px rgba(57,255,20,0.7)); /* More pronounced green highlight */
+          drop-shadow(0px 0 8px rgba(57,255,20,0.7)) /* Reduced intensity */
+          drop-shadow(2px 2px 10px rgba(0,0,0,0.9))
+          drop-shadow(-2px -2px 10px rgba(57,255,20,0.5)); /* Reduced intensity */
 }
 
 
