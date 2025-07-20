@@ -100,7 +100,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
         </button>
       )}
       {items.length === 0 ? (
-        <div className="text-gray-400 text-center py-8"> {/* Przywrócono py-8 */}
+        <div className="text-gray-400 text-center py-4"> {/* Zmieniono py-8 na py-4 */}
           <p>{emptyMessage}</p>
         </div>
       ) : (
