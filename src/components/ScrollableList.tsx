@@ -94,7 +94,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
       ) : (
         <div
           ref={scrollContainerRef}
-          className="overflow-y-auto hide-scrollbar"
+          className="overflow-y-auto hide-scrollbar min-h-0" {/* Dodano min-h-0 */}
           style={{ scrollSnapType: 'y mandatory' }}
         >
           <div className="space-y-3 pt-2">
