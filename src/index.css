@@ -328,30 +328,33 @@ html {
 /* Nowe style i animacje dla bąbelków XP w krysztale */
 @keyframes bubble-rise {
   0% {
-    /* Początkowa pozycja bottom jest ustawiana przez inline style na elemencie */
-    transform: scale(0.2);
+    bottom: 0%; /* Start at the very bottom of the liquid container */
+    transform: translateX(-50%) scale(0.2);
     opacity: 0;
     filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
   }
   10% {
-    opacity: 0.8; /* Staje się widoczny */
+    opacity: 0.8; /* Becomes visible */
   }
-  85% { /* Zbliża się do powierzchni, zwalnia */
-    bottom: 95%; /* 5% poniżej górnej krawędzi płynu */
-    transform: scale(1);
+  85% { /* Slow down as it approaches the top */
+    bottom: 95%; /* 5% below the top of the liquid container */
+    transform: translateX(-50%) scale(1);
     opacity: 0.8;
+    /* animation-timing-function: ease-out; */ /* Usunięto, cubic-bezier jest globalny */
   }
-  90% { /* Na powierzchni, rozpoczyna pęknięcie - szybka ekspansja */
-    bottom: 100%; /* Na samej górze płynu */
-    transform: scale(1.5); /* Większe rozszerzenie dla efektu pęknięcia */
+  90% { /* Burst effect: quick expansion and glow */
+    bottom: 100%; /* At the very top of the liquid container */
+    transform: translateX(-50%) scale(1.5); /* Expand for burst */
     opacity: 0.9;
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 1)); /* Jaśniejszy rozbłysk */
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 1)); /* Brighter glow */
+    /* animation-timing-function: ease-in; */ /* Usunięto, cubic-bezier jest globalny */
   }
-  100% { /* Pęknięcie kończy się, znika */
-    bottom: 110%; /* Przesuwa się nieco ponad płyn */
-    transform: scale(0); /* Zmniejsza się do zera */
+  100% { /* Fade out after burst */
+    bottom: 110%; /* Move slightly above the liquid container */
+    transform: translateX(-50%) scale(0); /* Shrink to zero */
     opacity: 0;
-    filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0)); /* Brak blasku */
+    filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0)); /* No glow */
+    /* animation-timing-function: ease-out; */ /* Usunięto, cubic-bezier jest globalny */
   }
 }
 
@@ -359,10 +362,9 @@ html {
   position: absolute;
   background-color: rgba(255, 255, 255, 0.6); /* Półprzezroczysty biały bąbelek */
   border-radius: 50%;
-  /* Użycie cubic-bezier dla efektu zwalniania i szybkiego pęknięcia na końcu */
   animation: bubble-rise var(--bubble-duration) cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite; 
   pointer-events: none;
-  transform: translateX(-50%); /* Wyśrodkuj poziomo */
+  /* transform: translateX(-50%); Usunięto stąd, jest teraz w keyframes */
 }
 
 /* Nowa animacja dla pulsującej aury kryształu */

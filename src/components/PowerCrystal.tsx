@@ -28,14 +28,17 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const bubbles = React.useMemo(() => {
     const maxStartBottomPercentage = xpProgress * 100; 
     return Array.from({ length: dynamicNumberOfBubbles }).map((_, i) => {
+      const startDelay = Math.random() * 3; // Bazowe opóźnienie
+      // Dodatkowe opóźnienie, aby symulować start z niższej pozycji w płynie
+      // Im niższy poziom płynu (xpProgress), tym większe opóźnienie dla bąbelków
+      const depthDelay = (1 - xpProgress) * 2; // Od 0 do 2 sekund dodatkowego opóźnienia
       return {
         id: `bubble-${i}-${Date.now()}`,
         size: Math.random() * (10 - 4) + 4,
         left: Math.random() * 90 + 5,
-        delay: Math.random() * 3,
-        // Zmieniono zakres duration, aby faza pęknięcia (ostatnie 10-15%) była szybka (0.15-0.25s)
+        delay: startDelay + depthDelay, // Całkowite opóźnienie
         duration: Math.random() * (2.5 - 1.5) + 1.5, // Czas trwania między 1.5s a 2.5s
-        startBottomPercentage: Math.random() * maxStartBottomPercentage, 
+        // startBottomPercentage nie jest już używane do bezpośredniego pozycjonowania 'bottom'
       };
     });
   }, [dynamicNumberOfBubbles, xpProgress]);
@@ -184,7 +187,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
                   left: `${bubble.left}%`,
                   animationDelay: `${bubble.delay}s`,
                   animationDuration: `${bubble.duration}s`,
-                  bottom: `${bubble.startBottomPercentage}%`, 
+                  // bottom: `${bubble.startBottomPercentage}%`, // Usunięto to, animacja CSS kontroluje 'bottom'
                 } as React.CSSProperties}
               />
             ))}
