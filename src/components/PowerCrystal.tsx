@@ -79,7 +79,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]);
 
   const holderImageBottom = 0; 
-  const crystalBottom = 92; 
+  const crystalBottom = 130; // Zmieniono z 92 na 130, aby podnieść kryształ
 
   const horizontalOffset = 1.5; 
 
@@ -110,7 +110,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         {/* Holder Image (holder4.png) - bez zmian */}
         <img
           src="/holder4.png" 
-          alt="Crystal Holder"
+          alt="Crystal Holder" 
           className={`absolute z-[30] transition-all duration-300 ease-out
             filter-dark-green-base
             ${isHovered ? 'filter-dark-green-hover' : ''}
