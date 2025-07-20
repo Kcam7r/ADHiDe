@@ -92,7 +92,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   }, [lastXpGainTimestamp, user.xp, prevXp, user.level, prevLevel]);
 
   const holderImageBottom = 0; 
-  const crystalBottom = 91; // Zmieniono z 92 na 91
+  const crystalBottom = 91; 
 
   const horizontalOffset = 1.5; 
 
@@ -113,7 +113,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
       >
         {/* Informacje o XP na najechanie myszką */}
         <div
-          className={`absolute -top-10 bg-gray-700 text-white text-sm px-3 py-1 rounded-md shadow-md transition-opacity duration-200 whitespace-nowrap ${
+          className={`absolute -top-5 bg-gray-700 text-white text-sm px-3 py-1 rounded-md shadow-md transition-opacity duration-200 whitespace-nowrap ${
             isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
           }`}
         >
