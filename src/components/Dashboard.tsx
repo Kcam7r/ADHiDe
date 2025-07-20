@@ -26,7 +26,7 @@ export const Dashboard: React.FC = () => {
   
   const [displayDailyTasks, setDisplayDailyTasks] = useState<DailyTask[]>([]);
   const [completedTodayVisual, setCompletedTodayVisual] = useState<DailyTask[]>([]);
-  const [animatingOutTasks, setAnimatingOutTasks] = new Set<string>();
+  const [animatingOutTasks, setAnimatingOutTasks] = useState(new Set<string>());
   const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedTasks] = useState(new Set<string>());
 
   const [fadingOutMissions, setFadingOutMissions] = useState(new Set<string>());
@@ -327,7 +327,7 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={44}>
+              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={44} visibleItemsCount={10.5}>
                 {renderHabitItems()}
               </ScrollableList>
             </div>
