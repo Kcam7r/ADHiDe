@@ -222,7 +222,7 @@ export const QuestLog: React.FC = () => {
 
         {/* Habits Tab */}
         {activeTab === 'habits' && (
-          <div className="bg-gray-800 rounded-lg p-6">
+          <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-white">Nawyki</h2>
               <button
@@ -283,18 +283,17 @@ export const QuestLog: React.FC = () => {
             )}
 
             {habits.length > 9 ? (
-              <Carousel itemsPerPage={7} contentHeightClass="h-[504px]"> {/* Zmieniono itemsPerPage na 7, contentHeightClass na h-[504px] */}
+              <Carousel>
                 {renderHabitItems()}
               </Carousel>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-3 flex-1 overflow-y-auto">
                 {renderHabitItems()}
-              </div>
-            )}
-            {habits.length === 0 && (
-              <div className="text-gray-400 text-center py-8">
-                <p>Brak nawyków do wyświetlenia</p>
-                <p className="text-sm mt-2">Dodaj swój pierwszy nawyk, aby rozpocząć!</p>
+                {habits.length === 0 && (
+                  <div className="text-gray-400 text-center h-full flex items-center justify-center">
+                    <p>Brak nawyków do wyświetlenia</p>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -302,7 +301,7 @@ export const QuestLog: React.FC = () => {
 
         {/* Daily Tasks Tab */}
         {activeTab === 'daily' && (
-          <div className="bg-gray-800 rounded-lg p-6">
+          <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-white">Zadania Codzienne</h2>
               <button
@@ -348,18 +347,17 @@ export const QuestLog: React.FC = () => {
             )}
 
             {dailyTasks.length > 9 ? (
-              <Carousel itemsPerPage={7} contentHeightClass="h-[504px]"> {/* Zmieniono itemsPerPage na 7, contentHeightClass na h-[504px] */}
+              <Carousel>
                 {renderDailyTaskItems()}
               </Carousel>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-3 flex-1 overflow-y-auto">
                 {renderDailyTaskItems()}
-              </div>
-            )}
-            {dailyTasks.length === 0 && (
-              <div className="text-gray-400 text-center py-8">
-                <p>Brak zadań codziennych</p>
-                <p className="text-sm mt-2">Dodaj swoje pierwsze zadanie codzienne!</p>
+                {dailyTasks.length === 0 && (
+                  <div className="text-gray-400 text-center h-full flex items-center justify-center">
+                    <p>Brak zadań codziennych</p>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -367,7 +365,7 @@ export const QuestLog: React.FC = () => {
 
         {/* Missions Tab */}
         {activeTab === 'missions' && (
-          <div className="bg-gray-800 rounded-lg p-6">
+          <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-white">Zadania</h2>
               <button
@@ -458,18 +456,17 @@ export const QuestLog: React.FC = () => {
             )}
 
             {missions.length > 9 ? (
-              <Carousel itemsPerPage={7} contentHeightClass="h-[504px]"> {/* Zmieniono itemsPerPage na 7, contentHeightClass na h-[504px] */}
+              <Carousel>
                 {renderMissionItems()}
               </Carousel>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-3 flex-1 overflow-y-auto">
                 {renderMissionItems()}
-              </div>
-            )}
-            {missions.length === 0 && (
-              <div className="text-gray-400 text-center py-8">
-                <p>Brak zadań do wyświetlenia</p>
-                <p className="text-sm mt-2">Dodaj swoje pierwsze zadanie!</p>
+                {missions.length === 0 && (
+                  <div className="text-gray-400 text-center h-full flex items-center justify-center">
+                    <p>Brak zadań do wyświetlenia</p>
+                  </div>
+                )}
               </div>
             )}
           </div>

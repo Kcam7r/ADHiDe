@@ -328,11 +328,11 @@ export const Dashboard: React.FC = () => {
                 <span>Nawyki</span>
               </h2>
               {habits.length > 9 ? (
-                <Carousel itemsPerPage={9} contentHeightClass="h-[648px]">
+                <Carousel>
                   {renderHabitItems()}
                 </Carousel>
               ) : (
-                <div className="space-y-3 h-[648px] overflow-hidden">
+                <div className="space-y-3 flex-1 overflow-y-auto">
                   {renderHabitItems()}
                   {habits.length === 0 && (
                     <div className="text-gray-400 text-center h-full flex items-center justify-center">
@@ -354,11 +354,11 @@ export const Dashboard: React.FC = () => {
             {/* Karuzela dla zadań do wykonania */}
             <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
             {displayDailyTasks.length > 7 ? (
-              <Carousel itemsPerPage={7} contentHeightClass="h-[504px]">
+              <Carousel>
                 {renderDailyTaskItems(displayDailyTasks)}
               </Carousel>
             ) : (
-              <div className="space-y-3 h-[504px] overflow-hidden">
+              <div className="space-y-3 flex-1 overflow-y-auto">
                 {renderDailyTaskItems(displayDailyTasks)}
                 {displayDailyTasks.length === 0 && (
                   <div className="text-gray-400 text-center h-full flex items-center justify-center">
@@ -372,11 +372,11 @@ export const Dashboard: React.FC = () => {
             <div className="mt-6 pt-4 border-t border-gray-700">
               <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
               {completedTodayVisual.length > 1 ? (
-                <Carousel itemsPerPage={1} contentHeightClass="h-[72px]">
+                <Carousel itemHeightPx={72}> {/* Przekazano itemHeightPx dla pojedynczego elementu */}
                   {renderDailyTaskItems(completedTodayVisual, true)}
                 </Carousel>
               ) : (
-                <div className="space-y-3 h-[72px] overflow-hidden">
+                <div className="space-y-3 flex-1 overflow-y-auto">
                   {renderDailyTaskItems(completedTodayVisual, true)}
                   {completedTodayVisual.length === 0 && (
                     <div className="text-gray-400 text-center h-full flex items-center justify-center">
@@ -403,11 +403,11 @@ export const Dashboard: React.FC = () => {
               </button>
             </div>
             {sortedActiveMissions.length > 9 ? (
-              <Carousel itemsPerPage={9} contentHeightClass="h-[648px]">
+              <Carousel>
                 {renderMissionItems()}
               </Carousel>
             ) : (
-              <div className="space-y-3 h-[648px] overflow-hidden">
+              <div className="space-y-3 flex-1 overflow-y-auto">
                 {renderMissionItems()}
                 {sortedActiveMissions.length === 0 && (
                   <div className="text-gray-400 text-center h-full flex items-center justify-center">
