@@ -371,7 +371,7 @@ export const Dashboard: React.FC = () => {
                 <Archive className="w-5 h-5" />
               </button>
             </div>
-            <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={44} visibleItemsCount={10.5}>
+            <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={76} visibleItemsCount={10.5}>
               {renderMissionItems()}
             </ScrollableList>
           </div>
