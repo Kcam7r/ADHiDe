@@ -60,7 +60,7 @@ export const Carousel: React.FC<CarouselProps> = ({
 
   return (
     <div 
-      className={`flex flex-col ${className}`} 
+      className={`${className}`} 
       onMouseDown={handleMouseDown}
       style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
     >
