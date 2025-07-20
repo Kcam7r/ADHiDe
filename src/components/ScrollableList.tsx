@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect, Children, isValidElement } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion'; // Import motion and AnimatePresence
 
 interface ScrollableListProps {
   children: React.ReactNode;
@@ -9,6 +10,13 @@ interface ScrollableListProps {
   visibleItemsCount?: number; // Maksymalna liczba widocznych elementów
   emptyMessage?: string; // Wiadomość wyświetlana, gdy lista jest pusta
 }
+
+// Define common animation variants for list items
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } },
+  exit: { opacity: 0, y: -20, transition: { duration: 0.2, ease: "easeIn" } }
+};
 
 export const ScrollableList: React.FC<ScrollableListProps> = ({
   children,
@@ -36,7 +44,6 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
     const currentRef = scrollContainerRef.current;
     if (currentRef) {
       currentRef.addEventListener('scroll', checkScrollability);
-      // Dodaj listener na resize, aby ponownie sprawdzić przewijalność
       window.addEventListener('resize', checkScrollability);
     }
     return () => {
@@ -45,11 +52,10 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
         window.removeEventListener('resize', checkScrollability);
       }
     };
-  }, [items.length, itemHeightPx, itemMarginYPx, containerPaddingTopPx, visibleItemsCount]); // Dodano zależności
+  }, [items.length, itemHeightPx, itemMarginYPx, containerPaddingTopPx, visibleItemsCount]);
 
   const handleScroll = (direction: 'up' | 'down') => {
     if (scrollContainerRef.current) {
-      // Przewijaj o wysokość jednego elementu wraz z jego marginesem
       const scrollAmount = itemHeightPx + itemMarginYPx; 
       scrollContainerRef.current.scrollBy({
         top: direction === 'down' ? scrollAmount : -scrollAmount,
@@ -58,7 +64,6 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
     }
   };
 
-  // Obliczanie całkowitej wysokości potrzebnej do wyświetlenia 'visibleItemsCount' elementów
   const totalHeight = (visibleItemsCount * itemHeightPx) + 
                       ((visibleItemsCount - 1) * itemMarginYPx) + 
                       containerPaddingTopPx;
@@ -89,14 +94,25 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
       <div
         ref={scrollContainerRef}
         className="flex-1 overflow-y-auto hide-scrollbar"
-        style={{ maxHeight: `${totalHeight}px` }} // Ogranicz wysokość kontenera
+        style={{ maxHeight: `${totalHeight}px`, scrollSnapType: 'y mandatory' }} // Added scrollSnapType
       >
         <div className="space-y-3 pt-2">
-          {items.map((item, index) => (
-            <React.Fragment key={item.key || index}>
-              {item}
-            </React.Fragment>
-          ))}
+          <AnimatePresence initial={false}> {/* initial={false} to prevent initial animation on mount for all items */}
+            {items.map((item, index) => (
+              <motion.div
+                key={item.key || index}
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                whileInView="visible" // For on-scroll reveal
+                viewport={{ once: true, amount: 0.5 }} // Animate only once when 50% in view
+                style={{ scrollSnapAlign: 'start' }} // Added scrollSnapAlign
+              >
+                {item}
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       </div>
       {showArrows && (
