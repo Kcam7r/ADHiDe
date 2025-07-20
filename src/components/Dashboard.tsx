@@ -22,7 +22,7 @@ export const Dashboard: React.FC = () => {
   } = useApp();
 
   const [showHistory, setShowHistory] = useState(false);
-  const [animatingHabits, setAnimatingHabits] = new Set<string>();
+  const [animatingHabits, setAnimatingHabits] = useState<Set<string>>(new Set()); // Poprawiona inicjalizacja
   
   const [displayDailyTasks, setDisplayDailyTasks] = useState<DailyTask[]>([]);
   const [completedTodayVisual, setCompletedTodayVisual] = useState<DailyTask[]>([]);
