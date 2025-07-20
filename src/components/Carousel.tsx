@@ -65,7 +65,7 @@ export const Carousel: React.FC<CarouselProps> = ({
       style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
     >
       <div ref={contentRef} className="flex-1 overflow-y-auto min-h-0 hide-scrollbar">
-        <div className="space-y-3"> {/* Usunięto flex-1 flex flex-col */}
+        <div className="space-y-3 pt-2"> {/* Dodano pt-2 tutaj */}
           {items.length === 0 ? (
             <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
               <p>Brak nawyków do wyświetlenia</p>
