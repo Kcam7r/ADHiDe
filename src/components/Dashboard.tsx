@@ -6,6 +6,7 @@ import { MissionHistoryModal } from './MissionHistoryModal';
 import { DailyTaskStamp } from './DailyTaskStamp';
 import { showSuccessToast, showInfoToast, showErrorToast } from '../utils/toast';
 import { Carousel } from './Carousel'; // Import Carousel
+import { CylinderCarousel } from './CylinderCarousel'; // Import CylinderCarousel
 
 export const Dashboard: React.FC = () => {
   console.log("Dashboard component is loading.");
@@ -327,15 +328,10 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              <Carousel className="flex-1">
-                {habits.length === 0 ? (
-                  <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
-                    <p>Brak nawyków do wyświetlenia</p>
-                  </div>
-                ) : (
-                  renderHabitItems()
-                )}
-              </Carousel>
+              {/* Użycie CylinderCarousel dla nawyków */}
+              <CylinderCarousel itemHeightPx={52} className="flex-1">
+                {renderHabitItems()}
+              </CylinderCarousel>
             </div>
           </div>
 
