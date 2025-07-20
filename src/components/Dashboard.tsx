@@ -325,7 +325,7 @@ export const Dashboard: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0"> 
           {/* Nawyki */}
           <div className="lg:col-span-1 min-h-0">
-            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1 min-h-0">
+            <div className="bg-gray-800 rounded-lg flex flex-col p-6"> {/* Usunięto flex-1 min-h-0 */}
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
                 <span>✨</span>
                 <span>Nawyki</span>
@@ -361,7 +361,7 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Misje */}
-          <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1 min-h-0">
+          <div className="bg-gray-800 rounded-lg flex flex-col p-6"> {/* Usunięto flex-1 min-h-0 */}
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-white flex items-center space-x-2 text-shadow-sm">
                 <span>🎯</span>
