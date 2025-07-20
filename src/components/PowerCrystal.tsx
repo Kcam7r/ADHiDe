@@ -116,7 +116,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
           className={`absolute -top-5 bg-gray-700 text-white text-sm px-3 py-1 rounded-md shadow-md transition-opacity duration-200 whitespace-nowrap ${
             isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
           }`}
-          style={{ transform: 'translateX(3px)' }} // Przesunięcie o 3px w prawo
+          style={{ transform: 'translateX(1px)' }} // Zmieniono z 3px na 1px
         >
           {xpPercentage}%
         </div>
