@@ -315,8 +315,8 @@ export const Dashboard: React.FC = () => {
   );
 
   return (
-    <div className="flex-1 p-6 bg-gray-900">
-      <div className="max-w-7xl mx-auto h-full flex flex-col">
+    <div className="flex-1 bg-gray-900"> {/* Usunięto p-6 */}
+      <div className="max-w-7xl mx-auto h-full flex flex-col p-6"> {/* Dodano p-6 tutaj */}
         {/* Usunięto nagłówek h1 "Pulpit" */}
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1">
@@ -328,7 +328,7 @@ export const Dashboard: React.FC = () => {
                 <span>Nawyki</span>
               </h2>
               {habits.length > 9 ? (
-                <Carousel>
+                <Carousel className="flex-1"> {/* Dodano flex-1 */}
                   {renderHabitItems()}
                 </Carousel>
               ) : (
@@ -351,41 +351,43 @@ export const Dashboard: React.FC = () => {
               <span>Codzienne</span>
             </h2>
             
-            {/* Karuzela dla zadań do wykonania */}
-            <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
-            {displayDailyTasks.length > 7 ? (
-              <Carousel>
-                {renderDailyTaskItems(displayDailyTasks)}
-              </Carousel>
-            ) : (
-              <div className="space-y-3 flex-1 overflow-y-auto">
-                {renderDailyTaskItems(displayDailyTasks)}
-                {displayDailyTasks.length === 0 && (
-                  <div className="text-gray-400 text-center h-full flex items-center justify-center">
-                    <p>Brak zadań do wykonania</p>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Karuzela dla ukończonych zadań */}
-            <div className="mt-6 pt-4 border-t border-gray-700">
-              <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
-              {completedTodayVisual.length > 1 ? (
-                <Carousel itemHeightPx={72}> {/* Przekazano itemHeightPx dla pojedynczego elementu */}
-                  {renderDailyTaskItems(completedTodayVisual, true)}
+            <div className="flex flex-col flex-1"> {/* Nowy wrapper dla sekcji przewijanych */}
+              {/* Karuzela dla zadań do wykonania */}
+              <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
+              {displayDailyTasks.length > 7 ? (
+                <Carousel className="flex-1"> {/* Dodano flex-1 */}
+                  {renderDailyTaskItems(displayDailyTasks)}
                 </Carousel>
               ) : (
                 <div className="space-y-3 flex-1 overflow-y-auto">
-                  {renderDailyTaskItems(completedTodayVisual, true)}
-                  {completedTodayVisual.length === 0 && (
+                  {renderDailyTaskItems(displayDailyTasks)}
+                  {displayDailyTasks.length === 0 && (
                     <div className="text-gray-400 text-center h-full flex items-center justify-center">
-                      <p>Brak ukończonych zadań</p>
+                      <p>Brak zadań do wykonania</p>
                     </div>
                   )}
                 </div>
               )}
-            </div>
+
+              {/* Karuzela dla ukończonych zadań */}
+              <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col"> {/* Dodano flex-1 flex flex-col */}
+                <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
+                {completedTodayVisual.length > 1 ? (
+                  <Carousel itemHeightPx={72} className="flex-1"> {/* Dodano flex-1 */}
+                    {renderDailyTaskItems(completedTodayVisual, true)}
+                  </Carousel>
+                ) : (
+                  <div className="space-y-3 flex-1 overflow-y-auto">
+                    {renderDailyTaskItems(completedTodayVisual, true)}
+                    {completedTodayVisual.length === 0 && (
+                      <div className="text-gray-400 text-center h-full flex items-center justify-center">
+                        <p>Brak ukończonych zadań</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div> {/* Koniec nowego wrappera */}
           </div>
 
           {/* Misje */}
@@ -403,7 +405,7 @@ export const Dashboard: React.FC = () => {
               </button>
             </div>
             {sortedActiveMissions.length > 9 ? (
-              <Carousel>
+              <Carousel className="flex-1"> {/* Dodano flex-1 */}
                 {renderMissionItems()}
               </Carousel>
             ) : (
