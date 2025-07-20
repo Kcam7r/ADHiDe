@@ -3,15 +3,16 @@ import { AppProvider } from './contexts/AppContext';
 import { Sidebar } from './components/Sidebar';
 import { PomodoroTimer } from './components/PomodoroTimer';
 import { ConfettiOverlay } from './components/ConfettiOverlay';
-// import { QuickThoughtFloatingButton } from './components/QuickThoughtFloatingButton'; // Usunięto
 import { QuickThoughtModal } from './components/QuickThoughtModal';
 import { QuickThoughtsModal } from './components/QuickThoughtsModal';
 import { LevelUpFlashOverlay } from './components/LevelUpFlashOverlay';
 import { XpBubblesOverlay } from './components/XpBubblesOverlay';
 import { AnimatePresence, motion } from 'framer-motion';
 
-// Leniwe ładowanie głównych komponentów widoków
-const Dashboard = lazy(() => import('./components/Dashboard').then(module => ({ default: module.Dashboard })));
+// Bezpośredni import Dashboard w celu diagnostyki
+import { Dashboard } from './components/Dashboard';
+
+// Leniwe ładowanie pozostałych głównych komponentów widoków
 const QuestLog = lazy(() => import('./components/QuestLog').then(module => ({ default: module.QuestLog })));
 const Journal = lazy(() => import('./components/Journal').then(module => ({ default: module.Journal })));
 const Garage = lazy(() => import('./components/Garage').then(module => ({ default: module.Garage })));
@@ -45,7 +46,7 @@ function App() {
           onOpenQuickThoughtsModal={() => setShowQuickThoughtsModal(true)}
           onOpenNewQuickThoughtModal={() => setShowQuickThoughtModal(true)} 
         />
-        <main className="flex-1 overflow-x-hidden"> {/* Usunięto overflow-y-auto */}
+        <main className="flex-1 overflow-x-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeView}
@@ -71,8 +72,6 @@ function App() {
       <LevelUpFlashOverlay />
       <XpBubblesOverlay />
       
-      {/* QuickThoughtFloatingButton został usunięty, jego funkcjonalność przeniesiona do Sidebar */}
-
       {showQuickThoughtModal && ( 
         <QuickThoughtModal 
           onClose={() => setShowQuickThoughtModal(false)} 
