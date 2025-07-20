@@ -184,8 +184,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
                   height: `${bubble.size}px`,
                   left: `${bubble.left}%`,
                   animationDelay: `${bubble.delay}s`,
-                  animationDuration: `${bubble.duration}s`,
-                  // bottom: `${bubble.startBottomPercentage}%`, // Usunięto to, animacja CSS kontroluje 'bottom'
+                  '--bubble-duration': `${bubble.duration}s`, // Ustawienie zmiennej CSS
                 } as React.CSSProperties}
               />
             ))}
