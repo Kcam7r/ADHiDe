@@ -8,6 +8,8 @@ import { showSuccessToast, showInfoToast, showErrorToast } from '../utils/toast'
 import { Carousel } from './Carousel'; // Import Carousel
 
 export const Dashboard: React.FC = () => {
+  console.log("Dashboard component is loading."); // Dodano tę linię
+
   const { 
     habits, 
     dailyTasks: appDailyTasks,
