@@ -30,6 +30,15 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(false);
 
+  // Calculate max height based on desired visible items
+  const calculatedMaxHeight = useMemo(() => {
+    if (items.length === 0) return 'auto'; // Allow empty list to collapse
+    // Calculate height for `visibleItemsCount` items + margins + padding
+    const totalItemHeight = itemHeightPx * visibleItemsCount;
+    const totalMarginHeight = itemMarginYPx * (visibleItemsCount > 0 ? (visibleItemsCount - 1) : 0);
+    return totalItemHeight + totalMarginHeight + containerPaddingTopPx;
+  }, [items.length, itemHeightPx, itemMarginYPx, visibleItemsCount, containerPaddingTopPx]);
+
   const checkScrollability = () => {
     if (scrollContainerRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
@@ -62,7 +71,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
         window.removeEventListener('resize', checkScrollability);
       }
     };
-  }, [items.length, children]); // Dependencies simplified, as height is now flex-based
+  }, [items.length, calculatedMaxHeight]); // Add calculatedMaxHeight to dependencies
 
   const handleScroll = (direction: 'up' | 'down') => {
     if (scrollContainerRef.current) {
@@ -74,21 +83,18 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
     }
   };
 
-  // The empty state div should also be flex-1 to center its content vertically.
   const emptyStateClasses = "text-gray-400 text-center py-4 flex-1 flex items-center justify-center";
-
-  // showArrows logic should be based on actual scrollHeight vs clientHeight
-  // This will be updated in checkScrollability, so we just use the state.
   const showArrows = canScrollUp || canScrollDown;
 
   return (
     <div 
-      className="flex flex-col flex-1" // Make the outer div flex-1 to fill parent
+      className="flex flex-col" // Removed flex-1 here
+      style={{ maxHeight: items.length > 0 ? `${calculatedMaxHeight}px` : 'auto' }} // Apply calculated maxHeight
     >
-      {showArrows && ( // Show up arrow only if can scroll up
+      {showArrows && (
         <button
           onClick={() => handleScroll('up')}
-          disabled={!canScrollUp} // Disable if cannot scroll up
+          disabled={!canScrollUp}
           className={`p-1 rounded-full self-center mb-2 transition-colors active:scale-[0.98] active:brightness-110
             ${canScrollUp ? 'text-gray-400 hover:bg-gray-700 hover:text-white' : 'text-gray-600 cursor-not-allowed'}
           `}
@@ -129,10 +135,10 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
           </div>
         </div>
       )}
-      {showArrows && ( // Show down arrow only if can scroll down
+      {showArrows && (
         <button
           onClick={() => handleScroll('down')}
-          disabled={!canScrollDown} // Disable if cannot scroll down
+          disabled={!canScrollDown}
           className={`p-1 rounded-full self-center mt-2 transition-colors active:scale-[0.98] active:brightness-110
             ${canScrollDown ? 'text-gray-400 hover:bg-gray-700 hover:text-white' : 'text-gray-600 cursor-not-allowed'}
           `}
