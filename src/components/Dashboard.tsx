@@ -313,24 +313,24 @@ export const Dashboard: React.FC = () => {
   );
 
   return (
-    <div className="flex-1 p-6 bg-gray-900"> {/* Usunięto min-h-screen */}
-      <div className="max-w-7xl mx-auto">
+    <div className="flex-1 p-6 bg-gray-900">
+      <div className="max-w-7xl mx-auto h-full flex flex-col"> {/* Dodano h-full flex flex-col */}
         <h1 className="text-3xl font-bold text-white mb-8">Pulpit</h1>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1"> {/* Dodano flex-1 */}
           {/* Nawyki */}
           <div className="lg:col-span-1">
-            <div className="bg-gray-800 rounded-lg p-6">
+            <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col"> {/* Dodano h-full flex flex-col */}
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              {habits.length > 7 ? (
-                <Carousel itemsPerPage={7} contentHeightClass="h-[504px]">
+              {habits.length > 9 ? ( {/* Zmieniono na 9 */}
+                <Carousel itemsPerPage={9} contentHeightClass="h-[648px]"> {/* Zmieniono na h-[648px] */}
                   {renderHabitItems()}
                 </Carousel>
               ) : (
-                <div className="space-y-3 h-[504px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
+                <div className="space-y-3 h-[648px] overflow-hidden"> {/* Zmieniono na h-[648px] */}
                   {renderHabitItems()}
                   {habits.length === 0 && (
                     <div className="text-gray-400 text-center h-full flex items-center justify-center">
@@ -343,7 +343,7 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Codzienne */}
-          <div className="bg-gray-800 rounded-lg p-6">
+          <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col"> {/* Dodano h-full flex flex-col */}
             <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
               <span>🗓️</span>
               <span>Codzienne</span>
@@ -351,12 +351,12 @@ export const Dashboard: React.FC = () => {
             
             {/* Karuzela dla zadań do wykonania */}
             <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
-            {displayDailyTasks.length > 4 ? (
-              <Carousel itemsPerPage={4} contentHeightClass="h-[318px]">
+            {displayDailyTasks.length > 7 ? ( {/* Zmieniono na 7 */}
+              <Carousel itemsPerPage={7} contentHeightClass="h-[504px]"> {/* Zmieniono na h-[504px] */}
                 {renderDailyTaskItems(displayDailyTasks)}
               </Carousel>
             ) : (
-              <div className="space-y-3 h-[318px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
+              <div className="space-y-3 h-[504px] overflow-hidden"> {/* Zmieniono na h-[504px] */}
                 {renderDailyTaskItems(displayDailyTasks)}
                 {displayDailyTasks.length === 0 && (
                   <div className="text-gray-400 text-center h-full flex items-center justify-center">
@@ -387,7 +387,7 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Misje */}
-          <div className="bg-gray-800 rounded-lg p-6">
+          <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col"> {/* Dodano h-full flex flex-col */}
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-white flex items-center space-x-2">
                 <span>🎯</span>
@@ -400,12 +400,12 @@ export const Dashboard: React.FC = () => {
                 <Archive className="w-5 h-5" />
               </button>
             </div>
-            {sortedActiveMissions.length > 7 ? (
-              <Carousel itemsPerPage={7} contentHeightClass="h-[504px]">
+            {sortedActiveMissions.length > 9 ? ( {/* Zmieniono na 9 */}
+              <Carousel itemsPerPage={9} contentHeightClass="h-[648px]"> {/* Zmieniono na h-[648px] */}
                 {renderMissionItems()}
               </Carousel>
             ) : (
-              <div className="space-y-3 h-[504px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
+              <div className="space-y-3 h-[648px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
                 {renderMissionItems()}
                 {sortedActiveMissions.length === 0 && (
                   <div className="text-gray-400 text-center h-full flex items-center justify-center">
