@@ -85,7 +85,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
   return (
     <div 
       className="flex flex-col"
-      style={{ maxHeight: `${calculatedMaxHeight}px` }} // Zawsze ustawia maxHeight
+      style={items.length > 0 ? { maxHeight: `${calculatedMaxHeight}px` } : {}}
     >
       {showArrows && (
         <button
@@ -100,7 +100,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
         </button>
       )}
       {items.length === 0 ? (
-        <div className="text-gray-400 text-center flex-1 flex items-center justify-center"> {/* Dodano flex-1 flex items-center justify-center */}
+        <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
           <p>{emptyMessage}</p>
         </div>
       ) : (
