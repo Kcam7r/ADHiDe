@@ -313,7 +313,7 @@ export const Dashboard: React.FC = () => {
   );
 
   return (
-    <div className="flex-1 p-6 bg-gray-900 min-h-screen">
+    <div className="flex-1 p-6 bg-gray-900"> {/* Usunięto min-h-screen */}
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-white mb-8">Pulpit</h1>
         
@@ -332,12 +332,11 @@ export const Dashboard: React.FC = () => {
               ) : (
                 <div className="space-y-3 h-[504px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
                   {renderHabitItems()}
-                </div>
-              )}
-              {habits.length === 0 && (
-                <div className="text-gray-400 text-center py-4">
-                  <p>Brak nawyków do wyświetlenia</p>
-                  <p className="text-sm mt-1">Dodaj nowe nawyki w Quest Log</p>
+                  {habits.length === 0 && (
+                    <div className="text-gray-400 text-center h-full flex items-center justify-center">
+                      <p>Brak nawyków do wyświetlenia</p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -352,15 +351,15 @@ export const Dashboard: React.FC = () => {
             
             {/* Karuzela dla zadań do wykonania */}
             <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
-            {displayDailyTasks.length > 5 ? (
-              <Carousel itemsPerPage={5} contentHeightClass="h-[360px]">
+            {displayDailyTasks.length > 4 ? (
+              <Carousel itemsPerPage={4} contentHeightClass="h-[288px]">
                 {renderDailyTaskItems(displayDailyTasks)}
               </Carousel>
             ) : (
-              <div className="space-y-3 h-[360px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
+              <div className="space-y-3 h-[288px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
                 {renderDailyTaskItems(displayDailyTasks)}
                 {displayDailyTasks.length === 0 && (
-                  <div className="text-gray-400 text-center py-4">
+                  <div className="text-gray-400 text-center h-full flex items-center justify-center">
                     <p>Brak zadań do wykonania</p>
                   </div>
                 )}
@@ -378,7 +377,7 @@ export const Dashboard: React.FC = () => {
                 <div className="space-y-3 h-[72px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
                   {renderDailyTaskItems(completedTodayVisual, true)}
                   {completedTodayVisual.length === 0 && (
-                    <div className="text-gray-400 text-center py-4">
+                    <div className="text-gray-400 text-center h-full flex items-center justify-center">
                       <p>Brak ukończonych zadań</p>
                     </div>
                   )}
@@ -408,12 +407,12 @@ export const Dashboard: React.FC = () => {
             ) : (
               <div className="space-y-3 h-[504px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
                 {renderMissionItems()}
-              </div>
-            )}
-            {sortedActiveMissions.length === 0 && (
-              <div className="text-gray-400 text-center py-4">
-                <p>Brak aktywnych misji</p>
-                <p className="text-sm mt-1">Aktywuj misje w Quest Log lub Garażu</p>
+                {sortedActiveMissions.length === 0 && (
+                  <div className="text-gray-400 text-center h-full flex items-center justify-center">
+                    <p>Brak aktywnych misji</p>
+                    <p className="text-sm mt-1">Aktywuj misje w Quest Log lub Garażu</p>
+                  </div>
+                )}
               </div>
             )}
           </div>
