@@ -7,7 +7,7 @@ interface ScrollableListProps {
   itemHeightPx?: number; // Rzeczywista wysokość pojedynczego elementu (np. 44px dla nawyków)
   itemMarginYPx?: number; // Pionowy margines między elementami (np. 12px dla space-y-3)
   containerPaddingTopPx?: number; // Padding na górze wewnętrznego kontenera przewijania (np. 8px dla pt-2)
-  visibleItemsCount?: number; // Maksymalna liczba widocznych elementów
+  visibleItemsCount?: number; // Maksymalna liczba widocznych elementów (teraz tylko do określenia, kiedy pokazać strzałki)
   emptyMessage?: string; // Wiadomość wyświetlana, gdy lista jest pusta
 }
 
@@ -41,28 +41,28 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
   useEffect(() => {
     checkScrollability();
     const currentRef = scrollContainerRef.current;
+    let resizeObserver: ResizeObserver;
+
     if (currentRef) {
       currentRef.addEventListener('scroll', checkScrollability);
-      // Użyj ResizeObserver, aby reagować na zmiany rozmiaru kontenera lub jego zawartości
-      const resizeObserver = new ResizeObserver(() => {
-        // Małe opóźnienie, aby upewnić się, że DOM jest stabilny po zmianach
+      resizeObserver = new ResizeObserver(() => {
         setTimeout(checkScrollability, 50);
       });
       resizeObserver.observe(currentRef);
-      window.addEventListener('resize', checkScrollability); // Nadal nasłuchuj zmian rozmiaru okna
+      window.addEventListener('resize', checkScrollability); 
 
-      // Początkowe sprawdzenie po zamontowaniu i po zmianie dzieci
       setTimeout(checkScrollability, 50);
     }
     return () => {
       if (currentRef) {
         currentRef.removeEventListener('scroll', checkScrollability);
-        // Odłącz ResizeObserver przy odmontowaniu komponentu
-        // resizeObserver.disconnect(); // To jest ważne, aby uniknąć wycieków pamięci
+        if (resizeObserver) {
+          resizeObserver.disconnect(); 
+        }
         window.removeEventListener('resize', checkScrollability);
       }
     };
-  }, [items.length, children, itemHeightPx, itemMarginYPx, containerPaddingTopPx, visibleItemsCount]); // Dodano zależności
+  }, [items.length, children, itemHeightPx, itemMarginYPx, containerPaddingTopPx, visibleItemsCount]); 
 
   const handleScroll = (direction: 'up' | 'down') => {
     if (scrollContainerRef.current) {
@@ -73,12 +73,6 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
       });
     }
   };
-
-  // Obliczanie maxHeight na podstawie visibleItemsCount
-  const calculatedMaxHeight = (itemHeightPx * Math.floor(visibleItemsCount)) + 
-                              (itemMarginYPx * (Math.floor(visibleItemsCount) - 1)) + 
-                              (itemHeightPx * (visibleItemsCount % 1)) + // Dodaje wysokość częściowego elementu
-                              containerPaddingTopPx;
 
   // Strzałki pojawiają się, jeśli jest więcej elementów niż może się zmieścić
   const showArrows = items.length > visibleItemsCount;
@@ -110,7 +104,6 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
         className="flex-1 overflow-y-auto hide-scrollbar"
         style={{ 
           scrollSnapType: 'y mandatory',
-          maxHeight: `${calculatedMaxHeight}px` // Ustawienie stałej wysokości
         }}
       >
         <div className="space-y-3 pt-2">
