@@ -331,8 +331,8 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              {/* Użycie CylinderCarousel dla nawyków */}
-              <CylinderCarousel itemHeightPx={52} className="flex-1">
+              {/* Zmieniono CylinderCarousel na Carousel */}
+              <Carousel className="flex-1">
                 {habits.length === 0 ? (
                   <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
                     <p>Brak nawyków do wyświetlenia</p>
@@ -340,7 +340,7 @@ export const Dashboard: React.FC = () => {
                 ) : (
                   renderHabitItems()
                 )}
-              </CylinderCarousel>
+              </Carousel>
             </div>
           </div>
 
