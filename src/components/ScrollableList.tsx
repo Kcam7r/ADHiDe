@@ -74,6 +74,12 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
     }
   };
 
+  // Oblicz maksymalną wysokość na podstawie liczby widocznych elementów
+  const calculatedMaxHeight = 
+    (visibleItemsCount * itemHeightPx) + 
+    ((visibleItemsCount > 0 ? visibleItemsCount - 1 : 0) * itemMarginYPx) + 
+    containerPaddingTopPx;
+
   // Strzałki pojawiają się, jeśli jest więcej elementów niż może się zmieścić
   const showArrows = items.length > visibleItemsCount;
 
@@ -86,7 +92,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col" style={{ maxHeight: `${calculatedMaxHeight}px` }}>
       {showArrows && (
         <button
           onClick={() => handleScroll('up')}
