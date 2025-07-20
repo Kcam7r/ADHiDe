@@ -330,7 +330,7 @@ export const Dashboard: React.FC = () => {
                   {renderHabitItems()}
                 </Carousel>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-3 h-[504px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
                   {renderHabitItems()}
                 </div>
               )}
@@ -352,12 +352,12 @@ export const Dashboard: React.FC = () => {
             
             {/* Karuzela dla zadań do wykonania */}
             <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
-            {displayDailyTasks.length > 3 ? (
-              <Carousel itemsPerPage={3} contentHeightClass="h-[216px]">
+            {displayDailyTasks.length > 5 ? (
+              <Carousel itemsPerPage={5} contentHeightClass="h-[360px]">
                 {renderDailyTaskItems(displayDailyTasks)}
               </Carousel>
             ) : (
-              <div className="space-y-3 h-[216px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
+              <div className="space-y-3 h-[360px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
                 {renderDailyTaskItems(displayDailyTasks)}
                 {displayDailyTasks.length === 0 && (
                   <div className="text-gray-400 text-center py-4">
@@ -370,12 +370,12 @@ export const Dashboard: React.FC = () => {
             {/* Karuzela dla ukończonych zadań */}
             <div className="mt-6 pt-4 border-t border-gray-700">
               <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
-              {completedTodayVisual.length > 3 ? (
-                <Carousel itemsPerPage={3} contentHeightClass="h-[216px]">
+              {completedTodayVisual.length > 1 ? (
+                <Carousel itemsPerPage={1} contentHeightClass="h-[72px]">
                   {renderDailyTaskItems(completedTodayVisual, true)}
                 </Carousel>
               ) : (
-                <div className="space-y-3 h-[216px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
+                <div className="space-y-3 h-[72px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
                   {renderDailyTaskItems(completedTodayVisual, true)}
                   {completedTodayVisual.length === 0 && (
                     <div className="text-gray-400 text-center py-4">
@@ -406,7 +406,7 @@ export const Dashboard: React.FC = () => {
                 {renderMissionItems()}
               </Carousel>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-3 h-[504px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
                 {renderMissionItems()}
               </div>
             )}
