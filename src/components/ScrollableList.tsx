@@ -74,7 +74,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
   const showArrows = canScrollUp || canScrollDown;
 
   return (
-    <div className="flex flex-col flex-1">
+    <div className="flex flex-col flex-1 max-h-full"> {/* Dodano max-h-full */}
       {showArrows && (
         <button
           onClick={() => handleScroll('up')}
