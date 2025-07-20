@@ -229,12 +229,12 @@ export const Dashboard: React.FC = () => {
       <div
         key={habit.id}
         onClick={(e) => handleHabitClick(habit.id, e)}
-        className={`p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 
-        hover:translate-y-[-2px] hover:shadow-lg active:scale-[0.98] active:brightness-110
+        className={`group p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 shadow-inner-subtle
+        hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110
         ${
           habit.type === 'positive' 
-            ? 'bg-green-600 border-green-500' 
-            : 'bg-red-600 border-red-500'
+            ? 'bg-green-600 border-green-500 shadow-glow-green' 
+            : 'bg-red-600 border-red-500 shadow-glow-red'
         } ${animatingHabits.has(habit.id) 
             ? (habit.type === 'positive' ? 'animate-habit-pulse-positive' : 'animate-habit-pulse-negative') 
             : 'hover:bg-opacity-80'
@@ -255,11 +255,11 @@ export const Dashboard: React.FC = () => {
       <div
         key={task.id}
         onClick={!isCompletedSection ? (e) => handleDailyTaskClick(task.id, e) : undefined}
-        className={`relative p-4 rounded-lg transition-all duration-200 
-          ${!isCompletedSection ? 'cursor-pointer hover:translate-y-[-2px] hover:shadow-lg active:scale-[0.98] active:brightness-110' : ''}
+        className={`group relative p-4 rounded-lg transition-all duration-200 shadow-inner-subtle
+          ${!isCompletedSection ? 'cursor-pointer hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110' : ''}
           ${isCompletedSection 
             ? 'bg-gray-700 border-2 border-amber-500 task-completed-visual flex items-center justify-between' 
-            : 'bg-gray-700 border-2 border-gray-600'}
+            : 'bg-gray-700 border-2 border-gray-600 shadow-glow-cyan'}
           ${animatingOutTasks.has(task.id) ? 'animate-daily-task-shrink-out' : ''}
           ${isCompletedSection && newlyCompletedAnimatedTasks.has(task.id) ? 'animate-daily-task-grow-in' : ''}
         `}
@@ -286,10 +286,10 @@ export const Dashboard: React.FC = () => {
         key={mission.id}
         id={`mission-${mission.id}`}
         onClick={(e) => handleMissionComplete(mission.id, e)}
-        className={`p-4 rounded-lg cursor-pointer transition-all duration-200 
+        className={`group p-4 rounded-lg cursor-pointer transition-all duration-200 shadow-inner-subtle
         hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110
         ${
-          mission.projectId ? 'bg-purple-600 hover:bg-purple-500' : 'bg-cyan-600 hover:bg-cyan-500'
+          mission.projectId ? 'bg-purple-600 hover:bg-purple-500 shadow-glow-purple' : 'bg-cyan-600 hover:bg-cyan-500 shadow-glow-cyan'
         } ${fadingOutMissions.has(mission.id) ? 'animate-mission-fade-out' : ''}
           ${missionReaction[mission.id] === 'normal' ? 'animate-mission-pulse-normal' : ''}
           ${missionReaction[mission.id] === 'important' ? 'animate-mission-pulse-important' : ''}
@@ -315,14 +315,14 @@ export const Dashboard: React.FC = () => {
   );
 
   return (
-    <div className="flex-1 bg-gray-900 h-full"> {/* Dodano h-full */}
+    <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-950 h-full"> {/* Zmieniono tło na gradient */}
       <div className="max-w-7xl mx-auto h-full flex flex-col p-6">
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full"> {/* Zmieniono flex-1 na h-full */}
           {/* Nawyki */}
           <div className="lg:col-span-1 h-full">
             <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col">
-              <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
+              <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm"> {/* Dodano text-shadow-sm */}
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
@@ -345,7 +345,7 @@ export const Dashboard: React.FC = () => {
 
           {/* Codzienne */}
           <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col">
-            <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
+            <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm"> {/* Dodano text-shadow-sm */}
               <span>🗓️</span>
               <span>Codzienne</span>
             </h2>
@@ -392,7 +392,7 @@ export const Dashboard: React.FC = () => {
           {/* Misje */}
           <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-white flex items-center space-x-2">
+              <h2 className="text-xl font-semibold text-white flex items-center space-x-2 text-shadow-sm"> {/* Dodano text-shadow-sm */}
                 <span>🎯</span>
                 <span>Misje</span>
               </h2>
