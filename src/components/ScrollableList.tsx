@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, Children, isValidElement } from 'react';
+import React, { useRef, useState, useEffect, Children, isValidElement, useMemo } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -22,7 +22,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
   itemHeightPx = 44,
   itemMarginYPx = 12,
   containerPaddingTopPx = 8,
-  visibleItemsCount = 5, // This was the default value in the initial codebase
+  visibleItemsCount = 5,
   emptyMessage = 'Brak elementów do wyświetlenia',
 }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -74,10 +74,24 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
     }
   };
 
-  // Oblicz maksymalną wysokość na podstawie liczby widocznych elementów
-  const calculatedMaxHeight = (visibleItemsCount * itemHeightPx) + 
-                              ((visibleItemsCount > 0 ? visibleItemsCount - 1 : 0) * itemMarginYPx) + 
-                              containerPaddingTopPx;
+  const emptyStateHeightPx = 50; // Szacowana wysokość dla pustego komunikatu z paddingiem py-4
+
+  const calculatedMaxHeight = useMemo(() => {
+    return (visibleItemsCount * itemHeightPx) + 
+           ((visibleItemsCount > 0 ? visibleItemsCount - 1 : 0) * itemMarginYPx) + 
+           containerPaddingTopPx;
+  }, [visibleItemsCount, itemHeightPx, itemMarginYPx, containerPaddingTopPx]);
+
+  const currentHeight = useMemo(() => {
+    if (items.length === 0) {
+      return emptyStateHeightPx;
+    }
+
+    const heightOfItems = (items.length * itemHeightPx) + ((items.length - 1) * itemMarginYPx);
+    const totalContentHeight = heightOfItems + containerPaddingTopPx;
+
+    return Math.min(totalContentHeight, calculatedMaxHeight);
+  }, [items.length, itemHeightPx, itemMarginYPx, containerPaddingTopPx, calculatedMaxHeight, emptyStateHeightPx]);
 
   // Strzałki pojawiają się, jeśli jest więcej elementów niż może się zmieścić
   const showArrows = items.length > visibleItemsCount;
@@ -85,7 +99,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
   return (
     <div 
       className="flex flex-col"
-      style={items.length > 0 ? { maxHeight: `${calculatedMaxHeight}px` } : {}}
+      style={{ maxHeight: `${currentHeight}px` }}
     >
       {showArrows && (
         <button
@@ -100,7 +114,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
         </button>
       )}
       {items.length === 0 ? (
-        <div className="text-gray-400 text-center py-4"> {/* Zmieniono py-8 na py-4 */}
+        <div className="text-gray-400 text-center py-4">
           <p>{emptyMessage}</p>
         </div>
       ) : (
