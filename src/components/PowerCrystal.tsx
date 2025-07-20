@@ -23,7 +23,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const xpProgress = xpInCurrentLevel / xpForNextLevel;
   const xpPercentage = Math.round(xpProgress * 100);
 
-  const dynamicNumberOfBubbles = Math.max(5, Math.floor(xpProgress * 20) + 5); 
+  // Zmniejszona liczba bąbelków: min 2, max 10 (wcześniej max 25)
+  const dynamicNumberOfBubbles = Math.max(2, Math.floor(xpProgress * 8) + 2); 
 
   const bubbles = React.useMemo(() => {
     return Array.from({ length: dynamicNumberOfBubbles }).map((_, i) => {
@@ -36,7 +37,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         size: Math.random() * (10 - 4) + 4,
         left: Math.random() * 90 + 5,
         delay: startDelay + depthDelay, // Całkowite opóźnienie
-        duration: Math.random() * (2.5 - 1.5) + 1.5, // Czas trwania między 1.5s a 2.5s
+        duration: Math.random() * (4 - 3) + 3, // Czas trwania między 3s a 4s (wcześniej 1.5s a 2.5s)
       };
     });
   }, [dynamicNumberOfBubbles, xpProgress]);
