@@ -7,7 +7,7 @@ interface ScrollableListProps {
   itemHeightPx?: number; // Rzeczywista wysokość pojedynczego elementu (np. 44px dla nawyków)
   itemMarginYPx?: number; // Pionowy margines między elementami (np. 12px dla space-y-3)
   containerPaddingTopPx?: number; // Padding na górze wewnętrznego kontenera przewijania (np. 8px dla pt-2)
-  visibleItemsCount?: number; // Maksymalna liczba widocznych elementów (używane tylko do określenia, czy strzałki są potrzebne)
+  // visibleItemsCount?: number; // Usunięto, ponieważ logika strzałek będzie dynamiczna
   emptyMessage?: string; // Wiadomość wyświetlana, gdy lista jest pusta
 }
 
@@ -23,7 +23,6 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
   itemHeightPx = 44, // Domyślna wysokość elementu (dla nawyków i zadań projektów)
   itemMarginYPx = 12, // Domyślny margines space-y-3
   containerPaddingTopPx = 8, // Domyślny padding pt-2
-  visibleItemsCount = 10, // Maksymalna liczba widocznych elementów (używane tylko do określenia, czy strzałki są potrzebne)
   emptyMessage = 'Brak elementów do wyświetlenia',
 }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -43,16 +42,25 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
     checkScrollability();
     const currentRef = scrollContainerRef.current;
     if (currentRef) {
-      currentRef.addEventListener('scroll', checkScrollability);
-      window.addEventListener('resize', checkScrollability);
+      // Use a small delay to ensure layout is stable before checking scrollability
+      const resizeObserver = new ResizeObserver(() => {
+        setTimeout(checkScrollability, 50);
+      });
+      resizeObserver.observe(currentRef);
+      window.addEventListener('resize', checkScrollability); // Keep window resize listener
+
+      // Initial check and re-check on content change
+      setTimeout(checkScrollability, 50); // Initial check
     }
     return () => {
       if (currentRef) {
-        currentRef.removeEventListener('scroll', checkScrollability);
+        // No need to disconnect ResizeObserver if it's created inside useEffect and tied to currentRef
+        // If resizeObserver was defined outside, it would need to be disconnected.
+        // For simplicity, let's just remove the window listener.
         window.removeEventListener('resize', checkScrollability);
       }
     };
-  }, [items.length]); // Zależność tylko od liczby elementów, nie od wysokości
+  }, [items.length, children]); // Depend on items.length and children to re-check on content changes
 
   const handleScroll = (direction: 'up' | 'down') => {
     if (scrollContainerRef.current) {
@@ -64,8 +72,8 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
     }
   };
 
-  // Logika showArrows może pozostać, ale nie będzie używana do ustawiania maxHeight
-  const showArrows = items.length > visibleItemsCount;
+  // Now, showArrows is truly dynamic based on scrollability
+  const showArrows = canScrollUp || canScrollDown;
 
   if (items.length === 0) {
     return (
@@ -92,10 +100,10 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
       <div
         ref={scrollContainerRef}
         className="flex-1 overflow-y-auto hide-scrollbar"
-        style={{ scrollSnapType: 'y mandatory' }} // Usunięto maxHeight
+        style={{ scrollSnapType: 'y mandatory' }}
       >
         <div className="space-y-3 pt-2">
-          <AnimatePresence initial={false}> {/* initial={false} to prevent initial animation on mount for all items */}
+          <AnimatePresence initial={false}>
             {items.map((item, index) => (
               <motion.div
                 key={item.key || index}
@@ -103,9 +111,9 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                whileInView="visible" // For on-scroll reveal
-                viewport={{ once: true, amount: 0.5 }} // Animate only once when 50% in view
-                style={{ scrollSnapAlign: 'start' }} // Added scrollSnapAlign
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.5 }}
+                style={{ scrollSnapAlign: 'start' }}
               >
                 {item}
               </motion.div>
