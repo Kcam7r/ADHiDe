@@ -5,6 +5,7 @@ import { Mission, DailyTask } from '../types';
 import { MissionHistoryModal } from './MissionHistoryModal';
 import { DailyTaskStamp } from './DailyTaskStamp';
 import { showSuccessToast, showInfoToast, showErrorToast } from '../utils/toast';
+import { Carousel } from './Carousel'; // Import Carousel
 
 export const Dashboard: React.FC = () => {
   const { 
@@ -221,6 +222,87 @@ export const Dashboard: React.FC = () => {
     }, 300);
   };
 
+  const renderHabitItems = () => (
+    habits.map((habit) => (
+      <div
+        key={habit.id}
+        onClick={(e) => handleHabitClick(habit.id, e)}
+        className={`p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 
+        hover:translate-y-[-2px] hover:shadow-lg active:scale-[0.98] active:brightness-110
+        ${
+          habit.type === 'positive' 
+            ? 'bg-green-600 border-green-500' 
+            : 'bg-red-600 border-red-500'
+        } ${animatingHabits.has(habit.id) 
+            ? (habit.type === 'positive' ? 'animate-habit-pulse-positive' : 'animate-habit-pulse-negative') 
+            : 'hover:bg-opacity-80'
+        }`}
+      >
+        <div className="flex items-center justify-between">
+          <span className="text-white font-medium">{habit.name}</span>
+          <span className="text-white text-sm font-bold">
+            {habit.count}x
+          </span>
+        </div>
+      </div>
+    ))
+  );
+
+  const renderDailyTaskItems = () => (
+    displayDailyTasks.map((task) => (
+      <div
+        key={task.id}
+        onClick={(e) => handleDailyTaskClick(task.id, e)}
+        className={`relative p-4 rounded-lg transition-all duration-200 cursor-pointer bg-gray-700 border-2 border-gray-600
+          hover:translate-y-[-2px] hover:shadow-lg active:scale-[0.98] active:brightness-110
+          ${animatingOutTasks.has(task.id) ? 'animate-daily-task-shrink-out' : ''}
+        `}
+      >
+        <span className={`text-white`}>
+          {task.title}
+        </span>
+        {/* Render DailyTaskStamp only if it's currently animating out */}
+        {animatingOutTasks.has(task.id) && (
+          <DailyTaskStamp onAnimationEnd={() => { /* No action needed here, task will move to completedTodayVisual */ }} />
+        )}
+      </div>
+    ))
+  );
+
+  const renderMissionItems = () => (
+    sortedActiveMissions.map((mission) => (
+      <div
+        key={mission.id}
+        id={`mission-${mission.id}`}
+        onClick={(e) => handleMissionComplete(mission.id, e)}
+        className={`p-4 rounded-lg cursor-pointer transition-all duration-200 
+        hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110
+        ${
+          mission.projectId ? 'bg-purple-600 hover:bg-purple-500' : 'bg-cyan-600 hover:bg-cyan-500'
+        } ${fadingOutMissions.has(mission.id) ? 'animate-mission-fade-out' : ''}
+          ${missionReaction[mission.id] === 'normal' ? 'animate-mission-pulse-normal' : ''}
+          ${missionReaction[mission.id] === 'important' ? 'animate-mission-pulse-important' : ''}
+          ${missionReaction[mission.id] === 'urgent' ? 'animate-mission-pulse-urgent' : ''}
+        `}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            {getPriorityIcon(mission.priority)}
+            <span className={`font-medium ${getPriorityColor(mission.priority)}`}>
+              {mission.title}
+            </span>
+          </div>
+          <div>
+            {getEnergyIcon(mission.energy)}
+          </div>
+        </div>
+        {mission.description && (
+          <p className="text-gray-200 text-sm mt-2">{mission.description}</p>
+        )}
+      </div>
+    ))
+  );
+
   return (
     <div className="flex-1 p-6 bg-gray-900 min-h-screen">
       <div className="max-w-7xl mx-auto">
@@ -234,37 +316,21 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              <div className="space-y-3">
-                {habits.map((habit) => (
-                  <div
-                    key={habit.id}
-                    onClick={(e) => handleHabitClick(habit.id, e)}
-                    className={`p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 
-                    hover:translate-y-[-2px] hover:shadow-lg active:scale-[0.98] active:brightness-110
-                    ${
-                      habit.type === 'positive' 
-                        ? 'bg-green-600 border-green-500' 
-                        : 'bg-red-600 border-red-500'
-                    } ${animatingHabits.has(habit.id) 
-                        ? (habit.type === 'positive' ? 'animate-habit-pulse-positive' : 'animate-habit-pulse-negative') 
-                        : 'hover:bg-opacity-80'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-white font-medium">{habit.name}</span>
-                      <span className="text-white text-sm font-bold">
-                        {habit.count}x
-                      </span>
-                    </div>
-                  </div>
-                ))}
-                {habits.length === 0 && (
-                  <div className="text-gray-400 text-center py-4">
-                    <p>Brak nawyków do wyświetlenia</p>
-                    <p className="text-sm mt-1">Dodaj nowe nawyki w Quest Log</p>
-                  </div>
-                )}
-              </div>
+              {habits.length > 9 ? (
+                <Carousel itemsPerPage={4} contentHeightClass="h-[304px]">
+                  {renderHabitItems()}
+                </Carousel>
+              ) : (
+                <div className="space-y-3">
+                  {renderHabitItems()}
+                </div>
+              )}
+              {habits.length === 0 && (
+                <div className="text-gray-400 text-center py-4">
+                  <p>Brak nawyków do wyświetlenia</p>
+                  <p className="text-sm mt-1">Dodaj nowe nawyki w Quest Log</p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -274,32 +340,21 @@ export const Dashboard: React.FC = () => {
               <span>🗓️</span>
               <span>Codzienne</span>
             </h2>
-            <div className="space-y-3">
-              {displayDailyTasks.map((task) => (
-                <div
-                  key={task.id}
-                  onClick={(e) => handleDailyTaskClick(task.id, e)}
-                  className={`relative p-4 rounded-lg transition-all duration-200 cursor-pointer bg-gray-700 border-2 border-gray-600
-                    hover:translate-y-[-2px] hover:shadow-lg active:scale-[0.98] active:brightness-110
-                    ${animatingOutTasks.has(task.id) ? 'animate-daily-task-shrink-out' : ''}
-                  `}
-                >
-                  <span className={`text-white`}>
-                    {task.title}
-                  </span>
-                  {/* Render DailyTaskStamp only if it's currently animating out */}
-                  {animatingOutTasks.has(task.id) && (
-                    <DailyTaskStamp onAnimationEnd={() => { /* No action needed here, task will move to completedTodayVisual */ }} />
-                  )}
-                </div>
-              ))}
-              {displayDailyTasks.length === 0 && completedTodayVisual.length === 0 && (
-                <div className="text-gray-400 text-center py-4">
-                  <p>Brak zadań codziennych</p>
-                  <p className="text-sm mt-1">Dodaj nowe zadania w Quest Log</p>
-                </div>
-              )}
-            </div>
+            {displayDailyTasks.length > 9 ? (
+              <Carousel itemsPerPage={4} contentHeightClass="h-[304px]">
+                {renderDailyTaskItems()}
+              </Carousel>
+            ) : (
+              <div className="space-y-3">
+                {renderDailyTaskItems()}
+              </div>
+            )}
+            {displayDailyTasks.length === 0 && completedTodayVisual.length === 0 && (
+              <div className="text-gray-400 text-center py-4">
+                <p>Brak zadań codziennych</p>
+                <p className="text-sm mt-1">Dodaj nowe zadania w Quest Log</p>
+              </div>
+            )}
 
             {completedTodayVisual.length > 0 && (
               <div className="mt-6 pt-4 border-t border-gray-700">
@@ -338,45 +393,21 @@ export const Dashboard: React.FC = () => {
                 <Archive className="w-5 h-5" />
               </button>
             </div>
-            <div className="space-y-3">
-              {sortedActiveMissions.map((mission) => (
-                <div
-                  key={mission.id}
-                  id={`mission-${mission.id}`}
-                  onClick={(e) => handleMissionComplete(mission.id, e)}
-                  className={`p-4 rounded-lg cursor-pointer transition-all duration-200 
-                  hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110
-                  ${
-                    mission.projectId ? 'bg-purple-600 hover:bg-purple-500' : 'bg-cyan-600 hover:bg-cyan-500'
-                  } ${fadingOutMissions.has(mission.id) ? 'animate-mission-fade-out' : ''}
-                    ${missionReaction[mission.id] === 'normal' ? 'animate-mission-pulse-normal' : ''}
-                    ${missionReaction[mission.id] === 'important' ? 'animate-mission-pulse-important' : ''}
-                    ${missionReaction[mission.id] === 'urgent' ? 'animate-mission-pulse-urgent' : ''}
-                  `}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      {getPriorityIcon(mission.priority)}
-                      <span className={`font-medium ${getPriorityColor(mission.priority)}`}>
-                        {mission.title}
-                      </span>
-                    </div>
-                    <div>
-                      {getEnergyIcon(mission.energy)}
-                    </div>
-                  </div>
-                  {mission.description && (
-                    <p className="text-gray-200 text-sm mt-2">{mission.description}</p>
-                  )}
-                </div>
-              ))}
-              {sortedActiveMissions.length === 0 && (
-                <div className="text-gray-400 text-center py-4">
-                  <p>Brak aktywnych misji</p>
-                  <p className="text-sm mt-1">Aktywuj misje w Quest Log lub Garażu</p>
-                </div>
-              )}
-            </div>
+            {sortedActiveMissions.length > 9 ? (
+              <Carousel itemsPerPage={4} contentHeightClass="h-[304px]">
+                {renderMissionItems()}
+              </Carousel>
+            ) : (
+              <div className="space-y-3">
+                {renderMissionItems()}
+              </div>
+            )}
+            {sortedActiveMissions.length === 0 && (
+              <div className="text-gray-400 text-center py-4">
+                <p>Brak aktywnych misji</p>
+                <p className="text-sm mt-1">Aktywuj misje w Quest Log lub Garażu</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
