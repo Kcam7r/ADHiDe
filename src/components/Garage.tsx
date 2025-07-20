@@ -733,7 +733,7 @@ export const Garage: React.FC = () => {
                                   task.completed ? 'line-through text-gray-400' : 'text-white'
                                 }`}>
                                   {task.title}
-                                </h4>
+                                </h5>
                                 {task.description && (
                                   <p className="text-gray-300 text-sm mt-1">{task.description}</p>
                                 )}
