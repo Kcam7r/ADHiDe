@@ -383,6 +383,8 @@ html {
   transform: translateX(-50%); /* Wyśrodkowanie bąbelka poziomo */
   filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5)); /* Subtelny blask dla wszystkich bąbelków */
   will-change: transform, opacity, filter; /* Dodano will-change */
+  opacity: 0; /* Dodano: Domyślnie niewidoczne */
+  bottom: 0; /* Dodano: Zaczyna na dole kontenera */
 }
 
 /* Style dla bąbelków wybuchowych (domyślna animacja) */
