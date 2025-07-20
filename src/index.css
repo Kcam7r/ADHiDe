@@ -37,6 +37,16 @@ html {
   scrollbar-color: #4b5563 #1f2937; /* Kolor uchwytu i ścieżki */
 }
 
+/* Hide scrollbar for specific elements */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
 
 @keyframes fadeOut {
   from { opacity: 1; transform: translateY(0) scale(1) rotateZ(0deg); }
