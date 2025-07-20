@@ -105,8 +105,8 @@ export const Garage: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 p-6 bg-gray-900 min-h-screen">
-      <div className="max-w-6xl mx-auto">
+    <div className="flex-1 p-6 bg-gray-900 h-full"> {/* Zmieniono min-h-screen na h-full */}
+      <div className="max-w-6xl mx-auto h-full flex flex-col"> {/* Dodano h-full i flex flex-col */}
         <h1 className="text-3xl font-bold text-white mb-8">Garaż</h1>
         
         <div className="mb-6">
@@ -203,7 +203,7 @@ export const Garage: React.FC = () => {
         )}
 
         {/* Projects List */}
-        <div className="space-y-4">
+        <div className="space-y-4 flex-1 overflow-y-auto min-h-0"> {/* Dodano flex-1 overflow-y-auto min-h-0 */}
           {projects.map((project) => (
             <div key={project.id} className="bg-gray-800 rounded-lg p-6 shadow-xl border border-gray-700 hover:border-cyan-600 transition-all duration-300 
             hover:translate-y-[-2px] hover:shadow-xl">

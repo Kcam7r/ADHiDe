@@ -196,8 +196,8 @@ export const QuestLog: React.FC = () => {
   );
 
   return (
-    <div className="flex-1 p-6 bg-gray-900 min-h-screen">
-      <div className="max-w-4xl mx-auto">
+    <div className="flex-1 p-6 bg-gray-900 h-full"> {/* Zmieniono min-h-screen na h-full */}
+      <div className="max-w-4xl mx-auto h-full flex flex-col"> {/* Dodano h-full i flex flex-col */}
         <h1 className="text-3xl font-bold text-white mb-8">Quest Log</h1>
         
         {/* Tabs */}
@@ -283,11 +283,11 @@ export const QuestLog: React.FC = () => {
             )}
 
             {habits.length > 9 ? (
-              <Carousel>
+              <Carousel className="flex-1">
                 {renderHabitItems()}
               </Carousel>
             ) : (
-              <div className="space-y-3 flex-1 overflow-y-auto">
+              <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
                 {renderHabitItems()}
                 {habits.length === 0 && (
                   <div className="text-gray-400 text-center h-full flex items-center justify-center">
@@ -347,12 +347,12 @@ export const QuestLog: React.FC = () => {
             )}
 
             {dailyTasks.length > 9 ? (
-              <Carousel>
+              <Carousel className="flex-1">
                 {renderDailyTaskItems()}
               </Carousel>
             ) : (
-              <div className="space-y-3 flex-1 overflow-y-auto">
-                {renderDailyTaskItems()}
+              <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
+                {renderDailyTaskItems(dailyTasks)}
                 {dailyTasks.length === 0 && (
                   <div className="text-gray-400 text-center h-full flex items-center justify-center">
                     <p>Brak zadań codziennych</p>
@@ -456,11 +456,11 @@ export const QuestLog: React.FC = () => {
             )}
 
             {missions.length > 9 ? (
-              <Carousel>
+              <Carousel className="flex-1">
                 {renderMissionItems()}
               </Carousel>
             ) : (
-              <div className="space-y-3 flex-1 overflow-y-auto">
+              <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
                 {renderMissionItems()}
                 {missions.length === 0 && (
                   <div className="text-gray-400 text-center h-full flex items-center justify-center">
