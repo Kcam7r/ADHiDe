@@ -22,7 +22,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
   itemHeightPx = 44,
   itemMarginYPx = 12,
   containerPaddingTopPx = 8,
-  visibleItemsCount = 10, // Domyślna wartość, jeśli nie zostanie przekazana
+  visibleItemsCount, // Usunięto domyślną wartość, aby można było ją pominąć
   emptyMessage = 'Brak elementów do wyświetlenia',
 }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -74,14 +74,18 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
     }
   };
 
-  // Oblicz maksymalną wysokość na podstawie liczby widocznych elementów
-  const calculatedMaxHeight = 
-    (visibleItemsCount * itemHeightPx) + 
-    ((visibleItemsCount > 0 ? visibleItemsCount - 1 : 0) * itemMarginYPx) + 
-    containerPaddingTopPx;
+  // Oblicz maksymalną wysokość na podstawie liczby widocznych elementów, TYLKO JEŚLI visibleItemsCount jest podany
+  const calculatedMaxHeight = visibleItemsCount !== undefined
+    ? (visibleItemsCount * itemHeightPx) + 
+      ((visibleItemsCount > 0 ? visibleItemsCount - 1 : 0) * itemMarginYPx) + 
+      containerPaddingTopPx
+    : undefined;
 
   // Strzałki pojawiają się, jeśli jest więcej elementów niż może się zmieścić
-  const showArrows = items.length > visibleItemsCount;
+  // Jeśli visibleItemsCount nie jest podany, strzałki pojawiają się, gdy scrollHeight > clientHeight
+  const showArrows = visibleItemsCount !== undefined 
+    ? items.length > visibleItemsCount 
+    : (scrollContainerRef.current ? scrollContainerRef.current.scrollHeight > scrollContainerRef.current.clientHeight : false);
 
   if (items.length === 0) {
     return (
@@ -92,7 +96,10 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
   }
 
   return (
-    <div className="flex flex-col" style={{ maxHeight: `${calculatedMaxHeight}px` }}>
+    <div 
+      className="flex flex-col" 
+      style={calculatedMaxHeight !== undefined ? { maxHeight: `${calculatedMaxHeight}px` } : { flex: 1 }} // Użyj flex: 1, jeśli maxHeight nie jest ustawiony
+    >
       {showArrows && (
         <button
           onClick={() => handleScroll('up')}
