@@ -82,18 +82,10 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
   // Strzałki pojawiają się, jeśli jest więcej elementów niż może się zmieścić
   const showArrows = items.length > visibleItemsCount;
 
-  if (items.length === 0) {
-    return (
-      <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
-        <p>{emptyMessage}</p>
-      </div>
-    );
-  }
-
   return (
     <div 
-      className="flex flex-col" 
-      style={{ maxHeight: `${calculatedMaxHeight}px` }} // Always sets maxHeight
+      className="flex flex-col flex-1 min-h-0" // Dodano flex-1 min-h-0
+      style={{ maxHeight: `${calculatedMaxHeight}px` }} // Zawsze ustawia maxHeight
     >
       {showArrows && (
         <button
@@ -107,32 +99,38 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
           <ChevronUp className="w-5 h-5" />
         </button>
       )}
-      <div
-        ref={scrollContainerRef}
-        className="flex-1 overflow-y-auto hide-scrollbar"
-        style={{ 
-          scrollSnapType: 'y mandatory',
-        }}
-      >
-        <div className="space-y-3 pt-2">
-          <AnimatePresence initial={false}>
-            {items.map((item, index) => (
-              <motion.div
-                key={item.key || index}
-                variants={itemVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.5 }}
-                style={{ scrollSnapAlign: 'start' }}
-              >
-                {item}
-              </motion.div>
-            ))}
-          </AnimatePresence>
+      {items.length === 0 ? (
+        <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
+          <p>{emptyMessage}</p>
         </div>
-      </div>
+      ) : (
+        <div
+          ref={scrollContainerRef}
+          className="flex-1 overflow-y-auto hide-scrollbar"
+          style={{ 
+            scrollSnapType: 'y mandatory',
+          }}
+        >
+          <div className="space-y-3 pt-2">
+            <AnimatePresence initial={false}>
+              {items.map((item, index) => (
+                <motion.div
+                  key={item.key || index}
+                  variants={itemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.5 }}
+                  style={{ scrollSnapAlign: 'start' }}
+                >
+                  {item}
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+        </div>
+      )}
       {showArrows && (
         <button
           onClick={() => handleScroll('down')}
