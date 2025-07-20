@@ -51,7 +51,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
       resizeObserver.observe(currentRef);
       window.addEventListener('resize', checkScrollability); 
 
-      setTimeout(checkScrollability, 50);
+      setTimeout(checkScrollability, 50); // Initial check after render
     }
     return () => {
       if (currentRef) {
@@ -62,7 +62,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
         window.removeEventListener('resize', checkScrollability);
       }
     };
-  }, [items.length, children, itemHeightPx, itemMarginYPx, containerPaddingTopPx, visibleItemsCount]); 
+  }, [items.length, children]); // Dependencies simplified, as height is now flex-based
 
   const handleScroll = (direction: 'up' | 'down') => {
     if (scrollContainerRef.current) {
@@ -74,37 +74,21 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
     }
   };
 
-  const emptyStateHeightPx = 50; // Szacowana wysokość dla pustego komunikatu z paddingiem py-4
+  // The empty state div should also be flex-1 to center its content vertically.
+  const emptyStateClasses = "text-gray-400 text-center py-4 flex-1 flex items-center justify-center";
 
-  const calculatedMaxHeight = useMemo(() => {
-    return (visibleItemsCount * itemHeightPx) + 
-           ((visibleItemsCount > 0 ? visibleItemsCount - 1 : 0) * itemMarginYPx) + 
-           containerPaddingTopPx;
-  }, [visibleItemsCount, itemHeightPx, itemMarginYPx, containerPaddingTopPx]);
-
-  const currentHeight = useMemo(() => {
-    if (items.length === 0) {
-      return emptyStateHeightPx;
-    }
-
-    const heightOfItems = (items.length * itemHeightPx) + ((items.length - 1) * itemMarginYPx);
-    const totalContentHeight = heightOfItems + containerPaddingTopPx;
-
-    return Math.min(totalContentHeight, calculatedMaxHeight);
-  }, [items.length, itemHeightPx, itemMarginYPx, containerPaddingTopPx, calculatedMaxHeight, emptyStateHeightPx]);
-
-  // Strzałki pojawiają się, jeśli jest więcej elementów niż może się zmieścić
-  const showArrows = items.length > visibleItemsCount;
+  // showArrows logic should be based on actual scrollHeight vs clientHeight
+  // This will be updated in checkScrollability, so we just use the state.
+  const showArrows = canScrollUp || canScrollDown;
 
   return (
     <div 
-      className="flex flex-col"
-      style={{ maxHeight: `${currentHeight}px` }}
+      className="flex flex-col flex-1" // Make the outer div flex-1 to fill parent
     >
-      {showArrows && (
+      {showArrows && ( // Show up arrow only if can scroll up
         <button
           onClick={() => handleScroll('up')}
-          disabled={!canScrollUp}
+          disabled={!canScrollUp} // Disable if cannot scroll up
           className={`p-1 rounded-full self-center mb-2 transition-colors active:scale-[0.98] active:brightness-110
             ${canScrollUp ? 'text-gray-400 hover:bg-gray-700 hover:text-white' : 'text-gray-600 cursor-not-allowed'}
           `}
@@ -114,13 +98,13 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
         </button>
       )}
       {items.length === 0 ? (
-        <div className="text-gray-400 text-center py-4">
+        <div className={emptyStateClasses}>
           <p>{emptyMessage}</p>
         </div>
       ) : (
         <div
           ref={scrollContainerRef}
-          className="flex-1 overflow-y-auto hide-scrollbar"
+          className="flex-1 overflow-y-auto hide-scrollbar" // This is the actual scrollable area
           style={{ 
             scrollSnapType: 'y mandatory',
           }}
@@ -145,10 +129,10 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
           </div>
         </div>
       )}
-      {showArrows && (
+      {showArrows && ( // Show down arrow only if can scroll down
         <button
           onClick={() => handleScroll('down')}
-          disabled={!canScrollDown}
+          disabled={!canScrollDown} // Disable if cannot scroll down
           className={`p-1 rounded-full self-center mt-2 transition-colors active:scale-[0.98] active:brightness-110
             ${canScrollDown ? 'text-gray-400 hover:bg-gray-700 hover:text-white' : 'text-gray-600 cursor-not-allowed'}
           `}
