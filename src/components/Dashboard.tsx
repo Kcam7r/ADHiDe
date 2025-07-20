@@ -29,9 +29,6 @@ export const Dashboard: React.FC = () => {
   const [animatingOutTasks, setAnimatingOutTasks] = useState(new Set<string>());
   const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedAnimatedTasks] = useState(new Set<string>());
 
-  const [fadingOutMissions, setFadingOutMissions] = useState(new Set<string>());
-  const [missionReaction, setMissionReaction] = useState<{[key: string]: Mission['priority'] | null}>({});
-
   useEffect(() => {
     const active = appDailyTasks.filter(task => 
       !task.completed && !animatingOutTasks.has(task.id)
@@ -325,21 +322,23 @@ export const Dashboard: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start h-full min-h-0">
           {/* Nawyki */}
           <div className="lg:col-span-1 flex flex-col flex-1 min-h-0">
-            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1 min-h-0 overflow-hidden"> {/* Dodano overflow-hidden */}
-              <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
+            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1 min-h-0 overflow-hidden">
+              <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm flex-shrink-0">
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={36} itemMarginYPx={12}>
-                {renderHabitItems()}
-              </ScrollableList>
+              <div className="flex-1 min-h-0"> {/* Nowy kontener dla ScrollableList */}
+                <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={36} itemMarginYPx={12}>
+                  {renderHabitItems()}
+                </ScrollableList>
+              </div>
             </div>
           </div>
 
           {/* Codzienne */}
           <div className="lg:col-span-1 flex flex-col flex-1 min-h-0">
-            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1 min-h-0 overflow-hidden"> {/* Dodano overflow-hidden */}
-              <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
+            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1 min-h-0 overflow-hidden">
+              <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm flex-shrink-0">
                 <span>🗓️</span>
                 <span>Codzienne</span>
               </h2>
@@ -364,8 +363,8 @@ export const Dashboard: React.FC = () => {
 
           {/* Misje */}
           <div className="lg:col-span-1 flex flex-col flex-1 min-h-0">
-            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1 min-h-0 overflow-hidden"> {/* Dodano overflow-hidden */}
-              <div className="flex items-center justify-between mb-4">
+            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1 min-h-0 overflow-hidden">
+              <div className="flex items-center justify-between mb-4 flex-shrink-0">
                 <h2 className="text-xl font-semibold text-white flex items-center space-x-2 text-shadow-sm">
                   <span>🎯</span>
                   <span>Misje</span>
@@ -377,9 +376,11 @@ export const Dashboard: React.FC = () => {
                   <Archive className="w-5 h-5" />
                 </button>
               </div>
-              <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={60} itemMarginYPx={12}>
-                {renderMissionItems()}
-              </ScrollableList>
+              <div className="flex-1 min-h-0"> {/* Nowy kontener dla ScrollableList */}
+                <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={60} itemMarginYPx={12}>
+                  {renderMissionItems()}
+                </ScrollableList>
+              </div>
             </div>
           </div>
         </div>
