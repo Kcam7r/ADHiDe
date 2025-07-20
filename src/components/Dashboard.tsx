@@ -330,7 +330,7 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={60} visibleItemsCount={9}> {/* Zmieniono visibleItemsCount na 9 */}
+              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={60} visibleItemsCount={9}>
                 {renderHabitItems()}
               </ScrollableList>
             </div>
@@ -374,7 +374,7 @@ export const Dashboard: React.FC = () => {
                 <Archive className="w-5 h-5" />
               </button>
             </div>
-            <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={60} visibleItemsCount={10}>
+            <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={60} visibleItemsCount={9}> {/* Zmieniono visibleItemsCount na 9 */}
               {renderMissionItems()}
             </ScrollableList>
           </div>
