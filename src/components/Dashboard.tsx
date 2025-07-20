@@ -413,7 +413,6 @@ export const Dashboard: React.FC = () => {
                 {sortedActiveMissions.length === 0 && (
                   <div className="text-gray-400 text-center h-full flex items-center justify-center">
                     <p>Brak aktywnych misji</p>
-                    <p className="text-sm mt-1">Aktywuj misje w Quest Log lub Garażu</p>
                   </div>
                 )}
               </div>
