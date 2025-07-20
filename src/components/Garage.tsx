@@ -272,359 +272,175 @@ export const Garage: React.FC = () => {
 
         {/* Projects List */}
         <div className="space-y-4 flex-1 flex flex-col"> {/* Zmieniono overflow-y-auto min-h-0 na flex flex-col */}
-          {projects.length > 9 ? (
-            <Carousel className="flex-1"> {/* Zmieniono h-full na flex-1 */}
-              {projects.map((project) => (
-                <div key={project.id} className="bg-gray-800 rounded-lg p-6 shadow-xl border border-gray-700 hover:border-cyan-600 transition-all duration-300 
-                hover:translate-y-[-2px] hover:shadow-xl">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <h3 className="text-xl font-semibold text-white">{project.name}</h3>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${getStatusColor(project.status)}`}>
-                          {getStatusLabel(project.status)}
-                        </span>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${getPriorityColor(project.priority)}`}>
-                          {project.priority}
-                        </span>
-                      </div>
-                      
-                      {/* Progress Bar */}
-                      <div className="mb-3">
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm text-gray-400">Postęp</span>
-                          <span className="text-sm text-gray-400">
-                            {project.tasks.filter(t => t.completed).length} / {project.tasks.length} zadań
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-700 rounded-full h-3 relative overflow-hidden">
-                          <div 
-                            className="bg-gradient-to-r from-green-500 to-green-700 h-full rounded-full transition-all duration-500 ease-out flex items-center justify-end pr-2"
-                            style={{ width: `${getProgressPercentage(project)}%` }}
-                          >
-                            {getProgressPercentage(project) > 10 && (
-                              <span className="text-xs font-bold text-white drop-shadow-sm">
-                                {getProgressPercentage(project)}%
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      {project.description && (
-                        <p className="text-gray-300 mb-3">{project.description}</p>
-                      )}
+          <Carousel className="flex-1"> {/* Zmieniono h-full na flex-1 */}
+            {projects.map((project) => (
+              <div key={project.id} className="bg-gray-800 rounded-lg p-6 shadow-xl border border-gray-700 hover:border-cyan-600 transition-all duration-300 
+              hover:translate-y-[-2px] hover:shadow-xl">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <h3 className="text-xl font-semibold text-white">{project.name}</h3>
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${getStatusColor(project.status)}`}>
+                        {getStatusLabel(project.status)}
+                      </span>
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${getPriorityColor(project.priority)}`}>
+                        {project.priority}
+                      </span>
                     </div>
                     
-                    <button
-                      onClick={() => toggleProjectExpansion(project.id)}
-                      className="text-gray-400 hover:text-white transition-colors ml-4 p-2 rounded-full hover:bg-gray-700 active:scale-[0.98] active:brightness-110"
-                    >
-                      {expandedProjects.has(project.id) ? 
-                        <ChevronUp className="w-6 h-6" /> : 
-                        <ChevronDown className="w-6 h-6" />
-                      }
-                    </button>
-                  </div>
-
-                  {expandedProjects.has(project.id) && (
-                    <div className="mt-6 pt-6 border-t border-gray-700">
-                      <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-lg font-medium text-white">Zadania Projektu</h4>
-                        <button
-                          onClick={() => toggleTaskForm(project.id)}
-                          className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors shadow-md active:scale-[0.98] active:brightness-110"
+                    {/* Progress Bar */}
+                    <div className="mb-3">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm text-gray-400">Postęp</span>
+                        <span className="text-sm text-gray-400">
+                          {project.tasks.filter(t => t.completed).length} / {project.tasks.length} zadań
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-700 rounded-full h-3 relative overflow-hidden">
+                        <div 
+                          className="bg-gradient-to-r from-green-500 to-green-700 h-full rounded-full transition-all duration-500 ease-out flex items-center justify-end pr-2"
+                          style={{ width: `${getProgressPercentage(project)}%` }}
                         >
-                          <Plus className="w-4 h-4" />
-                          <span>Dodaj Zadanie</span>
-                        </button>
-                      </div>
-
-                      {/* Task Form */}
-                      {showTaskForms.has(project.id) && (
-                        <form onSubmit={(e) => handleAddTask(project.id, e)} className="mb-4 p-4 bg-gray-700 rounded-lg border border-gray-600 shadow-inner">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                              <label className="block text-sm font-medium text-gray-300 mb-2">
-                                Tytuł zadania
-                              </label>
-                              <input
-                                type="text"
-                                value={taskForms[project.id]?.title || ''}
-                                onChange={(e) => setTaskForms({
-                                  ...taskForms,
-                                  [projectId]: { ...taskForms[projectId], title: e.target.value }
-                                })}
-                                className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
-                                placeholder="np. Zaprojektować header"
-                                required
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-300 mb-2">
-                                Priorytet
-                              </label>
-                              <select
-                                value={taskForms[project.id]?.priority || 'normal'}
-                                onChange={(e) => setTaskForms({
-                                  ...taskForms,
-                                  [projectId]: { ...taskForms[projectId], priority: e.target.value }
-                                })}
-                                className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
-                              >
-                                <option value="normal">Normalny</option>
-                                <option value="important">Ważny</option>
-                                <option value="urgent">Pilny</option>
-                              </select>
-                            </div>
-                          </div>
-                          
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                            <div>
-                              <label className="block text-sm font-medium text-gray-300 mb-2">
-                                Opis (opcjonalnie)
-                              </label>
-                              <textarea
-                                value={taskForms[project.id]?.description || ''}
-                                onChange={(e) => setTaskForms({
-                                  ...taskForms,
-                                  [projectId]: { ...taskForms[projectId], description: e.target.value }
-                                })}
-                                className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
-                                rows={2}
-                                placeholder="Szczegóły zadania..."
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-300 mb-2">
-                                Wymagana energia
-                              </label>
-                              <select
-                                value={taskForms[project.id]?.energy || 'medium'}
-                                onChange={(e) => setTaskForms({
-                                  ...taskForms,
-                                  [projectId]: { ...taskForms[projectId], energy: e.target.value }
-                                })}
-                                className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
-                              >
-                                <option value="low">Niska</option>
-                                <option value="medium">Średnia</option>
-                                <option value="high">Wysoka</option>
-                                <option value="concentration">Koncentracja</option>
-                              </select>
-                            </div>
-                          </div>
-                          
-                          <div className="flex space-x-3 mt-4">
-                            <button
-                              type="submit"
-                              className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md active:scale-[0.98] active:brightness-110"
-                            >
-                              Dodaj
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => toggleTaskForm(project.id)}
-                              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md active:scale-[0.98] active:brightness-110"
-                            >
-                              Anuluj
-                            </button>
-                          </div>
-                        </form>
-                      )}
-
-                      {/* Tasks List */}
-                      {project.tasks.length > 5 ? (
-                        <Carousel className="h-64"> {/* Ograniczona wysokość dla karuzeli zadań */}
-                          {renderTaskItems(project.tasks)}
-                        </Carousel>
-                      ) : (
-                        <div className="space-y-2 flex-1 overflow-y-auto min-h-0">
-                          {renderTaskItems(project.tasks)}
+                          {getProgressPercentage(project) > 10 && (
+                            <span className="text-xs font-bold text-white drop-shadow-sm">
+                              {getProgressPercentage(project)}%
+                            </span>
+                          )}
                         </div>
-                      )}
+                      </div>
                     </div>
-                  )}
+
+                    {project.description && (
+                      <p className="text-gray-300 mb-3">{project.description}</p>
+                    )}
+                  </div>
+                  
+                  <button
+                    onClick={() => toggleProjectExpansion(project.id)}
+                    className="text-gray-400 hover:text-white transition-colors ml-4 p-2 rounded-full hover:bg-gray-700 active:scale-[0.98] active:brightness-110"
+                  >
+                    {expandedProjects.has(project.id) ? 
+                      <ChevronUp className="w-6 h-6" /> : 
+                      <ChevronDown className="w-6 h-6" />
+                    }
+                  </button>
                 </div>
-              ))}
-            </Carousel>
-          ) : (
-            <div className="space-y-4 flex-1 overflow-y-auto min-h-0"> {/* Zmieniono overflow-y-auto min-h-0 na flex flex-col */}
-              {projects.map((project) => (
-                <div key={project.id} className="bg-gray-800 rounded-lg p-6 shadow-xl border border-gray-700 hover:border-cyan-600 transition-all duration-300 
-                hover:translate-y-[-2px] hover:shadow-xl">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <h3 className="text-xl font-semibold text-white">{project.name}</h3>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${getStatusColor(project.status)}`}>
-                          {getStatusLabel(project.status)}
-                        </span>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${getPriorityColor(project.priority)}`}>
-                          {project.priority}
-                        </span>
-                      </div>
-                      
-                      {/* Progress Bar */}
-                      <div className="mb-3">
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm text-gray-400">Postęp</span>
-                          <span className="text-sm text-gray-400">
-                            {project.tasks.filter(t => t.completed).length} / {project.tasks.length} zadań
-                          </span>
+
+                {expandedProjects.has(project.id) && (
+                  <div className="mt-6 pt-6 border-t border-gray-700">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="text-lg font-medium text-white">Zadania Projektu</h4>
+                      <button
+                        onClick={() => toggleTaskForm(project.id)}
+                        className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors shadow-md active:scale-[0.98] active:brightness-110"
+                      >
+                        <Plus className="w-4 h-4" />
+                        <span>Dodaj Zadanie</span>
+                      </button>
+                    </div>
+
+                    {/* Task Form */}
+                    {showTaskForms.has(project.id) && (
+                      <form onSubmit={(e) => handleAddTask(project.id, e)} className="mb-4 p-4 bg-gray-700 rounded-lg border border-gray-600 shadow-inner">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                              Tytuł zadania
+                            </label>
+                            <input
+                              type="text"
+                              value={taskForms[project.id]?.title || ''}
+                              onChange={(e) => setTaskForms({
+                                ...taskForms,
+                                [projectId]: { ...taskForms[projectId], title: e.target.value }
+                              })}
+                              className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
+                              placeholder="np. Zaprojektować header"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                              Priorytet
+                            </label>
+                            <select
+                              value={taskForms[project.id]?.priority || 'normal'}
+                              onChange={(e) => setTaskForms({
+                                ...taskForms,
+                                [projectId]: { ...taskForms[projectId], priority: e.target.value }
+                              })}
+                              className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
+                            >
+                              <option value="normal">Normalny</option>
+                              <option value="important">Ważny</option>
+                              <option value="urgent">Pilny</option>
+                            </select>
+                          </div>
                         </div>
-                        <div className="w-full bg-gray-700 rounded-full h-3 relative overflow-hidden">
-                          <div 
-                            className="bg-gradient-to-r from-green-500 to-green-700 h-full rounded-full transition-all duration-500 ease-out flex items-center justify-end pr-2"
-                            style={{ width: `${getProgressPercentage(project)}%` }}
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                              Opis (opcjonalnie)
+                            </label>
+                            <textarea
+                              value={taskForms[project.id]?.description || ''}
+                              onChange={(e) => setTaskForms({
+                                ...taskForms,
+                                [projectId]: { ...taskForms[projectId], description: e.target.value }
+                              })}
+                              className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
+                              rows={2}
+                              placeholder="Szczegóły zadania..."
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                              Wymagana energia
+                            </label>
+                            <select
+                              value={taskForms[project.id]?.energy || 'medium'}
+                              onChange={(e) => setTaskForms({
+                                ...taskForms,
+                                [projectId]: { ...taskForms[projectId], energy: e.target.value }
+                              })}
+                              className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
+                            >
+                              <option value="low">Niska</option>
+                              <option value="medium">Średnia</option>
+                              <option value="high">Wysoka</option>
+                              <option value="concentration">Koncentracja</option>
+                            </select>
+                          </div>
+                        </div>
+                        
+                        <div className="flex space-x-3 mt-4">
+                          <button
+                            type="submit"
+                            className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md active:scale-[0.98] active:brightness-110"
                           >
-                            {getProgressPercentage(project) > 10 && (
-                              <span className="text-xs font-bold text-white drop-shadow-sm">
-                                {getProgressPercentage(project)}%
-                              </span>
-                            )}
-                          </div>
+                            Dodaj
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => toggleTaskForm(project.id)}
+                            className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md active:scale-[0.98] active:brightness-110"
+                          >
+                            Anuluj
+                          </button>
                         </div>
-                      </div>
+                      </form>
+                    )}
 
-                      {project.description && (
-                        <p className="text-gray-300 mb-3">{project.description}</p>
-                      )}
-                    </div>
-                    
-                    <button
-                      onClick={() => toggleProjectExpansion(project.id)}
-                      className="text-gray-400 hover:text-white transition-colors ml-4 p-2 rounded-full hover:bg-gray-700 active:scale-[0.98] active:brightness-110"
-                    >
-                      {expandedProjects.has(project.id) ? 
-                        <ChevronUp className="w-6 h-6" /> : 
-                        <ChevronDown className="w-6 h-6" />
-                      }
-                    </button>
+                    {/* Tasks List */}
+                    <Carousel className="h-64"> {/* Ograniczona wysokość dla karuzeli zadań */}
+                      {renderTaskItems(project.tasks)}
+                    </Carousel>
                   </div>
-
-                  {expandedProjects.has(project.id) && (
-                    <div className="mt-6 pt-6 border-t border-gray-700">
-                      <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-lg font-medium text-white">Zadania Projektu</h4>
-                        <button
-                          onClick={() => toggleTaskForm(project.id)}
-                          className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors shadow-md active:scale-[0.98] active:brightness-110"
-                        >
-                          <Plus className="w-4 h-4" />
-                          <span>Dodaj Zadanie</span>
-                        </button>
-                      </div>
-
-                      {/* Task Form */}
-                      {showTaskForms.has(project.id) && (
-                        <form onSubmit={(e) => handleAddTask(project.id, e)} className="mb-4 p-4 bg-gray-700 rounded-lg border border-gray-600 shadow-inner">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                              <label className="block text-sm font-medium text-gray-300 mb-2">
-                                Tytuł zadania
-                              </label>
-                              <input
-                                type="text"
-                                value={taskForms[project.id]?.title || ''}
-                                onChange={(e) => setTaskForms({
-                                  ...taskForms,
-                                  [projectId]: { ...taskForms[projectId], title: e.target.value }
-                                })}
-                                className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
-                                placeholder="np. Zaprojektować header"
-                                required
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-300 mb-2">
-                                Priorytet
-                              </label>
-                              <select
-                                value={taskForms[project.id]?.priority || 'normal'}
-                                onChange={(e) => setTaskForms({
-                                  ...taskForms,
-                                  [projectId]: { ...taskForms[projectId], priority: e.target.value }
-                                })}
-                                className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
-                              >
-                                <option value="normal">Normalny</option>
-                                <option value="important">Ważny</option>
-                                <option value="urgent">Pilny</option>
-                              </select>
-                            </div>
-                          </div>
-                          
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                            <div>
-                              <label className="block text-sm font-medium text-gray-300 mb-2">
-                                Opis (opcjonalnie)
-                              </label>
-                              <textarea
-                                value={taskForms[project.id]?.description || ''}
-                                onChange={(e) => setTaskForms({
-                                  ...taskForms,
-                                  [projectId]: { ...taskForms[projectId], description: e.target.value }
-                                })}
-                                className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
-                                rows={2}
-                                placeholder="Szczegóły zadania..."
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium text-gray-300 mb-2">
-                                Wymagana energia
-                              </label>
-                              <select
-                                value={taskForms[project.id]?.energy || 'medium'}
-                                onChange={(e) => setTaskForms({
-                                  ...taskForms,
-                                  [projectId]: { ...taskForms[projectId], energy: e.target.value }
-                                })}
-                                className="w-full p-2 bg-gray-600 text-white rounded-lg border border-gray-500 focus:border-cyan-500 focus:outline-none"
-                              >
-                                <option value="low">Niska</option>
-                                <option value="medium">Średnia</option>
-                                <option value="high">Wysoka</option>
-                                <option value="concentration">Koncentracja</option>
-                              </select>
-                            </div>
-                          </div>
-                          
-                          <div className="flex space-x-3 mt-4">
-                            <button
-                              type="submit"
-                              className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md active:scale-[0.98] active:brightness-110"
-                            >
-                              Dodaj
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => toggleTaskForm(project.id)}
-                              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md active:scale-[0.98] active:brightness-110"
-                            >
-                              Anuluj
-                            </button>
-                          </div>
-                        </form>
-                      )}
-
-                      {/* Tasks List */}
-                      {project.tasks.length > 5 ? (
-                        <Carousel className="h-64"> {/* Ograniczona wysokość dla karuzeli zadań */}
-                          {renderTaskItems(project.tasks)}
-                        </Carousel>
-                      ) : (
-                        <div className="space-y-2 flex-1 overflow-y-auto min-h-0">
-                          {renderTaskItems(project.tasks)}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+                )}
+              </div>
+            ))}
+          </Carousel>
           
           {projects.length === 0 && (
             <div className="bg-gray-800 rounded-lg p-6 text-gray-400 text-center py-16 shadow-xl border border-gray-700">
