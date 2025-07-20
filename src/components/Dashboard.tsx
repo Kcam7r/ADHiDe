@@ -286,7 +286,7 @@ export const Dashboard: React.FC = () => {
         key={mission.id}
         id={`mission-${mission.id}`}
         onClick={(e) => handleMissionComplete(mission.id, e)}
-        className={`group p-3 rounded-lg cursor-pointer transition-all duration-200 shadow-inner-subtle
+        className={`group p-3 rounded-lg cursor-pointer transition-all duration-200 border-2 shadow-inner-subtle
         hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110
         ${
           mission.projectId ? 'bg-purple-600 border-purple-500 shadow-glow-purple' : 'bg-cyan-600 border-cyan-500 shadow-glow-cyan'
