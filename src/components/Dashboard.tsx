@@ -322,7 +322,7 @@ export const Dashboard: React.FC = () => {
       <h1 className="text-3xl font-bold text-white mb-4 px-6 pt-6">Pulpit</h1> 
       
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col px-6 pb-6"> 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start"> {/* Dodano items-start */}
           {/* Nawyki */}
           <div className="lg:col-span-1">
             <div className="bg-gray-800 rounded-lg flex flex-col p-6">
@@ -343,7 +343,7 @@ export const Dashboard: React.FC = () => {
               <span>Codzienne</span>
             </h2>
             
-            <div className="flex flex-col"> {/* Usunięto flex-1 min-h-0 */}
+            <div className=""> {/* Usunięto flex flex-col */}
               {/* Sekcja zadań do wykonania */}
               <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
               <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={80} visibleItemsCount={5}>
