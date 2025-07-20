@@ -171,7 +171,7 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
             style={{
               height: `${Math.max(5, xpProgress * 100)}%`,
               boxShadow: '0 0 15px rgba(255,165,0,0.7), inset 0 2px 5px rgba(255,255,255,0.3)',
-              overflow: 'hidden', // Dodano overflow: hidden tutaj
+              // Usunięto overflow: hidden; z tego elementu
             }}
             ref={liquidRef}
           >
