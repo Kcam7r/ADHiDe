@@ -11,11 +11,12 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 // Bezpośredni import Dashboard i Journal w celu diagnostyki i rozwiązania problemu
 import { Dashboard } from './components/Dashboard';
-import { Journal } from './components/Journal'; // Zmieniono na bezpośredni import
+import { Journal } from './components/Journal'; 
+import { Garage } from './components/Garage'; // Zmieniono na bezpośredni import
 
 // Leniwe ładowanie pozostałych głównych komponentów widoków
 const QuestLog = lazy(() => import('./components/QuestLog').then(module => ({ default: module.QuestLog })));
-const Garage = lazy(() => import('./components/Garage').then(module => ({ default: module.Garage })));
+// const Garage = lazy(() => import('./components/Garage').then(module => ({ default: module.Garage }))); // Zakomentowano
 
 function App() {
   const [activeView, setActiveView] = useState('dashboard');
@@ -31,7 +32,7 @@ function App() {
       case 'journal':
         return <Journal />;
       case 'garage':
-        return <Garage />;
+        return <Garage />; // Użycie bezpośrednio zaimportowanego komponentu
       default:
         return <Dashboard />;
     }
@@ -46,7 +47,7 @@ function App() {
           onOpenQuickThoughtsModal={() => setShowQuickThoughtsModal(true)}
           onOpenNewQuickThoughtModal={() => setShowQuickThoughtModal(true)} 
         />
-        <main className="flex-1 overflow-x-hidden overflow-y-hidden h-full"> {/* Dodano overflow-y-hidden */}
+        <main className="flex-1 overflow-x-hidden overflow-y-hidden h-full">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeView}
