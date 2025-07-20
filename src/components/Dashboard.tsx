@@ -316,7 +316,7 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-950 h-full"> {/* Zmieniono tło na gradient */}
-      <div className="max-w-7xl mx-auto h-full flex flex-col p-6">
+      <div className="max-w-7xl mx-auto flex-1 flex flex-col p-6"> {/* Zmieniono h-full na flex-1 */}
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full"> {/* Zmieniono flex-1 na h-full */}
           {/* Nawyki */}
