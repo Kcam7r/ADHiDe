@@ -340,13 +340,13 @@ html {
     filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8)); /* Utrzymanie blasku */
   }
   95% { /* Peak of the pop: slightly larger, brighter, then quickly fades */
-    bottom: 96%; /* Zmniejszona wysokość, aby pękało bliżej powierzchni */
-    transform: translateX(var(--bubble-drift-x, 0px)) scale(1.1); /* Lekkie powiększenie dla efektu pęknięcia */
+    bottom: 97%; /* Zmniejszona wysokość, aby pękało bliżej powierzchni */
+    transform: translateX(var(--bubble-drift-x, 0px)) scale(1.05); /* Zmniejszona skala dla efektu pęknięcia */
     opacity: 0.9; /* Nieco mniejsza widoczność */
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8)); /* Jaśniejszy blask dla pęknięcia */
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6)); /* Złagodzony blask */
   }
   100% { /* Disappear quickly after pop */
-    bottom: 99%; /* Przesuwa się nieco ponad płyn, ale mniej niż wcześniej */
+    bottom: 100%; /* Przesuwa się nieco ponad płyn, ale mniej niż wcześniej */
     transform: translateX(var(--bubble-drift-x, 0px)) scale(0); /* Zmniejsza się do zera */
     opacity: 0;
     filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0));
@@ -361,6 +361,7 @@ html {
   pointer-events: none;
   transform: translateX(-50%); /* Pozostawione tutaj jako domyślne wyśrodkowanie */
   filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5)); /* Subtelny blask dla wszystkich bąbelków */
+  will-change: transform, opacity, filter; /* Dodano will-change */
 }
 
 /* Nowa animacja dla pulsującej aury kryształu */
