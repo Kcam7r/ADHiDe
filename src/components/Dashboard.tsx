@@ -26,7 +26,7 @@ export const Dashboard: React.FC = () => {
   
   const [displayDailyTasks, setDisplayDailyTasks] = useState<DailyTask[]>([]);
   const [completedTodayVisual, setCompletedTodayVisual] = useState<DailyTask[]>([]);
-  const [animatingOutTasks, setAnimatingOutTasks] = useState(new Set<string>());
+  const [animatingOutTasks, setAnimatingOutTasks] = new Set<string>();
   const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedTasks] = useState(new Set<string>());
 
   const [fadingOutMissions, setFadingOutMissions] = useState(new Set<string>());
@@ -344,26 +344,14 @@ export const Dashboard: React.FC = () => {
               {/* Sekcja zadań do wykonania */}
               <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
               <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={52}>
-                {displayDailyTasks.length === 0 ? (
-                  <div className="text-gray-400 text-center flex items-center justify-center h-full">
-                    <p>Brak zadań do wykonania</p>
-                  </div>
-                ) : (
-                  renderDailyTaskItems(displayDailyTasks)
-                )}
+                {renderDailyTaskItems(displayDailyTasks)}
               </ScrollableList>
 
               {/* Sekcja ukończonych zadań */}
               <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col min-h-0">
                 <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
                 <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={52}>
-                  {completedTodayVisual.length === 0 ? (
-                    <div className="text-gray-400 text-center flex items-center justify-center h-full">
-                      <p>Brak ukończonych zadań</p>
-                    </div>
-                  ) : (
-                    renderDailyTaskItems(completedTodayVisual, true)
-                  )}
+                  {renderDailyTaskItems(completedTodayVisual, true)}
                 </ScrollableList>
               </div>
             </div>
