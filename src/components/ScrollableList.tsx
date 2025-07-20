@@ -37,7 +37,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
     const totalItemHeight = itemHeightPx * visibleItemsCount;
     const totalMarginHeight = itemMarginYPx * (visibleItemsCount > 0 ? (visibleItemsCount - 1) : 0);
     return totalItemHeight + totalMarginHeight + containerPaddingTopPx;
-  }, [itemHeightPx, itemMarginYPx, visibleItemsCount, containerPaddingTopPx]);
+  }, [itemHeightPx, itemMarginYPx, visibleItemsCount, containerPaddingTopPx, items.length]); // Dodano items.length do zależności
 
   const checkScrollability = () => {
     if (scrollContainerRef.current) {
@@ -71,7 +71,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
         window.removeEventListener('resize', checkScrollability);
       }
     };
-  }, [items.length, calculatedMaxHeight]); // Add calculatedMaxHeight to dependencies
+  }, [items.length, calculatedMaxHeight]);
 
   const handleScroll = (direction: 'up' | 'down') => {
     if (scrollContainerRef.current) {
@@ -88,8 +88,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
 
   return (
     <div 
-      className="flex flex-col" // Removed flex-1 here
-      style={{ maxHeight: items.length > 0 ? `${calculatedMaxHeight}px` : 'auto' }} // Apply calculated maxHeight
+      className="flex flex-col flex-1" // Dodano flex-1 tutaj, aby komponent rozciągał się w pionie
     >
       {showArrows && (
         <button
@@ -112,7 +111,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
           ref={scrollContainerRef}
           className="overflow-y-auto hide-scrollbar"
           style={{ 
-            // Usunięto sztywne ustawienie wysokości, aby lista mogła rosnąć
+            maxHeight: `${calculatedMaxHeight}px`, // Przeniesiono maxHeight na wewnętrzny div
             scrollSnapType: 'y mandatory',
           }}
         >

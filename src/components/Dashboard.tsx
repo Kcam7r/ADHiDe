@@ -22,7 +22,7 @@ export const Dashboard: React.FC = () => {
   } = useApp();
 
   const [showHistory, setShowHistory] = useState(false);
-  const [animatingHabits, setAnimatingHabits] = useState<Set<string>>(new Set());
+  const [animatingHabits, setAnimatingHabits] = new Set<string>();
   
   const [displayDailyTasks, setDisplayDailyTasks] = useState<DailyTask[]>([]);
   const [completedTodayVisual, setCompletedTodayVisual] = useState<DailyTask[]>([]);
@@ -324,37 +324,37 @@ export const Dashboard: React.FC = () => {
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col px-6 pb-6"> 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start h-full">
           {/* Nawyki */}
-          <div className="lg:col-span-1 flex flex-col h-full"> {/* Dodano flex flex-col h-full */}
-            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1"> {/* Dodano flex-1 */}
+          <div className="lg:col-span-1 flex flex-col h-full">
+            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1">
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={40} itemMarginYPx={12} containerPaddingTopPx={8} visibleItemsCount={9}> {/* Zmieniono itemHeightPx */}
+              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={36} itemMarginYPx={12} containerPaddingTopPx={8} visibleItemsCount={9}>
                 {renderHabitItems()}
               </ScrollableList>
             </div>
           </div>
 
           {/* Codzienne */}
-          <div className="lg:col-span-1 flex flex-col h-full"> {/* Dodano flex flex-col h-full */}
-            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1"> {/* Dodano flex-1 */}
+          <div className="lg:col-span-1 flex flex-col h-full">
+            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1">
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
                 <span>🗓️</span>
                 <span>Codzienne</span>
               </h2>
             
-              <div className="flex flex-col flex-1"> {/* Dodano flex-1 tutaj */}
+              <div className="flex flex-col flex-1">
                 {/* Sekcja zadań do wykonania */}
                 <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
-                <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={40} itemMarginYPx={12} containerPaddingTopPx={8} visibleItemsCount={5}> {/* Zmieniono itemHeightPx */}
+                <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={36} itemMarginYPx={12} containerPaddingTopPx={8} visibleItemsCount={5}>
                   {renderDailyTaskItems(displayDailyTasks)}
                 </ScrollableList>
 
                 {/* Sekcja ukończonych zadań */}
-                <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col"> {/* Dodano flex-1 flex flex-col */}
+                <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col">
                   <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
-                  <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={40} itemMarginYPx={12} containerPaddingTopPx={8} visibleItemsCount={5}> {/* Zmieniono itemHeightPx */}
+                  <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={36} itemMarginYPx={12} containerPaddingTopPx={8} visibleItemsCount={5}>
                     {renderDailyTaskItems(completedTodayVisual, true)}
                   </ScrollableList>
                 </div>
@@ -363,8 +363,8 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Misje */}
-          <div className="lg:col-span-1 flex flex-col h-full"> {/* Dodano flex flex-col h-full */}
-            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1"> {/* Dodano flex-1 */}
+          <div className="lg:col-span-1 flex flex-col h-full">
+            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold text-white flex items-center space-x-2 text-shadow-sm">
                   <span>🎯</span>
@@ -377,7 +377,7 @@ export const Dashboard: React.FC = () => {
                   <Archive className="w-5 h-5" />
                 </button>
               </div>
-              <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={40} itemMarginYPx={12} containerPaddingTopPx={8} visibleItemsCount={9}> {/* Zmieniono itemHeightPx */}
+              <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={60} itemMarginYPx={12} containerPaddingTopPx={8} visibleItemsCount={9}> {/* Zmieniono itemHeightPx na 60 dla misji, aby uwzględnić opis */}
                 {renderMissionItems()}
               </ScrollableList>
             </div>
