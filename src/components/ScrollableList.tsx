@@ -58,7 +58,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
         window.removeEventListener('resize', checkScrollability);
       }
     };
-  }, [items.length]);
+  }, [items.length, children]); // Dodano 'children' do zależności
 
   const handleScroll = (direction: 'up' | 'down') => {
     if (scrollContainerRef.current) {
@@ -74,7 +74,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
   const showArrows = canScrollUp || canScrollDown;
 
   return (
-    <div className="flex flex-col flex-1 max-h-full"> {/* Dodano max-h-full */}
+    <div className="flex flex-col flex-1"> {/* Usunięto max-h-full */}
       {showArrows && (
         <button
           onClick={() => handleScroll('up')}
