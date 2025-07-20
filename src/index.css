@@ -329,27 +329,29 @@ html {
 @keyframes bubble-rise {
   0% {
     bottom: 0%; /* Start at the very bottom of the liquid container */
-    transform: translateX(-50%) scale(0.2); /* Dodano translateX(-50%) */
+    transform: translateX(-50%) scale(0.2);
     opacity: 0;
-    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
+    filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0)); /* Brak blasku na początku */
   }
   10% {
     opacity: 0.8; /* Staje się widoczny */
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8)); /* Delikatny blask */
   }
-  85% { /* Zwalnia w miarę zbliżania się do góry */
+  90% { /* Główna faza wznoszenia */
     bottom: 95%; /* 5% poniżej górnej krawędzi płynu */
-    transform: translateX(-50%) scale(1); /* Dodano translateX(-50%) */
+    transform: translateX(-50%) scale(1);
     opacity: 0.8;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8)); /* Utrzymanie blasku */
   }
-  90% { /* Efekt pęknięcia: szybka ekspansja i blask */
+  95% { /* Efekt pęknięcia: szybka ekspansja i blask */
     bottom: 100%; /* Na samej górze płynu */
-    transform: translateX(-50%) scale(1.5); /* Dodano translateX(-50%) */
+    transform: translateX(-50%) scale(1.5); /* Rozszerzenie dla efektu pęknięcia */
     opacity: 0.9;
     filter: drop-shadow(0 0 15px rgba(255, 255, 255, 1)); /* Jaśniejszy blask */
   }
   100% { /* Zanika po pęknięciu */
     bottom: 110%; /* Przesuwa się nieco ponad płyn */
-    transform: translateX(-50%) scale(0); /* Dodano translateX(-50%) */
+    transform: translateX(-50%) scale(0); /* Zmniejsza się do zera */
     opacity: 0;
     filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0)); /* Brak blasku */
   }
