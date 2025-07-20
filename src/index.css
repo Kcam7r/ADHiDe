@@ -115,7 +115,7 @@ html {
   100% { transform: translateX(100%) translateY(100%); }
 }
 .animate-crystal-reflection-hover {
-  animation: crystal-reflection-hover 2s linear infinite;
+  animation: crystal-reflection-hover 4s linear infinite; /* Zmieniono z 2s na 4s */
 }
 
 @keyframes crystal-reflection-xp {
