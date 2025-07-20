@@ -66,7 +66,7 @@ export const Carousel: React.FC<CarouselProps> = ({
           <ChevronUp className="w-6 h-6 mx-auto" />
         </button>
       )}
-      <div ref={contentRef} className="flex-1 overflow-y-auto"> {/* Ten div będzie się przewijał */}
+      <div ref={contentRef} className="flex-1 overflow-y-auto min-h-0"> {/* Ten div będzie się przewijał */}
         <div className="space-y-3"> {/* To zastosuje odstępy między elementami */}
           {items.map((item, index) => (
             <React.Fragment key={item.key || index}>
