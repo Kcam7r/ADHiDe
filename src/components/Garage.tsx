@@ -438,7 +438,7 @@ export const Garage: React.FC = () => {
                     )}
 
                     {/* Tasks List */}
-                    <div className="h-64 overflow-y-auto min-h-0 hide-scrollbar pt-2">
+                    <div className="h-64 flex flex-col min-h-0 pt-2"> {/* Usunięto overflow-y-auto hide-scrollbar */}
                       <ScrollableList emptyMessage="Brak zadań w tym projekcie" itemHeightPx={90}>
                         {renderTaskItems(project.tasks)}
                       </ScrollableList>

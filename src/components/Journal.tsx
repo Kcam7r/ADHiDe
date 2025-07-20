@@ -254,7 +254,7 @@ export const Journal: React.FC = () => {
             </div>
 
             {/* Recent Entries */}
-            <div className="mt-8 bg-gray-800 rounded-lg p-6 shadow-lg flex-1 overflow-y-auto min-h-0">
+            <div className="mt-8 bg-gray-800 rounded-lg p-6 shadow-lg flex-1 flex flex-col min-h-0"> {/* Usunięto overflow-y-auto */}
               <h2 className="text-xl font-semibold text-white mb-4">Ostatnie wpisy</h2>
               <ScrollableList emptyMessage="Brak wpisów w dzienniku" itemHeightPx={80}>
                 {entriesWithDates
