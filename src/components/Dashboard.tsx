@@ -29,6 +29,9 @@ export const Dashboard: React.FC = () => {
   const [animatingOutTasks, setAnimatingOutTasks] = useState(new Set<string>());
   const [newlyCompletedAnimatedTasks, setNewlyCompletedAnimatedAnimatedTasks] = useState(new Set<string>());
 
+  const [fadingOutMissions, setFadingOutMissions] = useState(new Set<string>());
+  const [missionReaction, setMissionReaction] = useState<{[key: string]: Mission['priority'] | null}>({});
+
   useEffect(() => {
     const active = appDailyTasks.filter(task => 
       !task.completed && !animatingOutTasks.has(task.id)
@@ -327,8 +330,8 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              <div className="flex-1 min-h-0"> {/* Nowy kontener dla ScrollableList */}
-                <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={36} itemMarginYPx={12}>
+              <div className="flex-1 min-h-0 h-0"> {/* Dodano h-0 */}
+                <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={44} itemMarginYPx={12}> {/* Zmieniono itemHeightPx */}
                   {renderHabitItems()}
                 </ScrollableList>
               </div>
@@ -346,14 +349,16 @@ export const Dashboard: React.FC = () => {
               <div className="flex flex-col flex-1 min-h-0">
                 {/* Sekcja zadań do wykonania */}
                 <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
-                <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={36} itemMarginYPx={12}>
-                  {renderDailyTaskItems(displayDailyTasks)}
-                </ScrollableList>
+                <div className="flex-1 min-h-0 h-0"> {/* Dodano h-0 */}
+                  <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={44} itemMarginYPx={12}> {/* Zmieniono itemHeightPx */}
+                    {renderDailyTaskItems(displayDailyTasks)}
+                  </ScrollableList>
+                </div>
 
                 {/* Sekcja ukończonych zadań */}
-                <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col min-h-0">
+                <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col min-h-0 h-0"> {/* Dodano h-0 */}
                   <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
-                  <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={36} itemMarginYPx={12}>
+                  <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={44} itemMarginYPx={12}> {/* Zmieniono itemHeightPx */}
                     {renderDailyTaskItems(completedTodayVisual, true)}
                   </ScrollableList>
                 </div>
@@ -376,8 +381,8 @@ export const Dashboard: React.FC = () => {
                   <Archive className="w-5 h-5" />
                 </button>
               </div>
-              <div className="flex-1 min-h-0"> {/* Nowy kontener dla ScrollableList */}
-                <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={60} itemMarginYPx={12}>
+              <div className="flex-1 min-h-0 h-0"> {/* Dodano h-0 */}
+                <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={72} itemMarginYPx={12}> {/* Zmieniono itemHeightPx */}
                   {renderMissionItems()}
                 </ScrollableList>
               </div>
