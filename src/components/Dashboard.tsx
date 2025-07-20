@@ -229,7 +229,7 @@ export const Dashboard: React.FC = () => {
       <div
         key={habit.id}
         onClick={(e) => handleHabitClick(habit.id, e)}
-        className={`group p-3 rounded-lg cursor-pointer transition-all duration-200 border-2 shadow-inner-subtle
+        className={`group p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 shadow-inner-subtle
         hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110
         ${
           habit.type === 'positive' 
@@ -327,7 +327,7 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={44} visibleItemsCount={10.5}>
+              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={52} visibleItemsCount={10.5}>
                 {renderHabitItems()}
               </ScrollableList>
             </div>
