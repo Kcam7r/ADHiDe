@@ -282,7 +282,7 @@ export const QuestLog: React.FC = () => {
               </form>
             )}
 
-            <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={60}> {/* Zmieniono itemHeightPx na 60 */}
+            <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={80} visibleItemsCount={9}> {/* Zmieniono itemHeightPx na 80 */}
               {renderHabitItems()}
             </ScrollableList>
           </div>
@@ -335,7 +335,7 @@ export const QuestLog: React.FC = () => {
               </form>
             )}
 
-            <ScrollableList emptyMessage="Brak zadań codziennych" itemHeightPx={60}> {/* Zmieniono itemHeightPx na 60 */}
+            <ScrollableList emptyMessage="Brak zadań codziennych" itemHeightPx={80} visibleItemsCount={5}> {/* Zmieniono itemHeightPx na 80 */}
               {renderDailyTaskItems()}
             </ScrollableList>
           </div>
@@ -433,7 +433,7 @@ export const QuestLog: React.FC = () => {
               </form>
             )}
 
-            <ScrollableList emptyMessage="Brak zadań do wyświetlenia" itemHeightPx={60}> {/* Zmieniono itemHeightPx na 60 */}
+            <ScrollableList emptyMessage="Brak zadań do wyświetlenia" itemHeightPx={110} visibleItemsCount={9}> {/* Zmieniono itemHeightPx na 110 */}
               {renderMissionItems()}
             </ScrollableList>
           </div>
