@@ -116,7 +116,7 @@ export const Journal: React.FC = () => {
         <h1 className="text-3xl font-bold text-white mb-8">Dziennik</h1>
         
         {/* Tabs */}
-        <div className="flex space-x-1 mb-6">
+        <div className="flex space-x-1 mb-6 flex-shrink-0">
           <button
             onClick={() => setActiveTab('entries')}
             className={`px-6 py-3 rounded-lg font-medium transition-colors 
@@ -145,9 +145,9 @@ export const Journal: React.FC = () => {
 
         {activeTab === 'entries' && (
           <>
-            <div className="bg-gray-800 rounded-lg p-6 shadow-lg flex-1 flex flex-col">
+            <div className="bg-gray-800 rounded-lg p-6 shadow-lg flex-1 flex flex-col min-h-0 overflow-hidden">
               {/* Date Selection */}
-              <div className="mb-6">
+              <div className="mb-6 flex-shrink-0">
                 <div className="flex items-center justify-center relative mb-4">
                   <button
                     onClick={() => setShowCalendarPopup(true)}
@@ -173,7 +173,7 @@ export const Journal: React.FC = () => {
               </div>
 
               {/* Entry Form or Display */}
-              <form onSubmit={handleSubmit} className="space-y-6 flex-1 flex flex-col">
+              <form onSubmit={handleSubmit} className="space-y-6 flex-1 flex flex-col min-h-0 overflow-y-auto hide-scrollbar">
                 <div>
                   <label htmlFor="journal-content" className="block text-sm font-medium text-gray-300 mb-2">
                     Wpis
@@ -189,7 +189,7 @@ export const Journal: React.FC = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-shrink-0">
                   <div>
                     <label htmlFor="journal-mood" className="flex items-center text-sm font-medium text-gray-300 mb-2">
                       <span>Nastrój</span> <span className="text-2xl ml-2">{getMoodEmoji(formData.mood)}</span>
@@ -229,7 +229,7 @@ export const Journal: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex space-x-3">
+                <div className="flex space-x-3 flex-shrink-0">
                   <button
                     type="submit"
                     className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2 rounded-lg transition-colors font-medium active:scale-[0.98] active:brightness-110"
@@ -254,50 +254,52 @@ export const Journal: React.FC = () => {
             </div>
 
             {/* Recent Entries */}
-            <div className="mt-8 bg-gray-800 rounded-lg p-6 shadow-lg flex-1 flex flex-col min-h-0"> {/* Usunięto overflow-y-auto */}
-              <h2 className="text-xl font-semibold text-white mb-4">Ostatnie wpisy</h2>
-              <ScrollableList emptyMessage="Brak wpisów w dzienniku" itemHeightPx={80}>
-                {entriesWithDates
-                  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                  .map((entry) => (
-                    <div
-                      key={entry.id}
-                      className="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition-colors cursor-pointer 
-                      hover:translate-y-[-2px] hover:shadow-lg"
-                      onClick={() => setSelectedDate(new Date(entry.date))}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <h3 className="text-white font-medium">
-                            LOG z dnia {formatDate(entry.date)}
-                          </h3>
-                          <div className="flex items-center space-x-2">
-                            <span className="text-xl">{getMoodEmoji(entry.mood)}</span>
-                            <span className="text-xl">{getEnergyIcon(entry.energy)}</span>
+            <div className="mt-8 bg-gray-800 rounded-lg p-6 shadow-lg flex-1 flex flex-col min-h-0 overflow-hidden">
+              <h2 className="text-xl font-semibold text-white mb-4 flex-shrink-0">Ostatnie wpisy</h2>
+              <div className="flex-1 min-h-0">
+                <ScrollableList emptyMessage="Brak wpisów w dzienniku" itemHeightPx={80}>
+                  {entriesWithDates
+                    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                    .map((entry) => (
+                      <div
+                        key={entry.id}
+                        className="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition-colors cursor-pointer 
+                        hover:translate-y-[-2px] hover:shadow-lg"
+                        onClick={() => setSelectedDate(new Date(entry.date))}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-4">
+                            <h3 className="text-white font-medium">
+                              LOG z dnia {formatDate(entry.date)}
+                            </h3>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-xl">{getMoodEmoji(entry.mood)}</span>
+                              <span className="text-xl">{getEnergyIcon(entry.energy)}</span>
+                            </div>
                           </div>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleEntryExpansion(entry.id);
+                            }}
+                            className="text-gray-400 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-500 active:scale-[0.98] active:brightness-110"
+                          >
+                            {expandedEntries.has(entry.id) ? 
+                              <ChevronUp className="w-5 h-5" /> : 
+                              <ChevronDown className="w-5 h-5" />
+                            }
+                          </button>
                         </div>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleEntryExpansion(entry.id);
-                          }}
-                          className="text-gray-400 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-500 active:scale-[0.98] active:brightness-110"
-                        >
-                          {expandedEntries.has(entry.id) ? 
-                            <ChevronUp className="w-5 h-5" /> : 
-                            <ChevronDown className="w-5 h-5" />
-                          }
-                        </button>
+                        
+                        {expandedEntries.has(entry.id) && (
+                          <div className="mt-3 pt-3 border-t border-gray-600">
+                            <p className="text-gray-300 whitespace-pre-wrap">{entry.content}</p>
+                          </div>
+                        )}
                       </div>
-                      
-                      {expandedEntries.has(entry.id) && (
-                        <div className="mt-3 pt-3 border-t border-gray-600">
-                          <p className="text-gray-300 whitespace-pre-wrap">{entry.content}</p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-              </ScrollableList>
+                    ))}
+                </ScrollableList>
+              </div>
             </div>
           </>
         )}

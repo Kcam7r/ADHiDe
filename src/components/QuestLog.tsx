@@ -201,7 +201,7 @@ export const QuestLog: React.FC = () => {
         <h1 className="text-3xl font-bold text-white mb-8">Quest Log</h1>
         
         {/* Tabs */}
-        <div className="flex space-x-1 mb-6">
+        <div className="flex space-x-1 mb-6 flex-shrink-0">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -222,8 +222,8 @@ export const QuestLog: React.FC = () => {
 
         {/* Habits Tab */}
         {activeTab === 'habits' && (
-          <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col">
-            <div className="flex items-center justify-between mb-6">
+          <div className="bg-gray-800 rounded-lg p-6 flex-1 flex flex-col min-h-0 overflow-hidden">
+            <div className="flex items-center justify-between mb-6 flex-shrink-0">
               <h2 className="text-xl font-semibold text-white">Nawyki</h2>
               <button
                 onClick={() => setShowHabitForm(true)}
@@ -235,7 +235,7 @@ export const QuestLog: React.FC = () => {
             </div>
 
             {showHabitForm && (
-              <form onSubmit={handleAddHabit} className="mb-6 p-4 bg-gray-700 rounded-lg">
+              <form onSubmit={handleAddHabit} className="mb-6 p-4 bg-gray-700 rounded-lg flex-shrink-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -282,16 +282,18 @@ export const QuestLog: React.FC = () => {
               </form>
             )}
 
-            <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={80}>
-              {renderHabitItems()}
-            </ScrollableList>
+            <div className="flex-1 min-h-0">
+              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={80}>
+                {renderHabitItems()}
+              </ScrollableList>
+            </div>
           </div>
         )}
 
         {/* Daily Tasks Tab */}
         {activeTab === 'daily' && (
-          <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col">
-            <div className="flex items-center justify-between mb-6">
+          <div className="bg-gray-800 rounded-lg p-6 flex-1 flex flex-col min-h-0 overflow-hidden">
+            <div className="flex items-center justify-between mb-6 flex-shrink-0">
               <h2 className="text-xl font-semibold text-white">Zadania Codzienne</h2>
               <button
                 onClick={() => setShowDailyForm(true)}
@@ -303,7 +305,7 @@ export const QuestLog: React.FC = () => {
             </div>
 
             {showDailyForm && (
-              <form onSubmit={handleAddDailyTask} className="mb-6 p-4 bg-gray-700 rounded-lg">
+              <form onSubmit={handleAddDailyTask} className="mb-6 p-4 bg-gray-700 rounded-lg flex-shrink-0">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Tytuł zadania
@@ -335,16 +337,18 @@ export const QuestLog: React.FC = () => {
               </form>
             )}
 
-            <ScrollableList emptyMessage="Brak zadań codziennych" itemHeightPx={80}>
-              {renderDailyTaskItems()}
-            </ScrollableList>
+            <div className="flex-1 min-h-0">
+              <ScrollableList emptyMessage="Brak zadań codziennych" itemHeightPx={80}>
+                {renderDailyTaskItems()}
+              </ScrollableList>
+            </div>
           </div>
         )}
 
         {/* Missions Tab */}
         {activeTab === 'missions' && (
-          <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col">
-            <div className="flex items-center justify-between mb-6">
+          <div className="bg-gray-800 rounded-lg p-6 flex-1 flex flex-col min-h-0 overflow-hidden">
+            <div className="flex items-center justify-between mb-6 flex-shrink-0">
               <h2 className="text-xl font-semibold text-white">Zadania</h2>
               <button
                 onClick={() => setShowMissionForm(true)}
@@ -356,7 +360,7 @@ export const QuestLog: React.FC = () => {
             </div>
 
             {showMissionForm && (
-              <form onSubmit={handleAddMission} className="mb-6 p-4 bg-gray-700 rounded-lg">
+              <form onSubmit={handleAddMission} className="mb-6 p-4 bg-gray-700 rounded-lg flex-shrink-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -433,9 +437,11 @@ export const QuestLog: React.FC = () => {
               </form>
             )}
 
-            <ScrollableList emptyMessage="Brak zadań do wyświetlenia" itemHeightPx={110}>
-              {renderMissionItems()}
-            </ScrollableList>
+            <div className="flex-1 min-h-0">
+              <ScrollableList emptyMessage="Brak zadań do wyświetlenia" itemHeightPx={110}>
+                {renderMissionItems()}
+              </ScrollableList>
+            </div>
           </div>
         )}
       </div>

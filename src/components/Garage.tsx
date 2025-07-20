@@ -175,9 +175,9 @@ export const Garage: React.FC = () => {
   return (
     <div className="flex-1 p-6 bg-gray-900 h-full">
       <div className="max-w-6xl mx-auto h-full flex flex-col">
-        <h1 className="text-3xl font-bold text-white mb-8">Garaż</h1>
+        <h1 className="text-3xl font-bold text-white mb-8 flex-shrink-0">Garaż</h1>
         
-        <div className="mb-6">
+        <div className="mb-6 flex-shrink-0">
           <button
             onClick={() => setShowProjectForm(true)}
             className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-colors shadow-md hover:shadow-lg active:scale-[0.98] active:brightness-110"
@@ -189,7 +189,7 @@ export const Garage: React.FC = () => {
 
         {/* Project Form */}
         {showProjectForm && (
-          <div className="bg-gray-800 rounded-lg p-6 mb-6 shadow-xl border border-gray-700">
+          <div className="bg-gray-800 rounded-lg p-6 mb-6 shadow-xl border border-gray-700 flex-shrink-0">
             <form onSubmit={handleAddProject}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -271,7 +271,7 @@ export const Garage: React.FC = () => {
         )}
 
         {/* Projects List */}
-        <div className="space-y-4 flex-1 flex flex-col overflow-y-auto min-h-0 hide-scrollbar pt-2">
+        <div className="space-y-4 flex-1 flex flex-col min-h-0 overflow-y-auto hide-scrollbar pt-2">
           {projects.length === 0 ? (
             <div className="bg-gray-800 rounded-lg p-6 text-gray-400 text-center py-16 shadow-xl border border-gray-700 flex-1 flex items-center justify-center">
               <p className="text-lg">Brak projektów w garażu</p>
@@ -280,8 +280,8 @@ export const Garage: React.FC = () => {
           ) : (
             projects.map((project) => (
               <div key={project.id} className="bg-gray-800 rounded-lg p-6 shadow-xl border border-gray-700 hover:border-cyan-600 transition-all duration-300 
-              hover:translate-y-[-2px] hover:shadow-xl">
-                <div className="flex items-center justify-between">
+              hover:translate-y-[-2px] hover:shadow-xl flex flex-col min-h-0 overflow-hidden">
+                <div className="flex items-center justify-between flex-shrink-0">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-2">
                       <h3 className="text-xl font-semibold text-white">{project.name}</h3>
@@ -332,8 +332,8 @@ export const Garage: React.FC = () => {
                 </div>
 
                 {expandedProjects.has(project.id) && (
-                  <div className="mt-6 pt-6 border-t border-gray-700">
-                    <div className="flex items-center justify-between mb-4">
+                  <div className="mt-6 pt-6 border-t border-gray-700 flex-1 flex flex-col min-h-0 overflow-hidden">
+                    <div className="flex items-center justify-between mb-4 flex-shrink-0">
                       <h4 className="text-lg font-medium text-white">Zadania Projektu</h4>
                       <button
                         onClick={() => toggleTaskForm(project.id)}
@@ -346,7 +346,7 @@ export const Garage: React.FC = () => {
 
                     {/* Task Form */}
                     {showTaskForms.has(project.id) && (
-                      <form onSubmit={(e) => handleAddTask(project.id, e)} className="mb-4 p-4 bg-gray-700 rounded-lg border border-gray-600 shadow-inner">
+                      <form onSubmit={(e) => handleAddTask(project.id, e)} className="mb-4 p-4 bg-gray-700 rounded-lg border border-gray-600 shadow-inner flex-shrink-0">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -438,7 +438,7 @@ export const Garage: React.FC = () => {
                     )}
 
                     {/* Tasks List */}
-                    <div className="h-64 flex flex-col min-h-0 pt-2"> {/* Usunięto overflow-y-auto hide-scrollbar */}
+                    <div className="flex-1 min-h-0">
                       <ScrollableList emptyMessage="Brak zadań w tym projekcie" itemHeightPx={90}>
                         {renderTaskItems(project.tasks)}
                       </ScrollableList>
