@@ -322,7 +322,7 @@ export const Dashboard: React.FC = () => {
       <h1 className="text-3xl font-bold text-white mb-4 px-6 pt-6">Pulpit</h1> 
       
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col px-6 pb-6"> 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start h-full">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start"> {/* Usunięto h-full */}
           {/* Nawyki */}
           <div className="lg:col-span-1 flex flex-col">
             <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1">
