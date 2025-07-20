@@ -316,9 +316,9 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-950 flex flex-col">
-      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col">
+      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col p-6"> {/* Moved p-6 here */}
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 flex-1">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1"> {/* Removed p-6 from here */}
           {/* Nawyki */}
           <div className="lg:col-span-1 h-full">
             <div className="bg-gray-800 rounded-lg h-full flex flex-col p-6">
