@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, BookOpen, Calendar, Settings, X, Lightbulb, ClipboardList } from 'lucide-react';
+import { Home, BookOpen, Calendar, Settings, X, Lightbulb } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import { PowerCrystal } from './PowerCrystal';
 import { showInfoToast } from '../utils/toast';
@@ -21,13 +21,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
     { id: 'questlog', label: 'Quest Log', icon: BookOpen },
     { id: 'journal', label: 'Dziennik', icon: Calendar },
     { id: 'garage', label: 'Garaż', icon: Settings },
-    { id: 'quickthoughts-list', label: 'Lista Myśli', icon: ClipboardList, action: onOpenQuickThoughtsModal },
     { id: 'new-quickthought', label: 'Nowa Myśl', icon: Lightbulb, action: onOpenNewQuickThoughtModal },
   ];
 
   const handleInitialResetClick = () => {
     setShowResetConfirm(true);
-    setShowFinalResetConfirm(false);
+    setShowFinalResetConfirmButton(false);
   };
 
   const handleFinalReset = () => {
@@ -49,7 +48,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, onOp
         <div 
           className="p-6 border-b border-gray-700 flex flex-col items-center justify-center cursor-pointer"
           title="ADHiDe"
-          onClick={onOpenQuickThoughtsModal}
+          onClick={onOpenQuickThoughtsModal} {/* Kliknięcie logo otwiera listę myśli */}
         >
           <img 
             src="/logo.png" 
