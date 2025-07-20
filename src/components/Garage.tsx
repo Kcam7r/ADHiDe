@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Plus, ChevronDown, ChevronUp, Pause, Target, CheckCircle } from 'lucide-react';
-import { Project } from '../types';
+import { Project, Mission } from '../types'; // Dodano Mission do importu
 import { Carousel } from './Carousel'; // Import Carousel
 
 export const Garage: React.FC = () => {
@@ -104,6 +104,73 @@ export const Garage: React.FC = () => {
     const completed = project.tasks.filter(task => task.completed).length;
     return Math.round((completed / project.tasks.length) * 100);
   };
+
+  // Nowa funkcja pomocnicza do renderowania zadań
+  const renderTaskItems = (tasksToRender: Mission[]) => (
+    <>
+      {tasksToRender.map((task) => (
+        <div
+          key={task.id}
+          className={`p-3 rounded-lg border transition-all duration-200 
+          hover:translate-y-[-1px] hover:shadow-md
+          ${
+            task.completed 
+              ? 'bg-gray-700 border-green-500 opacity-70' 
+              : task.isActive 
+                ? 'bg-cyan-700 border-cyan-500 shadow-md' 
+                : 'bg-gray-700 border-gray-600 hover:bg-gray-600'
+          }`}
+        >
+          <div className="flex-1">
+            <h5 className={`font-medium ${
+              task.completed ? 'line-through text-gray-400' : 'text-white'
+            }`}>
+              {task.title}
+            </h5>
+            {task.description && (
+              <p className="text-gray-300 text-sm mt-1">{task.description}</p>
+            )}
+            <div className="flex items-center space-x-2 mt-2">
+              <span className="px-2 py-1 bg-gray-600 rounded text-xs text-gray-300">
+                {task.priority}
+              </span>
+              <span className="px-2 py-1 bg-gray-600 rounded text-xs text-gray-300">
+                {task.energy}
+              </span>
+            </div>
+          </div>
+          
+          <div className="flex items-center space-x-2 ml-4">
+            {task.completed ? (
+              <CheckCircle className="w-5 h-5 text-green-400" />
+            ) : (
+              <button
+                onClick={() => task.isActive ? deactivateMission(task.id) : activateMission(task.id)}
+                className={`p-2 rounded-full transition-colors shadow-sm active:scale-[0.98] active:brightness-110 ${
+                  task.isActive
+                    ? 'bg-orange-600 hover:bg-orange-700'
+                    : 'bg-green-600 hover:bg-green-700'
+                }`}
+              >
+                {task.isActive ? (
+                  <Pause className="w-4 h-4 text-white" />
+                ) : (
+                  <Target className="w-4 h-4 text-white" />
+                )}
+              </button>
+            )}
+          </div>
+        </div>
+      ))}
+      {tasksToRender.length === 0 && (
+        <div className="text-gray-400 text-center py-4">
+          <p>Brak zadań w tym projekcie</p>
+          <p className="text-sm mt-1">Dodaj pierwsze zadanie powyżej!</p>
+        </div>
+      )}
+    </>
+  );
+
 
   return (
     <div className="flex-1 p-6 bg-gray-900 h-full"> {/* Zmieniono min-h-screen na h-full */}
@@ -369,124 +436,11 @@ export const Garage: React.FC = () => {
                       {/* Tasks List */}
                       {project.tasks.length > 5 ? (
                         <Carousel className="h-64"> {/* Ograniczona wysokość dla karuzeli zadań */}
-                          {project.tasks.map((task) => (
-                            <div
-                              key={task.id}
-                              className={`p-3 rounded-lg border transition-all duration-200 
-                              hover:translate-y-[-1px] hover:shadow-md
-                              ${
-                                task.completed 
-                                  ? 'bg-gray-700 border-green-500 opacity-70' 
-                                  : task.isActive 
-                                    ? 'bg-cyan-700 border-cyan-500 shadow-md' 
-                                    : 'bg-gray-700 border-gray-600 hover:bg-gray-600'
-                              }`}
-                            >
-                              <div className="flex-1">
-                                <h5 className={`font-medium ${
-                                  task.completed ? 'line-through text-gray-400' : 'text-white'
-                                }`}>
-                                  {task.title}
-                                </h5>
-                                {task.description && (
-                                  <p className="text-gray-300 text-sm mt-1">{task.description}</p>
-                                )}
-                                <div className="flex items-center space-x-2 mt-2">
-                                  <span className="px-2 py-1 bg-gray-600 rounded text-xs text-gray-300">
-                                    {task.priority}
-                                  </span>
-                                  <span className="px-2 py-1 bg-gray-600 rounded text-xs text-gray-300">
-                                    {task.energy}
-                                  </span>
-                                </div>
-                              </div>
-                              
-                              <div className="flex items-center space-x-2 ml-4">
-                                {task.completed ? (
-                                  <CheckCircle className="w-5 h-5 text-green-400" />
-                                ) : (
-                                  <button
-                                    onClick={() => task.isActive ? deactivateMission(task.id) : activateMission(task.id)}
-                                    className={`p-2 rounded-full transition-colors shadow-sm active:scale-[0.98] active:brightness-110 ${
-                                      task.isActive
-                                        ? 'bg-orange-600 hover:bg-orange-700'
-                                        : 'bg-green-600 hover:bg-green-700'
-                                    }`}
-                                  >
-                                    {task.isActive ? (
-                                      <Pause className="w-4 h-4 text-white" />
-                                    ) : (
-                                      <Target className="w-4 h-4 text-white" />
-                                    )}
-                                  </button>
-                                )}
-                              </div>
-                            </div>
-                          ))}
+                          {renderTaskItems(project.tasks)}
                         </Carousel>
                       ) : (
                         <div className="space-y-2 flex-1 overflow-y-auto min-h-0">
-                          {project.tasks.map((task) => (
-                            <div
-                              key={task.id}
-                              className={`p-3 rounded-lg border transition-all duration-200 
-                              hover:translate-y-[-1px] hover:shadow-md
-                              ${
-                                task.completed 
-                                  ? 'bg-gray-700 border-green-500 opacity-70' 
-                                  : task.isActive 
-                                    ? 'bg-cyan-700 border-cyan-500 shadow-md' 
-                                    : 'bg-gray-700 border-gray-600 hover:bg-gray-600'
-                              }`}
-                            >
-                              <div className="flex-1">
-                                <h5 className={`font-medium ${
-                                  task.completed ? 'line-through text-gray-400' : 'text-white'
-                                }`}>
-                                  {task.title}
-                                </h5>
-                                {task.description && (
-                                  <p className="text-gray-300 text-sm mt-1">{task.description}</p>
-                                )}
-                                <div className="flex items-center space-x-2 mt-2">
-                                  <span className="px-2 py-1 bg-gray-600 rounded text-xs text-gray-300">
-                                    {task.priority}
-                                  </span>
-                                  <span className="px-2 py-1 bg-gray-600 rounded text-xs text-gray-300">
-                                    {task.energy}
-                                  </span>
-                                </div>
-                              </div>
-                              
-                              <div className="flex items-center space-x-2 ml-4">
-                                {task.completed ? (
-                                  <CheckCircle className="w-5 h-5 text-green-400" />
-                                ) : (
-                                  <button
-                                    onClick={() => task.isActive ? deactivateMission(task.id) : activateMission(task.id)}
-                                    className={`p-2 rounded-full transition-colors shadow-sm active:scale-[0.98] active:brightness-110 ${
-                                      task.isActive
-                                        ? 'bg-orange-600 hover:bg-orange-700'
-                                        : 'bg-green-600 hover:bg-green-700'
-                                    }`}
-                                  >
-                                    {task.isActive ? (
-                                      <Pause className="w-4 h-4 text-white" />
-                                    ) : (
-                                      <Target className="w-4 h-4 text-white" />
-                                    )}
-                                  </button>
-                                )}
-                              </div>
-                            </div>
-                          ))}
-                          
-                          {project.tasks.length === 0 && (
-                            <div className="text-gray-400 text-center py-4">
-                              <p>Brak zadań w tym projekcie</p>
-                              <p className="text-sm mt-1">Dodaj pierwsze zadanie powyżej!</p>
-                            </div>
-                          )}
+                          {renderTaskItems(project.tasks)}
                         </div>
                       )}
                     </div>
@@ -658,67 +612,11 @@ export const Garage: React.FC = () => {
                       {/* Tasks List */}
                       {project.tasks.length > 5 ? (
                         <Carousel className="h-64"> {/* Ograniczona wysokość dla karuzeli zadań */}
-                          {project.tasks.map((task) => (
-                            <div
-                              key={task.id}
-                              className={`p-3 rounded-lg border transition-all duration-200 
-                              hover:translate-y-[-1px] hover:shadow-md
-                              ${
-                                task.completed 
-                                  ? 'bg-gray-700 border-green-500 opacity-70' 
-                                  : task.isActive 
-                                    ? 'bg-cyan-700 border-cyan-500 shadow-md' 
-                                    : 'bg-gray-700 border-gray-600 hover:bg-gray-600'
-                              }`}
-                            >
-                              <div className="flex-1">
-                                <h5 className={`font-medium ${
-                                  task.completed ? 'line-through text-gray-400' : 'text-white'
-                                }`}>
-                                  {task.title}
-                                </h5>
-                                {task.description && (
-                                  <p className="text-gray-300 text-sm mt-1">{task.description}</p>
-                                )}
-                                <div className="flex items-center space-x-2 mt-2">
-                                  <span className="px-2 py-1 bg-gray-600 rounded text-xs text-gray-300">
-                                    {task.priority}
-                                  </span>
-                                  <span className="px-2 py-1 bg-gray-600 rounded text-xs text-gray-300">
-                                    {task.energy}
-                                  </span>
-                                </div>
-                              </div>
-                              
-                              <div className="flex items-center space-x-2 ml-4">
-                                {task.completed ? (
-                                  <CheckCircle className="w-5 h-5 text-green-400" />
-                                ) : (
-                                  <button
-                                    onClick={() => task.isActive ? deactivateMission(task.id) : activateMission(task.id)}
-                                    className={`p-2 rounded-full transition-colors shadow-sm active:scale-[0.98] active:brightness-110 ${
-                                      task.isActive
-                                        ? 'bg-orange-600 hover:bg-orange-700'
-                                        : 'bg-green-600 hover:bg-green-700'
-                                    }`}
-                                  >
-                                    {task.isActive ? (
-                                      <Pause className="w-4 h-4 text-white" />
-                                    ) : (
-                                      <Target className="w-4 h-4 text-white" />
-                                    )}
-                                  </button>
-                                )}
-                              </div>
-                            </div>
-                          ))}
-                          
-                          {project.tasks.length === 0 && (
-                            <div className="text-gray-400 text-center py-4">
-                              <p>Brak zadań w tym projekcie</p>
-                              <p className="text-sm mt-1">Dodaj pierwsze zadanie powyżej!</p>
-                            </div>
-                          )}
+                          {renderTaskItems(project.tasks)}
+                        </Carousel>
+                      ) : (
+                        <div className="space-y-2 flex-1 overflow-y-auto min-h-0">
+                          {renderTaskItems(project.tasks)}
                         </div>
                       )}
                     </div>
