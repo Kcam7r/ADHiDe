@@ -5,6 +5,7 @@ import { Mission, DailyTask } from '../types';
 import { MissionHistoryModal } from './MissionHistoryModal';
 import { DailyTaskStamp } from './DailyTaskStamp';
 import { showSuccessToast, showInfoToast, showErrorToast } from '../utils/toast';
+import { ScrollableList } from './ScrollableList'; // Import nowego komponentu
 
 export const Dashboard: React.FC = () => {
   console.log("Dashboard component is loading.");
@@ -326,17 +327,9 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              <div className="flex-1 overflow-y-auto min-h-0 hide-scrollbar pt-2">
-                <div className="space-y-3">
-                  {habits.length === 0 ? (
-                    <div className="text-gray-400 text-center flex items-center justify-center h-full">
-                      <p>Brak nawyków do wyświetlenia</p>
-                    </div>
-                  ) : (
-                    renderHabitItems()
-                  )}
-                </div>
-              </div>
+              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia">
+                {renderHabitItems()}
+              </ScrollableList>
             </div>
           </div>
 
@@ -350,32 +343,28 @@ export const Dashboard: React.FC = () => {
             <div className="flex flex-col flex-1 min-h-0">
               {/* Sekcja zadań do wykonania */}
               <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
-              <div className="flex-1 overflow-y-auto min-h-0 hide-scrollbar pt-2">
-                <div className="space-y-3">
-                  {displayDailyTasks.length === 0 ? (
-                    <div className="text-gray-400 text-center flex items-center justify-center h-full">
-                      <p>Brak zadań do wykonania</p>
-                    </div>
-                  ) : (
-                    renderDailyTaskItems(displayDailyTasks)
-                  )}
-                </div>
-              </div>
+              <ScrollableList emptyMessage="Brak zadań do wykonania">
+                {displayDailyTasks.length === 0 ? (
+                  <div className="text-gray-400 text-center flex items-center justify-center h-full">
+                    <p>Brak zadań do wykonania</p>
+                  </div>
+                ) : (
+                  renderDailyTaskItems(displayDailyTasks)
+                )}
+              </ScrollableList>
 
               {/* Sekcja ukończonych zadań */}
               <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col min-h-0">
                 <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
-                <div className="flex-1 overflow-y-auto min-h-0 hide-scrollbar pt-2">
-                  <div className="space-y-3">
-                    {completedTodayVisual.length === 0 ? (
-                      <div className="text-gray-400 text-center flex items-center justify-center h-full">
-                        <p>Brak ukończonych zadań</p>
-                      </div>
-                    ) : (
-                      renderDailyTaskItems(completedTodayVisual, true)
-                    )}
-                  </div>
-                </div>
+                <ScrollableList emptyMessage="Brak ukończonych zadań">
+                  {completedTodayVisual.length === 0 ? (
+                    <div className="text-gray-400 text-center flex items-center justify-center h-full">
+                      <p>Brak ukończonych zadań</p>
+                    </div>
+                  ) : (
+                    renderDailyTaskItems(completedTodayVisual, true)
+                  )}
+                </ScrollableList>
               </div>
             </div>
           </div>
@@ -394,17 +383,15 @@ export const Dashboard: React.FC = () => {
                 <Archive className="w-5 h-5" />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto min-h-0 hide-scrollbar pt-2">
-              <div className="space-y-3">
-                {sortedActiveMissions.length === 0 ? (
-                  <div className="text-gray-400 text-center flex items-center justify-center h-full">
-                    <p>Brak aktywnych misji</p>
-                  </div>
-                ) : (
-                  renderMissionItems()
-                )}
-              </div>
-            </div>
+            <ScrollableList emptyMessage="Brak aktywnych misji">
+              {sortedActiveMissions.length === 0 ? (
+                <div className="text-gray-400 text-center flex items-center justify-center h-full">
+                  <p>Brak aktywnych misji</p>
+                </div>
+              ) : (
+                renderMissionItems()
+              )}
+            </ScrollableList>
           </div>
         </div>
       </div>
