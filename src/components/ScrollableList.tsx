@@ -30,6 +30,15 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(false);
 
+  // Calculate the exact height for the scrollable content area
+  // This is the height that the inner div (scrollContainerRef) should occupy
+  const scrollableAreaHeight = useMemo(() => {
+    // Height for `visibleItemsCount` items + margins + padding
+    const totalItemHeight = itemHeightPx * visibleItemsCount;
+    const totalMarginHeight = itemMarginYPx * (visibleItemsCount > 0 ? (visibleItemsCount - 1) : 0);
+    return totalItemHeight + totalMarginHeight + containerPaddingTopPx;
+  }, [itemHeightPx, itemMarginYPx, visibleItemsCount, containerPaddingTopPx]);
+
   const checkScrollability = () => {
     if (scrollContainerRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
@@ -62,7 +71,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
         window.removeEventListener('resize', checkScrollability);
       }
     };
-  }, [items.length, children]); // Dependencies simplified, as height is now flex-based
+  }, [items.length, scrollableAreaHeight]); // Depend on scrollableAreaHeight
 
   const handleScroll = (direction: 'up' | 'down') => {
     if (scrollContainerRef.current) {
@@ -74,17 +83,14 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
     }
   };
 
-  const emptyStateClasses = "text-gray-400 text-center py-4 flex-1 flex items-center justify-center";
   const showArrows = canScrollUp || canScrollDown;
 
   return (
-    <div 
-      className="flex flex-col flex-1" // Make the outer div flex-1 to fill parent
-    >
-      {showArrows && ( // Show up arrow only if can scroll up
+    <div className="flex flex-col"> {/* No flex-1 or h-full here */}
+      {showArrows && (
         <button
           onClick={() => handleScroll('up')}
-          disabled={!canScrollUp} // Disable if cannot scroll up
+          disabled={!canScrollUp}
           className={`p-1 rounded-full self-center mb-2 transition-colors active:scale-[0.98] active:brightness-110
             ${canScrollUp ? 'text-gray-400 hover:bg-gray-700 hover:text-white' : 'text-gray-600 cursor-not-allowed'}
           `}
@@ -94,14 +100,15 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
         </button>
       )}
       {items.length === 0 ? (
-        <div className={emptyStateClasses}>
+        <div className="text-gray-400 text-center py-4 flex items-center justify-center" style={{ height: `${scrollableAreaHeight}px` }}> {/* Fixed height for empty state */}
           <p>{emptyMessage}</p>
         </div>
       ) : (
         <div
           ref={scrollContainerRef}
-          className="flex-1 overflow-y-auto hide-scrollbar" // This is the actual scrollable area
+          className="overflow-y-auto hide-scrollbar"
           style={{ 
+            height: `${scrollableAreaHeight}px`, // Apply fixed height to the scrollable area
             scrollSnapType: 'y mandatory',
           }}
         >
@@ -125,10 +132,10 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
           </div>
         </div>
       )}
-      {showArrows && ( // Show down arrow only if can scroll down
+      {showArrows && (
         <button
           onClick={() => handleScroll('down')}
-          disabled={!canScrollDown} // Disable if cannot scroll down
+          disabled={!canScrollDown}
           className={`p-1 rounded-full self-center mt-2 transition-colors active:scale-[0.98] active:brightness-110
             ${canScrollDown ? 'text-gray-400 hover:bg-gray-700 hover:text-white' : 'text-gray-600 cursor-not-allowed'}
           `}
