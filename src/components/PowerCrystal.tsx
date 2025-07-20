@@ -26,7 +26,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
   const dynamicNumberOfBubbles = Math.max(5, Math.floor(xpProgress * 20) + 5); 
 
   const bubbles = React.useMemo(() => {
-    const maxStartBottomPercentage = xpProgress * 100; 
     return Array.from({ length: dynamicNumberOfBubbles }).map((_, i) => {
       const startDelay = Math.random() * 3; // Bazowe opóźnienie
       // Dodatkowe opóźnienie, aby symulować start z niższej pozycji w płynie
@@ -38,7 +37,6 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         left: Math.random() * 90 + 5,
         delay: startDelay + depthDelay, // Całkowite opóźnienie
         duration: Math.random() * (2.5 - 1.5) + 1.5, // Czas trwania między 1.5s a 2.5s
-        // startBottomPercentage nie jest już używane do bezpośredniego pozycjonowania 'bottom'
       };
     });
   }, [dynamicNumberOfBubbles, xpProgress]);
