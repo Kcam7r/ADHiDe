@@ -321,7 +321,7 @@ export const Dashboard: React.FC = () => {
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1">
           {/* Nawyki */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 h-full"> {/* Dodano h-full */}
             <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col">
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
                 <span>✨</span>
