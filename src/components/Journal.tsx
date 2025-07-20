@@ -4,6 +4,7 @@ import { Calendar as CalendarIcon, ChevronDown, ChevronUp, Battery, BatteryLow, 
 import { JournalEntry } from '../types';
 import { Calendar } from './Calendar';
 import { JournalAnalysis } from './JournalAnalysis'; // Import nowego komponentu
+import { ScrollableList } from './ScrollableList'; // Import ScrollableList
 
 export const Journal: React.FC = () => {
   const { journalEntries, addJournalEntry, updateJournalEntry } = useApp();
@@ -255,14 +256,14 @@ export const Journal: React.FC = () => {
             {/* Recent Entries */}
             <div className="mt-8 bg-gray-800 rounded-lg p-6 shadow-lg flex-1 overflow-y-auto min-h-0"> {/* Dodano flex-1 overflow-y-auto min-h-0 */}
               <h2 className="text-xl font-semibold text-white mb-4">Ostatnie wpisy</h2>
-              {entriesWithDates.length === 0 ? (
-                <div className="text-gray-400 text-center py-8">
-                  <p>Brak wpisów w dzienniku</p>
-                  <p className="text-sm mt-2">Dodaj swój pierwszy wpis powyżej!</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {entriesWithDates
+              <ScrollableList emptyMessage="Brak wpisów w dzienniku" itemHeightPx={52}> {/* Zmieniono itemHeightPx na 52 dla p-4 */}
+                {entriesWithDates.length === 0 ? (
+                  <div className="text-gray-400 text-center py-8">
+                    <p>Brak wpisów w dzienniku</p>
+                    <p className="text-sm mt-2">Dodaj swój pierwszy wpis powyżej!</p>
+                  </div>
+                ) : (
+                  entriesWithDates
                     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                     .map((entry) => (
                     <div
@@ -302,8 +303,7 @@ export const Journal: React.FC = () => {
                       )}
                     </div>
                   ))}
-                </div>
-              )}
+                </ScrollableList>
             </div>
           </>
         )}

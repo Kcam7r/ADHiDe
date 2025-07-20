@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Plus, ChevronDown, ChevronUp, Pause, Target, CheckCircle } from 'lucide-react';
 import { Project, Mission } from '../types';
+import { ScrollableList } from './ScrollableList'; // Import ScrollableList
 
 export const Garage: React.FC = () => {
   const { projects, addProject, addTaskToProject, activateMission, deactivateMission } = useApp();
@@ -307,7 +308,7 @@ export const Garage: React.FC = () => {
                         >
                           {getProgressPercentage(project) > 10 && (
                             <span className="text-xs font-bold text-white drop-shadow-sm">
-                              {getProgressPercentage(project)}%
+                              {getProgressPercentage(project)}
                             </span>
                           )}
                         </div>
@@ -438,9 +439,9 @@ export const Garage: React.FC = () => {
 
                     {/* Tasks List */}
                     <div className="h-64 overflow-y-auto min-h-0 hide-scrollbar pt-2">
-                      <div className="space-y-3">
+                      <ScrollableList emptyMessage="Brak zadań w tym projekcie" itemHeightPx={44}>
                         {renderTaskItems(project.tasks)}
-                      </div>
+                      </ScrollableList>
                     </div>
                   </div>
                 )}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
 import { Plus, Pause, Trash2, Play } from 'lucide-react'; 
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { ScrollableList } from './ScrollableList'; // Import ScrollableList
 
 export const QuestLog: React.FC = () => {
   const { 
@@ -281,17 +282,9 @@ export const QuestLog: React.FC = () => {
               </form>
             )}
 
-            <div className="flex-1 overflow-y-auto min-h-0 hide-scrollbar pt-2">
-              <div className="space-y-3">
-                {habits.length === 0 ? (
-                  <div className="text-gray-400 text-center flex items-center justify-center h-full">
-                    <p>Brak nawyków do wyświetlenia</p>
-                  </div>
-                ) : (
-                  renderHabitItems()
-                )}
-              </div>
-            </div>
+            <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={52}> {/* Zmieniono itemHeightPx na 52 dla p-4 */}
+              {renderHabitItems()}
+            </ScrollableList>
           </div>
         )}
 
@@ -342,17 +335,9 @@ export const QuestLog: React.FC = () => {
               </form>
             )}
 
-            <div className="flex-1 overflow-y-auto min-h-0 hide-scrollbar pt-2">
-              <div className="space-y-3">
-                {dailyTasks.length === 0 ? (
-                  <div className="text-gray-400 text-center flex items-center justify-center h-full">
-                    <p>Brak zadań codziennych</p>
-                  </div>
-                ) : (
-                  renderDailyTaskItems()
-                )}
-              </div>
-            </div>
+            <ScrollableList emptyMessage="Brak zadań codziennych" itemHeightPx={52}> {/* Zmieniono itemHeightPx na 52 dla p-4 */}
+              {renderDailyTaskItems()}
+            </ScrollableList>
           </div>
         )}
 
@@ -448,17 +433,9 @@ export const QuestLog: React.FC = () => {
               </form>
             )}
 
-            <div className="flex-1 overflow-y-auto min-h-0 hide-scrollbar pt-2">
-              <div className="space-y-3">
-                {missions.length === 0 ? (
-                  <div className="text-gray-400 text-center flex items-center justify-center h-full">
-                    <p>Brak zadań do wyświetlenia</p>
-                  </div>
-                ) : (
-                  renderMissionItems()
-                )}
-              </div>
-            </div>
+            <ScrollableList emptyMessage="Brak zadań do wyświetlenia" itemHeightPx={52}> {/* Zmieniono itemHeightPx na 52 dla p-4 */}
+              {renderMissionItems()}
+            </ScrollableList>
           </div>
         )}
       </div>

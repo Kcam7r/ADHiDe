@@ -3,15 +3,19 @@ import { ChevronUp, ChevronDown } from 'lucide-react';
 
 interface ScrollableListProps {
   children: React.ReactNode;
-  itemHeightPx?: number; // Oczekiwana wysokość pojedynczego elementu w pikselach
+  itemHeightPx?: number; // Rzeczywista wysokość pojedynczego elementu (np. 44px dla nawyków)
+  itemMarginYPx?: number; // Pionowy margines między elementami (np. 12px dla space-y-3)
+  containerPaddingTopPx?: number; // Padding na górze wewnętrznego kontenera przewijania (np. 8px dla pt-2)
   visibleItemsCount?: number; // Maksymalna liczba widocznych elementów
   emptyMessage?: string; // Wiadomość wyświetlana, gdy lista jest pusta
 }
 
 export const ScrollableList: React.FC<ScrollableListProps> = ({
   children,
-  itemHeightPx = 56, // Domyślna wysokość kafelka nawyku (p-3 + space-y-3)
-  visibleItemsCount = 10, // Domyślnie 10 widocznych elementów
+  itemHeightPx = 44, // Domyślna wysokość elementu (dla nawyków i zadań projektów)
+  itemMarginYPx = 12, // Domyślny margines space-y-3
+  containerPaddingTopPx = 8, // Domyślny padding pt-2
+  visibleItemsCount = 10,
   emptyMessage = 'Brak elementów do wyświetlenia',
 }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -32,17 +36,21 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
     const currentRef = scrollContainerRef.current;
     if (currentRef) {
       currentRef.addEventListener('scroll', checkScrollability);
+      // Dodaj listener na resize, aby ponownie sprawdzić przewijalność
+      window.addEventListener('resize', checkScrollability);
     }
     return () => {
       if (currentRef) {
         currentRef.removeEventListener('scroll', checkScrollability);
+        window.removeEventListener('resize', checkScrollability);
       }
     };
-  }, [items.length]); // Sprawdzaj przewijalność, gdy zmienia się liczba elementów
+  }, [items.length, itemHeightPx, itemMarginYPx, containerPaddingTopPx, visibleItemsCount]); // Dodano zależności
 
   const handleScroll = (direction: 'up' | 'down') => {
     if (scrollContainerRef.current) {
-      const scrollAmount = itemHeightPx; // Przewijaj o wysokość jednego elementu
+      // Przewijaj o wysokość jednego elementu wraz z jego marginesem
+      const scrollAmount = itemHeightPx + itemMarginYPx; 
       scrollContainerRef.current.scrollBy({
         top: direction === 'down' ? scrollAmount : -scrollAmount,
         behavior: 'smooth',
@@ -50,7 +58,10 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
     }
   };
 
-  const totalHeight = visibleItemsCount * itemHeightPx;
+  // Obliczanie całkowitej wysokości potrzebnej do wyświetlenia 'visibleItemsCount' elementów
+  const totalHeight = (visibleItemsCount * itemHeightPx) + 
+                      ((visibleItemsCount - 1) * itemMarginYPx) + 
+                      containerPaddingTopPx;
   const showArrows = items.length > visibleItemsCount;
 
   if (items.length === 0) {

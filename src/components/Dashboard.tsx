@@ -327,7 +327,7 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia">
+              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={44}>
                 {renderHabitItems()}
               </ScrollableList>
             </div>
@@ -343,7 +343,7 @@ export const Dashboard: React.FC = () => {
             <div className="flex flex-col flex-1 min-h-0">
               {/* Sekcja zadań do wykonania */}
               <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
-              <ScrollableList emptyMessage="Brak zadań do wykonania">
+              <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={52}>
                 {displayDailyTasks.length === 0 ? (
                   <div className="text-gray-400 text-center flex items-center justify-center h-full">
                     <p>Brak zadań do wykonania</p>
@@ -356,7 +356,7 @@ export const Dashboard: React.FC = () => {
               {/* Sekcja ukończonych zadań */}
               <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col min-h-0">
                 <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
-                <ScrollableList emptyMessage="Brak ukończonych zadań">
+                <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={52}>
                   {completedTodayVisual.length === 0 ? (
                     <div className="text-gray-400 text-center flex items-center justify-center h-full">
                       <p>Brak ukończonych zadań</p>
@@ -383,7 +383,7 @@ export const Dashboard: React.FC = () => {
                 <Archive className="w-5 h-5" />
               </button>
             </div>
-            <ScrollableList emptyMessage="Brak aktywnych misji">
+            <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={52}>
               {sortedActiveMissions.length === 0 ? (
                 <div className="text-gray-400 text-center flex items-center justify-center h-full">
                   <p>Brak aktywnych misji</p>
