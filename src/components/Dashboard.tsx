@@ -327,12 +327,12 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              {habits.length > 9 ? ( {/* Zmieniono na 9 */}
-                <Carousel itemsPerPage={9} contentHeightClass="h-[648px]"> {/* Zmieniono na h-[648px] */}
+              {habits.length > 9 ? (
+                <Carousel itemsPerPage={9} contentHeightClass="h-[648px]">
                   {renderHabitItems()}
                 </Carousel>
               ) : (
-                <div className="space-y-3 h-[648px] overflow-hidden"> {/* Zmieniono na h-[648px] */}
+                <div className="space-y-3 h-[648px] overflow-hidden">
                   {renderHabitItems()}
                   {habits.length === 0 && (
                     <div className="text-gray-400 text-center h-full flex items-center justify-center">
@@ -353,12 +353,12 @@ export const Dashboard: React.FC = () => {
             
             {/* Karuzela dla zadań do wykonania */}
             <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
-            {displayDailyTasks.length > 7 ? ( {/* Zmieniono na 7 */}
-              <Carousel itemsPerPage={7} contentHeightClass="h-[504px]"> {/* Zmieniono na h-[504px] */}
+            {displayDailyTasks.length > 7 ? (
+              <Carousel itemsPerPage={7} contentHeightClass="h-[504px]">
                 {renderDailyTaskItems(displayDailyTasks)}
               </Carousel>
             ) : (
-              <div className="space-y-3 h-[504px] overflow-hidden"> {/* Zmieniono na h-[504px] */}
+              <div className="space-y-3 h-[504px] overflow-hidden">
                 {renderDailyTaskItems(displayDailyTasks)}
                 {displayDailyTasks.length === 0 && (
                   <div className="text-gray-400 text-center h-full flex items-center justify-center">
@@ -402,8 +402,8 @@ export const Dashboard: React.FC = () => {
                 <Archive className="w-5 h-5" />
               </button>
             </div>
-            {sortedActiveMissions.length > 9 ? ( {/* Zmieniono na 9 */}
-              <Carousel itemsPerPage={9} contentHeightClass="h-[648px]"> {/* Zmieniono na h-[648px] */}
+            {sortedActiveMissions.length > 9 ? (
+              <Carousel itemsPerPage={9} contentHeightClass="h-[648px]">
                 {renderMissionItems()}
               </Carousel>
             ) : (
