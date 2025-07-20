@@ -47,7 +47,7 @@ function App() {
           onOpenQuickThoughtsModal={() => setShowQuickThoughtsModal(true)}
           onOpenNewQuickThoughtModal={() => setShowQuickThoughtModal(true)} 
         />
-        <main className="flex-1 overflow-x-hidden overflow-y-auto h-full"> {/* Zmieniono overflow-y-hidden na overflow-y-auto */}
+        <main className="flex-1 overflow-x-hidden overflow-y-hidden h-full"> {/* Zmieniono overflow-y-auto na overflow-y-hidden */}
           <AnimatePresence mode="wait">
             <motion.div
               key={activeView}
