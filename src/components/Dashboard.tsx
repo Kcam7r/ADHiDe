@@ -287,7 +287,7 @@ export const Dashboard: React.FC = () => {
         id={`mission-${mission.id}`}
         onClick={(e) => handleMissionComplete(mission.id, e)}
         className={`group p-2 rounded-lg cursor-pointer transition-all duration-200 border-2 shadow-inner-subtle
-        hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110 min-h-[76px] flex flex-col justify-between
+        hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110 h-[76px] flex flex-col justify-between
         ${
           mission.projectId ? 'bg-purple-600 border-purple-500 shadow-glow-purple' : 'bg-cyan-600 border-cyan-500 shadow-glow-cyan'
         } ${fadingOutMissions.has(mission.id) ? 'animate-mission-fade-out' : ''}
@@ -324,7 +324,7 @@ export const Dashboard: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0"> 
           {/* Nawyki */}
           <div className="lg:col-span-1 min-h-0">
-            <div className="bg-gray-800 rounded-lg flex flex-col p-6 min-h-0 h-full">
+            <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1 min-h-0">
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
                 <span>✨</span>
                 <span>Nawyki</span>
@@ -336,7 +336,7 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Codzienne */}
-          <div className="bg-gray-800 rounded-lg flex flex-col p-6 min-h-0 h-full">
+          <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1 min-h-0">
             <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
               <span>🗓️</span>
               <span>Codzienne</span>
@@ -360,7 +360,7 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Misje */}
-          <div className="bg-gray-800 rounded-lg flex flex-col p-6 min-h-0 h-full">
+          <div className="bg-gray-800 rounded-lg flex flex-col p-6 flex-1 min-h-0">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-white flex items-center space-x-2 text-shadow-sm">
                 <span>🎯</span>
