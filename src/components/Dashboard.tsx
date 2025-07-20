@@ -8,7 +8,7 @@ import { showSuccessToast, showInfoToast, showErrorToast } from '../utils/toast'
 import { Carousel } from './Carousel'; // Import Carousel
 
 export const Dashboard: React.FC = () => {
-  console.log("Dashboard component is loading."); // Dodano tę linię
+  console.log("Dashboard component is loading.");
 
   const { 
     habits, 
@@ -316,13 +316,13 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="flex-1 p-6 bg-gray-900">
-      <div className="max-w-7xl mx-auto h-full flex flex-col"> {/* Dodano h-full flex flex-col */}
-        <h1 className="text-3xl font-bold text-white mb-8">Pulpit</h1>
+      <div className="max-w-7xl mx-auto h-full flex flex-col">
+        {/* Usunięto nagłówek h1 "Pulpit" */}
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1"> {/* Dodano flex-1 */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1">
           {/* Nawyki */}
           <div className="lg:col-span-1">
-            <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col"> {/* Dodano h-full flex flex-col */}
+            <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col">
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
                 <span>✨</span>
                 <span>Nawyki</span>
@@ -345,7 +345,7 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Codzienne */}
-          <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col"> {/* Dodano h-full flex flex-col */}
+          <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col">
             <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
               <span>🗓️</span>
               <span>Codzienne</span>
@@ -376,7 +376,7 @@ export const Dashboard: React.FC = () => {
                   {renderDailyTaskItems(completedTodayVisual, true)}
                 </Carousel>
               ) : (
-                <div className="space-y-3 h-[72px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
+                <div className="space-y-3 h-[72px] overflow-hidden">
                   {renderDailyTaskItems(completedTodayVisual, true)}
                   {completedTodayVisual.length === 0 && (
                     <div className="text-gray-400 text-center h-full flex items-center justify-center">
@@ -389,7 +389,7 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Misje */}
-          <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col"> {/* Dodano h-full flex flex-col */}
+          <div className="bg-gray-800 rounded-lg p-6 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-white flex items-center space-x-2">
                 <span>🎯</span>
@@ -407,7 +407,7 @@ export const Dashboard: React.FC = () => {
                 {renderMissionItems()}
               </Carousel>
             ) : (
-              <div className="space-y-3 h-[648px] overflow-hidden"> {/* Utrzymanie stałej wysokości */}
+              <div className="space-y-3 h-[648px] overflow-hidden">
                 {renderMissionItems()}
                 {sortedActiveMissions.length === 0 && (
                   <div className="text-gray-400 text-center h-full flex items-center justify-center">
