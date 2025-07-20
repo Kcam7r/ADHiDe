@@ -238,14 +238,12 @@ export const Dashboard: React.FC = () => {
         } ${animatingHabits.has(habit.id) 
             ? (habit.type === 'positive' ? 'animate-habit-pulse-positive' : 'animate-habit-pulse-negative') 
             : 'hover:bg-opacity-80'
-        }`}
+        } min-h-[44px] flex items-center justify-between`} {/* Dodano min-h i flex items-center */}
       >
-        <div className="flex items-center justify-between">
-          <span className="text-white font-medium">{habit.name}</span>
-          <span className="text-white text-sm font-bold">
-            {habit.count}x
-          </span>
-        </div>
+        <span className="text-white font-medium">{habit.name}</span>
+        <span className="text-white text-sm font-bold">
+          {habit.count}x
+        </span>
       </div>
     ))
   );
@@ -262,7 +260,7 @@ export const Dashboard: React.FC = () => {
             : 'bg-gray-700 border-2 border-gray-600 shadow-glow-cyan'}
           ${animatingOutTasks.has(task.id) ? 'animate-daily-task-shrink-out' : ''}
           ${isCompletedSection && newlyCompletedAnimatedTasks.has(task.id) ? 'animate-daily-task-grow-in' : ''}
-        `}
+          min-h-[44px] flex items-center justify-between`} {/* Dodano min-h i flex items-center */}
       >
         <span className={`${isCompletedSection ? 'text-gray-400' : 'text-white'}`}>
           {task.title}
@@ -294,7 +292,7 @@ export const Dashboard: React.FC = () => {
           ${missionReaction[mission.id] === 'normal' ? 'animate-mission-pulse-normal' : ''}
           ${missionReaction[mission.id] === 'important' ? 'animate-mission-pulse-important' : ''}
           ${missionReaction[mission.id] === 'urgent' ? 'animate-mission-pulse-urgent' : ''}
-        `}
+        } min-h-[72px]`} {/* Dodano min-h */}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">

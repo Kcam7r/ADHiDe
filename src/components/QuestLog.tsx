@@ -78,7 +78,7 @@ export const QuestLog: React.FC = () => {
       <div
         key={habit.id}
         className={`p-4 rounded-lg border-2 transition-all hover:shadow-lg 
-        hover:translate-y-[-2px]
+        hover:translate-y-[-2px] min-h-[80px] flex flex-col justify-center
         ${
           habit.type === 'positive' 
             ? 'bg-green-600 border-green-500' 
@@ -112,29 +112,27 @@ export const QuestLog: React.FC = () => {
       <div
         key={task.id}
         className={`p-4 rounded-lg border-2 transition-all hover:shadow-lg 
-        hover:translate-y-[-2px]
+        hover:translate-y-[-2px] min-h-[60px] flex items-center justify-between
         ${
           task.completed
             ? 'bg-gray-700 border-green-500'
             : 'bg-gray-700 border-gray-600'
         }`}
       >
-        <div className="flex items-center justify-between">
-          <h3 className={`font-medium ${task.completed ? 'line-through text-gray-400' : 'text-white'}`}>
-            {task.title}
-          </h3>
-          <div className="flex items-center space-x-2">
-            <div className="text-sm text-gray-400">
-              {task.completed ? 'Ukończone' : 'Do zrobienia'}
-            </div>
-            <button
-              onClick={() => deleteDailyTask(task.id)}
-              className="text-gray-200 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700 active:scale-[0.98] active:brightness-110"
-              title="Usuń zadanie"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
+        <h3 className={`font-medium ${task.completed ? 'line-through text-gray-400' : 'text-white'}`}>
+          {task.title}
+        </h3>
+        <div className="flex items-center space-x-2">
+          <div className="text-sm text-gray-400">
+            {task.completed ? 'Ukończone' : 'Do zrobienia'}
           </div>
+          <button
+            onClick={() => deleteDailyTask(task.id)}
+            className="text-gray-200 hover:text-white transition-colors p-1 rounded-full hover:bg-gray-700 active:scale-[0.98] active:brightness-110"
+            title="Usuń zadanie"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
         </div>
       </div>
     ))
@@ -145,7 +143,7 @@ export const QuestLog: React.FC = () => {
       <div
         key={mission.id}
         className={`p-4 rounded-lg border-2 transition-all hover:shadow-lg 
-        hover:translate-y-[-2px]
+        hover:translate-y-[-2px] min-h-[104px] flex flex-col justify-center
         ${
           mission.isActive
             ? 'bg-cyan-600 border-cyan-500'

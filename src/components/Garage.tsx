@@ -112,7 +112,7 @@ export const Garage: React.FC = () => {
         <div
           key={task.id}
           className={`p-3 rounded-lg border transition-all duration-200 
-          hover:translate-y-[-1px] hover:shadow-md
+          hover:translate-y-[-1px] hover:shadow-md min-h-[90px] flex flex-col justify-center
           ${
             task.completed 
               ? 'bg-gray-700 border-green-500 opacity-70' 
@@ -128,7 +128,9 @@ export const Garage: React.FC = () => {
               {task.title}
             </h5>
             {task.description && (
-              <p className="text-gray-300 text-sm mt-1">{task.description}</p>
+              <p className="text-gray-300 text-sm mt-1 overflow-hidden text-ellipsis whitespace-nowrap"> {/* Dodano overflow-hidden */}
+                {task.description}
+              </p>
             )}
             <div className="flex items-center space-x-2 mt-2">
               <span className="px-2 py-1 bg-gray-600 rounded text-xs text-gray-300">
@@ -271,7 +273,7 @@ export const Garage: React.FC = () => {
         )}
 
         {/* Projects List */}
-        <div className="space-y-4 flex-1 flex flex-col min-h-0 overflow-y-auto hide-scrollbar pt-2">
+        <div className="space-y-4 flex-1 flex flex-col min-h-0 overflow-y-auto hide-scrollbar pt-2"> {/* Zmieniono na standardowe przewijanie */}
           {projects.length === 0 ? (
             <div className="bg-gray-800 rounded-lg p-6 text-gray-400 text-center py-16 shadow-xl border border-gray-700 flex-1 flex items-center justify-center">
               <p className="text-lg">Brak projektów w garażu</p>

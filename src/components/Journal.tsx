@@ -4,7 +4,7 @@ import { Calendar as CalendarIcon, ChevronDown, ChevronUp, Battery, BatteryLow, 
 import { JournalEntry } from '../types';
 import { Calendar } from './Calendar';
 import { JournalAnalysis } from './JournalAnalysis'; // Import nowego komponentu
-import { ScrollableList } from './ScrollableList'; // Import ScrollableList
+// import { ScrollableList } from './ScrollableList'; // Usunięto import ScrollableList
 
 export const Journal: React.FC = () => {
   const { journalEntries, addJournalEntry, updateJournalEntry } = useApp();
@@ -256,8 +256,7 @@ export const Journal: React.FC = () => {
             {/* Recent Entries */}
             <div className="mt-8 bg-gray-800 rounded-lg p-6 shadow-lg flex-1 flex flex-col min-h-0 overflow-hidden">
               <h2 className="text-xl font-semibold text-white mb-4 flex-shrink-0">Ostatnie wpisy</h2>
-              <div className="flex-1 min-h-0 h-0">
-                <ScrollableList emptyMessage="Brak wpisów w dzienniku" itemHeightPx={56} itemMarginYPx={12}>
+              <div className="flex-1 min-h-0 h-0 overflow-y-auto hide-scrollbar space-y-3 pt-2"> {/* Zmieniono na standardowe przewijanie */}
                   {entriesWithDates
                     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                     .map((entry) => (
@@ -298,7 +297,6 @@ export const Journal: React.FC = () => {
                         )}
                       </div>
                     ))}
-                </ScrollableList>
               </div>
             </div>
           </>
