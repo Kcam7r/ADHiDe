@@ -229,7 +229,7 @@ export const Dashboard: React.FC = () => {
       <div
         key={habit.id}
         onClick={(e) => handleHabitClick(habit.id, e)}
-        className={`group p-3 rounded-lg cursor-pointer transition-all duration-200 border-2 shadow-inner-subtle
+        className={`group p-2 rounded-lg cursor-pointer transition-all duration-200 border-2 shadow-inner-subtle
         hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110
         ${
           habit.type === 'positive' 
@@ -255,7 +255,7 @@ export const Dashboard: React.FC = () => {
       <div
         key={task.id}
         onClick={!isCompletedSection ? (e) => handleDailyTaskClick(task.id, e) : undefined}
-        className={`group relative p-3 rounded-lg transition-all duration-200 shadow-inner-subtle
+        className={`group relative p-2 rounded-lg transition-all duration-200 shadow-inner-subtle
           ${!isCompletedSection ? 'cursor-pointer hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110' : ''}
           ${isCompletedSection 
             ? 'bg-gray-700 border-2 border-amber-500 task-completed-visual flex items-center justify-between' 
@@ -286,7 +286,7 @@ export const Dashboard: React.FC = () => {
         key={mission.id}
         id={`mission-${mission.id}`}
         onClick={(e) => handleMissionComplete(mission.id, e)}
-        className={`group p-3 rounded-lg cursor-pointer transition-all duration-200 border-2 shadow-inner-subtle
+        className={`group p-2 rounded-lg cursor-pointer transition-all duration-200 border-2 shadow-inner-subtle
         hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110
         ${
           mission.projectId ? 'bg-purple-600 border-purple-500 shadow-glow-purple' : 'bg-cyan-600 border-cyan-500 shadow-glow-cyan'
@@ -327,7 +327,7 @@ export const Dashboard: React.FC = () => {
                 <span>✨</span>
                 <span>Nawyki</span>
               </h2>
-              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={52} visibleItemsCount={10}>
+              <ScrollableList emptyMessage="Brak nawyków do wyświetlenia" itemHeightPx={44} visibleItemsCount={10}>
                 {renderHabitItems()}
               </ScrollableList>
             </div>
@@ -343,14 +343,14 @@ export const Dashboard: React.FC = () => {
             <div className="flex flex-col flex-1 min-h-0">
               {/* Sekcja zadań do wykonania */}
               <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
-              <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={52} visibleItemsCount={5}>
+              <ScrollableList emptyMessage="Brak zadań do wykonania" itemHeightPx={44} visibleItemsCount={5}>
                 {renderDailyTaskItems(displayDailyTasks)}
               </ScrollableList>
 
               {/* Sekcja ukończonych zadań */}
               <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col min-h-0">
                 <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
-                <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={52} visibleItemsCount={5}>
+                <ScrollableList emptyMessage="Brak ukończonych zadań" itemHeightPx={44} visibleItemsCount={5}>
                   {renderDailyTaskItems(completedTodayVisual, true)}
                 </ScrollableList>
               </div>
@@ -371,7 +371,7 @@ export const Dashboard: React.FC = () => {
                 <Archive className="w-5 h-5" />
               </button>
             </div>
-            <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={76} visibleItemsCount={10.5}>
+            <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={68} visibleItemsCount={10.5}>
               {renderMissionItems()}
             </ScrollableList>
           </div>
