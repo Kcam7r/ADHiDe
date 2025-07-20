@@ -9,12 +9,12 @@ import { LevelUpFlashOverlay } from './components/LevelUpFlashOverlay';
 import { XpBubblesOverlay } from './components/XpBubblesOverlay';
 import { AnimatePresence, motion } from 'framer-motion';
 
-// Bezpośredni import Dashboard w celu diagnostyki
+// Bezpośredni import Dashboard i Journal w celu diagnostyki i rozwiązania problemu
 import { Dashboard } from './components/Dashboard';
+import { Journal } from './components/Journal'; // Zmieniono na bezpośredni import
 
 // Leniwe ładowanie pozostałych głównych komponentów widoków
 const QuestLog = lazy(() => import('./components/QuestLog').then(module => ({ default: module.QuestLog })));
-const Journal = lazy(() => import('./components/Journal').then(module => ({ default: module.Journal })));
 const Garage = lazy(() => import('./components/Garage').then(module => ({ default: module.Garage })));
 
 function App() {
