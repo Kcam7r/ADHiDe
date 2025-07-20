@@ -9,7 +9,7 @@ interface CarouselProps {
 export const Carousel: React.FC<CarouselProps> = ({
   children,
   className,
-  itemHeightPx = 68, // Zmieniono z 76 na 68
+  itemHeightPx = 68,
 }) => {
   const items = Children.toArray(children).filter(isValidElement);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -60,12 +60,12 @@ export const Carousel: React.FC<CarouselProps> = ({
 
   return (
     <div 
-      className={`${className}`} 
+      className={`flex flex-col ${className}`} // Ustawienie głównego kontenera Carousel jako flex column
       onMouseDown={handleMouseDown}
       style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
     >
-      <div ref={contentRef} className="flex-1 overflow-y-auto min-h-0 hide-scrollbar">
-        <div className="space-y-3 pt-2"> {/* Dodano pt-2 tutaj */}
+      <div ref={contentRef} className="flex-1 overflow-y-auto min-h-0 hide-scrollbar"> {/* Ten div będzie przewijalny i wypełni dostępną przestrzeń */}
+        <div className="space-y-3 pt-2">
           {items.length === 0 ? (
             <div className="text-gray-400 text-center flex-1 flex items-center justify-center">
               <p>Brak nawyków do wyświetlenia</p>
