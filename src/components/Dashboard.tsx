@@ -321,8 +321,8 @@ export const Dashboard: React.FC = () => {
         {/* Dodano min-h-0 do kontenera siatki */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0"> 
           {/* Nawyki */}
-          <div className="lg:col-span-1 h-full min-h-0"> {/* Dodano min-h-0 */}
-            <div className="bg-gray-800 rounded-lg flex flex-col p-6 min-h-0"> {/* Usunięto h-full */}
+          <div className="lg:col-span-1 min-h-0"> {/* Usunięto h-full */}
+            <div className="bg-gray-800 rounded-lg flex flex-col p-6 min-h-0">
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
                 <span>✨</span>
                 <span>Nawyki</span>
@@ -334,13 +334,13 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Codzienne */}
-          <div className="bg-gray-800 rounded-lg flex flex-col p-6 min-h-0"> {/* Usunięto h-full */}
+          <div className="bg-gray-800 rounded-lg flex flex-col p-6 min-h-0">
             <h2 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2 text-shadow-sm">
               <span>🗓️</span>
               <span>Codzienne</span>
             </h2>
             
-            <div className="flex flex-col flex-1 min-h-0"> {/* Dodano min-h-0 */}
+            <div className="flex flex-col flex-1 min-h-0">
               {/* Karuzela dla zadań do wykonania */}
               <h3 className="text-lg font-semibold text-gray-300 mb-3">Do wykonania</h3>
               <Carousel className="flex-1">
@@ -354,7 +354,7 @@ export const Dashboard: React.FC = () => {
               </Carousel>
 
               {/* Karuzela dla ukończonych zadań */}
-              <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col min-h-0"> {/* Dodano min-h-0 */}
+              <div className="mt-6 pt-4 border-t border-gray-700 flex-1 flex flex-col min-h-0">
                 <h3 className="text-lg font-semibold text-gray-300 mb-3">Ukończone na dziś</h3>
                 <Carousel itemHeightPx={72} className="flex-1">
                   {completedTodayVisual.length === 0 ? (
@@ -370,7 +370,7 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Misje */}
-          <div className="bg-gray-800 rounded-lg flex flex-col p-6 min-h-0"> {/* Usunięto h-full */}
+          <div className="bg-gray-800 rounded-lg flex flex-col p-6 min-h-0">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-white flex items-center space-x-2 text-shadow-sm">
                 <span>🎯</span>
