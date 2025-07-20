@@ -340,13 +340,13 @@ html {
     filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8)); /* Utrzymanie blasku */
   }
   95% { /* Peak of the pop: slightly larger, brighter, then quickly fades */
-    bottom: 97%; /* Zmniejszona wysokość, aby pękało bliżej powierzchni */
+    bottom: 96%; /* Zmniejszona wysokość, aby pękało bliżej powierzchni */
     transform: translateX(-50%) scale(1.05); /* Zmniejszona skala dla efektu pęknięcia */
     opacity: 0.9; /* Nieco mniejsza widoczność */
     filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6)); /* Złagodzony blask */
   }
   100% { /* Disappear quickly after pop */
-    bottom: 100%; /* Przesuwa się nieco ponad płyn, ale mniej niż wcześniej */
+    bottom: 99%; /* Przesuwa się nieco ponad płyn, ale mniej niż wcześniej */
     transform: translateX(-50%) scale(0); /* Zmniejsza się do zera */
     opacity: 0;
     filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0));
