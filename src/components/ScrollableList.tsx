@@ -7,7 +7,7 @@ interface ScrollableListProps {
   itemHeightPx?: number; // Rzeczywista wysokość pojedynczego elementu (np. 44px dla nawyków)
   itemMarginYPx?: number; // Pionowy margines między elementami (np. 12px dla space-y-3)
   containerPaddingTopPx?: number; // Padding na górze wewnętrznego kontenera przewijania (np. 8px dla pt-2)
-  visibleItemsCount?: number; // Maksymalna liczba widocznych elementów
+  visibleItemsCount?: number; // Maksymalna liczba widocznych elementów (używane tylko do określenia, czy strzałki są potrzebne)
   emptyMessage?: string; // Wiadomość wyświetlana, gdy lista jest pusta
 }
 
@@ -23,7 +23,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
   itemHeightPx = 44, // Domyślna wysokość elementu (dla nawyków i zadań projektów)
   itemMarginYPx = 12, // Domyślny margines space-y-3
   containerPaddingTopPx = 8, // Domyślny padding pt-2
-  visibleItemsCount = 10,
+  visibleItemsCount = 10, // Maksymalna liczba widocznych elementów (używane tylko do określenia, czy strzałki są potrzebne)
   emptyMessage = 'Brak elementów do wyświetlenia',
 }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -52,7 +52,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
         window.removeEventListener('resize', checkScrollability);
       }
     };
-  }, [items.length, itemHeightPx, itemMarginYPx, containerPaddingTopPx, visibleItemsCount]);
+  }, [items.length]); // Zależność tylko od liczby elementów, nie od wysokości
 
   const handleScroll = (direction: 'up' | 'down') => {
     if (scrollContainerRef.current) {
@@ -64,9 +64,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
     }
   };
 
-  const totalHeight = (visibleItemsCount * itemHeightPx) + 
-                      ((visibleItemsCount - 1) * itemMarginYPx) + 
-                      containerPaddingTopPx;
+  // Logika showArrows może pozostać, ale nie będzie używana do ustawiania maxHeight
   const showArrows = items.length > visibleItemsCount;
 
   if (items.length === 0) {
@@ -94,7 +92,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
       <div
         ref={scrollContainerRef}
         className="flex-1 overflow-y-auto hide-scrollbar"
-        style={{ maxHeight: `${totalHeight}px`, scrollSnapType: 'y mandatory' }} // Added scrollSnapType
+        style={{ scrollSnapType: 'y mandatory' }} // Usunięto maxHeight
       >
         <div className="space-y-3 pt-2">
           <AnimatePresence initial={false}> {/* initial={false} to prevent initial animation on mount for all items */}
