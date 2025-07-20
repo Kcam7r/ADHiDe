@@ -33,7 +33,8 @@ export const PowerCrystal: React.FC<PowerCrystalProps> = React.memo(({ onCrystal
         size: Math.random() * (10 - 4) + 4,
         left: Math.random() * 90 + 5,
         delay: Math.random() * 3,
-        duration: Math.random() * (5 - 2) + 2,
+        // Zmieniono zakres duration, aby faza pęknięcia (ostatnie 10-15%) była szybka (0.15-0.25s)
+        duration: Math.random() * (2.5 - 1.5) + 1.5, // Czas trwania między 1.5s a 2.5s
         startBottomPercentage: Math.random() * maxStartBottomPercentage, 
       };
     });

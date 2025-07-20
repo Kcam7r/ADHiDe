@@ -328,30 +328,39 @@ html {
 /* Nowe style i animacje dla bąbelków XP w krysztale */
 @keyframes bubble-rise {
   0% {
-    /* bottom jest ustawiane przez inline style w React */
+    /* Początkowa pozycja bottom jest ustawiana przez inline style na elemencie */
     transform: scale(0.2);
     opacity: 0;
     filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
   }
   10% {
-    opacity: 0.8;
+    opacity: 0.8; /* Staje się widoczny */
   }
-  90% {
-    opacity: 0.8;
-  }
-  100% {
-    bottom: 100%; /* Unosi się do góry rodzica (elementu płynu) */
+  85% { /* Zbliża się do powierzchni, zwalnia */
+    bottom: 95%; /* 5% poniżej górnej krawędzi płynu */
     transform: scale(1);
+    opacity: 0.8;
+  }
+  90% { /* Na powierzchni, rozpoczyna pęknięcie - szybka ekspansja */
+    bottom: 100%; /* Na samej górze płynu */
+    transform: scale(1.5); /* Większe rozszerzenie dla efektu pęknięcia */
+    opacity: 0.9;
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 1)); /* Jaśniejszy rozbłysk */
+  }
+  100% { /* Pęknięcie kończy się, znika */
+    bottom: 110%; /* Przesuwa się nieco ponad płyn */
+    transform: scale(0); /* Zmniejsza się do zera */
     opacity: 0;
-    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
+    filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0)); /* Brak blasku */
   }
 }
 
 .xp-bubble {
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.6); /* Półprzezroczysty biały bąbelek */
   border-radius: 50%;
-  animation: bubble-rise linear infinite;
+  /* Użycie cubic-bezier dla efektu zwalniania i szybkiego pęknięcia na końcu */
+  animation: bubble-rise var(--bubble-duration) cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite; 
   pointer-events: none;
   transform: translateX(-50%); /* Wyśrodkuj poziomo */
 }
