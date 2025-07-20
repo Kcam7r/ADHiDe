@@ -181,7 +181,7 @@ export const Journal: React.FC = () => {
                     id="journal-content"
                     value={formData.content}
                     onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                    className="w-full p-4 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-cyan-500 focus:outline-none resize-y flex-1" {/* Dodano flex-1 */}
+                    className="w-full p-4 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-cyan-500 focus:outline-none resize-y flex-1"
                     rows={8}
                     placeholder="Jak minął Ci dzień? Co czujesz?"
                     required
