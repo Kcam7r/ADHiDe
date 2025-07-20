@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, Children, isValidElement, useMemo } from 'react';
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import { ChevronUp, ChevronDown } => 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ScrollableListProps {
@@ -30,10 +30,10 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(false);
 
-  // Calculate the exact height for the scrollable content area
-  // This is the height that the inner div (scrollContainerRef) should occupy
-  const scrollableAreaHeight = useMemo(() => {
-    // Height for `visibleItemsCount` items + margins + padding
+  // Calculate max height based on desired visible items
+  const calculatedMaxHeight = useMemo(() => {
+    if (items.length === 0) return 'auto'; // Allow empty list to collapse
+    // Calculate height for `visibleItemsCount` items + margins + padding
     const totalItemHeight = itemHeightPx * visibleItemsCount;
     const totalMarginHeight = itemMarginYPx * (visibleItemsCount > 0 ? (visibleItemsCount - 1) : 0);
     return totalItemHeight + totalMarginHeight + containerPaddingTopPx;
@@ -71,7 +71,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
         window.removeEventListener('resize', checkScrollability);
       }
     };
-  }, [items.length, scrollableAreaHeight]); // Depend on scrollableAreaHeight
+  }, [items.length, calculatedMaxHeight]); // Add calculatedMaxHeight to dependencies
 
   const handleScroll = (direction: 'up' | 'down') => {
     if (scrollContainerRef.current) {
@@ -83,10 +83,14 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
     }
   };
 
+  const emptyStateClasses = "text-gray-400 text-center py-4 flex items-center justify-center";
   const showArrows = canScrollUp || canScrollDown;
 
   return (
-    <div className="flex flex-col"> {/* No flex-1 or h-full here */}
+    <div 
+      className="flex flex-col" // Removed flex-1 here
+      style={{ maxHeight: items.length > 0 ? `${calculatedMaxHeight}px` : 'auto' }} // Apply calculated maxHeight
+    >
       {showArrows && (
         <button
           onClick={() => handleScroll('up')}
@@ -100,7 +104,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
         </button>
       )}
       {items.length === 0 ? (
-        <div className="text-gray-400 text-center py-4 flex items-center justify-center" style={{ height: `${scrollableAreaHeight}px` }}> {/* Fixed height for empty state */}
+        <div className={emptyStateClasses}>
           <p>{emptyMessage}</p>
         </div>
       ) : (
@@ -108,7 +112,7 @@ export const ScrollableList: React.FC<ScrollableListProps> = ({
           ref={scrollContainerRef}
           className="overflow-y-auto hide-scrollbar"
           style={{ 
-            height: `${scrollableAreaHeight}px`, // Apply fixed height to the scrollable area
+            height: `${calculatedMaxHeight}px`, // Apply fixed height to the scrollable area
             scrollSnapType: 'y mandatory',
           }}
         >
