@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Trash2, MoreVertical, CheckCircle, Archive, Target, CalendarDays, Plus } from 'lucide-react';
+import { X, Trash2, MoreVertical, CheckCircle, Archive, Target, CalendarDays } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import { showSuccessToast, showErrorToast, showInfoToast } from '../utils/toast';
 import { format, isSameDay } from 'date-fns';
@@ -131,14 +131,7 @@ export const QuickThoughtsModal: React.FC<QuickThoughtsModalProps> = ({ onClose,
             <span>💭</span>
             <span>Moje Myśli</span>
           </h3>
-          <button
-            onClick={onOpenNewThoughtModal}
-            className="bg-cyan-600 hover:bg-cyan-700 text-white px-3 py-1 rounded-lg flex items-center space-x-1 transition-colors text-sm active:scale-[0.98] active:brightness-110"
-            title="Dodaj nową myśl"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Nowa</span>
-          </button>
+          {/* Usunięto przycisk "+ Nowa" */}
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white transition-colors ml-2 active:scale-[0.98] active:brightness-110"
