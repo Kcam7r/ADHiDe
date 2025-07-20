@@ -287,7 +287,7 @@ export const Dashboard: React.FC = () => {
         id={`mission-${mission.id}`}
         onClick={(e) => handleMissionComplete(mission.id, e)}
         className={`group p-2 rounded-lg cursor-pointer transition-all duration-200 border-2 shadow-inner-subtle
-        hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110
+        hover:translate-y-[-2px] hover:shadow-xl active:scale-[0.98] active:brightness-110 min-h-[76px] flex flex-col justify-between
         ${
           mission.projectId ? 'bg-purple-600 border-purple-500 shadow-glow-purple' : 'bg-cyan-600 border-cyan-500 shadow-glow-cyan'
         } ${fadingOutMissions.has(mission.id) ? 'animate-mission-fade-out' : ''}
@@ -308,7 +308,9 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
         {mission.description && (
-          <p className="text-gray-200 text-sm mt-2">{mission.description}</p>
+          <p className="text-gray-200 text-sm mt-2 overflow-hidden text-ellipsis whitespace-nowrap">
+            {mission.description}
+          </p>
         )}
       </div>
     ))
@@ -371,7 +373,7 @@ export const Dashboard: React.FC = () => {
                 <Archive className="w-5 h-5" />
               </button>
             </div>
-            <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={68} visibleItemsCount={10}>
+            <ScrollableList emptyMessage="Brak aktywnych misji" itemHeightPx={76} visibleItemsCount={10}>
               {renderMissionItems()}
             </ScrollableList>
           </div>
